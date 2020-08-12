@@ -50,11 +50,12 @@ class IndexController @Inject()(
   }
 
   private def redirect(userAnswers: UserAnswers, draftId: String) = {
-//    if (isAnyBeneficiaryAdded(userAnswers)) {
-//      Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
-//    } else {
-//      Redirect(controllers.register.beneficiaries.individualBeneficiary.routes.InfoController.onPageLoad(draftId))
-//    }
-    Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+
+    userAnswers.get(sections.Trustees).getOrElse(Nil) match {
+      case Nil =>
+        Redirect(controllers.register.trustees.routes.TrusteesInfoController.onPageLoad(draftId))
+      case _ :: _ =>
+        Redirect(controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId))
+    }
   }
 }
