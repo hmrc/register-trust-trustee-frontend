@@ -14,23 +14,18 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
-@import views.html._
+@import viewmodels.Link
 
-@(answerSection: AnswerSection)(implicit messages: Messages)
+@(
+hint: Option[String] = None,
+readerHint: Option[String] = None,
+link: Option[Link] = None
+)(implicit messages: Messages)
 
-@if(answerSection.sectionKey.isDefined){
-    <h2 class="heading-large">@messages(answerSection.sectionKey.get)</h2>
-}
-
-@if(answerSection.headingKey.isDefined){
-    <h3 class="heading-medium">@messages(answerSection.headingKey.get)</h3>
-}
-
-@if(answerSection.rows) {
-    <ul role="list" class="govuk-check-your-answers cya-questions-long section">
-        @for(row <- answerSection.rows){
-            @components.answer_row(row)
-        }
-    </ul>
+@if(hint.nonEmpty) {
+  <span id="form-hint" class="form-hint form-field" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint
+  @link.map { l =>
+    <a id="link" href="@l.url" target="_blank">@l.text</a>
+  }
+  </span>
 }

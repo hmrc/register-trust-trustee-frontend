@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import viewmodels.AnswerSection
-@import views.html._
+package controllers.register
 
-@(answerSection: AnswerSection)(implicit messages: Messages)
+import com.google.inject.{Inject, Singleton}
+import config.FrontendAppConfig
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
-@if(answerSection.sectionKey.isDefined){
-    <h2 class="heading-large">@messages(answerSection.sectionKey.get)</h2>
-}
+@Singleton
+class LogoutController @Inject()(appConfig: FrontendAppConfig, val controllerComponents: MessagesControllerComponents) extends FrontendBaseController {
 
-@if(answerSection.headingKey.isDefined){
-    <h3 class="heading-medium">@messages(answerSection.headingKey.get)</h3>
-}
-
-@if(answerSection.rows) {
-    <ul role="list" class="govuk-check-your-answers cya-questions-long section">
-        @for(row <- answerSection.rows){
-            @components.answer_row(row)
-        }
-    </ul>
+  def logout: Action[AnyContent] = Action {
+    implicit request =>
+      Redirect(appConfig.logoutUrl).withNewSession
+  }
 }
