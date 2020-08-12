@@ -36,5 +36,29 @@ class IndexControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+//    "for trustee task" when {
+//
+//      "there are no trustees" must {
+//
+//        "go to TrusteeInfoPage" in {
+//          navigator.trusteesJourney(emptyUserAnswers, fakeDraftId) mustBe controllers.register.trustees.routes.TrusteesInfoController.onPageLoad(fakeDraftId)
+//        }
+//
+//      }
+//
+//      "there are trustees" must {
+//
+//        "go to AddATrustee" in {
+//          val answers = emptyUserAnswers
+//            .set(IsThisLeadTrusteePage(0), false).success.value
+//
+//          navigator.trusteesJourney(answers, fakeDraftId) mustBe controllers.register.trustees.routes.AddATrusteeController.onPageLoad(fakeDraftId)
+//        }
+//
+//      }
+//
+//    }
+
   }
 }
