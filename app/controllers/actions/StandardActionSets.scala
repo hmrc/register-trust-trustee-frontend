@@ -16,20 +16,15 @@
 
 package controllers.actions
 
+import controllers.actions.register._
 import javax.inject.Inject
-import models.requests.IdentifierRequest
-import play.api.mvc._
+import models.requests.RegistrationDataRequest
+import play.api.mvc.{ActionBuilder, AnyContent}
 
-import scala.concurrent.{ExecutionContext, Future}
-
-class FakeIdentifierAction @Inject()(bodyParsers: PlayBodyParsers) extends IdentifierAction {
-
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-    block(IdentifierRequest(request, "id"))
-
-  override def parser: BodyParser[AnyContent] =
-    bodyParsers.default
-
-  override protected def executionContext: ExecutionContext =
-    scala.concurrent.ExecutionContext.Implicits.global
+class StandardActionSets @Inject()(identify: RegistrationIdentifierAction,
+                                   getData: DraftIdRetrievalActionProvider,
+                                   requireData: RegistrationDataRequiredAction
+                                  ){
+  def identifiedUserWithData(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
+    identify andThen getData(draftId) andThen requireData
 }

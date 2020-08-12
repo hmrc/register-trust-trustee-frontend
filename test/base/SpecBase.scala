@@ -16,7 +16,9 @@
 
 package base
 
-import models.UserAnswers
+import controllers.actions.{FakeDraftIdRetrievalActionProvider, FakeIdentifyForRegistration}
+import controllers.actions.register._
+import models.{Status, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.TryValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -45,13 +47,13 @@ trait SpecBase extends PlaySpec
 
   lazy val fakeNavigator: FakeNavigator = new FakeNavigator()
 
-//  private def fakeDraftIdAction(userAnswers: Option[UserAnswers]): FakeDraftIdRetrievalActionProvider =
-//    new FakeDraftIdRetrievalActionProvider(
-//      draftId,
-//      Status.InProgress,
-//      userAnswers,
-//      registrationsRepository
-//    )
+  private def fakeDraftIdAction(userAnswers: Option[UserAnswers]): FakeDraftIdRetrievalActionProvider =
+    new FakeDraftIdRetrievalActionProvider(
+      draftId,
+      Status.InProgress,
+      userAnswers,
+      registrationsRepository
+    )
 
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
                                    affinityGroup: AffinityGroup = AffinityGroup.Organisation,
@@ -61,11 +63,11 @@ trait SpecBase extends PlaySpec
     new GuiceApplicationBuilder()
       .overrides(
         bind[Navigator].toInstance(navigator),
-//        bind[RegistrationDataRequiredAction].to[RegistrationDataRequiredActionImpl],
-//        bind[RegistrationIdentifierAction].toInstance(
-//          new FakeIdentifyForRegistration(affinityGroup, frontendAppConfig)(injectedParsers, trustsAuth, enrolments)
-//        ),
-//        bind[DraftIdRetrievalActionProvider].toInstance(fakeDraftIdAction(userAnswers)),
+        bind[RegistrationDataRequiredAction].to[RegistrationDataRequiredActionImpl],
+        bind[RegistrationIdentifierAction].toInstance(
+          new FakeIdentifyForRegistration(affinityGroup, frontendAppConfig)(injectedParsers, trustsAuth, enrolments)
+        ),
+        bind[DraftIdRetrievalActionProvider].toInstance(fakeDraftIdAction(userAnswers)),
         bind[RegistrationsRepository].toInstance(registrationsRepository),
         bind[AffinityGroup].toInstance(Organisation)
       )

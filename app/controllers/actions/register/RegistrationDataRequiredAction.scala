@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package controllers.actions
+package controllers.actions.register
 
 import javax.inject.Inject
-import controllers.routes
-import models.requests.{DataRequest, OptionalDataRequest}
+import models.requests.{OptionalRegistrationDataRequest, RegistrationDataRequest}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends DataRequiredAction {
+class RegistrationDataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends RegistrationDataRequiredAction {
 
-  override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+  override protected def refine[A](request: OptionalRegistrationDataRequest[A]): Future[Either[Result, RegistrationDataRequest[A]]] = {
 
     implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     request.userAnswers match {
       case None =>
-        Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad())))
+        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad())))
       case Some(data) =>
-        Future.successful(Right(DataRequest(request.request, request.internalId, data)))
+        Future.successful(Right(RegistrationDataRequest(request.request, request.internalId, data, request.affinityGroup, request.enrolments, request.agentARN)))
     }
   }
 }
 
-trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+trait RegistrationDataRequiredAction extends ActionRefiner[OptionalRegistrationDataRequest, RegistrationDataRequest]
