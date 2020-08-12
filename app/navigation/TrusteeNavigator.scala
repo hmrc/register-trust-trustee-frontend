@@ -16,11 +16,20 @@
 
 package navigation
 
+import config.FrontendAppConfig
+import javax.inject.Inject
 import models.ReadableUserAnswers
-import pages._
+import pages.Page
 import play.api.mvc.Call
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
-  override def nextPage(page: Page, fakeDraftId: String, userAnswers: ReadableUserAnswers): Call = desiredRoute
+class TrusteeNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
+
+  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
+    route(draftId, config)(page)(userAnswers)
+
+  private def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case _ => _ =>
+      controllers.routes.IndexController.onPageLoad()
+  }
 }
 

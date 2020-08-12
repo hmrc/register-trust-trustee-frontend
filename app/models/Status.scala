@@ -16,23 +16,18 @@
 
 package models
 
-import java.time.{Instant, LocalDateTime, ZoneOffset}
+sealed trait Status
 
-import play.api.libs.json._
+object Status extends Enumerable.Implicits {
 
-trait MongoDateTimeFormats {
+  case object Completed extends WithName("completed") with Status
 
-  implicit val localDateTimeRead: Reads[LocalDateTime] =
-    (__ \ "$date").read[Long].map {
-      millis =>
-        LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC)
-    }
+  case object InProgress extends WithName("progress") with Status
 
-  implicit val localDateTimeWrite: Writes[LocalDateTime] = new Writes[LocalDateTime] {
-    def writes(dateTime: LocalDateTime): JsValue = Json.obj(
-      "$date" -> dateTime.atZone(ZoneOffset.UTC).toInstant.toEpochMilli
-    )
-  }
+  val values: Set[Status] = Set(
+    Completed, InProgress
+  )
+
+  implicit val enumerable: Enumerable[Status] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }
-
-object MongoDateTimeFormats extends MongoDateTimeFormats

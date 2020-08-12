@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package navigation
+package base
 
-import models.ReadableUserAnswers
-import pages._
-import play.api.mvc.Call
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import repositories.RegistrationsRepository
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
-  override def nextPage(page: Page, fakeDraftId: String, userAnswers: ReadableUserAnswers): Call = desiredRoute
+import scala.concurrent.Future
+
+trait Mocked extends MockitoSugar {
+
+  val registrationsRepository : RegistrationsRepository = mock[RegistrationsRepository]
+
+  when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
+  when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 }
-
