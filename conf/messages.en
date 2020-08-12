@@ -21,9 +21,10 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = register-trust-trustee-frontend
-index.heading = register-trust-trustee-frontend
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
+#timeout dialog
+timeout.title=Your application will time out soon
+timeout.message=We will reset your application if you do not respond in
+timeout.keep-alive-button=Continue application
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset

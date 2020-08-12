@@ -1,6 +1,6 @@
 # microservice specific routes
 
-GET        /                                            controllers.IndexController.onPageLoad
+GET        /:draftId/start                              controllers.IndexController.onPageLoad(draftId: String)
 
 GET        /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
 
@@ -8,6 +8,12 @@ GET        /language/:lang                              controllers.LanguageSwit
 
 GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
 
-GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
-
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
+
+GET        /logout                                      controllers.register.LogoutController.logout()
+
+GET        /keep-alive                                  controllers.SessionTimeoutController.keepAlive
+GET        /timeout                                     controllers.SessionTimeoutController.timeout
+
+GET        /feature-not-available                       controllers.FeatureNotAvailableController.onPageLoad()
+
