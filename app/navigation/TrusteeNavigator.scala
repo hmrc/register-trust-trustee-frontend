@@ -29,7 +29,7 @@ class TrusteeNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   private def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case _ => _ =>
-      controllers.routes.IndexController.onPageLoad()
+      controllers.routes.IndexController.onPageLoad(draftId)
   }
 }
 

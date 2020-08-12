@@ -32,7 +32,7 @@ class TrusteeNavigatorSpec extends SpecBase {
       "go to Index from a page that doesn't exist in the route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, draftId, emptyUserAnswers) mustBe routes.IndexController.onPageLoad()
+        navigator.nextPage(UnknownPage, draftId, emptyUserAnswers) mustBe routes.IndexController.onPageLoad(draftId)
       }
     }
   }
