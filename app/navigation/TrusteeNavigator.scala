@@ -18,18 +18,21 @@ package navigation
 
 import config.FrontendAppConfig
 import javax.inject.Inject
-import models.ReadableUserAnswers
+import models.{ReadableUserAnswers, UserAnswers}
 import pages.Page
 import play.api.mvc.Call
 
-class TrusteeNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
+class TrusteeNavigator @Inject()(config: FrontendAppConfig, trusteeRoutes: TrusteeRoutes) extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    route(draftId, config)(page)(userAnswers)
+    route(draftId)(page)(userAnswers)
 
-  private def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case _ => _ =>
-      controllers.routes.IndexController.onPageLoad(draftId)
-  }
+    private def defaultRoute(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+      case _ => _ => controllers.routes.IndexController.onPageLoad(draftId)
+    }
+
+    protected def route(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
+        trusteeRoutes.route(draftId) orElse
+        defaultRoute(draftId)
 }
 

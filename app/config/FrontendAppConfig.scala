@@ -16,6 +16,8 @@
 
 package config
 
+import java.time.LocalDate
+
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
@@ -69,4 +71,15 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   def routeToSwitchLanguage: String => Call =
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
+
+  private def getInt(path: String): Int = configuration.get[Int](path)
+  private def getDate(entry: String): LocalDate =
+    LocalDate.of(
+      getInt(s"dates.$entry.year"),
+      getInt(s"dates.$entry.month"),
+      getInt(s"dates.$entry.day")
+    )
+
+  lazy val minDate: LocalDate = getDate("minimum")
+  lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 }
