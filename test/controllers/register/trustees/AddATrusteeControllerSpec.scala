@@ -40,8 +40,8 @@ class AddATrusteeControllerSpec extends SpecBase {
   val yesNoForm = new YesNoFormProvider().withPrefix("addATrusteeYesNo")
 
   val trustee = List(
-    AddRow("First 0 Last 0", typeLabel = "Trustee Individual", "/trusts-registration/feature-not-available", "/trusts-registration/id/trustees/0/individual/remove"),
-    AddRow("First 1 Last 1", typeLabel = "Trustee Individual", "/trusts-registration/feature-not-available", "/trusts-registration/id/trustees/1/individual/remove")
+    AddRow("First 0 Last 0", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/0/individual/remove"),
+    AddRow("First 1 Last 1", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/1/individual/remove")
   )
 
   val userAnswersWithTrusteesComplete = emptyUserAnswers
@@ -151,7 +151,7 @@ class AddATrusteeControllerSpec extends SpecBase {
 
     "there are trustees" must {
 
-      "return OK and the correct view for a GET" ignore {
+      "return OK and the correct view for a GET" in {
 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithTrusteesComplete)).build()
 
@@ -187,7 +187,7 @@ class AddATrusteeControllerSpec extends SpecBase {
         application.stop()
       }
 
-      "return a Bad Request and errors when invalid data is submitted" ignore {
+      "return a Bad Request and errors when invalid data is submitted" in {
 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithTrusteesComplete)).build()
 

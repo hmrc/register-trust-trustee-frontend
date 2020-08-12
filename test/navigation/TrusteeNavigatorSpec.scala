@@ -23,7 +23,7 @@ import models._
 
 class TrusteeNavigatorSpec extends SpecBase {
 
-  val navigator = new TrusteeNavigator(frontendAppConfig)
+  private val navigator = injector.instanceOf[TrusteeNavigator]
 
   "Navigator" when {
 
