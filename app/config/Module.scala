@@ -18,11 +18,13 @@ package config
 
 import com.google.inject.AbstractModule
 import controllers.actions.register._
+import navigation.{Navigator, TrusteeNavigator}
 import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
 
 class Module extends AbstractModule {
 
   override def configure(): Unit = {
+    bind(classOf[Navigator]).to(classOf[TrusteeNavigator]).asEagerSingleton()
     bind(classOf[RegistrationsRepository]).to(classOf[DefaultRegistrationsRepository]).asEagerSingleton()
     bind(classOf[RegistrationDataRequiredAction]).to(classOf[RegistrationDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[DraftIdRetrievalActionProvider]).to(classOf[DraftIdDataRetrievalActionProviderImpl]).asEagerSingleton()

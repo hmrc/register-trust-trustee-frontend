@@ -14,21 +14,23 @@
  * limitations under the License.
  *@
 
+@import controllers.register.trustees.routes._
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(index : Int, draftId: String, answerSections: Seq[Section], titlePrefix: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("checkYourAnswers.title")
+    title = messages(titlePrefix+".title")
     ) {
 
-    @components.heading("checkYourAnswers.heading")</h1>
+    @components.back_link()
 
-    <p>@messages("checkYourAnswers.guidance")</p>
+    @components.heading(titlePrefix+".heading")
 
     @for(section <- answerSections){
         @{
@@ -37,5 +39,9 @@
                 case r: RepeaterAnswerSection => components.repeater_answer_section(r)
             }
         }
+    }
+
+    @formHelper(action = TrusteesAnswerPageController.onSubmit(index, draftId), 'autoComplete -> "off") {
+        @components.submit_button()
     }
 }

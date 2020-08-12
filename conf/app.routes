@@ -1,19 +1,88 @@
 # microservice specific routes
 
-GET        /:draftId/start                              controllers.IndexController.onPageLoad(draftId: String)
+GET        /:draftId/start                                        controllers.IndexController.onPageLoad(draftId: String)
 
-GET        /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
+GET        /assets/*file                                          controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
+GET        /language/:lang                                        controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
+GET        /this-service-has-been-reset                           controllers.SessionExpiredController.onPageLoad
 
-GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
+GET        /unauthorised                                          controllers.UnauthorisedController.onPageLoad
 
-GET        /logout                                      controllers.register.LogoutController.logout()
+GET        /logout                                                controllers.register.LogoutController.logout()
 
-GET        /keep-alive                                  controllers.SessionTimeoutController.keepAlive
-GET        /timeout                                     controllers.SessionTimeoutController.timeout
+GET        /keep-alive                                            controllers.SessionTimeoutController.keepAlive
+GET        /timeout                                               controllers.SessionTimeoutController.timeout
 
-GET        /feature-not-available                       controllers.FeatureNotAvailableController.onPageLoad()
+GET        /feature-not-available                                 controllers.FeatureNotAvailableController.onPageLoad()
+
+## Trustees
+
+GET        /:draftId/information-you-need                         controllers.register.trustees.TrusteesInfoController.onPageLoad(draftId: String)
+
+GET        /:draftId/:index/is-this-the-lead-trustee              controllers.register.trustees.IsThisLeadTrusteeController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/is-this-the-lead-trustee              controllers.register.trustees.IsThisLeadTrusteeController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual-or-business                controllers.register.trustees.TrusteeIndividualOrBusinessController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual-or-business                controllers.register.trustees.TrusteeIndividualOrBusinessController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/check-answers                         controllers.register.trustees.TrusteesAnswerPageController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/check-answers                         controllers.register.trustees.TrusteesAnswerPageController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/add                                          controllers.register.trustees.AddATrusteeController.onPageLoad(draftId: String)
+POST       /:draftId/add                                          controllers.register.trustees.AddATrusteeController.submitOne(draftId: String)
+POST       /:draftId/add-another                                  controllers.register.trustees.AddATrusteeController.submitAnother(draftId: String)
+
+### Trustee Individual
+
+GET        /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual/name                       controllers.register.trustees.individual.TrusteesNameController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/name                       controllers.register.trustees.individual.TrusteesNameController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual/date-of-birth              controllers.register.trustees.individual.TrusteesDateOfBirthController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/individual/date-of-birth              controllers.register.trustees.individual.TrusteesDateOfBirthController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/individual/telephone-number           controllers.register.trustees.individual.TelephoneNumberController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/telephone-number           controllers.register.trustees.individual.TelephoneNumberController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual/is-a-uk-citizen            controllers.register.trustees.individual.TrusteeAUKCitizenController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/is-a-uk-citizen            controllers.register.trustees.individual.TrusteeAUKCitizenController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual/live-in-the-uk             controllers.register.trustees.individual.TrusteeLiveInTheUKController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/live-in-the-uk             controllers.register.trustees.individual.TrusteeLiveInTheUKController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual/nino                       controllers.register.trustees.individual.TrusteesNinoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/individual/nino                       controllers.register.trustees.individual.TrusteesNinoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/individual/uk-address                 controllers.register.trustees.individual.TrusteesUkAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/uk-address                 controllers.register.trustees.individual.TrusteesUkAddressController.onSubmit(index : Int, draftId: String)
+
+### Trustee Business
+
+GET        /:draftId/:index/business/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/business/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/business/telephone-number             controllers.register.trustees.organisation.TrusteeOrgTelephoneNumberController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/business/telephone-number             controllers.register.trustees.organisation.TrusteeOrgTelephoneNumberController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/business/is-a-uk-company              controllers.register.trustees.organisation.TrusteeUtrYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/business/is-a-uk-company              controllers.register.trustees.organisation.TrusteeUtrYesNoController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/business/name                         controllers.register.trustees.organisation.TrusteeBusinessNameController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/business/name                         controllers.register.trustees.organisation.TrusteeBusinessNameController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/business/utr                          controllers.register.trustees.organisation.TrusteeUtrController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/business/utr                          controllers.register.trustees.organisation.TrusteeUtrController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/business/uk-address-yes-no            controllers.register.trustees.organisation.TrusteeOrgAddressUkYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/business/uk-address-yes-no            controllers.register.trustees.organisation.TrusteeOrgAddressUkYesNoController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/business/uk-address                   controllers.register.trustees.organisation.TrusteesOrgUkAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/business/uk-address                   controllers.register.trustees.organisation.TrusteesOrgUkAddressController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/business/international-address        controllers.register.trustees.organisation.TrusteeOrgAddressInternationalController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/business/international-address        controllers.register.trustees.organisation.TrusteeOrgAddressInternationalController.onSubmit(index : Int, draftId: String)
 
