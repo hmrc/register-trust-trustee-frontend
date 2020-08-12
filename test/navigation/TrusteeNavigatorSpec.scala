@@ -17,23 +17,29 @@
 package navigation
 
 import base.SpecBase
-import controllers.routes
+import generators.Generators
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
-import models._
 
-class TrusteeNavigatorSpec extends SpecBase {
+class TrusteeNavigatorSpec extends SpecBase
+  with ScalaCheckPropertyChecks
+  with Generators
+  with TestTrusteeRoutes
+{
 
-  private val navigator = injector.instanceOf[TrusteeNavigator]
+  implicit val navigator : Navigator = injector.instanceOf[Navigator]
 
   "Navigator" when {
 
     "in Normal mode" must {
 
       "go to Index from a page that doesn't exist in the route map" in {
-
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, draftId, emptyUserAnswers) mustBe routes.IndexController.onPageLoad(draftId)
+        navigator.nextPage(UnknownPage, fakeDraftId, emptyUserAnswers) mustBe controllers.routes.IndexController.onPageLoad(fakeDraftId)
       }
+
+      behave like trusteeRoutes
     }
   }
 }
+
