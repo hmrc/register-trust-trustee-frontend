@@ -16,9 +16,56 @@
 
 package generators
 
-import models._
+import java.time.LocalDate
+
+import models.core.pages._
+import models.registration.pages._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryFullName : Arbitrary[FullName] = {
+    Arbitrary {
+      for {
+        str <- arbitrary[String]
+      } yield {
+        FullName(str, Some(str), str)
+      }
+    }
+  }
+
+  implicit lazy val arbitraryInternationalAddress: Arbitrary[InternationalAddress] =
+    Arbitrary {
+      for {
+        str <- arbitrary[String]
+      } yield InternationalAddress(str,str,Some(str),str)
+    }
+
+  implicit lazy val arbitraryUkAddress: Arbitrary[UKAddress] =
+    Arbitrary {
+      for {
+        line1 <- arbitrary[String]
+        line2 <- arbitrary[String]
+        line3 <- arbitrary[String]
+        line4 <- arbitrary[String]
+        postcode <- arbitrary[String]
+      } yield UKAddress(line1, line2, Some(line3), Some(line4), postcode)
+    }
+
+  implicit lazy val arbitraryAddATrustee: Arbitrary[AddATrustee] =
+    Arbitrary {
+      Gen.oneOf(AddATrustee.values)
+    }
+
+  implicit lazy val arbitraryTrusteeOrIndividual: Arbitrary[IndividualOrBusiness] =
+    Arbitrary {
+      Gen.oneOf(IndividualOrBusiness.values.toSeq)
+    }
+
+  implicit lazy val arbitraryLocalDate : Arbitrary[LocalDate] =
+    Arbitrary {
+      Gen.const(LocalDate.of(2010, 10, 10))
+    }
+
 }
