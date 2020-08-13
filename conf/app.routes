@@ -60,6 +60,15 @@ POST       /:draftId/:index/individual/nino                       controllers.re
 GET        /:draftId/:index/individual/uk-address                 controllers.register.trustees.individual.TrusteesUkAddressController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual/uk-address                 controllers.register.trustees.individual.TrusteesUkAddressController.onSubmit(index : Int, draftId: String)
 
+GET        /:draftId/:index/individual/details-choice             controllers.register.trustees.individual.TrusteeDetailsChoiceController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/details-choice             controllers.register.trustees.individual.TrusteeDetailsChoiceController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual/idCard-details             controllers.register.trustees.individual.IDCardDetailsController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/idCard-details             controllers.register.trustees.individual.IDCardDetailsController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/individual/passport-details           controllers.register.trustees.individual.PassportDetailsController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/passport-details           controllers.register.trustees.individual.PassportDetailsController.onSubmit(index : Int, draftId: String)
+
 ### Trustee Business
 
 GET        /:draftId/:index/business/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onPageLoad(index : Int, draftId: String)
