@@ -21,7 +21,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, orgName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
 title = s"${errorPrefix(form)} ${messages("trusteesOrgUkAddress.title")}"
@@ -36,7 +36,7 @@ title = s"${errorPrefix(form)} ${messages("trusteesOrgUkAddress.title")}"
         <fieldset>
 
             <legend>
-                @components.heading("trusteesOrgUkAddress.heading", optionalParam = Some(orgName))
+                @components.heading("trusteesOrgUkAddress.heading", optionalParam = Some(name))
             </legend>
 
             @components.uk_address(form)

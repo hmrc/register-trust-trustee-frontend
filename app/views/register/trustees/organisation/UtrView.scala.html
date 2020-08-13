@@ -21,7 +21,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, trusteeBusinessName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("trusteeUtr.title")}"
@@ -35,7 +35,7 @@
 
         @components.input_text(
             field = form("value"),
-            label = messages("trusteeUtr.heading", trusteeBusinessName),
+            label = messages("trusteeUtr.heading", name),
             labelAsHeading = true,
             hint = Some(messages("trusteeUtr.hint")),
             readerHint = Some(messages("trusteeUtr.hint.reader")),

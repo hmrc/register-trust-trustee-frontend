@@ -43,31 +43,29 @@ class NameController @Inject()(
 
   val form: Form[String] = formProvider()
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(draftId: String) =
     standardActionSets.identifiedUserWithData(draftId)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
-
-      val isUKRegisteredCompany: Boolean = request.userAnswers.get(UtrYesNoPage(index)).get
 
       val preparedForm = request.userAnswers.get(NamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, isUKRegisteredCompany))
+      Ok(view(preparedForm, draftId, index))
 
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       val isUKRegisteredCompany: Boolean = request.userAnswers.get(UtrYesNoPage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, isUKRegisteredCompany))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
           for {

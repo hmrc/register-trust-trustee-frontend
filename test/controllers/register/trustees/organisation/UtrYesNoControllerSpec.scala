@@ -20,16 +20,14 @@ import base.SpecBase
 import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.YesNoFormProvider
-import models.core.pages.IndividualOrBusiness
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.TrusteeIndividualOrBusinessPage
-import pages.register.trustees.organisation.UtrYesNoPage
+import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.organisation.UtrYesNoView
-
 
 class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
 
@@ -37,19 +35,17 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
   val form: Form[Boolean] = formProvider.withPrefix("leadTrusteeUtrYesNo")
 
   val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  val fakeName = "Name"
 
   lazy val utrYesNoRoute: String = routes.UtrYesNoController.onPageLoad(index, fakeDraftId).url
+
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
   "TrusteeUtrYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, utrYesNoRoute)
 
@@ -60,7 +56,7 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -69,7 +65,6 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(UtrYesNoPage(index), true).success.value
-        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -82,18 +77,15 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
@@ -114,10 +106,7 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, utrYesNoRoute)
@@ -132,7 +121,7 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }

@@ -21,11 +21,11 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, isUKRegisteredCompany: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("trusteeBusinessName.title")}"
-    ) {
+) {
 
     @formHelper(action = NameController.onSubmit(index, draftId), 'autoComplete -> "on") {
 
@@ -38,7 +38,7 @@
           inputClass = Some("trustee-business-name"),
           label = messages("trusteeBusinessName.heading"),
           labelAsHeading = true,
-          hint = if(isUKRegisteredCompany) Some(messages("trusteeBusinessName.hint")) else None,
+          hint = Some(messages("trusteeBusinessName.hint")),
           labelClass=Some("heading-large"),
           autocomplete = Some("name")
         )
