@@ -17,31 +17,28 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
-import controllers.register.IndexValidation
-import forms.trustees.TelephoneNumberFormProvider
+import forms.YesNoFormProvider
 import models.core.pages.FullName
-import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
-import pages.register.trustees.{IsThisLeadTrusteePage, TelephoneNumberPage}
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
+import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.trustees.individual.{TrusteeAddressInTheUKPage, TrusteesNamePage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.TelephoneNumberView
+import play.api.test.Helpers._
+import views.html.register.trustees.individual.LiveInTheUKYesNoView
 
-class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
+class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesTelephoneNumber"
-  val trusteeMessagePrefix = "telephoneNumber"
-  val formProvider = new TelephoneNumberFormProvider()
-  val form = formProvider(trusteeMessagePrefix)
+  val leadTrusteeMessagePrefix = "leadTrusteeLiveInTheUK"
+  val trusteeMessagePrefix = "trusteeLiveInTheUK"
+  val formProvider = new YesNoFormProvider()
+  val form = formProvider.withPrefix(trusteeMessagePrefix)
 
   val index = 0
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
-  lazy val telephoneNumberRoute = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeLiveInTheUKRoute = routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId).url
 
-  "TelephoneNumber Controller" must {
+  "TrusteeLiveInTheUK Controller" must {
 
     "return OK and the correct view (lead trustee) for a GET" in {
 
@@ -51,11 +48,11 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, telephoneNumberRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TelephoneNumberView]
+      val view = application.injector.instanceOf[LiveInTheUKYesNoView]
 
       status(result) mustEqual OK
 
@@ -73,11 +70,11 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, telephoneNumberRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TelephoneNumberView]
+      val view = application.injector.instanceOf[LiveInTheUKYesNoView]
 
       status(result) mustEqual OK
 
@@ -92,51 +89,33 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TelephoneNumberPage(index), "0191 1111111").success.value
+        .set(TrusteeAddressInTheUKPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, telephoneNumberRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
-      val view = application.injector.instanceOf[TelephoneNumberView]
+      val view = application.injector.instanceOf[LiveInTheUKYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("0191 1111111"), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to TrusteeName when TrusteesName is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, telephoneNumberRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
-    "redirect to IsThisLeadTrustee page when IsThisLeadTrustee is not answered" in {
+    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(TrusteeAddressInTheUKPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, telephoneNumberRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
       val result = route(application, request).value
 
@@ -152,14 +131,14 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(TrusteeAddressInTheUKPage(index), true).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, telephoneNumberRoute)
-          .withFormUrlEncodedBody(("value", "0191 1111111"))
+        FakeRequest(POST, trusteeLiveInTheUKRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -170,6 +149,52 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
+    "redirect to trusteeName must"  when{
+
+      "a GET when no name is found" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeAddressInTheUKPage(index), true).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
+
+        application.stop()
+      }
+      "a POST when no name is found" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeAddressInTheUKPage(index), true).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request =
+          FakeRequest(POST, trusteeLiveInTheUKRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
+
+        application.stop()
+
+      }
+    }
+
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
@@ -179,12 +204,12 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, telephoneNumberRoute)
+        FakeRequest(POST, trusteeLiveInTheUKRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[TelephoneNumberView]
+      val view = application.injector.instanceOf[LiveInTheUKYesNoView]
 
       val result = route(application, request).value
 
@@ -200,11 +225,12 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, telephoneNumberRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -215,7 +241,8 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, telephoneNumberRoute)
+        FakeRequest(POST, trusteeLiveInTheUKRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -225,38 +252,6 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       application.stop()
     }
-
-  "for a GET" must {
-
-    def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-      val route = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
-
-      FakeRequest(GET, route)
-    }
-
-    validateIndex(
-      arbitrary[String],
-      TelephoneNumberPage.apply,
-      getForIndex
-    )
-
-  }
-
-  "for a POST" must {
-    def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
-
-      val route =
-        routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
-
-      FakeRequest(POST, route)
-        .withFormUrlEncodedBody(("value", "0191 1111111"))
-    }
-
-    validateIndex(
-      arbitrary[String],
-      TelephoneNumberPage.apply,
-      postForIndex
-    )
-    }
   }
 }
+

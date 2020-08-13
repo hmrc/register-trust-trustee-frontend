@@ -19,92 +19,72 @@ package controllers.register.trustees.individual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.TelephoneNumberFormProvider
+import forms.PassportOrIdCardFormProvider
 import javax.inject.Inject
-import models.requests.RegistrationDataRequest
 import navigation.Navigator
-import pages.register.trustees.individual.TrusteesNamePage
-import pages.register.trustees.{IsThisLeadTrusteePage, TelephoneNumberPage}
+import pages.register.trustees.individual.{PassportDetailsPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.TelephoneNumberView
+import utils.countryOptions.CountryOptions
+import views.html.register.trustees.individual.PassportDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TelephoneNumberController @Inject()(
+class PassportDetailsController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            registrationsRepository: RegistrationsRepository,
                                            navigator: Navigator,
-                                           validateIndex: IndexActionFilterProvider,
                                            identify: RegistrationIdentifierAction,
                                            getData: DraftIdRetrievalActionProvider,
+                                           validateIndex: IndexActionFilterProvider,
                                            requireData: RegistrationDataRequiredAction,
                                            requiredAnswer: RequiredAnswerActionProvider,
-                                           formProvider: TelephoneNumberFormProvider,
+                                           formProvider: PassportOrIdCardFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: TelephoneNumberView
+                                           view: PassportDetailsView,
+                                           val countryOptions: CountryOptions
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val form = formProvider("individualBeneficiaryPassportDetails")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form = formProvider(messagePrefix)
-
-      val preparedForm = request.userAnswers.get(TelephoneNumberPage(index)) match {
+      val preparedForm = request.userAnswers.get(PassportDetailsPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
-  }
-
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteesTelephoneNumber"
-    } else {
-      "telephoneNumber"
-    }
-    messagePrefix
+      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
-
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form = formProvider(messagePrefix)
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
 
         value => {
-          val answers = request.userAnswers.set(TelephoneNumberPage(index), value)
-
           for {
-            updatedAnswers <- Future.fromTry(answers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportDetailsPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TelephoneNumberPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PassportDetailsPage(index), draftId, updatedAnswers))
         }
       )
   }

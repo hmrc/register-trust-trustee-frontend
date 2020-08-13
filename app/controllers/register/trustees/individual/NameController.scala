@@ -30,11 +30,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.TrusteesNameView
+import views.html.register.trustees.individual.NameView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteesNameController @Inject()(
+class NameController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         registrationsRepository: RegistrationsRepository,
                                         navigator: Navigator,
@@ -45,7 +45,7 @@ class TrusteesNameController @Inject()(
                                         formProvider: TrusteesNameFormProvider,
                                         requiredAnswer: RequiredAnswerActionProvider,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: TrusteesNameView
+                                        view: NameView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =

@@ -27,15 +27,15 @@ import play.api.i18n.Messages
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.TrusteesNameView
+import views.html.register.trustees.individual.NameView
 
-class TrusteesNameControllerSpec extends SpecBase with IndexValidation {
+class NameControllerSpec extends SpecBase with IndexValidation {
 
   val formProvider = new TrusteesNameFormProvider()
 
   val index = 0
 
-  lazy val trusteesNameRoute: String = routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteesNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   "TrusteesName Controller" must {
 
@@ -56,7 +56,7 @@ class TrusteesNameControllerSpec extends SpecBase with IndexValidation {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[TrusteesNameView]
+        val view = application.injector.instanceOf[NameView]
 
         val form = formProvider(messageKeyPrefix)
 
@@ -83,7 +83,7 @@ class TrusteesNameControllerSpec extends SpecBase with IndexValidation {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[TrusteesNameView]
+        val view = application.injector.instanceOf[NameView]
 
         val form = formProvider(messageKeyPrefix)
 
@@ -118,7 +118,7 @@ class TrusteesNameControllerSpec extends SpecBase with IndexValidation {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[TrusteesNameView]
+        val view = application.injector.instanceOf[NameView]
 
         val result = route(application, request).value
 
@@ -150,7 +150,7 @@ class TrusteesNameControllerSpec extends SpecBase with IndexValidation {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[TrusteesNameView]
+        val view = application.injector.instanceOf[NameView]
 
         val result = route(application, request).value
 
@@ -196,7 +196,7 @@ class TrusteesNameControllerSpec extends SpecBase with IndexValidation {
 
         val request = FakeRequest(GET, trusteesNameRoute)
 
-        val view = application.injector.instanceOf[TrusteesNameView]
+        val view = application.injector.instanceOf[NameView]
 
         val result = route(application, request).value
 
