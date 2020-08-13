@@ -338,3 +338,4 @@ trusteeOrgAddressInternational.title = What is the trustee’s address?
 trusteeOrgAddressInternational.heading = What is {0}’s address?
 trusteeOrgAddressInternational.checkYourAnswersLabel = What is {0}’s address?
 
+trustee.default = the trustee

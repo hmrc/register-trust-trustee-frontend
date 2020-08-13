@@ -18,6 +18,7 @@ package controllers.register.trustees.organisation
 
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
+import controllers.actions.register.organisation.NameRequiredActionImpl
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -36,13 +37,14 @@ class UtrYesNoController @Inject()(
                                     registrationsRepository: RegistrationsRepository,
                                     @TrusteeOrganisation navigator: Navigator,
                                     standardActionSets: StandardActionSets,
+                                    nameAction: NameRequiredActionImpl,
                                     formProvider: YesNoFormProvider,
                                     val controllerComponents: MessagesControllerComponents,
                                     view: UtrYesNoView
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId)
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

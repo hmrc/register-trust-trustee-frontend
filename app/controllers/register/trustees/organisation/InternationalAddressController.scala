@@ -18,10 +18,11 @@ package controllers.register.trustees.organisation
 
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
+import controllers.actions.register.organisation.NameRequiredActionImpl
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{InternationalAddressPage, NamePage}
+import pages.register.trustees.organisation.InternationalAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,6 +38,7 @@ class InternationalAddressController @Inject()(
                                                 registrationsRepository: RegistrationsRepository,
                                                 @TrusteeOrganisation navigator: Navigator,
                                                 standardActionSets: StandardActionSets,
+                                                nameAction: NameRequiredActionImpl,
                                                 formProvider: InternationalAddressFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: InternationalAddressView,
@@ -46,29 +48,25 @@ class InternationalAddressController @Inject()(
   private val form = formProvider()
 
   private def actions(index: Int, draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId)
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val orgName = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, index, draftId, orgName))
+      Ok(view(preparedForm, countryOptions.options, index, draftId, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val orgName = request.userAnswers.get(NamePage(index)).get
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, orgName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.trusteeName))),
 
         value => {
           for {

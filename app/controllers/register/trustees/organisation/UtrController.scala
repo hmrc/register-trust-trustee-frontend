@@ -18,10 +18,11 @@ package controllers.register.trustees.organisation
 
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
+import controllers.actions.register.organisation.NameRequiredActionImpl
 import forms.UtrFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{NamePage, UtrPage}
+import pages.register.trustees.organisation.UtrPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,6 +37,7 @@ class UtrController @Inject()(
                                registrationsRepository: RegistrationsRepository,
                                @TrusteeOrganisation navigator: Navigator,
                                standardActionSets: StandardActionSets,
+                               nameAction: NameRequiredActionImpl,
                                formProvider: UtrFormProvider,
                                val controllerComponents: MessagesControllerComponents,
                                view: UtrView
@@ -44,29 +46,25 @@ class UtrController @Inject()(
   private val form = formProvider("trusteeUtr")
 
   private def actions(index : Int, draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId)
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val trusteeBusinessName = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(UtrPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, trusteeBusinessName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
-      val trusteeBusinessName = request.userAnswers.get(NamePage(index)).get
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeBusinessName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
           for {
