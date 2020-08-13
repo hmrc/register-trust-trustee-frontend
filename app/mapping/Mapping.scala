@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package mapping
 
-import models.registration.pages.PassportOrIdCardDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
+import models.UserAnswers
 
-final case class IDCardDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+trait Mapping[T] {
 
-  override def path: JsPath = Trustees.path \ index \ toString
+  def build(userAnswers: UserAnswers) : Option[T]
 
-  override def toString: String = "idCardDetails"
 }

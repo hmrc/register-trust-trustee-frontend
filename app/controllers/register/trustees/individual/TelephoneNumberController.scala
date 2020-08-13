@@ -54,7 +54,7 @@ class TelephoneNumberController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.TrusteesNameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
       requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {

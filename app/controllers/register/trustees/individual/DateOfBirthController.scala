@@ -19,34 +19,34 @@ package controllers.register.trustees.individual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.UKAddressFormProvider
+import forms.trustees.TrusteesDateOfBirthFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesNamePage, TrusteesUkAddressPage}
+import pages.register.trustees.individual.{TrusteesDateOfBirthPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.TrusteesUkAddressView
+import views.html.register.trustees.individual.DateOfBirthView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteesUkAddressController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             registrationsRepository: RegistrationsRepository,
-                                             navigator: Navigator,
-                                             validateIndex: IndexActionFilterProvider,
-                                             identify: RegistrationIdentifierAction,
-                                             getData: DraftIdRetrievalActionProvider,
-                                             requireData: RegistrationDataRequiredAction,
-                                             requiredAnswer: RequiredAnswerActionProvider,
-                                             formProvider: UKAddressFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: TrusteesUkAddressView
+class DateOfBirthController @Inject()(
+                                       override val messagesApi: MessagesApi,
+                                       registrationsRepository: RegistrationsRepository,
+                                       navigator: Navigator,
+                                       identify: RegistrationIdentifierAction,
+                                       getData: DraftIdRetrievalActionProvider,
+                                       requireData: RegistrationDataRequiredAction,
+                                       validateIndex: IndexActionFilterProvider,
+                                       requiredAnswer: RequiredAnswerActionProvider,
+                                       formProvider: TrusteesDateOfBirthFormProvider,
+                                       val controllerComponents: MessagesControllerComponents,
+                                       view: DateOfBirthView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
@@ -56,16 +56,19 @@ class TrusteesUkAddressController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.TrusteesNameController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(
+        TrusteesNamePage(index),
+        routes.NameController.onPageLoad(index, draftId)
+      ))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
       val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val preparedForm = request.userAnswers.get(TrusteesUkAddressPage(index)) match {
+      val messagePrefix: String = getMessagePrefix(index, request)
+
+      val preparedForm = request.userAnswers.get(TrusteesDateOfBirthPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -73,23 +76,12 @@ class TrusteesUkAddressController @Inject()(
       Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
   }
 
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteeUkAddress"
-    } else {
-      "trusteesUkAddress"
-    }
-    messagePrefix
-  }
-
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
       val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+
+      val messagePrefix: String = getMessagePrefix(index, request)
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
@@ -97,10 +89,22 @@ class TrusteesUkAddressController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesUkAddressPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesUkAddressPage(index), draftId, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesDateOfBirthPage(index), value))
+            _ <- registrationsRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(TrusteesDateOfBirthPage(index), draftId, updatedAnswers))
         }
       )
   }
+
+  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
+    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
+
+    val messagePrefix = if (isLead) {
+      "leadTrusteesDateOfBirth"
+    } else {
+      "trusteesDateOfBirth"
+    }
+    messagePrefix
+  }
+
 }

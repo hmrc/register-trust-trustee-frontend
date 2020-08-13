@@ -21,13 +21,13 @@ main_template: MainTemplate,
 formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, messagePrefix: String, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index : Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
+title = s"${errorPrefix(form)} ${messages("trusteeIDCardDetailsYesNo.title")}"
 ) {
 
-  @formHelper(action = TrusteeAUKCitizenController.onSubmit(index, draftId), 'autoComplete -> "off") {
+  @formHelper(action = IDCardDetailsYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
      @components.back_link()
 
@@ -35,7 +35,7 @@ title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
 
      @components.input_yes_no(
         field = form("value"),
-        label = messages("trusteeAUKCitizen.heading", trusteeName),
+        label = messages("idCardDetailsYesNo.heading", trusteeName),
         legendClass = Some("heading-large"),
         legendAsHeading = true
      )

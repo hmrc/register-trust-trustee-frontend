@@ -23,6 +23,7 @@ import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{TrusteeAddressInTheUKPage, TrusteesNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.register.trustees.individual.TrusteeDetailsChoiceView
 
 class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
@@ -35,7 +36,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
-  lazy val trusteeLiveInTheUKRoute = routes.TrusteeLiveInTheUKController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeLiveInTheUKRoute = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   "TrusteeLiveInTheUK Controller" must {
 
@@ -51,7 +52,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
       status(result) mustEqual OK
 
@@ -73,7 +74,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
       status(result) mustEqual OK
 
@@ -94,7 +95,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
       val result = route(application, request).value
 
@@ -165,7 +166,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
+        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
         application.stop()
       }
@@ -186,7 +187,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
+        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
         application.stop()
 
@@ -208,7 +209,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
       val result = route(application, request).value
 

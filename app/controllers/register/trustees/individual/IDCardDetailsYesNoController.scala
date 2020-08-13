@@ -20,36 +20,34 @@ import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
-import forms.trustees.TrusteeDetailsChoiceFormProvider
 import javax.inject.Inject
-import models.registration.pages.DetailsChoice
-import models.requests.RegistrationDataRequest
 import navigation.Navigator
-import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAddressInTheUKPage, TrusteeDetailsChoicePage, TrusteesNamePage}
+import pages.register.trustees.individual.{IDCardDetailsYesNoPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.TrusteeDetailsChoiceView
+import views.html.register.trustees.individual.IDCardDetailsYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteeDetailsChoiceController @Inject()(
+class IDCardDetailsYesNoController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               registrationsRepository: RegistrationsRepository,
                                               navigator: Navigator,
-                                              validateIndex: IndexActionFilterProvider,
                                               identify: RegistrationIdentifierAction,
                                               getData: DraftIdRetrievalActionProvider,
+                                              validateIndex: IndexActionFilterProvider,
                                               requireData: RegistrationDataRequiredAction,
                                               requiredAnswer: RequiredAnswerActionProvider,
-                                              formProvider: TrusteeDetailsChoiceFormProvider,
+                                              yesNoFormProvider: YesNoFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: TrusteeDetailsChoiceView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              view: IDCardDetailsYesNoView
+                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val form = yesNoFormProvider.withPrefix("individualBeneficiaryIDCardDetailsYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -58,42 +56,34 @@ class TrusteeDetailsChoiceController @Inject()(
       validateIndex(index, Trustees) andThen
       requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
+
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get
 
-      val messagePrefix: String = "trusteeDetailsChoice"
-
-      val form: Form[DetailsChoice] = formProvider.withPrefix(messagePrefix)
-
-      val preparedForm = request.userAnswers.get(TrusteeDetailsChoicePage(index)) match {
+      val preparedForm = request.userAnswers.get(IDCardDetailsYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
+      Ok(view(preparedForm, draftId, index, name.toString))
   }
-
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
-
-      val messagePrefix: String = "trusteeDetailsChoice"
-
-      val form: Form[DetailsChoice] = formProvider.withPrefix(messagePrefix)
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, name.toString))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeDetailsChoicePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IDCardDetailsYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeDetailsChoicePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IDCardDetailsYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

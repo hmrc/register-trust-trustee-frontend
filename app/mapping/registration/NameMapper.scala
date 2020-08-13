@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package mapping.registration
 
-import models.registration.pages.PassportOrIdCardDetails
+import models.UserAnswers
+import models.core.pages.FullName
 import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
 
-final case class IDCardDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+class NameMapper {
 
-  override def path: JsPath = Trustees.path \ index \ toString
+  def build(namePage: QuestionPage[FullName], userAnswers: UserAnswers): Option[NameType] = {
+    val fullName: Option[FullName] = userAnswers.get(namePage)
+    fullName.map {
+      name => build(name)
+    }
+  }
 
-  override def toString: String = "idCardDetails"
+  def build(name: FullName): NameType = {
+    NameType(
+      firstName = name.firstName,
+      middleName = name.middleName,
+      lastName = name.lastName)
+  }
+
 }

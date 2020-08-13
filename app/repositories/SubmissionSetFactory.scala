@@ -17,15 +17,24 @@
 package repositories
 
 import javax.inject.Inject
+import mapping.registration.{CorrespondenceMapper, LeadTrusteeMapper, TrusteeMapper}
+import models.Status.{Completed, InProgress}
 import models._
+import models.registration.pages.AddATrustee
+import pages.register.trustees.AddATrusteePage
 import play.api.i18n.Messages
 import play.api.libs.json.Json
+import utils.CheckYourAnswersHelper
+import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class SubmissionSetFactory @Inject()() {
+class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
+                                     leadTrusteeMapper: LeadTrusteeMapper,
+                                     correspondenceMapper: CorrespondenceMapper,
+                                     countryOptions: CountryOptions) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
-    val status = Some(Status.InProgress)
+    val status = trusteesStatus(userAnswers)
     answerSectionsIfCompleted(userAnswers, status)
 
     RegistrationSubmission.DataSet(
@@ -36,50 +45,62 @@ class SubmissionSetFactory @Inject()() {
     )
   }
 
-  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
-//    if (status.contains(Status.Completed)) {
-//      trusteesMapper.build(userAnswers) match {
-//        case Some(assets) => List(RegistrationSubmission.MappedPiece("trust/entities/beneficiary", Json.toJson(assets)))
-//        case _ => List.empty
-//      }
-//    } else {
-      List.empty
-//    }
+  private def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
+    val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
+
+    userAnswers.get(_root_.sections.Trustees) match {
+      case Some(l) =>
+        if (l.isEmpty) {
+          None
+        } else {
+          val hasLeadTrustee = l.exists(_.isLead)
+          val isComplete = !l.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
+
+          if (isComplete) {
+            Some(Completed)
+          } else {
+            Some(InProgress)
+          }
+        }
+      case None => None
+    }
   }
 
-  def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
-                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
+    if (status.contains(Status.Completed)) {
+      val result: Option[List[RegistrationSubmission.MappedPiece]] = for {
+        leadTrustees <- leadTrusteeMapper.build(userAnswers)
+      } yield {
+        val leadTrusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", Json.toJson(leadTrustees))
+        trusteeMapper.build(userAnswers) match {
+          case Some(trustees) =>
+            val trusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/trustees", Json.toJson(trustees))
+            List(leadTrusteesPiece, trusteesPiece)
+          case _ => List(leadTrusteesPiece)
+        }
+      }
+      result match {
+        case Some(pieces) => pieces ++ correspondenceMapper.build(userAnswers)
+        case None => List.empty
+      }
 
-//    if (status.contains(Status.Completed)) {
-//
-//      val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//      val classOfBeneficiariesHelper = new ClassOfBeneficiariesAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//      val trustBeneficiariesHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//
-//      val entitySections = List(
-//        individualBeneficiariesHelper.individualBeneficiaries,
-//        classOfBeneficiariesHelper.classOfBeneficiaries,
-//        charityBeneficiariesHelper.charityBeneficiaries,
-//        trustBeneficiariesHelper.trustBeneficiaries,
-//        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false),
-//        largeBeneficiaryAnswersHelper.employmentRelatedBeneficiaries(userAnswers, canEdit = false),
-//        otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers, canEdit = false)
-//      ).flatten.flatten
-//
-//      val updatedFirstSection = AnswerSection(
-//        entitySections.head.headingKey,
-//        entitySections.head.rows,
-//        Some(Messages("answerPage.section.beneficiaries.heading"))
-//      )
-//
-//      val updatedSections = updatedFirstSection :: entitySections.tail
-//
-//      updatedSections.map(convertForSubmission)
-//
-//    } else {
+    } else {
       List.empty
-//    }
+    }
+  }
+
+  private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+    if (status.contains(Status.Completed)) {
+        val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, canEdit = false)
+
+        helper.trustees match {
+          case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
+          case None => List.empty
+        }
+    } else {
+      List.empty
+    }
   }
 
   private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {

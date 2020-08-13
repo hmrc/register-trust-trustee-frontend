@@ -56,7 +56,7 @@ class PassportDetailsController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.TrusteesNameController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

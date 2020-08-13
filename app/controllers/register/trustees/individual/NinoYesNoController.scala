@@ -31,11 +31,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.TrusteeAUKCitizenView
+import views.html.register.trustees.individual.NinoYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteeAUKCitizenController @Inject()(
+class NinoYesNoController @Inject()(
                                              override val messagesApi: MessagesApi,
                                              registrationsRepository: RegistrationsRepository,
                                              navigator: Navigator,
@@ -46,7 +46,7 @@ class TrusteeAUKCitizenController @Inject()(
                                              requiredAnswer: RequiredAnswerActionProvider,
                                              formProvider: YesNoFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
-                                             view: TrusteeAUKCitizenView
+                                             view: NinoYesNoView
                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
@@ -54,7 +54,7 @@ class TrusteeAUKCitizenController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.TrusteesNameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
       requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {

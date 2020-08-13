@@ -26,10 +26,10 @@ import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteesNamePa
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.TrusteeAUKCitizenView
+import views.html.register.trustees.individual.NinoYesNoView
 
 
-class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
+class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -42,7 +42,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
-  lazy val trusteeAUKCitizenRoute = routes.TrusteeAUKCitizenController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeAUKCitizenRoute = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
 
   "trusteeAUKCitizen Controller" must {
 
@@ -58,7 +58,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeAUKCitizenView]
+      val view = application.injector.instanceOf[NinoYesNoView]
 
       status(result) mustEqual OK
 
@@ -80,7 +80,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeAUKCitizenView]
+      val view = application.injector.instanceOf[NinoYesNoView]
 
       status(result) mustEqual OK
 
@@ -101,7 +101,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
 
       val request = FakeRequest(GET, trusteeAUKCitizenRoute)
 
-      val view = application.injector.instanceOf[TrusteeAUKCitizenView]
+      val view = application.injector.instanceOf[NinoYesNoView]
 
       val result = route(application, request).value
 
@@ -126,7 +126,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -186,7 +186,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteeAUKCitizenView]
+      val view = application.injector.instanceOf[NinoYesNoView]
 
       val result = route(application, request).value
 
@@ -231,7 +231,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
     "for a GET" must {
 
       def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.TrusteeAUKCitizenController.onPageLoad(index, fakeDraftId).url
+        val route = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
       }
@@ -249,7 +249,7 @@ class TrusteeAUKCitizenControllerSpec extends SpecBase with IndexValidation {
       def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
 
         val route =
-          routes.TrusteeAUKCitizenController.onPageLoad(index, fakeDraftId).url
+          routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(POST, route)
           .withFormUrlEncodedBody(("value", "true"))
