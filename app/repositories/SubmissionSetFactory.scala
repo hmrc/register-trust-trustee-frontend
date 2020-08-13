@@ -24,9 +24,13 @@ import models.registration.pages.AddATrustee
 import pages.register.trustees.AddATrusteePage
 import play.api.i18n.Messages
 import play.api.libs.json.Json
+import utils.CheckYourAnswersHelper
+import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper, leadTrusteeMapper: LeadTrusteeMapper) {
+class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
+                                     leadTrusteeMapper: LeadTrusteeMapper,
+                                     countryOptions: CountryOptions) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = trusteesStatus(userAnswers)
@@ -84,39 +88,18 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper, leadTrusteeMa
     }
   }
 
-  def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+  private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
                                (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+    if (status.contains(Status.Completed)) {
+        val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, canEdit = false)
 
-//    if (status.contains(Status.Completed)) {
-//
-//      val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//      val classOfBeneficiariesHelper = new ClassOfBeneficiariesAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//      val trustBeneficiariesHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-//
-//      val entitySections = List(
-//        individualBeneficiariesHelper.individualBeneficiaries,
-//        classOfBeneficiariesHelper.classOfBeneficiaries,
-//        charityBeneficiariesHelper.charityBeneficiaries,
-//        trustBeneficiariesHelper.trustBeneficiaries,
-//        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false),
-//        largeBeneficiaryAnswersHelper.employmentRelatedBeneficiaries(userAnswers, canEdit = false),
-//        otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers, canEdit = false)
-//      ).flatten.flatten
-//
-//      val updatedFirstSection = AnswerSection(
-//        entitySections.head.headingKey,
-//        entitySections.head.rows,
-//        Some(Messages("answerPage.section.beneficiaries.heading"))
-//      )
-//
-//      val updatedSections = updatedFirstSection :: entitySections.tail
-//
-//      updatedSections.map(convertForSubmission)
-//
-//    } else {
+        helper.trustees match {
+          case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
+          case None => List.empty
+        }
+    } else {
       List.empty
-//    }
+    }
   }
 
   private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
