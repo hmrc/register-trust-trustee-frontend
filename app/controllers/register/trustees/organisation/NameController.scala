@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.trustees.TrusteeBusinessNameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
+import pages.register.trustees.organisation.NamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -60,8 +60,6 @@ class NameController @Inject()(
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
-
-      val isUKRegisteredCompany: Boolean = request.userAnswers.get(UtrYesNoPage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

@@ -20,9 +20,10 @@ import base.SpecBase
 import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.InternationalAddressFormProvider
+import models.UserAnswers
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage}
+import pages.register.trustees.organisation.{InternationalAddressPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -37,19 +38,19 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
   val form: Form[InternationalAddress] = formProvider()
 
   val index = 0
-  val orgName = "Test"
+  val fakeName = "Test"
+
+  val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
 
   private lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeOrgAddressInternational Controller" must {
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
+
+  "InternationalAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), "Test").success.value
-        .set(AddressUkYesNoPage(index), false).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, internationalAddressRoute)
 
@@ -62,7 +63,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, index, fakeDraftId, orgName)(fakeRequest, messages).toString
+        view(form, countryOptions, index, fakeDraftId, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -70,9 +71,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), "Test").success.value
-        .set(AddressUkYesNoPage(index), false).success.value
-        .set(InternationalAddressPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
+        .set(InternationalAddressPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,26 +86,26 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")), countryOptions, index, fakeDraftId, orgName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), countryOptions, index, fakeDraftId, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), "Test").success.value
-        .set(AddressUkYesNoPage(index), false).success.value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
 
       val request =
         FakeRequest(POST, internationalAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "IN"))
+          .withFormUrlEncodedBody(
+            ("line1", validAnswer.line1),
+            ("line2", validAnswer.line2),
+            ("country", validAnswer.country)
+          )
 
       val result = route(application, request).value
 
@@ -119,11 +118,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), "Test").success.value
-        .set(AddressUkYesNoPage(index), false).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, internationalAddressRoute)
@@ -140,7 +135,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, index, fakeDraftId, orgName)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, index, fakeDraftId, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }

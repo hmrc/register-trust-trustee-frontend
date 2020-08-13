@@ -41,7 +41,7 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
-  "TrusteeUtrYesNo Controller" must {
+  "UtrYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 

@@ -20,6 +20,7 @@ import base.SpecBase
 import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.UtrFormProvider
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
 import pages.register.trustees.organisation.{NamePage, UtrPage}
 import play.api.data.Form
@@ -34,19 +35,18 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
   val form: Form[String] = formProvider("trusteeUtr")
 
   val index = 0
-  val fakeBusinessName = "Business name"
-  val fakeUtr = "1234567890"
+  val fakeName = "Test"
+  val validAnswer = "1234567890"
 
   lazy val utrRoute: String = routes.UtrController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeUtr Controller" must {
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
+
+  "Utr Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fakeBusinessName).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, utrRoute)
 
@@ -57,7 +57,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, fakeBusinessName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -65,8 +65,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fakeBusinessName).success.value
-        .set(UtrPage(index), fakeUtr).success.value
+        .set(UtrPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -79,25 +78,22 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(fakeUtr), fakeDraftId, index, fakeBusinessName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fakeBusinessName).success.value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
 
       val request =
         FakeRequest(POST, utrRoute)
-          .withFormUrlEncodedBody(("value", fakeUtr))
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 
@@ -109,10 +105,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fakeBusinessName).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, utrRoute)
@@ -127,7 +120,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, fakeBusinessName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -153,7 +146,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
 
       val request =
         FakeRequest(POST, utrRoute)
-          .withFormUrlEncodedBody(("value", fakeUtr))
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 

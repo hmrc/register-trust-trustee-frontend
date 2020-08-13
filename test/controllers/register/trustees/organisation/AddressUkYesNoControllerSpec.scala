@@ -20,8 +20,8 @@ import base.SpecBase
 import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.YesNoFormProvider
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.organisation.{AddressUkYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -36,20 +36,17 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
   val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
 
   val index = 0
-  val orgName = "Test"
+  val fakeName = "Test"
 
   lazy val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeOrgAddressUkYesNo Controller" must {
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
+
+  "AddressUkYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(NamePage(index), "Test").success.value
-
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, addressUkYesNoRoute)
 
@@ -60,7 +57,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, orgName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -68,7 +65,6 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), "Test").success.value
         .set(AddressUkYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -82,18 +78,15 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, orgName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), "Test").success.value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
@@ -114,11 +107,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(NamePage(index), "Test").success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, addressUkYesNoRoute)
@@ -133,7 +122,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, orgName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }

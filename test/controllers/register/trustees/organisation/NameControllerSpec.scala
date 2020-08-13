@@ -34,16 +34,15 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
   val form: Form[String] = formProvider()
   val index = 0
 
+  val validAnswer = "Name"
+
   lazy val nameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeBusinessName Controller" must {
+  "Name Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(UtrYesNoPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, nameRoute)
 
@@ -62,8 +61,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UtrYesNoPage(index), true).success.value
-        .set(NamePage(index), "Trustee business name").success.value
+        .set(NamePage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,25 +74,22 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Trustee business name"), fakeDraftId, index)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(UtrYesNoPage(index), true).success.value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
 
       val request =
         FakeRequest(POST, nameRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 
@@ -150,7 +145,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       val request =
         FakeRequest(POST, nameRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 
