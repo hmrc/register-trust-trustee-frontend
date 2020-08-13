@@ -40,7 +40,7 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper, leadTrusteeMa
     )
   }
 
-  def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
+  private def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
     val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
 
     userAnswers.get(_root_.sections.Trustees) match {
