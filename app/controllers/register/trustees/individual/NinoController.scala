@@ -19,42 +19,42 @@ package controllers.register.trustees.individual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.YesNoFormProvider
+import forms.NinoFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAddressInTheUKPage, TrusteesNamePage}
+import pages.register.trustees.individual.{TrusteesNamePage, TrusteesNinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.TrusteeLiveInTheUKView
+import views.html.register.trustees.individual.NinoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteeLiveInTheUKController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              navigator: Navigator,
-                                              validateIndex: IndexActionFilterProvider,
-                                              identify: RegistrationIdentifierAction,
-                                              getData: DraftIdRetrievalActionProvider,
-                                              requireData: RegistrationDataRequiredAction,
-                                              requiredAnswer: RequiredAnswerActionProvider,
-                                              formProvider: YesNoFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: TrusteeLiveInTheUKView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class NinoController @Inject()(
+                                        override val messagesApi: MessagesApi,
+                                        registrationsRepository: RegistrationsRepository,
+                                        navigator: Navigator,
+                                        identify: RegistrationIdentifierAction,
+                                        getData: DraftIdRetrievalActionProvider,
+                                        requireData: RegistrationDataRequiredAction,
+                                        validateIndex : IndexActionFilterProvider,
+                                        requiredAnswer: RequiredAnswerActionProvider,
+                                        formProvider: NinoFormProvider,
+                                        val controllerComponents: MessagesControllerComponents,
+                                        view: NinoView
+                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String) =
-    identify andThen
+  private def actions(index : Int, draftId: String) =
+      identify andThen
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.TrusteesNameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
       requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
@@ -64,9 +64,9 @@ class TrusteeLiveInTheUKController @Inject()(
 
       val messagePrefix: String = getMessagePrefix(index, request)
 
-      val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
+      val form = formProvider(messagePrefix)
 
-      val preparedForm = request.userAnswers.get(TrusteeAddressInTheUKPage(index)) match {
+      val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -78,21 +78,21 @@ class TrusteeLiveInTheUKController @Inject()(
     val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
 
     val messagePrefix = if (isLead) {
-      "leadTrusteeLiveInTheUK"
+      "leadTrusteesNino"
     } else {
-      "trusteeLiveInTheUK"
+      "trusteesNino"
     }
     messagePrefix
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
       val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
       val messagePrefix: String = getMessagePrefix(index, request)
 
-      val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
+      val form = formProvider(messagePrefix)
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
@@ -100,9 +100,9 @@ class TrusteeLiveInTheUKController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeAddressInTheUKPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeAddressInTheUKPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
         }
       )
   }

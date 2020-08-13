@@ -16,57 +16,39 @@
 
 package controllers.register.trustees.individual
 
+import java.time.{LocalDate, ZoneOffset}
+
 import base.SpecBase
 import controllers.register.IndexValidation
-import forms.NinoFormProvider
-import models.core.pages.{FullName, IndividualOrBusiness}
-import org.scalacheck.Arbitrary.arbitrary
+import forms.trustees.TrusteesDateOfBirthFormProvider
+import models.core.pages.FullName
+import org.scalacheck.Gen
+import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesNamePage, TrusteesNinoPage}
+import pages.register.trustees.individual.{TrusteesDateOfBirthPage, TrusteesNamePage}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.TrusteesNinoView
+import views.html.register.trustees.individual.DateOfBirthView
 
-class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
+class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesNino"
-  val trusteeMessagePrefix = "trusteesNino"
-  val formProvider = new NinoFormProvider()
-  val form = formProvider(trusteeMessagePrefix)
+  val leadTrusteeMessagePrefix = "leadTrusteesDateOfBirth"
+  val trusteeMessagePrefix = "trusteesDateOfBirth"
+  val formProvider = new TrusteesDateOfBirthFormProvider(frontendAppConfig)
+  val form = formProvider()
+
+  val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
   val index = 0
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
-  val validAnswer = "NH111111A"
 
-  lazy val trusteesNinoRoute = routes.TrusteesNinoController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteesDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteesNino Controller" must {
+  "TrusteesDateOfBirth Controller" must {
 
-    "return OK and the correct view (lead trustee) for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteesNinoRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[TrusteesNinoView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view (trustee) for a GET" in {
+    "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
@@ -74,11 +56,11 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteesNinoView]
+      val view = application.injector.instanceOf[DateOfBirthView]
 
       status(result) mustEqual OK
 
@@ -91,22 +73,22 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
+        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteesNinoPage(index), validAnswer).success.value
+        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
 
-      val view = application.injector.instanceOf[TrusteesNinoView]
+      val view = application.injector.instanceOf[DateOfBirthView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -114,17 +96,17 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
     "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNinoPage(index), validAnswer).success.value
+        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -135,16 +117,20 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteesNinoRoute)
-          .withFormUrlEncodedBody(("value", validAnswer))
+        FakeRequest(POST, trusteesDateOfBirthRoute)
+          .withFormUrlEncodedBody(
+            "value.day"   -> validAnswer.getDayOfMonth.toString,
+            "value.month" -> validAnswer.getMonthValue.toString,
+            "value.year"  -> validAnswer.getYear.toString
+          )
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
@@ -159,12 +145,12 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteesNinoRoute)
+        FakeRequest(POST, trusteesDateOfBirthRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteesNinoView]
+      val view = application.injector.instanceOf[DateOfBirthView]
 
       val result = route(application, request).value
 
@@ -180,12 +166,11 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -196,8 +181,12 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteesNinoRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+        FakeRequest(POST, trusteesDateOfBirthRoute)
+          .withFormUrlEncodedBody(
+            "value.day"   -> validAnswer.getDayOfMonth.toString,
+            "value.month" -> validAnswer.getMonthValue.toString,
+            "value.year"  -> validAnswer.getYear.toString
+          )
 
       val result = route(application, request).value
 
@@ -208,17 +197,18 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
+
     "for a GET" must {
 
       def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
-        val route = controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+        val route = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
       }
 
       validateIndex(
-        arbitrary[String],
-        TrusteesNinoPage.apply,
+        Gen.const(LocalDate.of(2010,10,10)),
+        TrusteesDateOfBirthPage.apply,
         getForIndex
       )
 
@@ -228,15 +218,19 @@ class TrusteesNinoControllerSpec extends SpecBase with IndexValidation {
       def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
 
         val route =
-          controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+          routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("value", IndividualOrBusiness.Individual.toString))
+          .withFormUrlEncodedBody(
+            "value.day"   -> validAnswer.getDayOfMonth.toString,
+            "value.month" -> validAnswer.getMonthValue.toString,
+            "value.year"  -> validAnswer.getYear.toString
+          )
       }
 
       validateIndex(
-        arbitrary[String],
-        TrusteesNinoPage.apply,
+        Gen.const(LocalDate.of(2010,10,10)),
+        TrusteesDateOfBirthPage.apply,
         postForIndex
       )
     }

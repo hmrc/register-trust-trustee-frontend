@@ -17,28 +17,29 @@
 @import controllers.register.trustees.individual.routes._
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, messagePrefix: String, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(s"$messagePrefix.title", trusteeName)}"
-) {
+    title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
+    ) {
 
-    @formHelper(action = TrusteesDateOfBirthController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = NinoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_date(
-            field = form("value"),
-            legend = messages("trusteesDateOfBirth.heading", trusteeName),
-            legendClass = "heading-large",
-            legendAsHeading = true,
-            hint = Some(messages(s"site.date.hint"))
+        @components.input_text(
+          field = form("value"),
+          label = messages("trusteesNino.heading", trusteeName),
+          labelClass = Some("heading-large"),
+          labelAsHeading = true,
+          hint = Some(messages(s"trusteesNino.hint")),
+          readerHint = Some(messages("trusteesNino.hint.reader"))
         )
 
         @components.submit_button()
