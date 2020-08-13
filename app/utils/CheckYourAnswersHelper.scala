@@ -173,7 +173,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteeBusinessName.checkYourAnswersLabel",
         HtmlFormat.escape(x),
-        Some(controllers.register.trustees.organisation.routes.TrusteeBusinessNameController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )
   }
@@ -193,7 +193,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "leadTrusteeUtrYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.trustees.organisation.routes.TrusteeUtrYesNoController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.organisation.routes.UtrYesNoController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )
   }
@@ -203,7 +203,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteeUtr.checkYourAnswersLabel",
         HtmlFormat.escape(x),
-        Some(controllers.register.trustees.organisation.routes.TrusteeUtrController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.organisation.routes.UtrController.onPageLoad(index, draftId).url),
         orgName(index, userAnswers),
         canEdit = canEdit
       )
@@ -224,7 +224,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteeOrgAddressUkYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.trustees.organisation.routes.TrusteeOrgAddressUkYesNoController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.organisation.routes.AddressUkYesNoController.onPageLoad(index, draftId).url),
         orgName(index, userAnswers),
         canEdit = canEdit
       )
@@ -235,7 +235,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteesOrgUkAddress.checkYourAnswersLabel",
         ukAddress(x),
-        Some(controllers.register.trustees.organisation.routes.TrusteesOrgUkAddressController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.organisation.routes.UkAddressController.onPageLoad(index, draftId).url),
         orgName(index, userAnswers),
         canEdit = canEdit
       )
@@ -246,7 +246,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteeOrgAddressInternational.checkYourAnswersLabel",
         internationalAddress(x, countryOptions),
-        Some(controllers.register.trustees.organisation.routes.TrusteeOrgAddressInternationalController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.organisation.routes.InternationalAddressController.onPageLoad(index, draftId).url),
         orgName(index, userAnswers),
         canEdit = canEdit
       )

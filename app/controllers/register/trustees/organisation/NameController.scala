@@ -31,15 +31,15 @@ import views.html.register.trustees.organisation.TrusteeBusinessNameView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteeBusinessNameController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               registrationsRepository: RegistrationsRepository,
-                                               @TrusteeOrganisation navigator: Navigator,
-                                               standardActionSets: StandardActionSets,
-                                               formProvider: TrusteeBusinessNameFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: TrusteeBusinessNameView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class NameController @Inject()(
+                                override val messagesApi: MessagesApi,
+                                registrationsRepository: RegistrationsRepository,
+                                @TrusteeOrganisation navigator: Navigator,
+                                standardActionSets: StandardActionSets,
+                                formProvider: TrusteeBusinessNameFormProvider,
+                                val controllerComponents: MessagesControllerComponents,
+                                view: TrusteeBusinessNameView
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider()
 

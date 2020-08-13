@@ -30,7 +30,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
 
     "Name page -> UTR yes no page" in {
       navigator.nextPage(TrusteeOrgNamePage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(TrusteeUtrYesNoController.onPageLoad(index, fakeDraftId))
+        .mustBe(UtrYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "UTR yes no page -> YES -> UTR page" in {
@@ -38,7 +38,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .set(TrusteeUtrYesNoPage(index), true).success.value
 
       navigator.nextPage(TrusteeUtrYesNoPage(index), fakeDraftId, answers)
-        .mustBe(TrusteeUtrController.onPageLoad(index, fakeDraftId))
+        .mustBe(UtrController.onPageLoad(index, fakeDraftId))
     }
 
     "UTR yes no page -> NO -> Do you know address page" ignore {
@@ -75,7 +75,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
 
       navigator.nextPage(TrusteeOrgAddressUkYesNoPage(index), fakeDraftId, answers)
-        .mustBe(TrusteesOrgUkAddressController.onPageLoad(index, fakeDraftId))
+        .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
     }
 
     "Is address in UK page -> NO -> International address page" ignore {
@@ -83,7 +83,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
 
       navigator.nextPage(TrusteeOrgAddressUkYesNoPage(index), fakeDraftId, answers)
-        .mustBe(TrusteeOrgAddressInternationalController.onPageLoad(index, fakeDraftId))
+        .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
     }
 
     "UK address page -> Check your answers page" ignore {

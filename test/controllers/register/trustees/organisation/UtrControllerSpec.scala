@@ -21,16 +21,14 @@ import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.UtrFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteesUtrPage}
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.organisation.TrusteeUtrView
 
-class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
+class UtrControllerSpec extends SpecBase with IndexValidation {
 
   val formProvider = new UtrFormProvider()
   val form: Form[String] = formProvider("trusteeUtr")
@@ -39,7 +37,7 @@ class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
   val fakeBusinessName = "Business name"
   val fakeUtr = "1234567890"
 
-  lazy val trusteeUtrRoute: String = routes.TrusteeUtrController.onPageLoad(index, fakeDraftId).url
+  lazy val utrRoute: String = routes.UtrController.onPageLoad(index, fakeDraftId).url
 
   "TrusteeUtr Controller" must {
 
@@ -50,7 +48,7 @@ class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeUtrRoute)
+      val request = FakeRequest(GET, utrRoute)
 
       val result = route(application, request).value
 
@@ -72,7 +70,7 @@ class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeUtrRoute)
+      val request = FakeRequest(GET, utrRoute)
 
       val view = application.injector.instanceOf[TrusteeUtrView]
 
@@ -98,7 +96,7 @@ class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
           ).build()
 
       val request =
-        FakeRequest(POST, trusteeUtrRoute)
+        FakeRequest(POST, utrRoute)
           .withFormUrlEncodedBody(("value", fakeUtr))
 
       val result = route(application, request).value
@@ -117,7 +115,7 @@ class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeUtrRoute)
+        FakeRequest(POST, utrRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -138,7 +136,7 @@ class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteeUtrRoute)
+      val request = FakeRequest(GET, utrRoute)
 
       val result = route(application, request).value
 
@@ -154,7 +152,7 @@ class TrusteeUtrControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteeUtrRoute)
+        FakeRequest(POST, utrRoute)
           .withFormUrlEncodedBody(("value", fakeUtr))
 
       val result = route(application, request).value

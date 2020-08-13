@@ -18,32 +18,28 @@ package controllers.register.trustees.organisation
 
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
-import forms.InternationalAddressFormProvider
+import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{TrusteeOrgAddressInternationalPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.trustees.organisation.TrusteeOrgAddressInternationalView
+import views.html.register.trustees.organisation.TrusteeOrgAddressUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteeOrgAddressInternationalController @Inject()(
-                                                          override val messagesApi: MessagesApi,
-                                                          registrationsRepository: RegistrationsRepository,
-                                                          @TrusteeOrganisation navigator: Navigator,
-                                                          standardActionSets: StandardActionSets,
-                                                          formProvider: InternationalAddressFormProvider,
-                                                          val controllerComponents: MessagesControllerComponents,
-                                                          view: TrusteeOrgAddressInternationalView,
-                                                          val countryOptions: CountryOptionsNonUK
-                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-
-  private val form = formProvider()
+class AddressUkYesNoController @Inject()(
+                                          override val messagesApi: MessagesApi,
+                                          registrationsRepository: RegistrationsRepository,
+                                          @TrusteeOrganisation navigator: Navigator,
+                                          standardActionSets: StandardActionSets,
+                                          formProvider: YesNoFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: TrusteeOrgAddressUkYesNoView
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId)
@@ -53,12 +49,14 @@ class TrusteeOrgAddressInternationalController @Inject()(
 
       val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(TrusteeOrgAddressInternationalPage(index)) match {
+      val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
+
+      val preparedForm = request.userAnswers.get(TrusteeOrgAddressUkYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, index, draftId, orgName))
+      Ok(view(preparedForm, draftId, index, orgName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -66,15 +64,17 @@ class TrusteeOrgAddressInternationalController @Inject()(
 
       val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
 
+      val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, orgName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, orgName))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrgAddressInternationalPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrgAddressUkYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeOrgAddressInternationalPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TrusteeOrgAddressUkYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

@@ -27,7 +27,7 @@
     title = s"${errorPrefix(form)} ${messages("trusteeUtr.title")}"
     ) {
 
-    @formHelper(action = TrusteeUtrController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = UtrController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

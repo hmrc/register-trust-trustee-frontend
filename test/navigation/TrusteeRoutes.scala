@@ -165,7 +165,7 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(controllers.register.trustees.organisation.routes.TrusteeUtrYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(controllers.register.trustees.organisation.routes.UtrYesNoController.onPageLoad(index, fakeDraftId))
       }
     }
 

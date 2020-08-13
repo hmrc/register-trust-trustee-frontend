@@ -21,22 +21,20 @@ import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.trustees.TrusteeBusinessNameFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteeUtrYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.organisation.TrusteeBusinessNameView
 
-class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
+class NameControllerSpec extends SpecBase  with IndexValidation {
 
   val formProvider = new TrusteeBusinessNameFormProvider()
   val form: Form[String] = formProvider()
   val index = 0
 
-  lazy val trusteeBusinessNameRoute: String = routes.TrusteeBusinessNameController.onPageLoad(index, fakeDraftId).url
+  lazy val nameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   "TrusteeBusinessName Controller" must {
 
@@ -47,7 +45,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeBusinessNameRoute)
+      val request = FakeRequest(GET, nameRoute)
 
       val result = route(application, request).value
 
@@ -69,7 +67,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeBusinessNameRoute)
+      val request = FakeRequest(GET, nameRoute)
 
       val view = application.injector.instanceOf[TrusteeBusinessNameView]
 
@@ -95,7 +93,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
           ).build()
 
       val request =
-        FakeRequest(POST, trusteeBusinessNameRoute)
+        FakeRequest(POST, nameRoute)
           .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(application, request).value
@@ -114,7 +112,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeBusinessNameRoute)
+        FakeRequest(POST, nameRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -135,7 +133,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteeBusinessNameRoute)
+      val request = FakeRequest(GET, nameRoute)
 
       val result = route(application, request).value
 
@@ -151,7 +149,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteeBusinessNameRoute)
+        FakeRequest(POST, nameRoute)
           .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(application, request).value

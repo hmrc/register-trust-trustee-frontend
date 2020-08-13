@@ -19,48 +19,48 @@ package controllers.register.trustees.organisation
 import base.SpecBase
 import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
-import forms.UKAddressFormProvider
-import models.core.pages.UKAddress
+import forms.YesNoFormProvider
+import models.core.pages.IndividualOrBusiness
 import navigation.{FakeNavigator, Navigator}
-import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.individual.TrusteesUkAddressPage
-import pages.register.trustees.organisation.TrusteeOrgNamePage
+import pages.register.trustees.TrusteeIndividualOrBusinessPage
+import pages.register.trustees.organisation.TrusteeUtrYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.TrusteesOrgUkAddressView
+import views.html.register.trustees.organisation.TrusteeUtrYesNoView
 
-class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new UKAddressFormProvider()
-  val form: Form[UKAddress] = formProvider()
+class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
+
+  val formProvider = new YesNoFormProvider()
+  val form: Form[Boolean] = formProvider.withPrefix("leadTrusteeUtrYesNo")
+
   val index = 0
-  val trusteeOrgName = "Test"
-  val validAnswer: UKAddress = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
+  val emptyTrusteeName = ""
+  val trusteeName = "FirstName LastName"
 
-  lazy val trusteesOrgUkAddressRoute: String = routes.TrusteesOrgUkAddressController.onPageLoad(index, fakeDraftId).url
+  lazy val utrYesNoRoute: String = routes.UtrYesNoController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteesUkAddress Controller" must {
+  "TrusteeUtrYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesOrgUkAddressRoute)
-
-      val view = application.injector.instanceOf[TrusteesOrgUkAddressView]
+      val request = FakeRequest(GET, utrYesNoRoute)
 
       val result = route(application, request).value
+
+      val view = application.injector.instanceOf[TrusteeUtrYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeOrgName)(request, messages).toString
+        view(form, fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -68,21 +68,21 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
-        .set(TrusteesUkAddressPage(index), validAnswer).success.value
+        .set(TrusteeUtrYesNoPage(index), true).success.value
+        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesOrgUkAddressRoute)
+      val request = FakeRequest(GET, utrYesNoRoute)
 
-      val view = application.injector.instanceOf[TrusteesOrgUkAddressView]
+      val view = application.injector.instanceOf[TrusteeUtrYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, trusteeOrgName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -90,7 +90,7 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -99,8 +99,9 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
           ).build()
 
       val request =
-        FakeRequest(POST, trusteesOrgUkAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("line3", "value 3"), ("line4", "town"), ("postcode", "AB1 1AB") )
+        FakeRequest(POST, utrYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
 
       val result = route(application, request).value
 
@@ -114,24 +115,24 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteesOrgUkAddressRoute)
-          .withFormUrlEncodedBody(("line1", "invalid value"))
+        FakeRequest(POST, utrYesNoRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("line1" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteesOrgUkAddressView]
+      val view = application.injector.instanceOf[TrusteeUtrYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeOrgName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -140,7 +141,7 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteesOrgUkAddressRoute)
+      val request = FakeRequest(GET, utrYesNoRoute)
 
       val result = route(application, request).value
 
@@ -155,8 +156,7 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteesOrgUkAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+        FakeRequest(POST, utrYesNoRoute)
 
       val result = route(application, request).value
 

@@ -28,7 +28,7 @@
     title = s"${errorPrefix(form)} ${messages("trusteeOrgAddressInternational.title")}"
     ) {
 
-    @formHelper(action = TrusteeOrgAddressInternationalController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

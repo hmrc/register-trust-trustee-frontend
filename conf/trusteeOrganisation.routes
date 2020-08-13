@@ -1,20 +1,20 @@
-GET        /:draftId/:index/name                         controllers.register.trustees.organisation.TrusteeBusinessNameController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/name                         controllers.register.trustees.organisation.TrusteeBusinessNameController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/name                         controllers.register.trustees.organisation.NameController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/name                         controllers.register.trustees.organisation.NameController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/do-you-know-utr              controllers.register.trustees.organisation.TrusteeUtrYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/do-you-know-utr              controllers.register.trustees.organisation.TrusteeUtrYesNoController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/do-you-know-utr              controllers.register.trustees.organisation.UtrYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/do-you-know-utr              controllers.register.trustees.organisation.UtrYesNoController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/utr                          controllers.register.trustees.organisation.TrusteeUtrController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/utr                          controllers.register.trustees.organisation.TrusteeUtrController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/utr                          controllers.register.trustees.organisation.UtrController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/utr                          controllers.register.trustees.organisation.UtrController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/is-address-in-uk             controllers.register.trustees.organisation.TrusteeOrgAddressUkYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/is-address-in-uk             controllers.register.trustees.organisation.TrusteeOrgAddressUkYesNoController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/is-address-in-uk             controllers.register.trustees.organisation.AddressUkYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/is-address-in-uk             controllers.register.trustees.organisation.AddressUkYesNoController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/uk-address                   controllers.register.trustees.organisation.TrusteesOrgUkAddressController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/uk-address                   controllers.register.trustees.organisation.TrusteesOrgUkAddressController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/uk-address                   controllers.register.trustees.organisation.UkAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/uk-address                   controllers.register.trustees.organisation.UkAddressController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/international-address        controllers.register.trustees.organisation.TrusteeOrgAddressInternationalController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/international-address        controllers.register.trustees.organisation.TrusteeOrgAddressInternationalController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/international-address        controllers.register.trustees.organisation.InternationalAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/international-address        controllers.register.trustees.organisation.InternationalAddressController.onSubmit(index : Int, draftId: String)
 
 GET        /:draftId/:index/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onSubmit(index : Int, draftId: String)

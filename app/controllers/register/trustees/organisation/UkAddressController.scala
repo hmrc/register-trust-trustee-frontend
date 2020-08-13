@@ -18,28 +18,30 @@ package controllers.register.trustees.organisation
 
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
-import forms.YesNoFormProvider
+import forms.UKAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.TrusteeUtrYesNoPage
+import pages.register.trustees.organisation.{TrusteeOrgAddressUkPage, TrusteeOrgNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.organisation.TrusteeUtrYesNoView
+import views.html.register.trustees.organisation.TrusteesOrgUkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrusteeUtrYesNoController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           registrationsRepository: RegistrationsRepository,
-                                           @TrusteeOrganisation navigator: Navigator,
-                                           standardActionSets: StandardActionSets,
-                                           formProvider: YesNoFormProvider,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: TrusteeUtrYesNoView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class UkAddressController @Inject()(
+                                     override val messagesApi: MessagesApi,
+                                     registrationsRepository: RegistrationsRepository,
+                                     @TrusteeOrganisation navigator: Navigator,
+                                     standardActionSets: StandardActionSets,
+                                     formProvider: UKAddressFormProvider,
+                                     val controllerComponents: MessagesControllerComponents,
+                                     view: TrusteesOrgUkAddressView
+                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val form = formProvider()
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId)
@@ -47,30 +49,31 @@ class TrusteeUtrYesNoController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val form: Form[Boolean] = formProvider.withPrefix("leadTrusteeUtrYesNo")
+      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(TrusteeUtrYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(TrusteeOrgAddressUkPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index))
+      Ok(view(preparedForm, draftId, index, orgName))
   }
+
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val form: Form[Boolean] = formProvider.withPrefix("leadTrusteeUtrYesNo")
+      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, orgName))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeUtrYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrgAddressUkPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeUtrYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TrusteeOrgAddressUkPage(index), draftId, updatedAnswers))
         }
       )
   }

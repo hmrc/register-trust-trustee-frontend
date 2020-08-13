@@ -19,50 +19,50 @@ package controllers.register.trustees.organisation
 import base.SpecBase
 import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
-import forms.YesNoFormProvider
+import forms.InternationalAddressFormProvider
+import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
-import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.organisation.{TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{TrusteeOrgAddressInternationalPage, TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.TrusteeOrgAddressUkYesNoView
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.register.trustees.organisation.TrusteeOrgAddressInternationalView
 
+class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
-class TrusteeOrgAddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
-
-  val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
+  val formProvider = new InternationalAddressFormProvider()
+  val form: Form[InternationalAddress] = formProvider()
 
   val index = 0
   val orgName = "Test"
 
-  lazy val trusteeOrgAddressUkYesNoRoute: String = routes.TrusteeOrgAddressUkYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeOrgAddressUkYesNo Controller" must {
+  "TrusteeOrgAddressInternational Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteeOrgNamePage(index), "Test").success.value
-
+        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeOrgAddressUkYesNoRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeOrgAddressUkYesNoView]
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+
+      val view = application.injector.instanceOf[TrusteeOrgAddressInternationalView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, orgName)(fakeRequest, messages).toString
+        view(form, countryOptions, index, fakeDraftId, orgName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -71,20 +71,23 @@ class TrusteeOrgAddressUkYesNoControllerSpec extends SpecBase with IndexValidati
 
       val userAnswers = emptyUserAnswers
         .set(TrusteeOrgNamePage(index), "Test").success.value
-        .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
+        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
+        .set(TrusteeOrgAddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeOrgAddressUkYesNoRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
-      val view = application.injector.instanceOf[TrusteeOrgAddressUkYesNoView]
+      val view = application.injector.instanceOf[TrusteeOrgAddressInternationalView]
 
       val result = route(application, request).value
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, orgName)(fakeRequest, messages).toString
+        view(form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")), countryOptions, index, fakeDraftId, orgName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -93,6 +96,7 @@ class TrusteeOrgAddressUkYesNoControllerSpec extends SpecBase with IndexValidati
 
       val userAnswers = emptyUserAnswers
         .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -101,9 +105,8 @@ class TrusteeOrgAddressUkYesNoControllerSpec extends SpecBase with IndexValidati
           ).build()
 
       val request =
-        FakeRequest(POST, trusteeOrgAddressUkYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
-
+        FakeRequest(POST, internationalAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "IN"))
 
       val result = route(application, request).value
 
@@ -117,25 +120,27 @@ class TrusteeOrgAddressUkYesNoControllerSpec extends SpecBase with IndexValidati
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeOrgAddressUkYesNoRoute)
+        FakeRequest(POST, internationalAddressRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteeOrgAddressUkYesNoView]
+      val view = application.injector.instanceOf[TrusteeOrgAddressInternationalView]
 
       val result = route(application, request).value
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, orgName)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, index, fakeDraftId, orgName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -144,7 +149,7 @@ class TrusteeOrgAddressUkYesNoControllerSpec extends SpecBase with IndexValidati
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteeOrgAddressUkYesNoRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
       val result = route(application, request).value
 
@@ -159,7 +164,7 @@ class TrusteeOrgAddressUkYesNoControllerSpec extends SpecBase with IndexValidati
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteeOrgAddressUkYesNoRoute)
+        FakeRequest(POST, internationalAddressRoute)
 
       val result = route(application, request).value
 
