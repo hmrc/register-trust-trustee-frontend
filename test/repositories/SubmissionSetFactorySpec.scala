@@ -25,13 +25,26 @@ import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
 import models.{RegistrationSubmission, Status, UserAnswers}
 import models.registration.pages.AddATrustee
 import pages.entitystatus.TrusteeStatus
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesNamePage, TrusteesNinoPage, TrusteesUkAddressPage}
+import pages.register.trustees.individual._
+import pages.register.trustees.organisation.TrusteeOrgNamePage
 import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage}
 import play.api.libs.json.Json
 
 import scala.collection.immutable.Nil
 
 class SubmissionSetFactorySpec extends SpecBase {
+
+  private val expectedTrusteeMappedJson = Json.parse(
+    """
+      |[
+      | {
+      |   "trusteeOrg":{
+      |     "name":"Org Name1",
+      |     "identification":{}
+      |   }
+      | }
+      |]
+      |""".stripMargin)
 
   private val expectedLeadTrusteeMappedJson = Json.parse(
     """
@@ -51,6 +64,26 @@ class SubmissionSetFactorySpec extends SpecBase {
       |}
       |""".stripMargin)
 
+  private def addTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
+    userAnswers
+      .set(TrusteeStatus(index), Status.Completed).success.value
+      .set(IsThisLeadTrusteePage(index), false).success.value
+      .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
+      .set(TrusteeOrgNamePage(index), "Org Name1").success.value
+  }
+
+  private def addLeadTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
+    userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
+      .set(TrusteeStatus(index), Status.Completed).success.value
+      .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
+      .set(TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
+      .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+      .set(TrusteeAUKCitizenPage(index), true).success.value
+      .set(TrusteeAddressInTheUKPage(index), true).success.value
+      .set(TrusteesNinoPage(index), "AB123456C").success.value
+      .set(TelephoneNumberPage(index), "0191 1111111").success.value
+      .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+  }
 
   "Submission set factory" must {
 
@@ -123,19 +156,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
       "there is a completed lead trustee, and section flagged as complete" must {
         "return Completed with mapped data" in {
-          val leadTrusteeIndex = 0
-
-          val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(leadTrusteeIndex), true).success.value
-            .set(TrusteeStatus(leadTrusteeIndex), Status.Completed).success.value
-            .set(TrusteeIndividualOrBusinessPage(leadTrusteeIndex), IndividualOrBusiness.Individual).success.value
-            .set(TrusteesNamePage(leadTrusteeIndex), FullName("first name",  Some("middle name"), "Last Name")).success.value
-            .set(TrusteesDateOfBirthPage(leadTrusteeIndex), LocalDate.of(1500,10,10)).success.value
-            .set(TrusteeAUKCitizenPage(leadTrusteeIndex), true).success.value
-            .set(TrusteeAddressInTheUKPage(leadTrusteeIndex), true).success.value
-            .set(TrusteesNinoPage(leadTrusteeIndex), "AB123456C").success.value
-            .set(TelephoneNumberPage(leadTrusteeIndex), "0191 1111111").success.value
-            .set(TrusteesUkAddressPage(leadTrusteeIndex), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+          val userAnswers = addLeadTrustee(0, emptyUserAnswers)
             .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
@@ -146,8 +167,26 @@ class SubmissionSetFactorySpec extends SpecBase {
           )
         }
       }
-    }
 
+      "there is a completed lead trustee and trustee, and section flagged as complete" must {
+        "return Completed with mapped data" in {
+          val userAnswers =
+            addTrustee(1,
+              addLeadTrustee(0, emptyUserAnswers))
+            .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
+            Json.toJson(userAnswers),
+            Some(Completed),
+            List(
+              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson)
+            ),
+            List.empty
+          )
+        }
+      }
+    }
 
 //    "return completed answer sections" when {
 //
