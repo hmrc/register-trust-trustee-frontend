@@ -29,28 +29,28 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
   "TrusteeOrganisation Navigator" must {
 
     "Name page -> UTR yes no page" in {
-      navigator.nextPage(TrusteeOrgNamePage(index), fakeDraftId, emptyUserAnswers)
+      navigator.nextPage(NamePage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(UtrYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "UTR yes no page -> YES -> UTR page" in {
       val answers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), true).success.value
+        .set(UtrYesNoPage(index), true).success.value
 
-      navigator.nextPage(TrusteeUtrYesNoPage(index), fakeDraftId, answers)
+      navigator.nextPage(UtrYesNoPage(index), fakeDraftId, answers)
         .mustBe(UtrController.onPageLoad(index, fakeDraftId))
     }
 
     "UTR yes no page -> NO -> Do you know address page" ignore {
       val answers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), false).success.value
+        .set(UtrYesNoPage(index), false).success.value
 
-      navigator.nextPage(TrusteeUtrYesNoPage(index), fakeDraftId, answers)
+      navigator.nextPage(UtrYesNoPage(index), fakeDraftId, answers)
         .mustBe(???)
     }
 
     "UTR page -> Check your answers page" ignore {
-      navigator.nextPage(TrusteesUtrPage(index), fakeDraftId, emptyUserAnswers)
+      navigator.nextPage(UtrPage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(???)
     }
 
@@ -72,27 +72,27 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
 
     "Is address in UK page -> YES -> UK address page" ignore {
       val answers = emptyUserAnswers
-        .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
-      navigator.nextPage(TrusteeOrgAddressUkYesNoPage(index), fakeDraftId, answers)
+      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
         .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
     }
 
     "Is address in UK page -> NO -> International address page" ignore {
       val answers = emptyUserAnswers
-        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
+        .set(AddressUkYesNoPage(index), false).success.value
 
-      navigator.nextPage(TrusteeOrgAddressUkYesNoPage(index), fakeDraftId, answers)
+      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
         .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
     }
 
     "UK address page -> Check your answers page" ignore {
-      navigator.nextPage(TrusteeOrgAddressUkPage(index), fakeDraftId, emptyUserAnswers)
+      navigator.nextPage(UkAddressPage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(???)
     }
 
     "International address page -> Check your answers page" ignore {
-      navigator.nextPage(TrusteeOrgAddressInternationalPage(index), fakeDraftId, emptyUserAnswers)
+      navigator.nextPage(InternationalAddressPage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(???)
     }
   }

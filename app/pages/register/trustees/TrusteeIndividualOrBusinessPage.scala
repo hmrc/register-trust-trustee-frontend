@@ -45,12 +45,12 @@ final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPa
           .flatMap(_.remove(TelephoneNumberPage(index)))
 
       case Some(Individual) =>
-        userAnswers.remove(TrusteeUtrYesNoPage(index))
-          .flatMap(_.remove(TrusteeOrgNamePage(index)))
-          .flatMap(_.remove(TrusteesUtrPage(index)))
-          .flatMap(_.remove(TrusteeOrgAddressUkYesNoPage(index)))
-          .flatMap(_.remove(TrusteeOrgAddressUkPage(index)))
-          .flatMap(_.remove(TrusteeOrgAddressInternationalPage(index)))
+        userAnswers.remove(UtrYesNoPage(index))
+          .flatMap(_.remove(NamePage(index)))
+          .flatMap(_.remove(UtrPage(index)))
+          .flatMap(_.remove(AddressUkYesNoPage(index)))
+          .flatMap(_.remove(UkAddressPage(index)))
+          .flatMap(_.remove(InternationalAddressPage(index)))
           .flatMap(_.remove(TelephoneNumberPage(index)))
 
       case _ => super.cleanup(value, userAnswers)

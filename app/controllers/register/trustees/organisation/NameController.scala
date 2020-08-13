@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.trustees.TrusteeBusinessNameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteeUtrYesNoPage}
+import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,9 +49,9 @@ class NameController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val isUKRegisteredCompany: Boolean = request.userAnswers.get(TrusteeUtrYesNoPage(index)).get
+      val isUKRegisteredCompany: Boolean = request.userAnswers.get(UtrYesNoPage(index)).get
 
-      val preparedForm = request.userAnswers.get(TrusteeOrgNamePage(index)) match {
+      val preparedForm = request.userAnswers.get(NamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -63,7 +63,7 @@ class NameController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val isUKRegisteredCompany: Boolean = request.userAnswers.get(TrusteeUtrYesNoPage(index)).get
+      val isUKRegisteredCompany: Boolean = request.userAnswers.get(UtrYesNoPage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
@@ -71,9 +71,9 @@ class NameController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrgNamePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeOrgNamePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
         }
       )
   }

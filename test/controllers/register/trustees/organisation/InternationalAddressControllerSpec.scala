@@ -22,7 +22,7 @@ import controllers.register.IndexValidation
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.{TrusteeOrgAddressInternationalPage, TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{InternationalAddressPage, AddressUkYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -46,8 +46,8 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
-        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
+        .set(NamePage(index), "Test").success.value
+        .set(AddressUkYesNoPage(index), false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -70,9 +70,9 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
-        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
-        .set(TrusteeOrgAddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
+        .set(NamePage(index), "Test").success.value
+        .set(AddressUkYesNoPage(index), false).success.value
+        .set(InternationalAddressPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -95,8 +95,8 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
-        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
+        .set(NamePage(index), "Test").success.value
+        .set(AddressUkYesNoPage(index), false).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -120,8 +120,8 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
-        .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
+        .set(NamePage(index), "Test").success.value
+        .set(AddressUkYesNoPage(index), false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

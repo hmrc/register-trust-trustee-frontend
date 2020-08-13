@@ -27,7 +27,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees._
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteeUtrYesNoPage}
+import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
 import play.api.mvc.Call
 import sections.Trustees
 

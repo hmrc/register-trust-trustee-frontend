@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.UKAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{TrusteeOrgAddressUkPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{UkAddressPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,9 +49,9 @@ class UkAddressController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val orgName = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(TrusteeOrgAddressUkPage(index)) match {
+      val preparedForm = request.userAnswers.get(UkAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -63,7 +63,7 @@ class UkAddressController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val orgName = request.userAnswers.get(NamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
@@ -71,9 +71,9 @@ class UkAddressController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrgAddressUkPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeOrgAddressUkPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UkAddressPage(index), draftId, updatedAnswers))
         }
       )
   }

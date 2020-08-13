@@ -21,7 +21,7 @@ import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.trustees.TrusteeBusinessNameFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteeUtrYesNoPage}
+import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -41,7 +41,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), true).success.value
+        .set(UtrYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -62,8 +62,8 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), true).success.value
-        .set(TrusteeOrgNamePage(index), "Trustee business name").success.value
+        .set(UtrYesNoPage(index), true).success.value
+        .set(NamePage(index), "Trustee business name").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -84,7 +84,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), true).success.value
+        .set(UtrYesNoPage(index), true).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -107,7 +107,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), true).success.value
+        .set(UtrYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -168,7 +168,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def trusteeOrgName(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeOrgNamePage(index)) map {
+  def trusteeOrgName(index: Int): Option[AnswerRow] = userAnswers.get(NamePage(index)) map {
     x =>
       AnswerRow(
         "trusteeBusinessName.checkYourAnswersLabel",
@@ -188,7 +188,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def trusteeUtrYesNo(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeUtrYesNoPage(index)) map {
+  def trusteeUtrYesNo(index: Int): Option[AnswerRow] = userAnswers.get(UtrYesNoPage(index)) map {
     x =>
       AnswerRow(
         "leadTrusteeUtrYesNo.checkYourAnswersLabel",
@@ -198,7 +198,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def trusteeUtr(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesUtrPage(index)) map {
+  def trusteeUtr(index: Int): Option[AnswerRow] = userAnswers.get(UtrPage(index)) map {
     x =>
       AnswerRow(
         "trusteeUtr.checkYourAnswersLabel",
@@ -219,7 +219,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def orgAddressInTheUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeOrgAddressUkYesNoPage(index)) map {
+  def orgAddressInTheUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressUkYesNoPage(index)) map {
     x =>
       AnswerRow(
         "trusteeOrgAddressUkYesNo.checkYourAnswersLabel",
@@ -230,7 +230,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def trusteesOrgUkAddress(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeOrgAddressUkPage(index)) map {
+  def trusteesOrgUkAddress(index: Int): Option[AnswerRow] = userAnswers.get(UkAddressPage(index)) map {
     x =>
       AnswerRow(
         "trusteesOrgUkAddress.checkYourAnswersLabel",
@@ -241,7 +241,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def trusteeOrgInternationalAddress(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeOrgAddressInternationalPage(index)) map {
+  def trusteeOrgInternationalAddress(index: Int): Option[AnswerRow] = userAnswers.get(InternationalAddressPage(index)) map {
     x =>
       AnswerRow(
         "trusteeOrgAddressInternational.checkYourAnswersLabel",

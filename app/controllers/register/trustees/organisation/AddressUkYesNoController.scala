@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{AddressUkYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,11 +47,11 @@ class AddressUkYesNoController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val orgName = request.userAnswers.get(NamePage(index)).get
 
       val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
 
-      val preparedForm = request.userAnswers.get(TrusteeOrgAddressUkYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -62,7 +62,7 @@ class AddressUkYesNoController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val orgName = request.userAnswers.get(NamePage(index)).get
 
       val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
 
@@ -72,9 +72,9 @@ class AddressUkYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrgAddressUkYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUkYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeOrgAddressUkYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUkYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

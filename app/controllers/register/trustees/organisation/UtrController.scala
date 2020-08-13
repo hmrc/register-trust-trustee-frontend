@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.UtrFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteesUtrPage}
+import pages.register.trustees.organisation.{NamePage, UtrPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,9 +49,9 @@ class UtrController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val trusteeBusinessName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val trusteeBusinessName = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(TrusteesUtrPage(index)) match {
+      val preparedForm = request.userAnswers.get(UtrPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -62,7 +62,7 @@ class UtrController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
-      val trusteeBusinessName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val trusteeBusinessName = request.userAnswers.get(NamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
@@ -70,9 +70,9 @@ class UtrController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesUtrPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UtrPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesUtrPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UtrPage(index), draftId, updatedAnswers))
         }
       )
   }

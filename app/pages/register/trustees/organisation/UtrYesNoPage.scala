@@ -23,7 +23,7 @@ import sections.Trustees
 
 import scala.util.Try
 
-final case class TrusteeUtrYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class UtrYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
@@ -32,7 +32,7 @@ final case class TrusteeUtrYesNoPage(index : Int) extends QuestionPage[Boolean] 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
       case Some(false) =>
-        userAnswers.remove(TrusteesUtrPage(index))
+        userAnswers.remove(UtrPage(index))
       case _ => super.cleanup(value, userAnswers)
     }
   }

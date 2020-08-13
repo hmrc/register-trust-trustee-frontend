@@ -23,7 +23,7 @@ import forms.YesNoFormProvider
 import models.core.pages.IndividualOrBusiness
 import navigation.{FakeNavigator, Navigator}
 import pages.register.trustees.TrusteeIndividualOrBusinessPage
-import pages.register.trustees.organisation.TrusteeUtrYesNoPage
+import pages.register.trustees.organisation.UtrYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -68,7 +68,7 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), true).success.value
+        .set(UtrYesNoPage(index), true).success.value
         .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

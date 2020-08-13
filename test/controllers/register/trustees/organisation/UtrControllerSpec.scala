@@ -21,7 +21,7 @@ import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.UtrFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteesUtrPage}
+import pages.register.trustees.organisation.{NamePage, UtrPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -44,7 +44,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), fakeBusinessName).success.value
+        .set(NamePage(index), fakeBusinessName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -65,8 +65,8 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), fakeBusinessName).success.value
-        .set(TrusteesUtrPage(index), fakeUtr).success.value
+        .set(NamePage(index), fakeBusinessName).success.value
+        .set(UtrPage(index), fakeUtr).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,7 +87,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), fakeBusinessName).success.value
+        .set(NamePage(index), fakeBusinessName).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -110,7 +110,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), fakeBusinessName).success.value
+        .set(NamePage(index), fakeBusinessName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

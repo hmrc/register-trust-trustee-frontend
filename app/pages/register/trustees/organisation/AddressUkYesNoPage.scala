@@ -16,14 +16,28 @@
 
 package pages.register.trustees.organisation
 
-import models.core.pages.UKAddress
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class TrusteeOrgAddressUkPage(index: Int) extends QuestionPage[UKAddress] {
+import scala.util.Try
+
+final case class  AddressUkYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "addressUKYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) =>
+        userAnswers.remove(InternationalAddressPage(index))
+
+      case Some(false) =>
+        userAnswers.remove(UkAddressPage(index))
+
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }

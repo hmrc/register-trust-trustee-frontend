@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{TrusteeOrgAddressInternationalPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{InternationalAddressPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -51,9 +51,9 @@ class InternationalAddressController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val orgName = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(TrusteeOrgAddressInternationalPage(index)) match {
+      val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -64,7 +64,7 @@ class InternationalAddressController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val orgName = request.userAnswers.get(TrusteeOrgNamePage(index)).get
+      val orgName = request.userAnswers.get(NamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
@@ -72,9 +72,9 @@ class InternationalAddressController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrgAddressInternationalPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeOrgAddressInternationalPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
         }
       )
   }

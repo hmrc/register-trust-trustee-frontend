@@ -27,24 +27,24 @@ class TrusteeOrganisationNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case TrusteeOrgNamePage(index) => UtrYesNoController.onPageLoad(index, draftId)
-    case TrusteesUtrPage(index) => ???
-    case TrusteeOrgAddressUkPage(index) => ???
-    case TrusteeOrgAddressInternationalPage(index) => ???
+    case NamePage(index) => UtrYesNoController.onPageLoad(index, draftId)
+    case UtrPage(index) => ???
+    case UkAddressPage(index) => ???
+    case InternationalAddressPage(index) => ???
   }
 
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case TrusteeUtrYesNoPage(index) => ua =>
+    case UtrYesNoPage(index) => ua =>
       yesNoNav(
         ua,
-        TrusteeUtrYesNoPage(index),
+        UtrYesNoPage(index),
         UtrController.onPageLoad(index, draftId),
         ???
       )
-    case TrusteeOrgAddressUkYesNoPage(index) => ua =>
+    case AddressUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
-        TrusteeOrgAddressUkYesNoPage(index),
+        AddressUkYesNoPage(index),
         UkAddressController.onPageLoad(index, draftId),
         InternationalAddressController.onPageLoad(index, draftId)
       )

@@ -22,7 +22,7 @@ import controllers.register.IndexValidation
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.organisation.{TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{AddressUkYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -46,7 +46,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(NamePage(index), "Test").success.value
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -68,8 +68,8 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
-        .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
+        .set(NamePage(index), "Test").success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,7 +90,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(NamePage(index), "Test").success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -116,7 +116,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteeOrgNamePage(index), "Test").success.value
+        .set(NamePage(index), "Test").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

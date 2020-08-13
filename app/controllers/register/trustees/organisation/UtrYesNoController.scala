@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.TrusteeUtrYesNoPage
+import pages.register.trustees.organisation.UtrYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,7 +49,7 @@ class UtrYesNoController @Inject()(
 
       val form: Form[Boolean] = formProvider.withPrefix("leadTrusteeUtrYesNo")
 
-      val preparedForm = request.userAnswers.get(TrusteeUtrYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(UtrYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -68,9 +68,9 @@ class UtrYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeUtrYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UtrYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeUtrYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UtrYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }
