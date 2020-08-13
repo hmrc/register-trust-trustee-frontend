@@ -28,7 +28,7 @@ import pages.entitystatus.TrusteeStatus
 import pages.register.trustees.individual._
 import pages.register.trustees.organisation.TrusteeOrgNamePage
 import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsBoolean, JsString, Json}
 
 import scala.collection.immutable.Nil
 
@@ -160,14 +160,14 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               Some("answerPage.section.trustee.subheading 1"),
               List(
-                AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel","Individual",""),
-                AnswerRow("leadTrusteesName.checkYourAnswersLabel","first name middle name Last Name",""),
-                AnswerRow("trusteesDateOfBirth.checkYourAnswersLabel","10 October 1500","first name Last Name"),
-                AnswerRow("trusteeAUKCitizen.checkYourAnswersLabel","Yes","first name Last Name"),
-                AnswerRow("trusteesNino.checkYourAnswersLabel","AB 12 34 56 C","first name Last Name"),
-                AnswerRow("trusteeLiveInTheUK.checkYourAnswersLabel","Yes","first name Last Name"),
-                AnswerRow("trusteesUkAddress.checkYourAnswersLabel","line1<br />line2<br />NE65QA","first name Last Name"),
-                AnswerRow("telephoneNumber.checkYourAnswersLabel","0191 1111111","first name Last Name")
+                AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", ""),
+                AnswerRow("leadTrusteesName.checkYourAnswersLabel", "first name middle name Last Name", ""),
+                AnswerRow("trusteesDateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
+                AnswerRow("trusteeAUKCitizen.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trusteesNino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
+                AnswerRow("trusteeLiveInTheUK.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trusteesUkAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
+                AnswerRow("telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
               Some("answerPage.section.trustees.heading")
             )
@@ -178,7 +178,13 @@ class SubmissionSetFactorySpec extends SpecBase {
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
             Json.toJson(userAnswers),
             Some(Completed),
-            List(RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson)),
+            List(
+              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+              RegistrationSubmission.MappedPiece("correspondence/address",
+                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
+              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
+            ),
             leadTrusteeOnlySections
           )
         }
@@ -190,192 +196,46 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               Some("answerPage.section.trustee.subheading 1"),
               List(
-                AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel","Individual",""),
-                AnswerRow("leadTrusteesName.checkYourAnswersLabel","first name middle name Last Name",""),
-                AnswerRow("trusteesDateOfBirth.checkYourAnswersLabel","10 October 1500","first name Last Name"),
-                AnswerRow("trusteeAUKCitizen.checkYourAnswersLabel","Yes","first name Last Name"),
-                AnswerRow("trusteesNino.checkYourAnswersLabel","AB 12 34 56 C","first name Last Name"),
-                AnswerRow("trusteeLiveInTheUK.checkYourAnswersLabel","Yes","first name Last Name"),
-                AnswerRow("trusteesUkAddress.checkYourAnswersLabel","line1<br />line2<br />NE65QA","first name Last Name"),
-                AnswerRow("telephoneNumber.checkYourAnswersLabel","0191 1111111","first name Last Name")
+                AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", ""),
+                AnswerRow("leadTrusteesName.checkYourAnswersLabel", "first name middle name Last Name", ""),
+                AnswerRow("trusteesDateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
+                AnswerRow("trusteeAUKCitizen.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trusteesNino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
+                AnswerRow("trusteeLiveInTheUK.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trusteesUkAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
+                AnswerRow("telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
               Some("answerPage.section.trustees.heading")
             ),
             AnswerSection(
               Some("answerPage.section.trustee.subheading 2"),
               List(
-                AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel","Business",""),
-                AnswerRow("trusteeBusinessName.checkYourAnswersLabel","Org Name1","")),
+                AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", "Business", ""),
+                AnswerRow("trusteeBusinessName.checkYourAnswersLabel", "Org Name1", "")),
               None
             )
           )
           val userAnswers =
             addTrustee(1,
               addLeadTrustee(0, emptyUserAnswers))
-            .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+              .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
             Json.toJson(userAnswers),
             Some(Completed),
             List(
               RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
-              RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson)
+              RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+              RegistrationSubmission.MappedPiece("correspondence/address",
+                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
+              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
+
             ),
             answerSections
           )
         }
       }
     }
-
-//    "return completed answer sections" when {
-//
-//      "only one beneficiary" must {
-//        "have 'Beneficiaries' as section key" when {
-//          "individual beneficiary only" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(IndividualBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Individual beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                )
-//              )
-//          }
-//
-//          "class of beneficiary only" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(ClassBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Class of beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                )
-//              )
-//          }
-//
-//          "charity beneficiary only" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(CharityBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Charity beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                )
-//              )
-//          }
-//
-//          "trust beneficiary only" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(TrustBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Trust beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                )
-//              )
-//          }
-//
-//          "company beneficiary only" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(CompanyBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Company beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                )
-//              )
-//          }
-//
-//          "large beneficiary only" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(LargeBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Employment related beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                )
-//              )
-//          }
-//
-//          "other beneficiary only" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(OtherBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Other beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                )
-//              )
-//          }
-//        }
-//      }
-//
-//      "more than one beneficiary" must {
-//        "have 'Beneficiaries' as section key of the topmost section" when {
-//          "individual beneficiary and class of beneficiary" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(IndividualBeneficiaryStatus(0), Completed).success.value
-//              .set(ClassBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Individual beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                ),
-//                AnswerSection(
-//                  Some("Class of beneficiary 1"),
-//                  Nil,
-//                  None
-//                )
-//              )
-//          }
-//
-//          "class of beneficiary and trust beneficiary" in {
-//            val userAnswers: UserAnswers = emptyUserAnswers
-//              .set(ClassBeneficiaryStatus(0), Completed).success.value
-//              .set(TrustBeneficiaryStatus(0), Completed).success.value
-//
-//            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
-//              List(
-//                AnswerSection(
-//                  Some("Class of beneficiary 1"),
-//                  Nil,
-//                  Some("Beneficiaries")
-//                ),
-//                AnswerSection(
-//                  Some("Trust beneficiary 1"),
-//                  Nil,
-//                  None
-//                )
-//              )
-//          }
-//        }
-//      }
-//
-//    }
   }
-
 }
