@@ -17,7 +17,7 @@
 package repositories
 
 import javax.inject.Inject
-import mapping.registration.{LeadTrusteeMapper, TrusteeMapper}
+import mapping.registration.{CorrespondenceMapper, LeadTrusteeMapper, TrusteeMapper}
 import models.Status.{Completed, InProgress}
 import models._
 import models.registration.pages.AddATrustee
@@ -30,6 +30,7 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      leadTrusteeMapper: LeadTrusteeMapper,
+                                     correspondenceMapper: CorrespondenceMapper,
                                      countryOptions: CountryOptions) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
@@ -79,7 +80,7 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
         }
       }
       result match {
-        case Some(pieces) => pieces
+        case Some(pieces) => pieces ++ correspondenceMapper.build(userAnswers)
         case None => List.empty
       }
 
