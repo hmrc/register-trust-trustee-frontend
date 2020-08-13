@@ -17,13 +17,16 @@
 package controllers.register.trustees.organisation
 
 import base.SpecBase
+import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.organisation.{TrusteeOrgAddressInternationalPage, TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
 import play.api.data.Form
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.inject.bind
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import utils.InputOption
@@ -31,8 +34,6 @@ import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.trustees.organisation.TrusteeOrgAddressInternationalView
 
 class TrusteeOrgAddressInternationalControllerSpec extends SpecBase with IndexValidation {
-
-  def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
@@ -94,23 +95,6 @@ class TrusteeOrgAddressInternationalControllerSpec extends SpecBase with IndexVa
       application.stop()
     }
 
-    "redirect to TrusteeOrgNamePage when TrusteeOrgName is not answered" in {
-
-      val userAnswers = emptyUserAnswers
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeOrgAddressInternationalRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.TrusteeBusinessNameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
@@ -118,7 +102,10 @@ class TrusteeOrgAddressInternationalControllerSpec extends SpecBase with IndexVa
         .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteeOrgAddressInternationalPOST)
@@ -189,40 +176,6 @@ class TrusteeOrgAddressInternationalControllerSpec extends SpecBase with IndexVa
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-    }
-
-    "for a GET" must {
-
-      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.TrusteeOrgAddressInternationalController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(GET, route)
-      }
-
-      validateIndex(
-        arbitrary[InternationalAddress],
-        TrusteeOrgAddressInternationalPage.apply,
-        getForIndex
-      )
-
-    }
-
-    "for a POST" must {
-
-      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
-
-        val route =
-          routes.TrusteeOrgAddressInternationalController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("value", "true"))
-      }
-
-      validateIndex(
-        arbitrary[InternationalAddress],
-        TrusteeOrgAddressInternationalPage.apply,
-        postForIndex
-      )
     }
   }
 }

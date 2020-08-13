@@ -65,8 +65,8 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
               trusteeUtr(index),
               orgAddressInTheUkYesNo(index),
               trusteesOrgUkAddress(index),
-              trusteeOrgInternationalAddress(index),
-              orgTelephoneNumber(index)
+              trusteeOrgInternationalAddress(index)/*,
+              orgTelephoneNumber(index)*/
             ).flatten
         }
 
@@ -136,7 +136,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def orgTelephoneNumber(index: Int): Option[AnswerRow] = userAnswers.get(TelephoneNumberPage(index)) map {
+  /*def orgTelephoneNumber(index: Int): Option[AnswerRow] = userAnswers.get(TelephoneNumberPage(index)) map {
     x =>
       AnswerRow(
         "telephoneNumber.checkYourAnswersLabel",
@@ -145,7 +145,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
         orgName(index, userAnswers),
         canEdit = canEdit
       )
-  }
+  }*/
 
   def trusteeAUKCitizen(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeAUKCitizenPage(index)) map {
     x =>

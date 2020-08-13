@@ -32,12 +32,6 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
   def route(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case IsThisLeadTrusteePage(index) =>_ => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
     case TrusteeIndividualOrBusinessPage(index)  => ua => trusteeIndividualOrBusinessRoute(ua, index, draftId)
-    case TrusteeUtrYesNoPage(index) => _ => controllers.register.trustees.organisation.routes.TrusteeBusinessNameController.onPageLoad(index, draftId)
-    case TrusteeOrgNamePage(index)  => ua => trusteeBusinessNameRoute(ua, index, draftId)
-    case TrusteesUtrPage(index) => _ => controllers.register.trustees.organisation.routes.TrusteeOrgAddressUkYesNoController.onPageLoad(index, draftId)
-    case TrusteeOrgAddressUkYesNoPage(index) => ua => trusteeOrgAddressUkYesNoRoute(ua, index, draftId)
-    case TrusteeOrgAddressUkPage(index) => _ => controllers.register.trustees.organisation.routes.TrusteeOrgTelephoneNumberController.onPageLoad(index, draftId)
-    case TrusteeOrgAddressInternationalPage(index)  => _ => controllers.register.trustees.organisation.routes.TrusteeOrgTelephoneNumberController.onPageLoad(index, draftId)
 
     case TrusteesNamePage(index) => _ => controllers.register.trustees.individual.routes.TrusteesDateOfBirthController.onPageLoad(index, draftId)
     case TrusteesDateOfBirthPage(index)  => ua => trusteeDateOfBirthRoute(ua, index, draftId)

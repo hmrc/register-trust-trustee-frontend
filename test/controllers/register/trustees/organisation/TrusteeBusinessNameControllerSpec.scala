@@ -17,10 +17,14 @@
 package controllers.register.trustees.organisation
 
 import base.SpecBase
+import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.trustees.TrusteeBusinessNameFormProvider
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteeUtrYesNoPage}
+import play.api.data.Form
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -29,10 +33,10 @@ import views.html.register.trustees.organisation.TrusteeBusinessNameView
 class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
 
   val formProvider = new TrusteeBusinessNameFormProvider()
-  val form = formProvider()
+  val form: Form[String] = formProvider()
   val index = 0
 
-  lazy val trusteeBusinessNameRoute = routes.TrusteeBusinessNameController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeBusinessNameRoute: String = routes.TrusteeBusinessNameController.onPageLoad(index, fakeDraftId).url
 
   "TrusteeBusinessName Controller" must {
 
@@ -52,7 +56,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, true)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, isUKRegisteredCompany = true)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -74,24 +78,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Trustee business name"), fakeDraftId, index, true)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "redirect to TrusteeUtrYesNoPage when TrusteeUtrYesNo is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(index), "Trustee business name").success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeBusinessNameRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.TrusteeUtrYesNoController.onPageLoad(index, fakeDraftId).url
+        view(form.fill("Trustee business name"), fakeDraftId, index, isUKRegisteredCompany = true)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -102,7 +89,10 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
         .set(TrusteeUtrYesNoPage(index), true).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteeBusinessNameRoute)
@@ -136,7 +126,7 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, true)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, isUKRegisteredCompany = true)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -172,41 +162,5 @@ class TrusteeBusinessNameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
-
-    "for a GET" must {
-
-      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.TrusteeBusinessNameController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(GET, route)
-      }
-
-      validateIndex(
-        arbitrary[String],
-        TrusteeOrgNamePage.apply,
-        getForIndex
-      )
-
-    }
-
-    "for a POST" must {
-
-      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
-
-        val route =
-          routes.TrusteeBusinessNameController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("value", "true"))
-      }
-
-      validateIndex(
-        arbitrary[String],
-        TrusteeOrgNamePage.apply,
-        postForIndex
-      )
-    }
-
-
   }
 }

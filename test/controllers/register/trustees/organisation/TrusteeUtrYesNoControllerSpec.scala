@@ -17,13 +17,17 @@
 package controllers.register.trustees.organisation
 
 import base.SpecBase
+import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.YesNoFormProvider
 import models.core.pages.IndividualOrBusiness
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.TrusteeIndividualOrBusinessPage
 import pages.register.trustees.organisation.TrusteeUtrYesNoPage
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.data.Form
+import play.api.inject.bind
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.organisation.TrusteeUtrYesNoView
@@ -31,16 +35,14 @@ import views.html.register.trustees.organisation.TrusteeUtrYesNoView
 
 class TrusteeUtrYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  def onwardRoute = Call("GET", "/foo")
-
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("leadTrusteeUtrYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("leadTrusteeUtrYesNo")
 
   val index = 0
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
-  lazy val trusteeUtrYesNoRoute = routes.TrusteeUtrYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeUtrYesNoRoute: String = routes.TrusteeUtrYesNoController.onPageLoad(index, fakeDraftId).url
 
   "TrusteeUtrYesNo Controller" must {
 
@@ -87,30 +89,16 @@ class TrusteeUtrYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "redirect to TrusteeIndividualOrBusiness page when TrusteeIndividualOrBusiness is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(TrusteeUtrYesNoPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeUtrYesNoRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteeUtrYesNoRoute)
@@ -179,40 +167,6 @@ class TrusteeUtrYesNoControllerSpec extends SpecBase with IndexValidation {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-    }
-
-    "for a GET" must {
-
-      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.TrusteeUtrYesNoController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(GET, route)
-      }
-
-      validateIndex(
-        arbitrary[Boolean],
-        TrusteeUtrYesNoPage.apply,
-        getForIndex
-      )
-
-    }
-
-    "for a POST" must {
-
-      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
-
-        val route =
-          routes.TrusteeUtrYesNoController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("value", "true"))
-      }
-
-      validateIndex(
-        arbitrary[Boolean],
-        TrusteeUtrYesNoPage.apply,
-        postForIndex
-      )
     }
   }
 }

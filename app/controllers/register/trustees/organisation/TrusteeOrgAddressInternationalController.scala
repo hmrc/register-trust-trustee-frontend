@@ -16,18 +16,16 @@
 
 package controllers.register.trustees.organisation
 
+import config.annotations.TrusteeOrganisation
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.filters.IndexActionFilterProvider
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{TrusteeOrgAddressInternationalPage, TrusteeOrgAddressUkYesNoPage, TrusteeOrgNamePage}
+import pages.register.trustees.organisation.{TrusteeOrgAddressInternationalPage, TrusteeOrgNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.trustees.organisation.TrusteeOrgAddressInternationalView
@@ -35,29 +33,20 @@ import views.html.register.trustees.organisation.TrusteeOrgAddressInternationalV
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrusteeOrgAddressInternationalController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              navigator: Navigator,
-                                              validateIndex: IndexActionFilterProvider,
-                                              identify: RegistrationIdentifierAction,
-                                              getData: DraftIdRetrievalActionProvider,
-                                              requireData: RegistrationDataRequiredAction,
-                                              requiredAnswer: RequiredAnswerActionProvider,
-                                              formProvider: InternationalAddressFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: TrusteeOrgAddressInternationalView,
-                                              val countryOptions: CountryOptionsNonUK
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                          override val messagesApi: MessagesApi,
+                                                          registrationsRepository: RegistrationsRepository,
+                                                          @TrusteeOrganisation navigator: Navigator,
+                                                          standardActionSets: StandardActionSets,
+                                                          formProvider: InternationalAddressFormProvider,
+                                                          val controllerComponents: MessagesControllerComponents,
+                                                          view: TrusteeOrgAddressInternationalView,
+                                                          val countryOptions: CountryOptionsNonUK
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
 
   private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteeOrgNamePage(index), routes.TrusteeBusinessNameController.onPageLoad(index, draftId))) andThen
-      requiredAnswer(RequiredAnswer(TrusteeOrgAddressUkYesNoPage(index), routes.TrusteeOrgAddressUkYesNoController.onPageLoad(index, draftId)))
+    standardActionSets.identifiedUserWithData(draftId)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

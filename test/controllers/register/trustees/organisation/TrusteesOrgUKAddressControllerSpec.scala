@@ -17,13 +17,16 @@
 package controllers.register.trustees.organisation
 
 import base.SpecBase
+import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.UKAddressFormProvider
 import models.core.pages.UKAddress
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.individual.TrusteesUkAddressPage
 import pages.register.trustees.organisation.TrusteeOrgNamePage
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -35,7 +38,7 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
   val form: Form[UKAddress] = formProvider()
   val index = 0
   val trusteeOrgName = "Test"
-  val validAnswer = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
+  val validAnswer: UKAddress = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
 
   lazy val trusteesOrgUkAddressRoute: String = routes.TrusteesOrgUkAddressController.onPageLoad(index, fakeDraftId).url
 
@@ -84,31 +87,16 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-
-    "redirect to Trustee Org Name page when TrusteeOrgName is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesUkAddressPage(index), validAnswer).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteesOrgUkAddressRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.TrusteeBusinessNameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteeOrgNamePage(index), "Test").success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteesOrgUkAddressRoute)
@@ -178,40 +166,5 @@ class TrusteesOrgUKAddressControllerSpec extends SpecBase with IndexValidation {
 
       application.stop()
     }
-
-    "for a GET" must {
-
-      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.TrusteesOrgUkAddressController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(GET, route)
-      }
-
-      validateIndex(
-        arbitrary[UKAddress],
-        TrusteesUkAddressPage.apply,
-        getForIndex
-      )
-
-    }
-
-    "for a POST" must {
-      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
-
-        val route =
-          routes.TrusteesOrgUkAddressController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("line1", "line1"), ("line2", "line2"), ("line3", "line3"), ("line4", "town or city"), ("postcode", "AB1 1AB"))
-      }
-
-      validateIndex(
-        arbitrary[UKAddress],
-        TrusteesUkAddressPage.apply,
-        postForIndex
-      )
-    }
-
-
   }
 }

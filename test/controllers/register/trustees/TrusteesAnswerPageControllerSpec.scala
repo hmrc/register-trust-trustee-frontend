@@ -175,8 +175,8 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeOrgName(index).value,
             checkYourAnswersHelper.trusteeUtr(index).value,
             checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-            checkYourAnswersHelper.trusteesOrgUkAddress(index).value,
-            checkYourAnswersHelper.orgTelephoneNumber(index).value
+            checkYourAnswersHelper.trusteesOrgUkAddress(index).value/*,
+            checkYourAnswersHelper.orgTelephoneNumber(index).value*/
           )
         )
       )
@@ -224,8 +224,8 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeUtrYesNo(index).value,
             checkYourAnswersHelper.trusteeOrgName(index).value,
             checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-            checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value,
-            checkYourAnswersHelper.orgTelephoneNumber(index).value
+            checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value/*,
+            checkYourAnswersHelper.orgTelephoneNumber(index).value*/
           )
         )
       )

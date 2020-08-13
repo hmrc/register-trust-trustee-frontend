@@ -94,8 +94,7 @@ class TrusteesAnswerPageController @Inject()(
                 checkYourAnswersHelper.trusteeUtr(index),
                 checkYourAnswersHelper.orgAddressInTheUkYesNo(index),
                 checkYourAnswersHelper.trusteesOrgUkAddress(index),
-                checkYourAnswersHelper.trusteeOrgInternationalAddress(index),
-                checkYourAnswersHelper.orgTelephoneNumber(index)
+                checkYourAnswersHelper.trusteeOrgInternationalAddress(index)
               ).flatten
 
               case None =>
