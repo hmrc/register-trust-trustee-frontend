@@ -19,7 +19,10 @@ package repositories
 import base.SpecBase
 import models.RegistrationSubmission.AnswerSection
 import models.Status.{Completed, InProgress}
-import models.UserAnswers
+import models.{Status, UserAnswers}
+import models.registration.pages.AddATrustee
+import pages.entitystatus.TrusteeStatus
+import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage}
 
 import scala.collection.immutable.Nil
 
@@ -28,6 +31,60 @@ class SubmissionSetFactorySpec extends SpecBase {
   "Submission set factory" must {
 
     val factory = injector.instanceOf[SubmissionSetFactory]
+
+    "return None status if no trustees" in {
+      factory.trusteesStatus(emptyUserAnswers) mustBe None
+    }
+
+    "return InProgress status" when {
+
+      "there are trustees that are incomplete" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(0), true).success.value
+          .set(IsThisLeadTrusteePage(1), false).success.value
+          .set(TrusteeStatus(1), Status.Completed).success.value
+
+        factory.trusteesStatus(userAnswers).value mustBe InProgress
+      }
+
+      "there are trustees that are complete, but section flagged not complete" in {
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(0), true).success.value
+          .set(TrusteeStatus(0), Status.Completed).success.value
+          .set(IsThisLeadTrusteePage(1), false).success.value
+          .set(TrusteeStatus(1), Status.Completed).success.value
+          .set(AddATrusteePage, AddATrustee.YesLater).success.value
+
+        factory.trusteesStatus(userAnswers).value mustBe InProgress
+      }
+
+      "there are completed trustees, the section is flagged as completed, but there is no lead trustee" in {
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(0), false).success.value
+          .set(TrusteeStatus(0), Status.Completed).success.value
+          .set(IsThisLeadTrusteePage(1), false).success.value
+          .set(TrusteeStatus(1), Status.Completed).success.value
+          .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+
+        factory.trusteesStatus(userAnswers).value mustBe InProgress
+      }
+    }
+
+    "return Completed status" when {
+
+      "there are trustees that are complete, and section flagged as complete" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(0), true).success.value
+          .set(TrusteeStatus(0), Status.Completed).success.value
+          .set(IsThisLeadTrusteePage(1), false).success.value
+          .set(TrusteeStatus(1), Status.Completed).success.value
+          .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+
+        factory.trusteesStatus(userAnswers).value mustBe Completed
+      }
+    }
 
     "return no answer sections if no completed beneficiaries" in {
 

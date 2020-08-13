@@ -17,7 +17,10 @@
 package repositories
 
 import javax.inject.Inject
+import models.Status.{Completed, InProgress}
 import models._
+import models.registration.pages.AddATrustee
+import pages.register.trustees.AddATrusteePage
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import viewmodels.{AnswerRow, AnswerSection}
@@ -25,7 +28,7 @@ import viewmodels.{AnswerRow, AnswerSection}
 class SubmissionSetFactory @Inject()() {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
-    val status = Some(Status.InProgress)
+    val status = trusteesStatus(userAnswers)
     answerSectionsIfCompleted(userAnswers, status)
 
     RegistrationSubmission.DataSet(
@@ -34,6 +37,29 @@ class SubmissionSetFactory @Inject()() {
       mappedDataIfCompleted(userAnswers, status),
       answerSectionsIfCompleted(userAnswers, status)
     )
+  }
+
+  def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
+    val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
+
+    userAnswers.get(_root_.sections.Trustees) match {
+      case Some(l) =>
+
+        if (l.isEmpty) {
+          None
+        } else {
+          val hasLeadTrustee = l.exists(_.isLead)
+          val isComplete = !l.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
+
+          if (isComplete) {
+            Some(Completed)
+          } else {
+            Some(InProgress)
+          }
+        }
+      case None =>
+        None
+    }
   }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
