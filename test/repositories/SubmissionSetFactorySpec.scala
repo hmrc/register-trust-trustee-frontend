@@ -16,81 +16,138 @@
 
 package repositories
 
+import java.time.LocalDate
+
 import base.SpecBase
 import models.RegistrationSubmission.AnswerSection
 import models.Status.{Completed, InProgress}
-import models.{Status, UserAnswers}
+import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
+import models.{RegistrationSubmission, Status, UserAnswers}
 import models.registration.pages.AddATrustee
 import pages.entitystatus.TrusteeStatus
-import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage}
+import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesNamePage, TrusteesNinoPage, TrusteesUkAddressPage}
+import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage}
+import play.api.libs.json.Json
 
 import scala.collection.immutable.Nil
 
 class SubmissionSetFactorySpec extends SpecBase {
 
+  private val expectedLeadTrusteeMappedJson = Json.parse(
+    """
+      |{
+      | "leadTrusteeInd":{
+      |   "name":{
+      |     "firstName":"first name",
+      |     "middleName":"middle name",
+      |     "lastName":"Last Name"
+      |   },
+      |   "dateOfBirth":"1500-10-10",
+      |   "phoneNumber":"0191 1111111",
+      |   "identification":{
+      |     "nino":"AB123456C"
+      |   }
+      | }
+      |}
+      |""".stripMargin)
+
+
   "Submission set factory" must {
 
     val factory = injector.instanceOf[SubmissionSetFactory]
 
-    "return None status if no trustees" in {
-      factory.trusteesStatus(emptyUserAnswers) mustBe None
-    }
+    "create submission data set" when {
 
-    "return InProgress status" when {
-
-      "there are trustees that are incomplete" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(0), true).success.value
-          .set(IsThisLeadTrusteePage(1), false).success.value
-          .set(TrusteeStatus(1), Status.Completed).success.value
-
-        factory.trusteesStatus(userAnswers).value mustBe InProgress
+      "there are no trustees or lead trustees" must {
+        "return a valid empty data set" in {
+          factory.createFrom(emptyUserAnswers) mustBe RegistrationSubmission.DataSet(
+            Json.toJson(emptyUserAnswers),
+            None,
+            List.empty,
+            List.empty
+          )
+        }
       }
 
-      "there are trustees that are complete, but section flagged not complete" in {
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(0), true).success.value
-          .set(TrusteeStatus(0), Status.Completed).success.value
-          .set(IsThisLeadTrusteePage(1), false).success.value
-          .set(TrusteeStatus(1), Status.Completed).success.value
-          .set(AddATrusteePage, AddATrustee.YesLater).success.value
+      "there are trustees that are incomplete" must {
+        "return InProgress status" in {
+          val userAnswers = emptyUserAnswers
+            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeStatus(1), Status.Completed).success.value
 
-        factory.trusteesStatus(userAnswers).value mustBe InProgress
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
+            Json.toJson(userAnswers),
+            Some(InProgress),
+            List.empty,
+            List.empty
+          )
+        }
       }
 
-      "there are completed trustees, the section is flagged as completed, but there is no lead trustee" in {
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(0), false).success.value
-          .set(TrusteeStatus(0), Status.Completed).success.value
-          .set(IsThisLeadTrusteePage(1), false).success.value
-          .set(TrusteeStatus(1), Status.Completed).success.value
-          .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+      "there are trustees that are complete, but section flagged not complete" must {
+        "return InProgress status" in {
+          val userAnswers = emptyUserAnswers
+            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeStatus(0), Status.Completed).success.value
+            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeStatus(1), Status.Completed).success.value
+            .set(AddATrusteePage, AddATrustee.YesLater).success.value
 
-        factory.trusteesStatus(userAnswers).value mustBe InProgress
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
+            Json.toJson(userAnswers),
+            Some(InProgress),
+            List.empty,
+            List.empty
+          )
+        }
+      }
+
+      "there are completed trustees, the section is flagged as completed, but there is no lead trustee" must {
+        "return InProgress status" in {
+          val userAnswers = emptyUserAnswers
+            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeStatus(0), Status.Completed).success.value
+            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeStatus(1), Status.Completed).success.value
+            .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
+            Json.toJson(userAnswers),
+            Some(InProgress),
+            List.empty,
+            List.empty
+          )
+        }
+      }
+
+      "there is a completed lead trustee, and section flagged as complete" must {
+        "return Completed with mapped data" in {
+          val leadTrusteeIndex = 0
+
+          val userAnswers = emptyUserAnswers
+            .set(IsThisLeadTrusteePage(leadTrusteeIndex), true).success.value
+            .set(TrusteeStatus(leadTrusteeIndex), Status.Completed).success.value
+            .set(TrusteeIndividualOrBusinessPage(leadTrusteeIndex), IndividualOrBusiness.Individual).success.value
+            .set(TrusteesNamePage(leadTrusteeIndex), FullName("first name",  Some("middle name"), "Last Name")).success.value
+            .set(TrusteesDateOfBirthPage(leadTrusteeIndex), LocalDate.of(1500,10,10)).success.value
+            .set(TrusteeAUKCitizenPage(leadTrusteeIndex), true).success.value
+            .set(TrusteeAddressInTheUKPage(leadTrusteeIndex), true).success.value
+            .set(TrusteesNinoPage(leadTrusteeIndex), "AB123456C").success.value
+            .set(TelephoneNumberPage(leadTrusteeIndex), "0191 1111111").success.value
+            .set(TrusteesUkAddressPage(leadTrusteeIndex), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+            .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
+            Json.toJson(userAnswers),
+            Some(Completed),
+            List(RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson)),
+            List.empty
+          )
+        }
       }
     }
 
-    "return Completed status" when {
-
-      "there are trustees that are complete, and section flagged as complete" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(0), true).success.value
-          .set(TrusteeStatus(0), Status.Completed).success.value
-          .set(IsThisLeadTrusteePage(1), false).success.value
-          .set(TrusteeStatus(1), Status.Completed).success.value
-          .set(AddATrusteePage, AddATrustee.NoComplete).success.value
-
-        factory.trusteesStatus(userAnswers).value mustBe Completed
-      }
-    }
-
-    "return no answer sections if no completed beneficiaries" in {
-
-      factory.answerSectionsIfCompleted(emptyUserAnswers, Some(InProgress))
-        .mustBe(Nil)
-    }
 
 //    "return completed answer sections" when {
 //
