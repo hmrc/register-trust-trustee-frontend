@@ -17,6 +17,7 @@
 package repositories
 
 import javax.inject.Inject
+import mapping.registration.{LeadTrusteeMapper, TrusteeMapper}
 import models.Status.{Completed, InProgress}
 import models._
 import models.registration.pages.AddATrustee
@@ -25,7 +26,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import viewmodels.{AnswerRow, AnswerSection}
 
-class SubmissionSetFactory @Inject()() {
+class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper, leadTrusteeMapper: LeadTrusteeMapper) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = trusteesStatus(userAnswers)
@@ -39,12 +40,11 @@ class SubmissionSetFactory @Inject()() {
     )
   }
 
-  def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
+  private def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
     val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
 
     userAnswers.get(_root_.sections.Trustees) match {
       case Some(l) =>
-
         if (l.isEmpty) {
           None
         } else {
@@ -57,20 +57,31 @@ class SubmissionSetFactory @Inject()() {
             Some(InProgress)
           }
         }
-      case None =>
-        None
+      case None => None
     }
   }
 
-  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
-//    if (status.contains(Status.Completed)) {
-//      trusteesMapper.build(userAnswers) match {
-//        case Some(assets) => List(RegistrationSubmission.MappedPiece("trust/entities/beneficiary", Json.toJson(assets)))
-//        case _ => List.empty
-//      }
-//    } else {
+  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
+    if (status.contains(Status.Completed)) {
+      val result: Option[List[RegistrationSubmission.MappedPiece]] = for {
+        leadTrustees <- leadTrusteeMapper.build(userAnswers)
+      } yield {
+        val leadTrusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", Json.toJson(leadTrustees))
+        trusteeMapper.build(userAnswers) match {
+          case Some(trustees) =>
+            val trusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/trustees", Json.toJson(trustees))
+            List(leadTrusteesPiece, trusteesPiece)
+          case _ => List(leadTrusteesPiece)
+        }
+      }
+      result match {
+        case Some(pieces) => pieces
+        case None => List.empty
+      }
+
+    } else {
       List.empty
-//    }
+    }
   }
 
   def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
