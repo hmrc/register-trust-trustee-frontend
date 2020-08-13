@@ -17,28 +17,32 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
-import forms.YesNoFormProvider
-import models.core.pages.FullName
+import controllers.register.IndexValidation
+import forms.NinoFormProvider
+import models.core.pages.{FullName, IndividualOrBusiness}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAddressInTheUKPage, TrusteesNamePage}
+import pages.register.trustees.individual.{TrusteesNamePage, TrusteesNinoPage}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import views.html.register.trustees.individual.TrusteeLiveInTheUKView
+import play.api.test.Helpers.{route, _}
+import views.html.register.trustees.individual.NinoView
 
-class TrusteeLiveInTheUKControllerSpec extends SpecBase {
+class NinoControllerSpec extends SpecBase with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteeLiveInTheUK"
-  val trusteeMessagePrefix = "trusteeLiveInTheUK"
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  val leadTrusteeMessagePrefix = "leadTrusteesNino"
+  val trusteeMessagePrefix = "trusteesNino"
+  val formProvider = new NinoFormProvider()
+  val form = formProvider(trusteeMessagePrefix)
 
   val index = 0
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
+  val validAnswer = "NH111111A"
 
-  lazy val trusteeLiveInTheUKRoute = routes.TrusteeLiveInTheUKController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteesNinoRoute = routes.NinoController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeLiveInTheUK Controller" must {
+  "TrusteesNino Controller" must {
 
     "return OK and the correct view (lead trustee) for a GET" in {
 
@@ -48,11 +52,11 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
+      val request = FakeRequest(GET, trusteesNinoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[NinoView]
 
       status(result) mustEqual OK
 
@@ -70,11 +74,11 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
+      val request = FakeRequest(GET, trusteesNinoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[NinoView]
 
       status(result) mustEqual OK
 
@@ -89,39 +93,38 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAddressInTheUKPage(index), true).success.value
+        .set(TrusteesNinoPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
+      val request = FakeRequest(GET, trusteesNinoRoute)
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[NinoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
-
+    "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAddressInTheUKPage(index), true).success.value
+        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(TrusteesNinoPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
+      val request = FakeRequest(GET, trusteesNinoRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -131,69 +134,21 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAddressInTheUKPage(index), true).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeLiveInTheUKRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, trusteesNinoRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }
-
-    "redirect to trusteeName must"  when{
-
-      "a GET when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-      }
-      "a POST when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request =
-          FakeRequest(POST, trusteeLiveInTheUKRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-
-      }
-    }
-
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
@@ -204,12 +159,12 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeLiveInTheUKRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        FakeRequest(POST, trusteesNinoRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> ""))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteeLiveInTheUKView]
+      val view = application.injector.instanceOf[NinoView]
 
       val result = route(application, request).value
 
@@ -225,7 +180,7 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
+      val request = FakeRequest(GET, trusteesNinoRoute)
 
       val result = route(application, request).value
 
@@ -241,8 +196,8 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteeLiveInTheUKRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, trusteesNinoRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(application, request).value
 
@@ -252,6 +207,39 @@ class TrusteeLiveInTheUKControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "for a GET" must {
+
+      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
+        val route = controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+
+        FakeRequest(GET, route)
+      }
+
+      validateIndex(
+        arbitrary[String],
+        TrusteesNinoPage.apply,
+        getForIndex
+      )
+
+    }
+
+    "for a POST" must {
+      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
+
+        val route =
+          controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+
+        FakeRequest(POST, route)
+          .withFormUrlEncodedBody(("value", IndividualOrBusiness.Individual.toString))
+      }
+
+      validateIndex(
+        arbitrary[String],
+        TrusteesNinoPage.apply,
+        postForIndex
+      )
+    }
+
   }
 }
-

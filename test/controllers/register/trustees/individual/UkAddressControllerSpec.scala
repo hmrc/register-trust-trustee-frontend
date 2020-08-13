@@ -16,37 +16,32 @@
 
 package controllers.register.trustees.individual
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import controllers.register.IndexValidation
-import forms.trustees.TrusteesDateOfBirthFormProvider
-import models.core.pages.FullName
-import org.scalacheck.Gen
-import org.scalatestplus.mockito.MockitoSugar
+import forms.UKAddressFormProvider
+import models.core.pages.{FullName, UKAddress}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesDateOfBirthPage, TrusteesNamePage}
+import pages.register.trustees.individual.{TrusteesNamePage, TrusteesUkAddressPage}
+import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.TrusteesDateOfBirthView
+import views.html.register.trustees.individual.UkAddressView
 
-class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
+class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesDateOfBirth"
-  val trusteeMessagePrefix = "trusteesDateOfBirth"
-  val formProvider = new TrusteesDateOfBirthFormProvider(frontendAppConfig)
-  val form = formProvider()
-
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
-
+  val leadTrusteeMessagePrefix = "leadTrusteeUkAddress"
+  val trusteeMessagePrefix = "trusteesUkAddress"
+  val formProvider = new UKAddressFormProvider()
+  val form: Form[UKAddress] = formProvider()
   val index = 0
-  val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
+  val validAnswer = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
 
-  lazy val trusteesDateOfBirthRoute = routes.TrusteesDateOfBirthController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteesUkAddressRoute: String = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteesDateOfBirth Controller" must {
+  "TrusteesUkAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -56,16 +51,16 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+      val request = FakeRequest(GET, trusteesUkAddressRoute)
+
+      val view = application.injector.instanceOf[UkAddressView]
 
       val result = route(application, request).value
-
-      val view = application.injector.instanceOf[TrusteesDateOfBirthView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(request, messages).toString
 
       application.stop()
     }
@@ -73,40 +68,40 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
+        .set(TrusteesUkAddressPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+      val request = FakeRequest(GET, trusteesUkAddressRoute)
 
-      val view = application.injector.instanceOf[TrusteesDateOfBirthView]
+      val view = application.injector.instanceOf[UkAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
+
     "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
+        .set(TrusteesUkAddressPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+      val request = FakeRequest(GET, trusteesUkAddressRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.TrusteesNameController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -117,15 +112,12 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteesDateOfBirthRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> validAnswer.getDayOfMonth.toString,
-            "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year"  -> validAnswer.getYear.toString
-          )
+        FakeRequest(POST, trusteesUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("line3", "value 3"), ("line4", "town"), ("postcode", "AB1 1AB") )
 
       val result = route(application, request).value
 
@@ -145,12 +137,12 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteesDateOfBirthRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        FakeRequest(POST, trusteesUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("line1" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteesDateOfBirthView]
+      val view = application.injector.instanceOf[UkAddressView]
 
       val result = route(application, request).value
 
@@ -166,7 +158,7 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+      val request = FakeRequest(GET, trusteesUkAddressRoute)
 
       val result = route(application, request).value
 
@@ -181,12 +173,8 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteesDateOfBirthRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> validAnswer.getDayOfMonth.toString,
-            "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year"  -> validAnswer.getYear.toString
-          )
+        FakeRequest(POST, trusteesUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
 
       val result = route(application, request).value
 
@@ -197,18 +185,17 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
       application.stop()
     }
 
-
     "for a GET" must {
 
       def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.TrusteesDateOfBirthController.onPageLoad(index, fakeDraftId).url
+        val route = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
       }
 
       validateIndex(
-        Gen.const(LocalDate.of(2010,10,10)),
-        TrusteesDateOfBirthPage.apply,
+        arbitrary[UKAddress],
+        TrusteesUkAddressPage.apply,
         getForIndex
       )
 
@@ -218,22 +205,19 @@ class TrusteesDateOfBirthControllerSpec extends SpecBase with MockitoSugar with 
       def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
 
         val route =
-          routes.TrusteesDateOfBirthController.onPageLoad(index, fakeDraftId).url
+          routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(POST, route)
-          .withFormUrlEncodedBody(
-            "value.day"   -> validAnswer.getDayOfMonth.toString,
-            "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year"  -> validAnswer.getYear.toString
-          )
+          .withFormUrlEncodedBody(("line1", "line1"), ("line2", "line2"), ("line3", "line3"), ("line4", "town or city"), ("postcode", "AB1 1AB"))
       }
 
       validateIndex(
-        Gen.const(LocalDate.of(2010,10,10)),
-        TrusteesDateOfBirthPage.apply,
+        arbitrary[UKAddress],
+        TrusteesUkAddressPage.apply,
         postForIndex
       )
     }
+
 
   }
 }
