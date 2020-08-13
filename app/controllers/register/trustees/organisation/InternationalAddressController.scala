@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.trustees.organisation.TrusteeOrgAddressInternationalView
+import views.html.register.trustees.organisation.InternationalAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,7 +39,7 @@ class InternationalAddressController @Inject()(
                                                 standardActionSets: StandardActionSets,
                                                 formProvider: InternationalAddressFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
-                                                view: TrusteeOrgAddressInternationalView,
+                                                view: InternationalAddressView,
                                                 val countryOptions: CountryOptionsNonUK
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 

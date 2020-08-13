@@ -27,7 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.organisation.TrusteeOrgAddressUkYesNoView
+import views.html.register.trustees.organisation.AddressUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,7 @@ class AddressUkYesNoController @Inject()(
                                           standardActionSets: StandardActionSets,
                                           formProvider: YesNoFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
-                                          view: TrusteeOrgAddressUkYesNoView
+                                          view: AddressUkYesNoView
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =

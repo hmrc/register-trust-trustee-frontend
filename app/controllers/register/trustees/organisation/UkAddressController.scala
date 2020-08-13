@@ -21,13 +21,13 @@ import controllers.actions._
 import forms.UKAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.{UkAddressPage, NamePage}
+import pages.register.trustees.organisation.{NamePage, UkAddressPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.organisation.TrusteesOrgUkAddressView
+import views.html.register.trustees.organisation.UkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,7 @@ class UkAddressController @Inject()(
                                      standardActionSets: StandardActionSets,
                                      formProvider: UKAddressFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
-                                     view: TrusteesOrgUkAddressView
+                                     view: UkAddressView
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()

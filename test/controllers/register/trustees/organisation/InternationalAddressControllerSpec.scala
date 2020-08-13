@@ -22,14 +22,14 @@ import controllers.register.IndexValidation
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.{InternationalAddressPage, AddressUkYesNoPage, NamePage}
+import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.trustees.organisation.TrusteeOrgAddressInternationalView
+import views.html.register.trustees.organisation.InternationalAddressView
 
 class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
@@ -57,7 +57,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
-      val view = application.injector.instanceOf[TrusteeOrgAddressInternationalView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       status(result) mustEqual OK
 
@@ -78,7 +78,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       val request = FakeRequest(GET, internationalAddressRoute)
 
-      val view = application.injector.instanceOf[TrusteeOrgAddressInternationalView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       val result = route(application, request).value
 
@@ -131,7 +131,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteeOrgAddressInternationalView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       val result = route(application, request).value
 

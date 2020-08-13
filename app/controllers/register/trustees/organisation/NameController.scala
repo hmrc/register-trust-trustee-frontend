@@ -27,7 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.organisation.TrusteeBusinessNameView
+import views.html.register.trustees.organisation.NameView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,7 @@ class NameController @Inject()(
                                 standardActionSets: StandardActionSets,
                                 formProvider: TrusteeBusinessNameFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: TrusteeBusinessNameView
+                                view: NameView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider()

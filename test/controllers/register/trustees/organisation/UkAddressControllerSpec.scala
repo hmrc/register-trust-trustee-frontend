@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.TrusteesOrgUkAddressView
+import views.html.register.trustees.organisation.UkAddressView
 
 class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
@@ -51,7 +51,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val request = FakeRequest(GET, ukAddressRoute)
 
-      val view = application.injector.instanceOf[TrusteesOrgUkAddressView]
+      val view = application.injector.instanceOf[UkAddressView]
 
       val result = route(application, request).value
 
@@ -73,7 +73,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val request = FakeRequest(GET, ukAddressRoute)
 
-      val view = application.injector.instanceOf[TrusteesOrgUkAddressView]
+      val view = application.injector.instanceOf[UkAddressView]
 
       val result = route(application, request).value
 
@@ -122,7 +122,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val boundForm = form.bind(Map("line1" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteesOrgUkAddressView]
+      val view = application.injector.instanceOf[UkAddressView]
 
       val result = route(application, request).value
 

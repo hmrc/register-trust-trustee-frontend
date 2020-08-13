@@ -26,7 +26,7 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.TrusteeBusinessNameView
+import views.html.register.trustees.organisation.NameView
 
 class NameControllerSpec extends SpecBase  with IndexValidation {
 
@@ -49,7 +49,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeBusinessNameView]
+      val view = application.injector.instanceOf[NameView]
 
       status(result) mustEqual OK
 
@@ -69,7 +69,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       val request = FakeRequest(GET, nameRoute)
 
-      val view = application.injector.instanceOf[TrusteeBusinessNameView]
+      val view = application.injector.instanceOf[NameView]
 
       val result = route(application, request).value
 
@@ -117,7 +117,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[TrusteeBusinessNameView]
+      val view = application.injector.instanceOf[NameView]
 
       val result = route(application, request).value
 

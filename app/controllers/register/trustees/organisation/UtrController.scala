@@ -27,7 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.organisation.TrusteeUtrView
+import views.html.register.trustees.organisation.UtrView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,7 @@ class UtrController @Inject()(
                                standardActionSets: StandardActionSets,
                                formProvider: UtrFormProvider,
                                val controllerComponents: MessagesControllerComponents,
-                               view: TrusteeUtrView
+                               view: UtrView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider("trusteeUtr")

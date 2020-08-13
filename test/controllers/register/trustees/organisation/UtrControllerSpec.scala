@@ -26,7 +26,7 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.TrusteeUtrView
+import views.html.register.trustees.organisation.UtrView
 
 class UtrControllerSpec extends SpecBase with IndexValidation {
 
@@ -52,7 +52,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeUtrView]
+      val view = application.injector.instanceOf[UtrView]
 
       status(result) mustEqual OK
 
@@ -72,7 +72,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
 
       val request = FakeRequest(GET, utrRoute)
 
-      val view = application.injector.instanceOf[TrusteeUtrView]
+      val view = application.injector.instanceOf[UtrView]
 
       val result = route(application, request).value
 
@@ -120,7 +120,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[TrusteeUtrView]
+      val view = application.injector.instanceOf[UtrView]
 
       val result = route(application, request).value
 
