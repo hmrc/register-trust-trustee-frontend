@@ -20,14 +20,13 @@ import java.time.LocalDate
 
 import base.SpecBase
 import generators.Generators
-import mapping.Mapping
 import models.RegistrationSubmission
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.trustees._
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
+import pages.register.trustees.{organisation => org}
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
 class CorrespondenceMapperSpec extends SpecBase with MustMatchers
@@ -93,8 +92,8 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(IsThisLeadTrusteePage(0), true).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-            .set(TrusteeOrgNamePage(0), "Org Name").success.value
-            .set(TrusteeOrgAddressUkPage(0), address).success.value
+            .set(org.NamePage(0), "Org Name").success.value
+            .set(org.UkAddressPage(0), address).success.value
             .set(TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe List.empty
@@ -106,11 +105,11 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(IsThisLeadTrusteePage(0), true).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-            .set(TrusteeUtrYesNoPage(0), true).success.value
-            .set(TrusteeOrgNamePage(0), "Org Name").success.value
-            .set(TrusteesUtrPage(0), "1234567890").success.value
-            .set(TrusteeOrgAddressUkYesNoPage(0), true).success.value
-            .set(TrusteeOrgAddressUkPage(0), address).success.value
+            .set(org.UtrYesNoPage(0), true).success.value
+            .set(org.NamePage(0), "Org Name").success.value
+            .set(org.UtrPage(0), "1234567890").success.value
+            .set(org.AddressUkYesNoPage(0), true).success.value
+            .set(org.UkAddressPage(0), address).success.value
             .set(TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe
@@ -130,8 +129,8 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(IsThisLeadTrusteePage(0), true).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-            .set(TrusteeOrgNamePage(0), "Org Name").success.value
-            .set(TrusteeOrgAddressInternationalPage(0), address).success.value
+            .set(org.NamePage(0), "Org Name").success.value
+            .set(org.InternationalAddressPage(0), address).success.value
             .set(TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe List.empty
@@ -143,11 +142,11 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(IsThisLeadTrusteePage(0), true).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-            .set(TrusteeUtrYesNoPage(0), true).success.value
-            .set(TrusteeOrgNamePage(0), "Org Name").success.value
-            .set(TrusteesUtrPage(0), "1234567890").success.value
-            .set(TrusteeOrgAddressUkYesNoPage(0), false).success.value
-            .set(TrusteeOrgAddressInternationalPage(0), address).success.value
+            .set(org.UtrYesNoPage(0), true).success.value
+            .set(org.NamePage(0), "Org Name").success.value
+            .set(org.UtrPage(0), "1234567890").success.value
+            .set(org.AddressUkYesNoPage(0), false).success.value
+            .set(org.InternationalAddressPage(0), address).success.value
             .set(TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe

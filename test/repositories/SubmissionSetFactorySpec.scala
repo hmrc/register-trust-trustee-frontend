@@ -22,15 +22,12 @@ import base.SpecBase
 import models.RegistrationSubmission.{AnswerRow, AnswerSection}
 import models.Status.{Completed, InProgress}
 import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
-import models.{RegistrationSubmission, Status, UserAnswers}
 import models.registration.pages.AddATrustee
+import models.{RegistrationSubmission, Status, UserAnswers}
 import pages.entitystatus.TrusteeStatus
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation.TrusteeOrgNamePage
-import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage}
+import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage, organisation => org}
 import play.api.libs.json.{JsBoolean, JsString, Json}
-
-import scala.collection.immutable.Nil
 
 class SubmissionSetFactorySpec extends SpecBase {
 
@@ -69,7 +66,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       .set(TrusteeStatus(index), Status.Completed).success.value
       .set(IsThisLeadTrusteePage(index), false).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-      .set(TrusteeOrgNamePage(index), "Org Name1").success.value
+      .set(org.NamePage(index), "Org Name1").success.value
   }
 
   private def addLeadTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {

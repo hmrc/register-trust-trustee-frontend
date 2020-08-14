@@ -22,10 +22,9 @@ import base.SpecBase
 import generators.Generators
 import mapping.Mapping
 import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import pages.register.trustees._
+import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation.{TrusteeOrgNamePage, TrusteeUtrYesNoPage, TrusteesUtrPage}
+import pages.register.trustees.{organisation => org, _}
 
 class TrusteeMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -69,7 +68,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           emptyUserAnswers
             .set(IsThisLeadTrusteePage(index), false).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-            .set(TrusteeOrgNamePage(index), "Org Name").success.value
+            .set(org.NamePage(index), "Org Name").success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = None,
@@ -124,11 +123,11 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           emptyUserAnswers
             .set(IsThisLeadTrusteePage(index0), false).success.value
             .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Business).success.value
-            .set(TrusteeOrgNamePage(index0), "Org Name1").success.value
+            .set(org.NamePage(index0), "Org Name1").success.value
 
             .set(IsThisLeadTrusteePage(index1), false).success.value
             .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Business).success.value
-            .set(TrusteeOrgNamePage(index1), "Org Name2").success.value
+            .set(org.NamePage(index1), "Org Name2").success.value
 
         trusteeMapper.build(userAnswers).value mustBe
           List(
@@ -192,9 +191,9 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteeUtrYesNoPage(index), true).success.value
-          .set(TrusteesUtrPage(index), "1234567890").success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.UtrYesNoPage(index), true).success.value
+          .set(org.UtrPage(index), "1234567890").success.value
           .set(TrusteeAddressYesNoPage(index), true).success.value
           .set(TrusteeAddressInTheUKPage(index), true).success.value
           .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
@@ -236,9 +235,9 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteeUtrYesNoPage(index), true).success.value
-          .set(TrusteesUtrPage(index), "1234567890").success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.UtrYesNoPage(index), true).success.value
+          .set(org.UtrPage(index), "1234567890").success.value
           .set(TrusteeAddressYesNoPage(index), true).success.value
           .set(TrusteeAddressInTheUKPage(index), true).success.value
           .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
