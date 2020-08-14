@@ -141,7 +141,7 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(controllers.register.trustees.individual.routes.TrusteesNameController.onPageLoad(index, fakeDraftId))
+            .mustBe(controllers.register.trustees.individual.routes.NameController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -153,7 +153,7 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(controllers.register.trustees.individual.routes.TrusteesNameController.onPageLoad(index, fakeDraftId))
+            .mustBe(controllers.register.trustees.individual.routes.NameController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -189,7 +189,7 @@ trait TestTrusteeRoutes {
         userAnswers =>
 
           navigator.nextPage(TrusteesNamePage(index), fakeDraftId, userAnswers)
-            .mustBe(controllers.register.trustees.individual.routes.TrusteesDateOfBirthController.onPageLoad(index, fakeDraftId))
+            .mustBe(controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -217,7 +217,7 @@ trait TestTrusteeRoutes {
             val answers = userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
 
             navigator.nextPage(TrusteesDateOfBirthPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.TrusteeAUKCitizenController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -228,7 +228,7 @@ trait TestTrusteeRoutes {
             val answers = userAnswers.set(TrusteeAUKCitizenPage(index), value = true).success.value
 
             navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.TrusteesNinoController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -239,7 +239,7 @@ trait TestTrusteeRoutes {
             val answers = userAnswers.set(TrusteeAUKCitizenPage(index), value = false).success.value
 
             navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.TrusteeAUKCitizenController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -248,7 +248,7 @@ trait TestTrusteeRoutes {
           userAnswers =>
 
             navigator.nextPage(TrusteesNinoPage(index), fakeDraftId, userAnswers)
-              .mustBe(controllers.register.trustees.individual.routes.TrusteeLiveInTheUKController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -259,7 +259,7 @@ trait TestTrusteeRoutes {
             val answers = userAnswers.set(TrusteeAddressInTheUKPage(index), value = true).success.value
 
             navigator.nextPage(TrusteeAddressInTheUKPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.TrusteesUkAddressController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.UkAddressController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -270,7 +270,7 @@ trait TestTrusteeRoutes {
             val answers = userAnswers.set(TrusteeAddressInTheUKPage(index), value = false).success.value
 
             navigator.nextPage(TrusteeAddressInTheUKPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.TrusteeLiveInTheUKController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 

@@ -86,7 +86,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteesNino.checkYourAnswersLabel",
         HtmlFormat.escape(formatNino(x)),
-        Some(controllers.register.trustees.individual.routes.TrusteesNinoController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
         canEdit = canEdit
       )
@@ -97,7 +97,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteeLiveInTheUK.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.trustees.individual.routes.TrusteeLiveInTheUKController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
         canEdit = canEdit
       )
@@ -108,7 +108,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteesUkAddress.checkYourAnswersLabel",
         ukAddress(x),
-        Some(controllers.register.trustees.individual.routes.TrusteesUkAddressController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.UkAddressController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
         canEdit = canEdit
       )
@@ -119,7 +119,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteesDateOfBirth.checkYourAnswersLabel",
         HtmlFormat.escape(x.format(dateFormatter)),
-        Some(controllers.register.trustees.individual.routes.TrusteesDateOfBirthController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
         canEdit = canEdit
       )
@@ -152,7 +152,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "trusteeAUKCitizen.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.trustees.individual.routes.TrusteeAUKCitizenController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
         canEdit = canEdit
       )
@@ -163,7 +163,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         s"$messagePrefix.checkYourAnswersLabel",
         HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
-        Some(controllers.register.trustees.individual.routes.TrusteesNameController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )
   }
