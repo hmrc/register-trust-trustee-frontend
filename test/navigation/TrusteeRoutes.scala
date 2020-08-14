@@ -157,7 +157,7 @@ trait TestTrusteeRoutes {
       }
     }
 
-    "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a lead trustee Business" in {
+    "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a lead trustee Business" ignore {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers
@@ -165,11 +165,11 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(controllers.register.trustees.organisation.routes.UtrYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(???)
       }
     }
 
-    "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a non-lead trustee Business" in {
+    "go to NamePage from TrusteeIndividualOrBusinessPage page for a non-lead trustee Business" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers
@@ -177,7 +177,7 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
+            .mustBe(controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, fakeDraftId))
       }
     }
 

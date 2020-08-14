@@ -99,8 +99,8 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
   private def trusteeIndividualOrBusinessRoute(answers: ReadableUserAnswers, index : Int, draftId: String) = {
     (answers.get(IsThisLeadTrusteePage(index)), answers.get(TrusteeIndividualOrBusinessPage(index))) match {
       case (Some(_), Some(IndividualOrBusiness.Individual)) => controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId)
-      case (Some(true), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.organisation.routes.UtrYesNoController.onPageLoad(index, draftId)
-      case (Some(false), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
+      case (Some(false), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, draftId)
+      case (Some(true), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
       case _ => sessionExpired
     }
   }

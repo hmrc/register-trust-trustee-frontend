@@ -19,7 +19,7 @@ package controllers.register.trustees.organisation
 import base.SpecBase
 import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
-import forms.trustees.TrusteeBusinessNameFormProvider
+import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
 import play.api.data.Form
@@ -30,8 +30,8 @@ import views.html.register.trustees.organisation.NameView
 
 class NameControllerSpec extends SpecBase  with IndexValidation {
 
-  val formProvider = new TrusteeBusinessNameFormProvider()
-  val form: Form[String] = formProvider()
+  val formProvider = new StringFormProvider()
+  val form: Form[String] = formProvider.withConfig("trustee.organisation.name", 56)
   val index = 0
 
   val validAnswer = "Name"

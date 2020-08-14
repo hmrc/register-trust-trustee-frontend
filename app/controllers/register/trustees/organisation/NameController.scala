@@ -18,7 +18,7 @@ package controllers.register.trustees.organisation
 
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
-import forms.trustees.TrusteeBusinessNameFormProvider
+import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.organisation.NamePage
@@ -36,12 +36,12 @@ class NameController @Inject()(
                                 registrationsRepository: RegistrationsRepository,
                                 @TrusteeOrganisation navigator: Navigator,
                                 standardActionSets: StandardActionSets,
-                                formProvider: TrusteeBusinessNameFormProvider,
+                                formProvider: StringFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider()
+  val form: Form[String] = formProvider.withConfig("trustee.organisation.name", 56)
 
   private def actions(draftId: String) =
     standardActionSets.identifiedUserWithData(draftId)

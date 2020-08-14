@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package forms
 
-import forms.Validation
 import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class TrusteeBusinessNameFormProvider @Inject() extends Mappings {
+class StringFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def withConfig(prefix: String, length: Int): Form[String] =
     Form(
-      "value" -> text("trusteeBusinessName.error.required")
-        .verifying(maxLength(56, "trusteeBusinessName.error.length"),
-          isNotEmpty("value", "trusteeBusinessName.error.required"),
-          regexp(Validation.nameRegex, "trusteeBusinessName.error.invalidFormat"))
+      "value" -> text(s"$prefix.error.required")
+        .verifying(
+          firstError(
+            isNotEmpty("value", s"$prefix.error.required"),
+            maxLength(length, s"$prefix.error.length"),
+            regexp(Validation.nameRegex, s"$prefix.error.invalid")
+          )
+        )
     )
 }
