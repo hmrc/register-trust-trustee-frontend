@@ -16,47 +16,55 @@
 
 package controllers.register.trustees.individual
 
+import java.time.LocalDate
+
 import base.SpecBase
-import forms.YesNoFormProvider
+import forms.PassportOrIdCardFormProvider
 import models.core.pages.FullName
+import models.registration.pages.PassportOrIdCardDetails
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsYesNoPage, TrusteesNamePage}
+import pages.register.trustees.individual.{IDCardDetailsPage, TrusteesNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.PassportDetailsYesNoView
+import utils.InputOption
+import utils.countryOptions.CountryOptions
+import views.html.register.trustees.individual.IDCardDetailsView
 
-class PassportDetailsYesNoControllerSpec extends SpecBase {
+class IDCardDetailsControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "passportDetailsYesNo"
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  val trusteeMessagePrefix = "trusteeIDCardDetails"
+  val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
+  val form = formProvider(trusteeMessagePrefix)
+  val cardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
+
+  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
   val index = 0
   val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  val trusteeName = FullName("FirstName", None, "LastName")
 
-  lazy val passportDetailsYesNoRoute = routes.PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val idCardDetailsRoute = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
 
-  "PassportDetailsYesNo Controller" must {
+  "IDCardDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), trusteeName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, passportDetailsYesNoRoute)
+      val request = FakeRequest(GET, idCardDetailsRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[PassportDetailsYesNoView]
+      val view = application.injector.instanceOf[IDCardDetailsView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form, countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -66,20 +74,20 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
+        .set(IDCardDetailsPage(index), cardDetails).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, passportDetailsYesNoRoute)
+      val request = FakeRequest(GET, idCardDetailsRoute)
 
-      val view = application.injector.instanceOf[PassportDetailsYesNoView]
+      val view = application.injector.instanceOf[IDCardDetailsView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(cardDetails), countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,11 +96,11 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
+        .set(IDCardDetailsPage(index), cardDetails).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, passportDetailsYesNoRoute)
+      val request = FakeRequest(GET, idCardDetailsRoute)
 
       val result = route(application, request).value
 
@@ -108,14 +116,20 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
+        .set(IDCardDetailsPage(index), cardDetails).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, passportDetailsYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, idCardDetailsRoute)
+          .withFormUrlEncodedBody(
+            "country" -> "country",
+            "number" -> "123456",
+            "expiryDate.day"   -> "1",
+            "expiryDate.month" -> "1",
+            "expiryDate.year"  -> "1990"
+          )
 
       val result = route(application, request).value
 
@@ -132,12 +146,12 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(PassportDetailsYesNoPage(index), true).success.value
+          .set(IDCardDetailsPage(index), cardDetails).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, passportDetailsYesNoRoute)
+        val request = FakeRequest(GET, idCardDetailsRoute)
 
         val result = route(application, request).value
 
@@ -151,13 +165,13 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(PassportDetailsYesNoPage(index), true).success.value
+          .set(IDCardDetailsPage(index), cardDetails).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         val request =
-          FakeRequest(POST, passportDetailsYesNoRoute)
+          FakeRequest(POST, idCardDetailsRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -181,19 +195,19 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, passportDetailsYesNoRoute)
+        FakeRequest(POST, idCardDetailsRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[PassportDetailsYesNoView]
+      val view = application.injector.instanceOf[IDCardDetailsView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -202,7 +216,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, passportDetailsYesNoRoute)
+      val request = FakeRequest(GET, idCardDetailsRoute)
 
       val result = route(application, request).value
 
@@ -218,7 +232,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, passportDetailsYesNoRoute)
+        FakeRequest(POST, idCardDetailsRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
