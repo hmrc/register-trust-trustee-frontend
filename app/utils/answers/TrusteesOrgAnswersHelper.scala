@@ -16,17 +16,14 @@
 
 package utils.answers
 
-import javax.inject.Inject
-import mapping.reads._
 import models.UserAnswers
 import pages.register.trustees._
-import pages.register.trustees.individual._
 import pages.register.trustees.organisation._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
-import viewmodels.{AnswerRow, AnswerSection}
+import viewmodels.AnswerRow
 
 trait TrusteesOrgAnswersHelper {
 

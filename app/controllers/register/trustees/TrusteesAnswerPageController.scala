@@ -79,7 +79,7 @@ class TrusteesAnswerPageController @Inject()(
                 checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix),
                 checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix),
                 checkYourAnswersHelper.trusteesDateOfBirth(index),
-                checkYourAnswersHelper.trusteeAUKCitizen(index),
+                checkYourAnswersHelper.trusteeNinoYesNo(index),
                 checkYourAnswersHelper.trusteesNino(index),
                 checkYourAnswersHelper.trusteeLiveInTheUK(index),
                 checkYourAnswersHelper.trusteesUkAddress(index),

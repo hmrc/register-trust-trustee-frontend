@@ -16,17 +16,15 @@
 
 package utils.answers
 
-import javax.inject.Inject
 import mapping.reads._
 import models.UserAnswers
 import pages.register.trustees._
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
-import viewmodels.{AnswerRow, AnswerSection}
+import viewmodels.AnswerRow
 
 trait TrusteesIndividualAnswersHelper {
 
@@ -37,13 +35,12 @@ trait TrusteesIndividualAnswersHelper {
 
   implicit val  messages: Messages
 
-  def trusteesNino(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesNinoPage(index)) map {
+  def trusteeFullName(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(TrusteesNamePage(index)) map {
     x =>
       AnswerRow(
-        "trusteesNino.checkYourAnswersLabel",
-        HtmlFormat.escape(formatNino(x)),
-        Some(controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, draftId).url),
-        trusteeName(index, userAnswers),
+        s"$messagePrefix.checkYourAnswersLabel",
+        HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
+        Some(controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )
   }
@@ -92,7 +89,7 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteeAUKCitizen(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeAUKCitizenPage(index)) map {
+  def trusteeNinoYesNo(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeAUKCitizenPage(index)) map {
     x =>
       AnswerRow(
         "trusteeAUKCitizen.checkYourAnswersLabel",
@@ -103,12 +100,57 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteeFullName(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(TrusteesNamePage(index)) map {
+  def trusteesNino(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesNinoPage(index)) map {
     x =>
       AnswerRow(
-        s"$messagePrefix.checkYourAnswersLabel",
-        HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
-        Some(controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId).url),
+        "trusteesNino.checkYourAnswersLabel",
+        HtmlFormat.escape(formatNino(x)),
+        Some(controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, draftId).url),
+        trusteeName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def trusteePassportDetailsYesNo(index: Int): Option[AnswerRow] = userAnswers.get(PassportDetailsYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "trusteeAUKCitizen.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.trustees.individual.routes.PassportDetailsYesNoController.onPageLoad(index, draftId).url),
+        trusteeName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def trusteesPassportDetails(index: Int): Option[AnswerRow] = userAnswers.get(PassportDetailsPage(index)) map {
+    x =>
+      AnswerRow(
+        "trusteesNino.checkYourAnswersLabel",
+        passportOrIDCard(x, countryOptions),
+        Some(controllers.register.trustees.individual.routes.PassportDetailsController.onPageLoad(index, draftId).url),
+        trusteeName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def trusteeIDCardDetailsYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IDCardDetailsYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "trusteeAUKCitizen.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.trustees.individual.routes.IDCardDetailsYesNoController.onPageLoad(index, draftId).url),
+        trusteeName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def trusteesIDCardDetails(index: Int): Option[AnswerRow] = userAnswers.get(IDCardDetailsPage(index)) map {
+    x =>
+      AnswerRow(
+        "trusteesNino.checkYourAnswersLabel",
+        passportOrIDCard(x, countryOptions),
+        Some(controllers.register.trustees.individual.routes.IDCardDetailsController.onPageLoad(index, draftId).url),
+        trusteeName(index, userAnswers),
         canEdit = canEdit
       )
   }

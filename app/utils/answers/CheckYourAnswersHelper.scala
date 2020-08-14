@@ -20,8 +20,6 @@ import javax.inject.Inject
 import mapping.reads._
 import models.UserAnswers
 import pages.register.trustees._
-import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import utils.CheckAnswersFormatters._
@@ -50,7 +48,7 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions)
               trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix),
               trusteeFullName(index, trusteeFullNameMessagePrefix),
               trusteesDateOfBirth(index),
-              trusteeAUKCitizen(index),
+              trusteeNinoYesNo(index),
               trusteesNino(index),
               trusteeLiveInTheUK(index),
               trusteesUkAddress(index),

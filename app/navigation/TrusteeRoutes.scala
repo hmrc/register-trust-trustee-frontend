@@ -85,6 +85,7 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
       case _ => sessionExpired
     }
   }
+
   private def trusteeAUKCitizenRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(TrusteeAUKCitizenPage(index)) match {
     case Some(true)   => controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, draftId)
     case Some(false)  => controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, draftId)
