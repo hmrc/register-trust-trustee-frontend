@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.actions.register.organisation
+package controllers.actions.register.leadtrustee.organisation
 
+import com.google.inject.Inject
 import controllers.actions.register.TrusteeNameRequest
-import javax.inject.Inject
 import models.requests.RegistrationDataRequest
-import pages.register.trustees.organisation.NamePage
+import pages.register.leadtrustee.organisation.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class NameRequiredAction(index: Int)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
+class NameRequiredAction @Inject()(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
   extends ActionTransformer[RegistrationDataRequest, TrusteeNameRequest] with I18nSupport {
 
   override protected def transform[A](request: RegistrationDataRequest[A]): Future[TrusteeNameRequest[A]] = {
@@ -35,13 +35,9 @@ class NameRequiredAction(index: Int)(implicit val executionContext: ExecutionCon
   }
 
   private def getName[A](request: RegistrationDataRequest[A]): String = {
-    request.userAnswers.get(NamePage(index)) match {
+    request.userAnswers.get(NamePage) match {
       case Some(name) => name
-      case _ => request.messages(messagesApi)("trustee.default")
+      case _ => request.messages(messagesApi)("leadTrustee.default")
     }
   }
-}
-
-class NameRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) {
-  def apply(index: Int): NameRequiredAction = new NameRequiredAction(index)
 }

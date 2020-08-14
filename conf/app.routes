@@ -17,7 +17,8 @@ GET        /timeout                                               controllers.Se
 
 GET        /feature-not-available                                 controllers.FeatureNotAvailableController.onPageLoad()
 
-->         /business                                              trusteeOrganisation.Routes
+->         /trustee/business                                      trusteeOrganisation.Routes
+->         /lead-trustee/business                                 leadTrusteeOrganisation.Routes
 
 ## Trustees
 

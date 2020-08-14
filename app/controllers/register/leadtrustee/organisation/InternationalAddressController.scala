@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees.organisation
+package controllers.register.leadtrustee.organisation
 
-import config.annotations.TrusteeOrganisation
+import config.annotations.LeadTrusteeOrganisation
 import controllers.actions._
-import controllers.actions.register.trustees.organisation.NameRequiredActionImpl
+import controllers.actions.register.leadtrustee.organisation.NameRequiredAction
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.InternationalAddressPage
+import pages.register.leadtrustee.organisation.InternationalAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.trustees.organisation.InternationalAddressView
+import views.html.register.leadtrustee.organisation.InternationalAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class InternationalAddressController @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 registrationsRepository: RegistrationsRepository,
-                                                @TrusteeOrganisation navigator: Navigator,
+                                                @LeadTrusteeOrganisation navigator: Navigator,
                                                 standardActionSets: StandardActionSets,
-                                                nameAction: NameRequiredActionImpl,
+                                                nameAction: NameRequiredAction,
                                                 formProvider: InternationalAddressFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: InternationalAddressView,
@@ -47,32 +47,32 @@ class InternationalAddressController @Inject()(
 
   private val form = formProvider()
 
-  private def actions(index: Int, draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
+  private def actions(draftId: String) =
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
+      val preparedForm = request.userAnswers.get(InternationalAddressPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, index, draftId, request.trusteeName))
+      Ok(view(preparedForm, countryOptions.options, draftId, request.trusteeName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, request.trusteeName))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(InternationalAddressPage, draftId, updatedAnswers))
         }
       )
   }

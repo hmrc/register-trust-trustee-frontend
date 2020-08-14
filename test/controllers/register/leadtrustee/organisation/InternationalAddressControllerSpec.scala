@@ -14,51 +14,55 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees.organisation
+package controllers.register.leadtrustee.organisation
 
 import base.SpecBase
-import config.annotations.TrusteeOrganisation
+import config.annotations.LeadTrusteeOrganisation
 import controllers.register.IndexValidation
-import forms.UKAddressFormProvider
+import forms.InternationalAddressFormProvider
 import models.UserAnswers
-import models.core.pages.UKAddress
+import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.UkAddressPage
-import pages.register.trustees.organisation.NamePage
+import pages.register.leadtrustee.organisation.{InternationalAddressPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.UkAddressView
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.register.leadtrustee.organisation.InternationalAddressView
 
-class UkAddressControllerSpec extends SpecBase with IndexValidation {
+class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new UKAddressFormProvider()
-  val form: Form[UKAddress] = formProvider()
-  val index = 0
+  val formProvider = new InternationalAddressFormProvider()
+  val form: Form[InternationalAddress] = formProvider()
+
   val fakeName = "Test"
-  val validAnswer: UKAddress = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
 
-  lazy val ukAddressRoute: String = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
+  val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
 
-  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
+  private lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(fakeDraftId).url
 
-  "UkAddress Controller" must {
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage, fakeName).success.value
+
+  "InternationalAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, ukAddressRoute)
-
-      val view = application.injector.instanceOf[UkAddressView]
+      val request = FakeRequest(GET, internationalAddressRoute)
 
       val result = route(application, request).value
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, fakeName)(request, messages).toString
+        view(form, countryOptions, fakeDraftId, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -66,20 +70,22 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UkAddressPage(index), validAnswer).success.value
+        .set(InternationalAddressPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, ukAddressRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
-      val view = application.injector.instanceOf[UkAddressView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       val result = route(application, request).value
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, fakeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), countryOptions, fakeDraftId, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -89,17 +95,15 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
+            bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
 
       val request =
-        FakeRequest(POST, ukAddressRoute)
+        FakeRequest(POST, internationalAddressRoute)
           .withFormUrlEncodedBody(
             ("line1", validAnswer.line1),
             ("line2", validAnswer.line2),
-            ("line3", validAnswer.line3.get),
-            ("line4", validAnswer.line4.get),
-            ("postcode", validAnswer.postcode)
+            ("country", validAnswer.country)
           )
 
       val result = route(application, request).value
@@ -116,19 +120,21 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, ukAddressRoute)
-          .withFormUrlEncodedBody(("line1", "invalid value"))
+        FakeRequest(POST, internationalAddressRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("line1" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[UkAddressView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       val result = route(application, request).value
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -137,7 +143,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, ukAddressRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
       val result = route(application, request).value
 
@@ -152,11 +158,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, ukAddressRoute)
-          .withFormUrlEncodedBody(
-            ("line1", validAnswer.line1),
-            ("line2", validAnswer.line2)
-          )
+        FakeRequest(POST, internationalAddressRoute)
 
       val result = route(application, request).value
 

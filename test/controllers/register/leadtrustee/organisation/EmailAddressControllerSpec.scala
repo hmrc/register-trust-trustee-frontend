@@ -14,86 +14,91 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees.organisation
+package controllers.register.leadtrustee.organisation
 
 import base.SpecBase
-import config.annotations.TrusteeOrganisation
-import controllers.register.IndexValidation
-import forms.StringFormProvider
+import config.annotations.LeadTrusteeOrganisation
+import forms.EmailAddressFormProvider
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.NamePage
+import pages.register.leadtrustee.organisation.{EmailAddressPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.NameView
+import play.api.test.Helpers._
+import views.html.register.leadtrustee.organisation.EmailAddressView
 
-class NameControllerSpec extends SpecBase  with IndexValidation {
+class EmailAddressControllerSpec extends SpecBase {
 
-  val formProvider = new StringFormProvider()
-  val form: Form[String] = formProvider.withConfig("trustee.organisation.name", 56)
-  val index = 0
+  lazy val emailAddressRoute: String = routes.EmailAddressController.onPageLoad(fakeDraftId).url
 
-  val validAnswer = "Name"
+  val formProvider = new EmailAddressFormProvider()
+  val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.email")
+  val name: String = "Name"
 
-  lazy val nameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
+  val validAnswer: String = "email@example.com"
 
-  "Name Controller" must {
+  val baseAnswers: UserAnswers = emptyUserAnswers
+    .set(NamePage, name).success.value
+
+  "EmailAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, emailAddressRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[EmailAddressView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), validAnswer).success.value
+      val userAnswers = baseAnswers
+        .set(EmailAddressPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, emailAddressRoute)
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[EmailAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, name)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+            bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
+          )
+          .build()
 
       val request =
-        FakeRequest(POST, nameRoute)
+        FakeRequest(POST, emailAddressRoute)
           .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
@@ -101,22 +106,22 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
-        FakeRequest(POST, nameRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        FakeRequest(POST, emailAddressRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> ""))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[EmailAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -125,12 +130,11 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, emailAddressRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -141,7 +145,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, nameRoute)
+        FakeRequest(POST, emailAddressRoute)
           .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
