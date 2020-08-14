@@ -308,7 +308,6 @@ addATrusteeYesNo.error.required = Select yes if you want to add a trustee
 
 trustee.organisation.name.title = What is the business name?
 trustee.organisation.name.heading = What is the business name?
-trustee.organisation.name.hint = Enter the name as it appears on tax returns and other letters about Corporation Tax.
 trustee.organisation.name.error.required = Enter the business name
 trustee.organisation.name.error.length = Business name must be 56 characters or less
 trustee.organisation.name.error.invalid = Business name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces

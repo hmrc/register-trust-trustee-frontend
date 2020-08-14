@@ -43,7 +43,7 @@ class UtrController @Inject()(
                                view: UtrView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("trustee.organisation.utr")
+  private val form = formProvider.withPrefix("trustee.organisation.utr")
 
   private def actions(index : Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)

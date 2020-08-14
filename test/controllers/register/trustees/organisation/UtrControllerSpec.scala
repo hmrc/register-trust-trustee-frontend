@@ -32,7 +32,7 @@ import views.html.register.trustees.organisation.UtrView
 class UtrControllerSpec extends SpecBase with IndexValidation {
 
   val formProvider = new UtrFormProvider()
-  val form: Form[String] = formProvider("trustee.organisation.utr")
+  val form: Form[String] = formProvider.withPrefix("trustee.organisation.utr")
 
   val index = 0
   val fakeName = "Test"

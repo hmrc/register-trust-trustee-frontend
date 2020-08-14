@@ -16,25 +16,34 @@
 
 package views.behaviours
 
+import models.core.pages.InternationalAddress
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 
-trait QuestionViewBehaviours[A] extends ViewBehaviours {
+
+trait InternationalAddressViewBehaviours extends ViewBehaviours {
+
 
   val errorKey = "value"
-  val errorPrefix = "site.error"
   val errorMessage = "error.number"
   val error = FormError(errorKey, errorMessage)
 
-  val form: Form[A]
+  val form: Form[InternationalAddress]
 
-  def pageWithTextFields(form: Form[A],
-                         createView: Form[A] => HtmlFormat.Appendable,
-                         messageKeyPrefix: String,
-                         expectedFormAction: String,
-                         fields: String*) = {
+  def internationalAddress(createView: Form[InternationalAddress] => HtmlFormat.Appendable,
+                           titleMessagePrefix: Option[String],
+                           expectedFormAction: String,
+                           args: String*) = {
 
-    "behave like a question page" when {
+    val titlePrefix = titleMessagePrefix.getOrElse("site.address.international")
+
+    val fields = Seq(("line1", None),
+      ("line2", None),
+      ("line3", None),
+      ("country", None)
+    )
+
+    "behave like a internationalAddressPage" when {
 
       "rendered" must {
 
@@ -42,7 +51,7 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
 
           s"contain an input for $field" in {
             val doc = asDocument(createView(form))
-            assertRenderedById(doc, field)
+            assertRenderedById(doc, field._1)
           }
         }
 
@@ -58,7 +67,10 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
+          assertEqualsValue(
+            doc,
+            "title",
+            s"""${messages("error.browser.title.prefix")} ${messages(s"$titlePrefix.title", args: _*)}""")
         }
       }
 
@@ -68,19 +80,27 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
 
           "show an error summary" in {
 
-            val doc = asDocument(createView(form.withError(FormError(field, "error"))))
+            val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
             assertRenderedById(doc, "error-summary-heading")
           }
 
-          s"show an error associated with the field '$field'" in {
+          s"show an error in the label for field '$field'" in {
 
-            val doc = asDocument(createView(form.withError(FormError(field, "error"))))
+            val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
             val errorSpan = doc.getElementsByClass("error-message").first
-            doc.getElementById(field).attr("aria-describedby") contains errorSpan.attr("id")
-            errorSpan.parent.attr("for") mustBe field
+            errorSpan.parent.getElementsByClass("form-label").attr("for") mustBe field._1
           }
+        }
+      }
+
+      for (field <- fields) {
+        s"contains a label and optional hint text for the field '$field'" in {
+          val doc = asDocument(createView(form))
+          val fieldName = field._1
+          assertContainsLabel(doc, fieldName, messages(s"site.address.international.$fieldName"))
         }
       }
     }
   }
+
 }

@@ -22,7 +22,7 @@ import play.api.data.Form
 
 class UtrFormProvider @Inject() extends Mappings {
 
-  def apply(messagePrefix: String): Form[String] =
+  def withPrefix(messagePrefix: String): Form[String] =
     Form(
       "value" -> text(s"$messagePrefix.error.required")
         .verifying(
@@ -31,7 +31,8 @@ class UtrFormProvider @Inject() extends Mappings {
             minLength(10, s"$messagePrefix.error.length"),
             regexp(Validation.utrRegex, s"$messagePrefix.error.invalidCharacters"),
             isNotEmpty("value", s"$messagePrefix.error.required")
-          ))
+          )
+        )
     )
 }
 
