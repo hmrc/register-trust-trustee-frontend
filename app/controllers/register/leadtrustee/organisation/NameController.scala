@@ -18,6 +18,7 @@ package controllers.register.leadtrustee.organisation
 
 import config.annotations.LeadTrusteeOrganisation
 import controllers.actions._
+import controllers.actions.register.leadtrustee.organisation.UkRegisteredRequiredAction
 import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -36,6 +37,7 @@ class NameController @Inject()(
                                 registrationsRepository: RegistrationsRepository,
                                 @LeadTrusteeOrganisation navigator: Navigator,
                                 standardActionSets: StandardActionSets,
+                                ukRegisteredAction: UkRegisteredRequiredAction,
                                 formProvider: StringFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView
@@ -44,7 +46,7 @@ class NameController @Inject()(
   val form: Form[String] = formProvider.withConfig("leadTrustee.organisation.name", 56)
 
   private def actions(draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId)
+    standardActionSets.identifiedUserWithData(draftId) andThen ukRegisteredAction
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
@@ -54,8 +56,7 @@ class NameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId))
-
+      Ok(view(preparedForm, draftId, request.isUkRegistered))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
@@ -63,7 +64,7 @@ class NameController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, request.isUkRegistered))),
 
         value => {
           for {

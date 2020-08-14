@@ -20,8 +20,9 @@ import base.SpecBase
 import config.annotations.LeadTrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.StringFormProvider
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import pages.register.leadtrustee.organisation.NamePage
+import pages.register.leadtrustee.organisation.{NamePage, UkRegisteredYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -37,11 +38,43 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
   lazy val nameRoute: String = routes.NameController.onPageLoad(fakeDraftId).url
 
-  "Name Controller" must {
+  "Name Controller" when {
 
+    "UK registered" must {
+
+      val isUkRegistered: Boolean = true
+
+      val baseAnswers: UserAnswers = super.emptyUserAnswers
+        .set(UkRegisteredYesNoPage, isUkRegistered).success.value
+
+      returnOkAndCorrectViewForAGet(isUkRegistered, baseAnswers)
+      populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered, baseAnswers)
+      redirectToNextPageWhenValidDataSubmitted(baseAnswers)
+      returnBadRequestAndErrorsWhenInvalidDataSubmitted(isUkRegistered, baseAnswers)
+      redirectToSessionExpiredForAGetIfNoExistingDataFound()
+      redirectToSessionExpiredForAPostIfNoExistingDataFound()
+    }
+
+    "Not UK registered" must {
+
+      val isUkRegistered: Boolean = false
+
+      val baseAnswers: UserAnswers = super.emptyUserAnswers
+        .set(UkRegisteredYesNoPage, isUkRegistered).success.value
+
+      returnOkAndCorrectViewForAGet(isUkRegistered, baseAnswers)
+      populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered, baseAnswers)
+      redirectToNextPageWhenValidDataSubmitted(baseAnswers)
+      returnBadRequestAndErrorsWhenInvalidDataSubmitted(isUkRegistered, baseAnswers)
+      redirectToSessionExpiredForAGetIfNoExistingDataFound()
+      redirectToSessionExpiredForAPostIfNoExistingDataFound()
+    }
+  }
+
+  private def returnOkAndCorrectViewForAGet(isUkRegistered: Boolean, baseAnswers: UserAnswers): Unit = {
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request = FakeRequest(GET, nameRoute)
 
@@ -52,14 +85,16 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId)(fakeRequest, messages).toString
+        view(form, fakeDraftId, isUkRegistered)(fakeRequest, messages).toString
 
       application.stop()
     }
+  }
 
+  private def populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered: Boolean, baseAnswers: UserAnswers): Unit = {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers
+      val userAnswers = baseAnswers
         .set(NamePage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -73,15 +108,17 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, isUkRegistered)(fakeRequest, messages).toString
 
       application.stop()
     }
+  }
 
+  private def redirectToNextPageWhenValidDataSubmitted(baseAnswers: UserAnswers): Unit = {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
@@ -97,10 +134,12 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
+  }
 
+  private def returnBadRequestAndErrorsWhenInvalidDataSubmitted(isUkRegistered: Boolean, baseAnswers: UserAnswers): Unit = {
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
         FakeRequest(POST, nameRoute)
@@ -115,11 +154,13 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, isUkRegistered)(fakeRequest, messages).toString
 
       application.stop()
     }
+  }
 
+  private def redirectToSessionExpiredForAGetIfNoExistingDataFound(): Unit = {
     "redirect to Session Expired for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -134,7 +175,9 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
+  }
 
+  private def redirectToSessionExpiredForAPostIfNoExistingDataFound(): Unit = {
     "redirect to Session Expired for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()

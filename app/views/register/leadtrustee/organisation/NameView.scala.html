@@ -21,7 +21,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, isUkRegistered: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("leadTrustee.organisation.name.title")}"
@@ -38,7 +38,8 @@
             inputClass = Some("trustee-business-name"),
             label = messages("leadTrustee.organisation.name.heading"),
             labelAsHeading = true,
-            autocomplete = Some("name")
+            autocomplete = Some("name"),
+            hint = if(isUkRegistered) Some(messages("leadTrustee.organisation.name.hint")) else None
         )
 
         @components.submit_button()

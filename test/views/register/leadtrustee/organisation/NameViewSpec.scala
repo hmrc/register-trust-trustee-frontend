@@ -28,18 +28,34 @@ class NameViewSpec extends StringViewBehaviours {
   override val form: Form[String] = new StringFormProvider().withConfig(prefix, 56)
   val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
 
-  "Name View" must {
+  "Name View" when {
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId)(fakeRequest, messages)
+    "UK registered" must {
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, isUkRegistered = true)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), prefix)
+      behave like normalPage(applyView(form), prefix)
 
-    behave like pageWithBackLink(applyView(form))
+      behave like pageWithBackLink(applyView(form))
 
-    behave like stringPage(form, applyView, prefix)
+      behave like stringPage(form, applyView, prefix)
 
-    behave like pageWithASubmitButton(applyView(form))
+      behave like pageWithHint(form, applyView, prefix)
 
+      behave like pageWithASubmitButton(applyView(form))
+    }
+
+    "Not UK registered" must {
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, isUkRegistered = false)(fakeRequest, messages)
+
+      behave like normalPage(applyView(form), prefix)
+
+      behave like pageWithBackLink(applyView(form))
+
+      behave like stringPage(form, applyView, prefix)
+
+      behave like pageWithASubmitButton(applyView(form))
+    }
   }
 }
