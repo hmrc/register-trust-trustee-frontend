@@ -32,7 +32,7 @@ class LeadTrusteeOrganisationNavigator extends Navigator {
     case UtrPage => _ => AddressUkYesNoController.onPageLoad(draftId)
     case UkAddressPage | InternationalAddressPage => _ => EmailAddressYesNoController.onPageLoad(draftId)
     case EmailAddressPage => _ => TelephoneNumberController.onPageLoad(draftId)
-    case TelephoneNumberPage => _ => ???
+    case TelephoneNumberPage => _ => CheckDetailsController.onPageLoad(draftId)
   }
 
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {

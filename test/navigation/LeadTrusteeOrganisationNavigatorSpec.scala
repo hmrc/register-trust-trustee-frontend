@@ -113,9 +113,9 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
         .mustBe(TelephoneNumberController.onPageLoad(fakeDraftId))
     }
 
-    "Telephone number page -> Check your answers page" ignore {
+    "Telephone number page -> Check your answers page" in {
       navigator.nextPage(TelephoneNumberPage, fakeDraftId, emptyUserAnswers)
-        .mustBe(???)
+        .mustBe(CheckDetailsController.onPageLoad(fakeDraftId))
     }
   }
 
