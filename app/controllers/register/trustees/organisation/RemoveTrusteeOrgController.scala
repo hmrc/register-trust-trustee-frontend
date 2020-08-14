@@ -23,7 +23,7 @@ import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
-import pages.register.trustees.organisation.TrusteeOrgNamePage
+import pages.register.trustees.organisation.NamePage
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveTrusteeQuery, Settable}
@@ -46,7 +46,7 @@ class RemoveTrusteeOrgController @Inject()(
 
   override val messagesPrefix : String = "removeATrusteeOrg"
 
-  override def page(index: Int) : QuestionPage[String] = TrusteeOrgNamePage(index)
+  override def page(index: Int) : QuestionPage[String] = NamePage(index)
 
   override def actions(draftId : String, index: Int) =
     identify andThen getData(draftId) andThen requireData

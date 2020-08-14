@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.trustees.organisation.TrusteeOrgNamePage
+import pages.register.trustees.organisation.NamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RemoveIndexView
@@ -66,7 +66,7 @@ class RemoveTrusteeOrgControllerSpec extends SpecBase with ScalaCheckPropertyChe
       "return OK and the correct view for a GET" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrgNamePage(0), content).success.value
+          .set(NamePage(0), content).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,7 +87,7 @@ class RemoveTrusteeOrgControllerSpec extends SpecBase with ScalaCheckPropertyChe
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(0), content).success.value
+        .set(NamePage(0), content).success.value
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -113,7 +113,7 @@ class RemoveTrusteeOrgControllerSpec extends SpecBase with ScalaCheckPropertyChe
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrgNamePage(0), content).success.value
+        .set(NamePage(0), content).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
