@@ -320,7 +320,7 @@ trustee.organisation.utrYesNo.error.required = Select yes if you know the truste
 
 trustee.organisation.utr.title = What is the trustee’s Unique Taxpayer Reference (UTR)?
 trustee.organisation.utr.heading = What is {0}’s Unique Taxpayer Reference (UTR)?
-trustee.organisation.utr.organisation.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR)?
+trustee.organisation.utr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR)?
 trustee.organisation.utr.error.required = Enter the trustee’s Unique Taxpayer Reference
 trustee.organisation.utr.error.length = Unique Taxpayer Reference must be a 10 digit number
 trustee.organisation.utr.error.invalidCharacters = Enter the trust’s Unique Taxpayer Reference in the correct format
@@ -346,6 +346,9 @@ trustee.organisation.ukAddress.checkYourAnswersLabel = What is {0}’s address?
 trustee.organisation.internationalAddress.title = What is the trustee’s address?
 trustee.organisation.internationalAddress.heading = What is {0}’s address?
 trustee.organisation.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.organisation.checkDetails.title = Check trustee details
+trustee.organisation.checkDetails.heading = Check trustee details
 
 trustee.default = the trustee
 leadTrustee.default = the lead trustee
