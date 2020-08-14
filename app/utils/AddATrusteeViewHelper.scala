@@ -16,6 +16,9 @@
 
 package utils
 
+import controllers.register.leadtrustee.organisation.{routes => ltoRts}
+import controllers.register.trustees.organisation.{routes => toRts}
+import controllers.register.trustees.individual.{routes => tiRts}
 import models.Status.{Completed, InProgress}
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
@@ -45,19 +48,43 @@ class AddATrusteeViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         s"${messages("entities.trustee")}"
     }
 
+    case class ChangeLink(inProgressRoute: String, completedRoute: String)
+
+    val changeLink: String = {
+      viewModel match {
+        case TrusteeViewModel(false, _, Some(Individual), InProgress) =>
+          tiRts.NameController.onPageLoad(index, draftId).url
+        case TrusteeViewModel(false, _, Some(Individual), Completed) =>
+          controllers.routes.FeatureNotAvailableController.onPageLoad().url
+        case TrusteeViewModel(false, _, Some(Business), InProgress) =>
+          toRts.NameController.onPageLoad(index, draftId).url
+        case TrusteeViewModel(false, _, Some(Business), Completed) =>
+          toRts.CheckDetailsController.onPageLoad(index, draftId).url
+        case TrusteeViewModel(true, _, Some(Individual), InProgress) =>
+          controllers.routes.FeatureNotAvailableController.onPageLoad().url
+        case TrusteeViewModel(true, _, Some(Individual), Completed) =>
+          controllers.routes.FeatureNotAvailableController.onPageLoad().url
+        case TrusteeViewModel(true, _, Some(Business), InProgress) =>
+          ltoRts.UkRegisteredYesNoController.onPageLoad(index, draftId).url
+        case TrusteeViewModel(true, _, Some(Business), Completed) =>
+          ltoRts.CheckDetailsController.onPageLoad(index, draftId).url
+        case _ => controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      }
+    }
+
     val removeLink = viewModel.`type` match {
       case Some(Individual) =>
         controllers.register.trustees.individual.routes.RemoveTrusteeController.onPageLoad(index, draftId).url
       case Some(Business) =>
         controllers.register.trustees.organisation.routes.RemoveTrusteeOrgController.onPageLoad(index, draftId).url
       case _ =>
-        controllers.register.trustees.individual.routes.RemoveTrusteeController.onPageLoad(index, draftId).url
+        controllers.routes.FeatureNotAvailableController.onPageLoad().url
     }
 
     AddRow(
       name = nameOfTrustee,
       typeLabel = trusteeType,
-      changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      changeUrl = changeLink,
       removeUrl = removeLink
     )
   }
