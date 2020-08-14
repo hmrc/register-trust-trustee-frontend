@@ -83,6 +83,10 @@ class TrusteesAnswerPageController @Inject()(
                 checkYourAnswersHelper.trusteesNino(index),
                 checkYourAnswersHelper.trusteeLiveInTheUK(index),
                 checkYourAnswersHelper.trusteesUkAddress(index),
+                checkYourAnswersHelper.trusteePassportDetailsYesNo(index),
+                checkYourAnswersHelper.trusteesPassportDetails(index),
+                checkYourAnswersHelper.trusteeIDCardDetailsYesNo(index),
+                checkYourAnswersHelper.trusteesIDCardDetails(index),
                 checkYourAnswersHelper.telephoneNumber(index)
               ).flatten
 
