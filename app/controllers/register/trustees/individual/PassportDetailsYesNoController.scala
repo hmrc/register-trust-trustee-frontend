@@ -22,6 +22,7 @@ import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
+import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{PassportDetailsYesNoPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,14 +48,15 @@ class PassportDetailsYesNoController @Inject()(
                                                 view: PassportDetailsYesNoView
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = yesNoFormProvider.withPrefix("individualBeneficiaryPassportDetailsYesNo")
+  private val form = yesNoFormProvider.withPrefix("passportDetailsYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

@@ -30,7 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.CheckYourAnswersHelper
+import utils.answers.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.trustees.TrusteesAnswerPageView
@@ -79,7 +79,7 @@ class TrusteesAnswerPageController @Inject()(
                 checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix),
                 checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix),
                 checkYourAnswersHelper.trusteesDateOfBirth(index),
-                checkYourAnswersHelper.trusteeAUKCitizen(index),
+                checkYourAnswersHelper.trusteeNinoYesNo(index),
                 checkYourAnswersHelper.trusteesNino(index),
                 checkYourAnswersHelper.trusteeLiveInTheUK(index),
                 checkYourAnswersHelper.trusteesUkAddress(index),

@@ -25,7 +25,7 @@ import pages.register.trustees.individual._
 import pages.register.trustees.organisation._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.CheckYourAnswersHelper
+import utils.answers.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.trustees.TrusteesAnswerPageView
@@ -65,7 +65,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeIndividualOrBusiness(index, leadTrusteeIndividualOrBusinessMessagePrefix).value,
             checkYourAnswersHelper.trusteeFullName(index, leadTrusteeFullNameMessagePrefix).value,
             checkYourAnswersHelper.trusteesDateOfBirth(index).value,
-            checkYourAnswersHelper.trusteeAUKCitizen(index).value,
+            checkYourAnswersHelper.trusteeNinoYesNo(index).value,
             checkYourAnswersHelper.trusteesNino(index).value,
             checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
             checkYourAnswersHelper.trusteesUkAddress(index).value,
@@ -119,7 +119,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
             checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix).value,
             checkYourAnswersHelper.trusteesDateOfBirth(index).value,
-            checkYourAnswersHelper.trusteeAUKCitizen(index).value,
+            checkYourAnswersHelper.trusteeNinoYesNo(index).value,
             checkYourAnswersHelper.trusteesNino(index).value,
             checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
             checkYourAnswersHelper.trusteesUkAddress(index).value,
