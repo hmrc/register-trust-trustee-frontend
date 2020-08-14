@@ -16,22 +16,23 @@
 
 package controllers.actions.register.leadtrustee.organisation
 
-import com.google.inject.Inject
 import controllers.Assets.Redirect
 import controllers.actions.register.UkRegisteredYesNoRequest
+import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.register.leadtrustee.organisation.UkRegisteredYesNoPage
+import play.api.i18n.MessagesApi
 import play.api.mvc.{ActionRefiner, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UkRegisteredRequiredAction @Inject()(implicit val executionContext: ExecutionContext)
+class UkRegisteredRequiredAction(index: Int)(implicit val executionContext: ExecutionContext)
   extends ActionRefiner[RegistrationDataRequest, UkRegisteredYesNoRequest] {
 
   override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, UkRegisteredYesNoRequest[A]]] = {
 
     Future.successful(
-      request.userAnswers.get(UkRegisteredYesNoPage) match {
+      request.userAnswers.get(UkRegisteredYesNoPage(index)) match {
         case None =>
           Left(
             Redirect(controllers.routes.SessionExpiredController.onPageLoad())
@@ -46,4 +47,8 @@ class UkRegisteredRequiredAction @Inject()(implicit val executionContext: Execut
       }
     )
   }
+}
+
+class UkRegisteredRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) {
+  def apply(index: Int): UkRegisteredRequiredAction = new UkRegisteredRequiredAction(index)
 }

@@ -35,11 +35,13 @@ class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
   val form: Form[String] = formProvider("leadTrustee.organisation.telephoneNumber")
   val name = "Name"
 
+  val index = 0
   val validAnswer = "1234567890"
 
-  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage, name).success.value
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
+    .set(NamePage(index), name).success.value
 
-  lazy val telephoneNumberRoute: String = routes.TelephoneNumberController.onPageLoad(fakeDraftId).url
+  lazy val telephoneNumberRoute: String = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
 
   "TelephoneNumber Controller" must {
 
@@ -56,14 +58,15 @@ class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(TelephoneNumberPage, validAnswer).success.value
+      val userAnswers = emptyUserAnswers
+        .set(TelephoneNumberPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,7 +79,7 @@ class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, name)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -84,7 +87,7 @@ class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers.set(TelephoneNumberPage, validAnswer).success.value))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
           )
@@ -120,7 +123,7 @@ class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }

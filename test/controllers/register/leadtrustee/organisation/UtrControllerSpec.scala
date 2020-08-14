@@ -35,11 +35,13 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
   val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.utr")
 
   val fakeName = "Test"
+  val index = 0
   val validAnswer = "1234567890"
 
-  lazy val utrRoute: String = routes.UtrController.onPageLoad(fakeDraftId).url
+  lazy val utrRoute: String = routes.UtrController.onPageLoad(index, fakeDraftId).url
 
-  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage, fakeName).success.value
+  override val emptyUserAnswers: UserAnswers = super
+    .emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
   "Utr Controller" must {
 
@@ -56,7 +58,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -64,7 +66,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UtrPage, validAnswer).success.value
+        .set(UtrPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -77,7 +79,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -119,7 +121,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }

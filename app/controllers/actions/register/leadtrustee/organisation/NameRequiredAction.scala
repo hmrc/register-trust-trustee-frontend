@@ -16,8 +16,8 @@
 
 package controllers.actions.register.leadtrustee.organisation
 
-import com.google.inject.Inject
 import controllers.actions.register.TrusteeNameRequest
+import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.register.leadtrustee.organisation.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -25,7 +25,7 @@ import play.api.mvc.ActionTransformer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class NameRequiredAction @Inject()(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
+class NameRequiredAction(index: Int)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
   extends ActionTransformer[RegistrationDataRequest, TrusteeNameRequest] with I18nSupport {
 
   override protected def transform[A](request: RegistrationDataRequest[A]): Future[TrusteeNameRequest[A]] = {
@@ -35,9 +35,13 @@ class NameRequiredAction @Inject()(implicit val executionContext: ExecutionConte
   }
 
   private def getName[A](request: RegistrationDataRequest[A]): String = {
-    request.userAnswers.get(NamePage) match {
+    request.userAnswers.get(NamePage(index)) match {
       case Some(name) => name
-      case _ => request.messages(messagesApi)("leadTrustee.default")
+      case _ => request.messages(messagesApi)("trustee.default")
     }
   }
+}
+
+class NameRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) {
+  def apply(index: Int): NameRequiredAction = new NameRequiredAction(index)
 }

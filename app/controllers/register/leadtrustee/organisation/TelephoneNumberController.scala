@@ -18,7 +18,7 @@ package controllers.register.leadtrustee.organisation
 
 import config.annotations.LeadTrusteeOrganisation
 import controllers.actions.StandardActionSets
-import controllers.actions.register.leadtrustee.organisation.NameRequiredAction
+import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
 import forms.TelephoneNumberFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -38,39 +38,39 @@ class TelephoneNumberController @Inject()(
                                            registrationsRepository: RegistrationsRepository,
                                            @LeadTrusteeOrganisation navigator: Navigator,
                                            standardActionSets: StandardActionSets,
-                                           nameAction: NameRequiredAction,
+                                           nameAction: NameRequiredActionImpl,
                                            formProvider: TelephoneNumberFormProvider,
                                            view: TelephoneNumberView
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId) andThen nameAction
+  private def actions(index: Int, draftId: String) =
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   val form: Form[String] = formProvider("leadTrustee.organisation.telephoneNumber")
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(TelephoneNumberPage) match {
+      val preparedForm = request.userAnswers.get(TelephoneNumberPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TelephoneNumberPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TelephoneNumberPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TelephoneNumberPage, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TelephoneNumberPage(index), draftId, updatedAnswers))
       )
   }
 }

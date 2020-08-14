@@ -17,20 +17,21 @@
 package pages.behaviours.leadtrustee.organisation
 
 import models.UserAnswers
-import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.leadtrustee.organisation.{UkRegisteredYesNoPage, UtrPage}
 
 class UkRegisteredYesNoPageSpec extends PageBehaviours {
 
+  val index = 0
+
   "UkRegisteredYesNo Page" must {
 
-    beRetrievable[Boolean](UkRegisteredYesNoPage)
+    beRetrievable[Boolean](UkRegisteredYesNoPage(index))
 
-    beSettable[Boolean](UkRegisteredYesNoPage)
+    beSettable[Boolean](UkRegisteredYesNoPage(index))
 
-    beRemovable[Boolean](UkRegisteredYesNoPage)
+    beRemovable[Boolean](UkRegisteredYesNoPage(index))
 
     "implement cleanup logic" when {
 
@@ -39,10 +40,10 @@ class UkRegisteredYesNoPageSpec extends PageBehaviours {
           userAnswers =>
             val result: UserAnswers =
               userAnswers
-                .set(UtrPage, "utr").success.value
-                .set(UkRegisteredYesNoPage, false).success.value
+                .set(UtrPage(index), "utr").success.value
+                .set(UkRegisteredYesNoPage(index), false).success.value
 
-            result.get(UtrPage) mustNot be(defined)
+            result.get(UtrPage(index)) mustNot be(defined)
         }
       }
     }

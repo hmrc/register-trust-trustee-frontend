@@ -18,11 +18,11 @@ package controllers.register.leadtrustee.organisation
 
 import config.FrontendAppConfig
 import controllers.actions._
-import controllers.actions.register.leadtrustee.organisation.NameRequiredAction
+import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
 import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
-import pages.entitystatus.LeadTrusteeStatus
+import pages.entitystatus.TrusteeStatus
 import pages.register.trustees.TrusteesAnswerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -43,24 +43,24 @@ class CheckDetailsController @Inject()(
                                         view: CheckDetailsView,
                                         val appConfig: FrontendAppConfig,
                                         printHelper: LeadTrusteeOrganisationPrintHelper,
-                                        nameAction: NameRequiredAction
+                                        nameAction: NameRequiredActionImpl
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId) andThen nameAction
+  private def actions(index: Int, draftId: String) =
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.trusteeName, draftId)
+      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.trusteeName, index, draftId)
 
-      Ok(view(section, draftId))
+      Ok(view(section, draftId, index))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(LeadTrusteeStatus, Completed)
+      val answers = request.userAnswers.set(TrusteeStatus(index), Completed)
 
       for {
         updatedAnswers <- Future.fromTry(answers)

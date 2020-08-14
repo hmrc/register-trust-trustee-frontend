@@ -23,16 +23,16 @@ import sections.LeadTrustee
 
 import scala.util.Try
 
-case object EmailAddressYesNoPage extends QuestionPage[Boolean] {
+case class EmailAddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = LeadTrustee.path \ toString
+  override def path: JsPath = LeadTrustee.path \ index \ toString
 
   override def toString: String = "emailYesNo"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
       case Some(false) =>
-        userAnswers.remove(EmailAddressPage)
+        userAnswers.remove(EmailAddressPage(index))
       case _ =>
         super.cleanup(value, userAnswers)
     }

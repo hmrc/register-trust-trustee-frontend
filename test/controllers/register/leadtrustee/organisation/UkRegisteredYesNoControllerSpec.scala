@@ -34,11 +34,13 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.organisation.ukRegisteredYesNo")
 
+  val index = 0
   val fakeName = "Test"
 
-  lazy val ukRegisteredYesNoRoute: String = routes.UkRegisteredYesNoController.onPageLoad(fakeDraftId).url
+  lazy val ukRegisteredYesNoRoute: String = routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId).url
 
-  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage, fakeName).success.value
+  override val emptyUserAnswers: UserAnswers = super
+    .emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
   "UkRegisteredYesNo Controller" must {
 
@@ -55,7 +57,7 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -63,7 +65,7 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UkRegisteredYesNoPage, true).success.value
+        .set(UkRegisteredYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,7 +78,7 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -92,7 +94,6 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       val request =
         FakeRequest(POST, ukRegisteredYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -120,7 +121,7 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }

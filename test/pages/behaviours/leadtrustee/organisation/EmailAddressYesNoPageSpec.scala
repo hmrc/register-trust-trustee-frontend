@@ -23,13 +23,15 @@ import pages.register.leadtrustee.organisation._
 
 class EmailAddressYesNoPageSpec extends PageBehaviours {
 
+  val index = 0
+
   "EmailAddressYesNo Page" must {
 
-    beRetrievable[Boolean](EmailAddressYesNoPage)
+    beRetrievable[Boolean](EmailAddressYesNoPage(index))
 
-    beSettable[Boolean](EmailAddressYesNoPage)
+    beSettable[Boolean](EmailAddressYesNoPage(index))
 
-    beRemovable[Boolean](EmailAddressYesNoPage)
+    beRemovable[Boolean](EmailAddressYesNoPage(index))
 
     "implement cleanup logic" when {
 
@@ -38,10 +40,10 @@ class EmailAddressYesNoPageSpec extends PageBehaviours {
           userAnswers =>
             val result: UserAnswers =
               userAnswers
-                .set(EmailAddressPage, "email").success.value
-                .set(EmailAddressYesNoPage, false).success.value
+                .set(EmailAddressPage(index), "email").success.value
+                .set(EmailAddressYesNoPage(index), false).success.value
 
-            result.get(EmailAddressPage) mustNot be(defined)
+            result.get(EmailAddressPage(index)) mustNot be(defined)
         }
       }
     }

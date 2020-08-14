@@ -26,6 +26,7 @@ class TelephoneNumberViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "leadTrustee.organisation.telephoneNumber"
   val fakeName = "Name"
+  val index = 0
 
   override val form: Form[String] = new TelephoneNumberFormProvider()(messageKeyPrefix)
 
@@ -34,7 +35,7 @@ class TelephoneNumberViewSpec extends StringViewBehaviours {
     val view = viewFor[TelephoneNumberView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, fakeName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, fakeName, "hint")
 

@@ -20,9 +20,9 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.LeadTrustee
 
-case object NamePage extends QuestionPage[String] {
+case class NamePage(index: Int) extends QuestionPage[String] {
 
-  override def path: JsPath = LeadTrustee.path \ toString
+  override def path: JsPath = LeadTrustee.path \ index \ toString
 
   override def toString: String = "name"
 }

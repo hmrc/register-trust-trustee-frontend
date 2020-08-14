@@ -30,7 +30,9 @@ import views.html.register.leadtrustee.organisation.EmailAddressView
 
 class EmailAddressControllerSpec extends SpecBase {
 
-  lazy val emailAddressRoute: String = routes.EmailAddressController.onPageLoad(fakeDraftId).url
+  val index = 0
+
+  lazy val emailAddressRoute: String = routes.EmailAddressController.onPageLoad(index, fakeDraftId).url
 
   val formProvider = new EmailAddressFormProvider()
   val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.email")
@@ -39,7 +41,7 @@ class EmailAddressControllerSpec extends SpecBase {
   val validAnswer: String = "email@example.com"
 
   val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage(index), name).success.value
 
   "EmailAddress Controller" must {
 
@@ -56,7 +58,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -64,7 +66,7 @@ class EmailAddressControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(EmailAddressPage, validAnswer).success.value
+        .set(EmailAddressPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -77,7 +79,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, name)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -121,7 +123,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }

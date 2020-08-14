@@ -27,7 +27,6 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees._
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
 import play.api.mvc.Call
 import sections.Trustees
 
@@ -124,25 +123,12 @@ trait TestTrusteeRoutes {
       }
     }
 
-    "go to Lead Trustee IndividualOrBusinessPage from IsThisLeadTrusteePage page when YES selected" in {
+    "go to IndividualOrBusinessPage from IsThisLeadTrusteePage page when YES selected" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
 
-          val answers = userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
-
-          navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, answers)
-            .mustBe(controllers.register.leadtrustee.routes.IndividualOrBusinessController.onPageLoad(fakeDraftId))
-      }
-    }
-
-    "go to Trustee IndividualOrBusinessPage from IsThisLeadTrusteePage page when NO selected" in {
-      forAll(arbitrary[UserAnswers]) {
-        userAnswers =>
-
-          val answers = userAnswers.set(IsThisLeadTrusteePage(index), false).success.value
-
-          navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, answers)
-            .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
+          navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, userAnswers)
+            .mustBe(controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -178,7 +164,7 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(fakeDraftId))
+            .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId))
       }
     }
 

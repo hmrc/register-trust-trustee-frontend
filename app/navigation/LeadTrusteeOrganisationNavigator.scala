@@ -27,35 +27,36 @@ class LeadTrusteeOrganisationNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case UkRegisteredYesNoPage => _ => NameController.onPageLoad(draftId)
-    case NamePage => ua => nameRoute(ua, draftId)
-    case UtrPage => _ => AddressUkYesNoController.onPageLoad(draftId)
-    case UkAddressPage | InternationalAddressPage => _ => EmailAddressYesNoController.onPageLoad(draftId)
-    case EmailAddressPage => _ => TelephoneNumberController.onPageLoad(draftId)
-    case TelephoneNumberPage => _ => CheckDetailsController.onPageLoad(draftId)
+    case UkRegisteredYesNoPage(index) => _ => NameController.onPageLoad(index, draftId)
+    case NamePage(index) => ua => nameRoute(ua, index, draftId)
+    case UtrPage(index) => _ => AddressUkYesNoController.onPageLoad(index, draftId)
+    case UkAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
+    case InternationalAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
+    case EmailAddressPage(index) => _ => TelephoneNumberController.onPageLoad(index, draftId)
+    case TelephoneNumberPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case AddressUkYesNoPage => ua =>
+    case AddressUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
-        AddressUkYesNoPage,
-        UkAddressController.onPageLoad(draftId),
-        InternationalAddressController.onPageLoad(draftId)
+        AddressUkYesNoPage(index),
+        UkAddressController.onPageLoad(index, draftId),
+        InternationalAddressController.onPageLoad(index, draftId)
       )
-    case EmailAddressYesNoPage => ua =>
+    case EmailAddressYesNoPage(index) => ua =>
       yesNoNav(
         ua,
-        EmailAddressYesNoPage,
-        EmailAddressController.onPageLoad(draftId),
-        TelephoneNumberController.onPageLoad(draftId)
+        EmailAddressYesNoPage(index),
+        EmailAddressController.onPageLoad(index, draftId),
+        TelephoneNumberController.onPageLoad(index, draftId)
       )
   }
 
-  private def nameRoute(ua: ReadableUserAnswers, draftId: String): Call = {
-    ua.get(UkRegisteredYesNoPage) match {
-      case Some(true) => UtrController.onPageLoad(draftId)
-      case Some(false) => AddressUkYesNoController.onPageLoad(draftId)
+  private def nameRoute(ua: ReadableUserAnswers, index: Int, draftId: String): Call = {
+    ua.get(UkRegisteredYesNoPage(index)) match {
+      case Some(true) => UtrController.onPageLoad(index, draftId)
+      case Some(false) => AddressUkYesNoController.onPageLoad(index, draftId)
       case None => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

@@ -26,13 +26,14 @@ class EmailAddressViewSpec extends QuestionViewBehaviours[String] {
 
   val prefix = "leadTrustee.organisation.email"
   val fakeName: String = "Test"
+  val index = 0
 
   override val form: Form[String] = new EmailAddressFormProvider().withPrefix(prefix)
 
   val view: EmailAddressView = viewFor[EmailAddressView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, fakeDraftId, fakeName)(fakeRequest, messages)
+    view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
 
   "EmailAddress View" must {
 

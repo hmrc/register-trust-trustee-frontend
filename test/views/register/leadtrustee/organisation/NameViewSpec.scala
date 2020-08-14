@@ -27,12 +27,13 @@ class NameViewSpec extends StringViewBehaviours {
   val prefix = "leadTrustee.organisation.name"
   override val form: Form[String] = new StringFormProvider().withConfig(prefix, 56)
   val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val index = 0
 
   "Name View" when {
 
     "UK registered" must {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, isUkRegistered = true)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, index, isUkRegistered = true)(fakeRequest, messages)
 
       behave like normalPage(applyView(form), prefix)
 
@@ -47,7 +48,7 @@ class NameViewSpec extends StringViewBehaviours {
 
     "Not UK registered" must {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, isUkRegistered = false)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, index, isUkRegistered = false)(fakeRequest, messages)
 
       behave like normalPage(applyView(form), prefix)
 

@@ -34,9 +34,10 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
   val formProvider = new StringFormProvider()
   val form: Form[String] = formProvider.withConfig("trustee.organisation.name", 56)
 
+  val index = 0
   val validAnswer = "Name"
 
-  lazy val nameRoute: String = routes.NameController.onPageLoad(fakeDraftId).url
+  lazy val nameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   "Name Controller" when {
 
@@ -45,7 +46,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       val isUkRegistered: Boolean = true
 
       val baseAnswers: UserAnswers = super.emptyUserAnswers
-        .set(UkRegisteredYesNoPage, isUkRegistered).success.value
+        .set(UkRegisteredYesNoPage(index), isUkRegistered).success.value
 
       returnOkAndCorrectViewForAGet(isUkRegistered, baseAnswers)
       populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered, baseAnswers)
@@ -60,7 +61,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       val isUkRegistered: Boolean = false
 
       val baseAnswers: UserAnswers = super.emptyUserAnswers
-        .set(UkRegisteredYesNoPage, isUkRegistered).success.value
+        .set(UkRegisteredYesNoPage(index), isUkRegistered).success.value
 
       returnOkAndCorrectViewForAGet(isUkRegistered, baseAnswers)
       populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered, baseAnswers)
@@ -85,7 +86,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, isUkRegistered)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, isUkRegistered)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -95,7 +96,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(NamePage, validAnswer).success.value
+        .set(NamePage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -108,7 +109,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, isUkRegistered)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, isUkRegistered)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -154,7 +155,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, isUkRegistered)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, isUkRegistered)(fakeRequest, messages).toString
 
       application.stop()
     }

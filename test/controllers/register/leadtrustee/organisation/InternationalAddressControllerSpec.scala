@@ -37,13 +37,15 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
   val formProvider = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
 
+  val index = 0
   val fakeName = "Test"
 
   val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
 
-  private lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(fakeDraftId).url
+  private lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(index, fakeDraftId).url
 
-  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage, fakeName).success.value
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
+    .set(NamePage(index), fakeName).success.value
 
   "InternationalAddress Controller" must {
 
@@ -62,7 +64,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(form, countryOptions, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -70,7 +72,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(InternationalAddressPage, validAnswer).success.value
+        .set(InternationalAddressPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +87,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), countryOptions, fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), countryOptions, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -134,7 +136,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, fakeDraftId, fakeName)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
 
       application.stop()
     }

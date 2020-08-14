@@ -18,7 +18,7 @@ package controllers.register.leadtrustee.organisation
 
 import config.annotations.LeadTrusteeOrganisation
 import controllers.actions._
-import controllers.actions.register.leadtrustee.organisation.NameRequiredAction
+import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -37,40 +37,40 @@ class UkRegisteredYesNoController @Inject()(
                                              registrationsRepository: RegistrationsRepository,
                                              @LeadTrusteeOrganisation navigator: Navigator,
                                              standardActionSets: StandardActionSets,
-                                             nameAction: NameRequiredAction,
+                                             nameAction: NameRequiredActionImpl,
                                              formProvider: YesNoFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
                                              view: UkRegisteredYesNoView
                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId) andThen nameAction
+  private def actions(index: Int, draftId: String) =
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   private val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.organisation.ukRegisteredYesNo")
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(UkRegisteredYesNoPage) match {
+      val preparedForm = request.userAnswers.get(UkRegisteredYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkRegisteredYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkRegisteredYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkRegisteredYesNoPage, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UkRegisteredYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

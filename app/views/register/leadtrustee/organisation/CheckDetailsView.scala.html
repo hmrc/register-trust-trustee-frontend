@@ -22,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("leadTrustee.organisation.checkDetails.title")
 ) {
 
-    @formHelper(action = CheckDetailsController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

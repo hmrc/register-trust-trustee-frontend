@@ -24,13 +24,15 @@ import pages.register.leadtrustee.organisation._
 
 class AddressUkYesNoPageSpec extends PageBehaviours {
 
+  val index = 0
+
   "AddressUkYesNo Page" must {
 
-    beRetrievable[Boolean](AddressUkYesNoPage)
+    beRetrievable[Boolean](AddressUkYesNoPage(index))
 
-    beSettable[Boolean](AddressUkYesNoPage)
+    beSettable[Boolean](AddressUkYesNoPage(index))
 
-    beRemovable[Boolean](AddressUkYesNoPage)
+    beRemovable[Boolean](AddressUkYesNoPage(index))
 
     "implement cleanup logic" when {
 
@@ -39,10 +41,10 @@ class AddressUkYesNoPageSpec extends PageBehaviours {
           userAnswers =>
             val result: UserAnswers =
               userAnswers
-                .set(InternationalAddressPage, InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).success.value
-                .set(AddressUkYesNoPage, true).success.value
+                .set(InternationalAddressPage(index), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).success.value
+                .set(AddressUkYesNoPage(index), true).success.value
 
-            result.get(InternationalAddressPage) mustNot be(defined)
+            result.get(InternationalAddressPage(index)) mustNot be(defined)
         }
       }
 
@@ -51,10 +53,10 @@ class AddressUkYesNoPageSpec extends PageBehaviours {
           userAnswers =>
             val result: UserAnswers =
               userAnswers
-                .set(UkAddressPage, UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).success.value
-                .set(AddressUkYesNoPage, false).success.value
+                .set(UkAddressPage(index), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).success.value
+                .set(AddressUkYesNoPage(index), false).success.value
 
-            result.get(UkAddressPage) mustNot be(defined)
+            result.get(UkAddressPage(index)) mustNot be(defined)
         }
       }
     }

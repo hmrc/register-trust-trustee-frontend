@@ -18,7 +18,7 @@ package controllers.register.leadtrustee.organisation
 
 import config.annotations.LeadTrusteeOrganisation
 import controllers.actions._
-import controllers.actions.register.leadtrustee.organisation.UkRegisteredRequiredAction
+import controllers.actions.register.leadtrustee.organisation.UkRegisteredRequiredActionImpl
 import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -37,7 +37,7 @@ class NameController @Inject()(
                                 registrationsRepository: RegistrationsRepository,
                                 @LeadTrusteeOrganisation navigator: Navigator,
                                 standardActionSets: StandardActionSets,
-                                ukRegisteredAction: UkRegisteredRequiredAction,
+                                ukRegisteredAction: UkRegisteredRequiredActionImpl,
                                 formProvider: StringFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView
@@ -45,32 +45,32 @@ class NameController @Inject()(
 
   val form: Form[String] = formProvider.withConfig("leadTrustee.organisation.name", 56)
 
-  private def actions(draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId) andThen ukRegisteredAction
+  private def actions(index: Int, draftId: String) =
+    standardActionSets.identifiedUserWithData(draftId) andThen ukRegisteredAction(index)
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(NamePage) match {
+      val preparedForm = request.userAnswers.get(NamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, request.isUkRegistered))
+      Ok(view(preparedForm, draftId, index, request.isUkRegistered))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, request.isUkRegistered))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.isUkRegistered))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
         }
       )
   }

@@ -21,9 +21,9 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.LeadTrustee
 
-case object InternationalAddressPage extends QuestionPage[InternationalAddress] {
+case class InternationalAddressPage(index: Int) extends QuestionPage[InternationalAddress] {
 
-  override def path: JsPath = LeadTrustee.path \ toString
+  override def path: JsPath = LeadTrustee.path \ index \ toString
 
   override def toString: String = "address"
 }

@@ -28,11 +28,12 @@ class UtrViewSpec extends StringViewBehaviours {
   override val form: Form[String] = new UtrFormProvider().withPrefix(prefix)
   val view: UtrView = viewFor[UtrView](Some(emptyUserAnswers))
   val fakeName = "Test"
+  val index = 0
 
   "Utr View" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, fakeName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, fakeName)
 
