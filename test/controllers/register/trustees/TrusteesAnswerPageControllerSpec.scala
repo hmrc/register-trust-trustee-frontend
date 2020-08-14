@@ -25,7 +25,7 @@ import pages.register.trustees.individual._
 import pages.register.trustees.organisation._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.CheckYourAnswersHelper
+import utils.answers.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.trustees.TrusteesAnswerPageView

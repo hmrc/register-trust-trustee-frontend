@@ -24,7 +24,7 @@ import models.registration.pages.AddATrustee
 import pages.register.trustees.AddATrusteePage
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.CheckYourAnswersHelper
+import utils.answers.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
