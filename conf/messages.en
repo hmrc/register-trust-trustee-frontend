@@ -384,3 +384,11 @@ PassportDetails.expiryDate.error.required = Passport expiry date must include {0
 PassportDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s passport expires
 PassportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 PassportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+
+emailAddressYesNo.title = Do you know {0}'s email address?
+emailAddressYesNo.heading = Do you know {0}'s email address?
+emailAddressYesNo.checkYourAnswersLabel = Do you know {0}'s email address?
+
+emailAddress.title =
+emailAddress.heading =
+emailAddress.checkYourAnswer =

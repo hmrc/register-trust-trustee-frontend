@@ -17,26 +17,32 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import controllers.register.IndexValidation
 import forms.YesNoFormProvider
 import models.core.pages.FullName
-import pages.register.trustees.individual.TrusteesNamePage
+import org.scalacheck.Arbitrary.arbitrary
+import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.trustees.individual.{EmailAddressYesNoPage, TrusteeAUKCitizenPage, TrusteesNamePage}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import views.html.register.trustees.individual.TrusteeDetailsChoiceView
+import play.api.test.Helpers.{route, _}
+import views.html.register.trustees.individual.{EmailAddressYesNoView, NinoYesNoView}
 
-class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
-  val messageKeyPrefix = "trusteeDetailsChoice"
+class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
+
+  def onwardRoute = Call("GET", "/foo")
+
+  val messagePrefix = "emailAddressYesNo"
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(messageKeyPrefix)
+  val form = formProvider.withPrefix(messagePrefix)
 
   val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  val trusteeName = FullName("FirstName", None, "LastName").toString
 
-  lazy val trusteeDetailsChoiceUKRoute: String = routes.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url
+  lazy val emailAddressYesNoRoute = routes.EmailAddressYesNoController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeDetailsChoice Controller" must {
+  "emailAddressYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -45,16 +51,16 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val request = FakeRequest(GET, emailAddressYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      val view = application.injector.instanceOf[EmailAddressYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -63,34 +69,37 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(EmailAddressYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val request = FakeRequest(GET, emailAddressYesNoRoute)
 
-      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      val view = application.injector.instanceOf[EmailAddressYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to trusteeNamePage when trustee name is not answered" in {
+    "redirect to NamePage when TrusteesName is not answered" in {
+      val userAnswers = emptyUserAnswers
+        .set(EmailAddressYesNoPage(index), true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val request = FakeRequest(GET, emailAddressYesNoRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.register.trustees.individual.routes.NameController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -104,8 +113,9 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", "idCard"))
+        FakeRequest(POST, emailAddressYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
 
       val result = route(application, request).value
 
@@ -119,24 +129,25 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
+        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        FakeRequest(POST, emailAddressYesNoRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> ""))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      val view = application.injector.instanceOf[EmailAddressYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -145,12 +156,11 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val request = FakeRequest(GET, emailAddressYesNoRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -161,8 +171,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, emailAddressYesNoRoute)
 
       val result = route(application, request).value
 
@@ -172,6 +181,39 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "for a GET" must {
+
+      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
+        val route = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
+
+        FakeRequest(GET, route)
+      }
+
+      validateIndex(
+        arbitrary[Boolean],
+        TrusteeAUKCitizenPage.apply,
+        getForIndex
+      )
+
+    }
+
+    "for a POST" must {
+
+      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
+
+        val route =
+          routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
+
+        FakeRequest(POST, route)
+          .withFormUrlEncodedBody(("value", "true"))
+      }
+
+      validateIndex(
+        arbitrary[Boolean],
+        TrusteeAUKCitizenPage.apply,
+        postForIndex
+      )
+    }
   }
 }
-

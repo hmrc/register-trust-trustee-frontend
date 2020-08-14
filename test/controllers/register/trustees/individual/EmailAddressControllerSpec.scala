@@ -17,26 +17,25 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
-import forms.YesNoFormProvider
+import forms.trustees.EmailAddressFormProvider
 import models.core.pages.FullName
 import pages.register.trustees.individual.TrusteesNamePage
+import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.TrusteeDetailsChoiceView
+import views.html.register.trustees.individual.EmailAddressView
 
-class TrusteeDetailsChoiceControllerSpec extends SpecBase {
+class EmailAddressControllerSpec extends SpecBase {
 
-  val messageKeyPrefix = "trusteeDetailsChoice"
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(messageKeyPrefix)
-
+  lazy val emailAddressRoute: String = routes.EmailAddressController.onPageLoad(index, fakeDraftId).url
   val index = 0
-  val emptyTrusteeName = ""
+  val formProvider = new EmailAddressFormProvider()
+  val form: Form[String] = formProvider.withPrefix("emailAddress")
   val trusteeName = "FirstName LastName"
 
-  lazy val trusteeDetailsChoiceUKRoute: String = routes.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url
+  val validAnswer: String = "email@example.com"
 
-  "TrusteeDetailsChoice Controller" must {
+  "EmailAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -45,16 +44,16 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val request = FakeRequest(GET, emailAddressRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      val view = application.injector.instanceOf[EmailAddressView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -66,37 +65,21 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val request = FakeRequest(GET, emailAddressRoute)
 
-      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      val view = application.injector.instanceOf[EmailAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to trusteeNamePage when trustee name is not answered" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.individual.routes.NameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
-    "redirect to the next page when valid data is submitted" in {
-
+    "redirect to next page when valid data is submitted" in {
       val userAnswers = emptyUserAnswers
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
@@ -104,8 +87,8 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", "idCard"))
+        FakeRequest(POST, emailAddressRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 
@@ -124,19 +107,19 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        FakeRequest(POST, emailAddressRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> ""))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      val view = application.injector.instanceOf[EmailAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -145,12 +128,11 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val request = FakeRequest(GET, emailAddressRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -161,8 +143,8 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, emailAddressRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
 
@@ -174,4 +156,3 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
     }
   }
 }
-
