@@ -19,11 +19,11 @@ package pages.register.leadtrustee.organisation
 import models.core.pages.UKAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.LeadTrustee
+import sections.Trustees
 
 case class UkAddressPage(index: Int) extends QuestionPage[UKAddress] {
 
-  override def path: JsPath = LeadTrustee.path \ index \ toString
+  override def path: JsPath = Trustees.path \ index \ toString
 
   override def toString: String = "address"
 }

@@ -18,11 +18,11 @@ package pages.register.leadtrustee.organisation
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.LeadTrustee
+import sections.Trustees
 
 case class UtrPage(index: Int) extends QuestionPage[String] {
 
-  override def path: JsPath = LeadTrustee.path \ index \ toString
+  override def path: JsPath = Trustees.path \ index \ toString
 
   override def toString: String = "utr"
 }

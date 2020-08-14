@@ -19,13 +19,13 @@ package pages.register.leadtrustee.organisation
 import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.LeadTrustee
+import sections.Trustees
 
 import scala.util.Try
 
 case class EmailAddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = LeadTrustee.path \ index \ toString
+  override def path: JsPath = Trustees.path \ index \ toString
 
   override def toString: String = "emailYesNo"
 
