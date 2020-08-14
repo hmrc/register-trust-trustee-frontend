@@ -63,8 +63,8 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions)
               trusteeUtr(index),
               orgAddressInTheUkYesNo(index),
               trusteesOrgUkAddress(index),
-              trusteeOrgInternationalAddress(index),
-              orgTelephoneNumber(index)
+              trusteeOrgInternationalAddress(index)/*,
+              orgTelephoneNumber(index)*/
             ).flatten
         }
 

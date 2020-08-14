@@ -22,7 +22,7 @@ import models.UserAnswers
 import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import pages.register.trustees.individual.TrusteesNamePage
-import pages.register.trustees.organisation.TrusteeOrgNamePage
+import pages.register.trustees.organisation.NamePage
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
@@ -57,7 +57,7 @@ object CheckAnswersFormatters {
     userAnswers.get(TrusteesNamePage(index)).map(_.toString).getOrElse("")
 
   def orgName(index: Int, userAnswers: UserAnswers): String =
-    userAnswers.get(TrusteeOrgNamePage(index)).getOrElse("")
+    userAnswers.get(NamePage(index)).getOrElse("")
 
   def answer[T](key: String, answer: T)(implicit messages: Messages): Html =
     HtmlFormat.escape(messages(s"$key.$answer"))
