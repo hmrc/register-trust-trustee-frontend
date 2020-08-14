@@ -157,7 +157,7 @@ trait TestTrusteeRoutes {
       }
     }
 
-    "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a lead trustee Business" ignore {
+    "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a lead trustee Business" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers
@@ -165,7 +165,7 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(???)
+            .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(fakeDraftId))
       }
     }
 

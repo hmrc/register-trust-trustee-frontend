@@ -369,10 +369,9 @@ leadTrustee.organisation.utr.organisation.checkYourAnswersLabel = What is {0}’
 leadTrustee.organisation.utr.error.required = Enter the lead trustee’s Unique Taxpayer Reference
 leadTrustee.organisation.utr.error.length = Unique Taxpayer Reference must be a 10 digit number
 leadTrustee.organisation.utr.error.invalidCharacters = Enter the trust’s Unique Taxpayer Reference in the correct format
-leadTrustee.organisation.utr.p1 = Providing this information will help verify the trust and help correspondence.
 leadTrustee.organisation.utr.hint = This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 leadTrustee.organisation.utr.hint.reader = This is 10 numbers, for example 1 2 3 4 5 6 7 8 9 0. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
-leadTrustee.organisation.utr.p2 = You can
+leadTrustee.organisation.utr.p1 = You can
 leadTrustee.organisation.utr.link = find a lost UTR number (opens in a new window or tab)
 
 leadTrustee.organisation.addressUkYesNo.title = Is the lead trustee’s address in the UK?
