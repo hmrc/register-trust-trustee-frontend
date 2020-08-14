@@ -46,10 +46,10 @@ class AddressUkYesNoController @Inject()(
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
+  private val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressUkYesNo")
+
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
 
       val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
         case None => form
@@ -61,8 +61,6 @@ class AddressUkYesNoController @Inject()(
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

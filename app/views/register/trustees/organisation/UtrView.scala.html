@@ -24,8 +24,8 @@
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trusteeUtr.title")}"
-    ) {
+    title = s"${errorPrefix(form)} ${messages("trustee.organisation.utr.title")}"
+) {
 
     @formHelper(action = UtrController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
@@ -37,13 +37,13 @@
             field = form("value"),
             label = messages("trusteeUtr.heading", name),
             labelAsHeading = true,
-            hint = Some(messages("trusteeUtr.hint")),
-            readerHint = Some(messages("trusteeUtr.hint.reader")),
+            hint = Some(messages("trustee.organisation.utr.hint")),
+            readerHint = Some(messages("trustee.organisation.utr.hint.reader")),
             labelClass = Some("heading-large"),
             inputMode = Some("numeric")
         )
 
-        <p>@messages("trusteeUtr.p1") <a target="_blank" href="https://www.gov.uk/find-lost-utr-number">@messages("trusteeUtr.link")</a>.</p>
+        <p>@messages("trustee.organisation.utr.p1") <a target="_blank" href="https://www.gov.uk/find-lost-utr-number">@messages("trustee.organisation.utr.link")</a>.</p>
 
         @components.submit_button()
     }

@@ -33,7 +33,7 @@ import views.html.register.trustees.organisation.AddressUkYesNoView
 class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
   val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("trusteeOrgAddressUkYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressUkYesNo")
 
   val index = 0
   val fakeName = "Test"

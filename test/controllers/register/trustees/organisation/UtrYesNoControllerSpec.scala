@@ -32,7 +32,7 @@ import views.html.register.trustees.organisation.UtrYesNoView
 class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
 
   val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("leadTrusteeUtrYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.utrYesNo")
 
   val index = 0
   val fakeName = "Name"
