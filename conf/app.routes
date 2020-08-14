@@ -74,3 +74,8 @@ POST       /:draftId/:index/individual/passport                   controllers.re
 
 GET        /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onPageLoad( index: Int, draftId: String)
 POST       /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onSubmit( index: Int, draftId: String)
+
+### Lead trustee
+
+GET        /:draftId/individual-or-business                       controllers.register.leadtrustee.IndividualOrBusinessController.onPageLoad(draftId: String)
+POST       /:draftId/individual-or-business                       controllers.register.leadtrustee.IndividualOrBusinessController.onSubmit(draftId: String)

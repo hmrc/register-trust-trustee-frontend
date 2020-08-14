@@ -124,11 +124,24 @@ trait TestTrusteeRoutes {
       }
     }
 
-    "go to TrusteeIndividualOrBusinessPage from IsThisLeadTrusteePage page" in {
+    "go to Lead Trustee IndividualOrBusinessPage from IsThisLeadTrusteePage page when YES selected" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
 
-          navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, userAnswers)
+          val answers = userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
+
+          navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, answers)
+            .mustBe(controllers.register.leadtrustee.routes.IndividualOrBusinessController.onPageLoad(fakeDraftId))
+      }
+    }
+
+    "go to Trustee IndividualOrBusinessPage from IsThisLeadTrusteePage page when NO selected" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+
+          val answers = userAnswers.set(IsThisLeadTrusteePage(index), false).success.value
+
+          navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, answers)
             .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
       }
     }
@@ -180,9 +193,6 @@ trait TestTrusteeRoutes {
             .mustBe(controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, fakeDraftId))
       }
     }
-
-
-
 
     "go to TrusteesDateOfBirthPage from TrusteesNamePage page" in {
       forAll(arbitrary[UserAnswers]) {

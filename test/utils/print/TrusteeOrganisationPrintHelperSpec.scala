@@ -40,7 +40,7 @@ class TrusteeOrganisationPrintHelperSpec extends SpecBase {
     val helper = injector.instanceOf[TrusteeOrganisationPrintHelper]
 
     val baseAnswers = emptyUserAnswers
-      .set(IsThisLeadTrusteePage(index), true).success.value
+      .set(IsThisLeadTrusteePage(index), false).success.value
       .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
       .set(NamePage(index), name).success.value
 

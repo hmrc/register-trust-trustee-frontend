@@ -24,3 +24,6 @@ POST       /:draftId/email                        controllers.register.leadtrust
 
 GET        /:draftId/telephone-number             controllers.register.leadtrustee.organisation.TelephoneNumberController.onPageLoad(draftId: String)
 POST       /:draftId/telephone-number             controllers.register.leadtrustee.organisation.TelephoneNumberController.onSubmit(draftId: String)
+
+GET        /:draftId/check-details                controllers.register.leadtrustee.organisation.CheckDetailsController.onPageLoad(draftId: String)
+POST       /:draftId/check-details                controllers.register.leadtrustee.organisation.CheckDetailsController.onSubmit(draftId: String)
