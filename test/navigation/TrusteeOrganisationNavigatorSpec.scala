@@ -41,12 +41,12 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .mustBe(UtrController.onPageLoad(index, fakeDraftId))
     }
 
-    "UTR yes no page -> NO -> Do you know address page" ignore {
+    "UTR yes no page -> NO -> Do you know address page" in {
       val answers = emptyUserAnswers
         .set(UtrYesNoPage(index), false).success.value
 
       navigator.nextPage(UtrYesNoPage(index), fakeDraftId, answers)
-        .mustBe(???)
+        .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "UTR page -> Check your answers page" ignore {
@@ -54,23 +54,23 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .mustBe(???)
     }
 
-    "Do you know address page -> YES -> Is address in UK page" ignore {
+    "Do you know address page -> YES -> Is address in UK page" in {
       val answers = emptyUserAnswers
-        .set(???, true).success.value
+        .set(AddressYesNoPage(index), true).success.value
 
-      navigator.nextPage(???, fakeDraftId, answers)
-        .mustBe(???)
+      navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
+        .mustBe(AddressUkYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "Do you know address page -> NO -> Check your answers page" ignore {
       val answers = emptyUserAnswers
-        .set(???, true).success.value
+        .set(AddressYesNoPage(index), true).success.value
 
-      navigator.nextPage(???, fakeDraftId, answers)
+      navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
         .mustBe(???)
     }
 
-    "Is address in UK page -> YES -> UK address page" ignore {
+    "Is address in UK page -> YES -> UK address page" in {
       val answers = emptyUserAnswers
         .set(AddressUkYesNoPage(index), true).success.value
 
@@ -78,7 +78,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
     }
 
-    "Is address in UK page -> NO -> International address page" ignore {
+    "Is address in UK page -> NO -> International address page" in {
       val answers = emptyUserAnswers
         .set(AddressUkYesNoPage(index), false).success.value
 

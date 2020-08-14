@@ -39,6 +39,13 @@ class TrusteeOrganisationNavigator extends Navigator {
         ua,
         UtrYesNoPage(index),
         UtrController.onPageLoad(index, draftId),
+        AddressYesNoController.onPageLoad(index, draftId)
+      )
+    case AddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        AddressYesNoPage(index),
+        AddressUkYesNoController.onPageLoad(index, draftId),
         ???
       )
     case AddressUkYesNoPage(index) => ua =>

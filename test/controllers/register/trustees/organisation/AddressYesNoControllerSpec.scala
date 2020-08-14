@@ -22,36 +22,36 @@ import controllers.register.IndexValidation
 import forms.YesNoFormProvider
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.{AddressUkYesNoPage, NamePage}
+import pages.register.trustees.organisation.{AddressYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.organisation.AddressUkYesNoView
+import views.html.register.trustees.organisation.AddressYesNoView
 
-class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
+class AddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
   val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressUkYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressYesNo")
 
   val index = 0
   val fakeName = "Test"
 
-  lazy val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val addressYesNoRoute: String = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
-  "AddressUkYesNo Controller" must {
+  "AddressYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, addressUkYesNoRoute)
+      val request = FakeRequest(GET, addressYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AddressUkYesNoView]
+      val view = application.injector.instanceOf[AddressYesNoView]
 
       status(result) mustEqual OK
 
@@ -64,13 +64,13 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(AddressUkYesNoPage(index), true).success.value
+        .set(AddressYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, addressUkYesNoRoute)
+      val request = FakeRequest(GET, addressYesNoRoute)
 
-      val view = application.injector.instanceOf[AddressUkYesNoView]
+      val view = application.injector.instanceOf[AddressYesNoView]
 
       val result = route(application, request).value
 
@@ -91,7 +91,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
           ).build()
 
       val request =
-        FakeRequest(POST, addressUkYesNoRoute)
+        FakeRequest(POST, addressYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
 
@@ -109,12 +109,12 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, addressUkYesNoRoute)
+        FakeRequest(POST, addressYesNoRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[AddressUkYesNoView]
+      val view = application.injector.instanceOf[AddressYesNoView]
 
       val result = route(application, request).value
 
@@ -130,7 +130,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, addressUkYesNoRoute)
+      val request = FakeRequest(GET, addressYesNoRoute)
 
       val result = route(application, request).value
 
@@ -145,7 +145,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, addressUkYesNoRoute)
+        FakeRequest(POST, addressYesNoRoute)
 
       val result = route(application, request).value
 
