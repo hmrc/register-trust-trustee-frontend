@@ -19,6 +19,7 @@ package utils
 import base.SpecBase
 import controllers.register.leadtrustee.organisation.{routes => ltoRts}
 import controllers.register.trustees.organisation.{routes => toRts}
+import controllers.register.trustees.{routes => tRts}
 import models.Status._
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.UKAddress
@@ -29,41 +30,114 @@ import viewmodels.{AddRow, AddToRows}
 
 class AddATrusteeViewHelperSpec extends SpecBase {
 
+  private val defaultName: String = "No name added"
   private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
 
   private def removeOrgRoute(index: Int): String =
     controllers.register.trustees.organisation.routes.RemoveTrusteeOrgController.onPageLoad(index, draftId).url
 
+  private def removeIndRoute(index: Int): String =
+    controllers.register.trustees.individual.routes.RemoveTrusteeController.onPageLoad(index, draftId).url
+
   "Add A Trustee View Helper" must {
 
     "return the add to rows" when {
 
+      "lead trustee type unknown" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(TrusteeStatus(0), InProgress).success.value
+          .set(IsThisLeadTrusteePage(0), true).success.value
+
+        val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
+
+        helper.rows mustBe AddToRows(
+          inProgress = List(
+            AddRow(
+              name = defaultName,
+              typeLabel = "Lead Trustee",
+              changeUrl = tRts.IsThisLeadTrusteeController.onPageLoad(0, fakeDraftId).url,
+              removeUrl = removeIndRoute(0)
+            )
+          ),
+          complete = Nil
+        )
+      }
+
+      "trustee type unknown" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(TrusteeStatus(0), InProgress).success.value
+          .set(IsThisLeadTrusteePage(0), false).success.value
+
+        val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
+
+        helper.rows mustBe AddToRows(
+          inProgress = List(
+            AddRow(
+              name = defaultName,
+              typeLabel = "Trustee",
+              changeUrl = tRts.IsThisLeadTrusteeController.onPageLoad(0, fakeDraftId).url,
+              removeUrl = removeIndRoute(0)
+            )
+          ),
+          complete = Nil
+        )
+      }
+
       "lead trustee org" when {
 
         val name: String = "Lead Trustee Org"
+        val typeLabel = "Lead Trustee Company"
 
-        "in progress" in {
+        "in progress" when {
 
-          val userAnswers = emptyUserAnswers
-            .set(TrusteeStatus(0), InProgress).success.value
-            .set(IsThisLeadTrusteePage(0), true).success.value
-            .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-            .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
-            .set(ltorg.NamePage(0), name).success.value
+          "name added" in {
 
-          val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
+            val userAnswers = emptyUserAnswers
+              .set(TrusteeStatus(0), InProgress).success.value
+              .set(IsThisLeadTrusteePage(0), true).success.value
+              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
+              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
+              .set(ltorg.NamePage(0), name).success.value
 
-          helper.rows mustBe AddToRows(
-            inProgress = List(
-              AddRow(
-                name = name,
-                typeLabel = "Lead Trustee Company",
-                changeUrl = ltoRts.UkRegisteredYesNoController.onPageLoad(0, fakeDraftId).url,
-                removeUrl = removeOrgRoute(0)
-              )
-            ),
-            complete = Nil
-          )
+            val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
+
+            helper.rows mustBe AddToRows(
+              inProgress = List(
+                AddRow(
+                  name = name,
+                  typeLabel = typeLabel,
+                  changeUrl = ltoRts.UkRegisteredYesNoController.onPageLoad(0, fakeDraftId).url,
+                  removeUrl = removeOrgRoute(0)
+                )
+              ),
+              complete = Nil
+            )
+          }
+
+          "no name added" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(TrusteeStatus(0), InProgress).success.value
+              .set(IsThisLeadTrusteePage(0), true).success.value
+              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
+              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
+
+            val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
+
+            helper.rows mustBe AddToRows(
+              inProgress = List(
+                AddRow(
+                  name = defaultName,
+                  typeLabel = typeLabel,
+                  changeUrl = ltoRts.UkRegisteredYesNoController.onPageLoad(0, fakeDraftId).url,
+                  removeUrl = removeOrgRoute(0)
+                )
+              ),
+              complete = Nil
+            )
+          }
         }
 
         "completed" in {
@@ -86,7 +160,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             complete = List(
               AddRow(
                 name = name,
-                typeLabel = "Lead Trustee Company",
+                typeLabel = typeLabel,
                 changeUrl = ltoRts.CheckDetailsController.onPageLoad(0, fakeDraftId).url,
                 removeUrl = removeOrgRoute(0)
               )
@@ -98,6 +172,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       "trustee org" when {
 
         val name: String = "Trustee Org"
+        val typeLabel = "Trustee Company"
 
         "in progress" in {
 
@@ -113,7 +188,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             inProgress = List(
               AddRow(
                 name = name,
-                typeLabel = "Trustee Company",
+                typeLabel = typeLabel,
                 changeUrl = toRts.NameController.onPageLoad(0, fakeDraftId).url,
                 removeUrl = removeOrgRoute(0)
               )
@@ -139,7 +214,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             complete = List(
               AddRow(
                 name = name,
-                typeLabel = "Trustee Company",
+                typeLabel = typeLabel,
                 changeUrl = toRts.CheckDetailsController.onPageLoad(0, fakeDraftId).url,
                 removeUrl = removeOrgRoute(0)
               )
@@ -168,7 +243,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             inProgress = List(
               AddRow(
                 name = name,
-                typeLabel = "Trustee Company",
+                typeLabel = typeLabel,
                 changeUrl = toRts.NameController.onPageLoad(0, fakeDraftId).url,
                 removeUrl = removeOrgRoute(0)
               )
@@ -176,7 +251,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             complete = List(
               AddRow(
                 name = name,
-                typeLabel = "Trustee Company",
+                typeLabel = typeLabel,
                 changeUrl = toRts.CheckDetailsController.onPageLoad(1, fakeDraftId).url,
                 removeUrl = removeOrgRoute(1)
               )

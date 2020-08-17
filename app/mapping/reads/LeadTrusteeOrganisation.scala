@@ -16,7 +16,7 @@
 
 package mapping.reads
 
-import models.core.pages.Address
+import models.core.pages.{Address, InternationalAddress, UKAddress}
 import models.core.pages.IndividualOrBusiness.Business
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
@@ -35,13 +35,17 @@ object LeadTrusteeOrganisation {
 
   implicit lazy val reads: Reads[LeadTrusteeOrganisation] = {
 
+    val addressReads: Reads[Address] =
+      (__ \ 'ukAddress).read[UKAddress].widen[Address] or
+        (__ \ 'internationalAddress).read[InternationalAddress].widen[Address]
+
     val leadTrusteeReads: Reads[LeadTrusteeOrganisation] = (
       (__ \ "isThisLeadTrustee").read[Boolean] and
         (__ \ "name").read[String] and
         (__ \ "isUKBusiness").read[Boolean] and
         (__ \ "utr").readNullable[String] and
         (__ \ "addressUKYesNo").read[Boolean] and
-        (__ \ "address").read[Address] and
+        addressReads and
         (__ \ "telephoneNumber").read[String]
       )(LeadTrusteeOrganisation.apply _)
 

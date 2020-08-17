@@ -21,7 +21,6 @@ import mapping.Mapping
 import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustee, Trustees}
 import models.UserAnswers
 
-
 class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
                                   addressMapper: AddressMapper
                                  ) extends Mapping[LeadTrusteeType] {
