@@ -16,6 +16,7 @@
 
 package views.behaviours
 
+import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.ViewSpecBase
 
@@ -63,7 +64,6 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-
   def dynamicTitlePage(view: HtmlFormat.Appendable,
                        messageKeyPrefix: String,
                        messageKeyParam: String,
@@ -99,22 +99,24 @@ trait ViewBehaviours extends ViewSpecBase {
           for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
         }
 
-        "not display language toggles" in {
+        "display language toggles" in {
 
           val doc = asDocument(view)
           assertNotRenderedById(doc, "cymraeg-switch")
         }
+
       }
     }
   }
 
-  def pageWithASubmitButton(view: HtmlFormat.Appendable) = {
+  def pageWithHint[A](form: Form[A],
+                      createView: Form[A] => HtmlFormat.Appendable,
+                      expectedHintKey: String): Unit = {
 
-    "behave like a page with a submit button" must {
-      "have a submit button" in {
-        val doc = asDocument(view)
-        assertRenderedById(doc, "submit")
-      }
+    "behave like a page with hint text" in {
+
+      val doc = asDocument(createView(form))
+      assertContainsHint(doc, "value", Some(messages(s"$expectedHintKey.hint")))
     }
   }
 
@@ -126,6 +128,16 @@ trait ViewBehaviours extends ViewSpecBase {
 
         val doc = asDocument(view)
         assertRenderedById(doc, "back-link")
+      }
+    }
+  }
+
+  def pageWithASubmitButton(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a submit button" must {
+      "have a submit button" in {
+        val doc = asDocument(view)
+        assertRenderedById(doc, "submit")
       }
     }
   }

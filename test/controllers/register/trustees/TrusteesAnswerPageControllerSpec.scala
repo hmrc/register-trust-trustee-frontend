@@ -25,7 +25,7 @@ import pages.register.trustees.individual._
 import pages.register.trustees.organisation._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.CheckYourAnswersHelper
+import utils.answers.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.trustees.TrusteesAnswerPageView
@@ -65,7 +65,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeIndividualOrBusiness(index, leadTrusteeIndividualOrBusinessMessagePrefix).value,
             checkYourAnswersHelper.trusteeFullName(index, leadTrusteeFullNameMessagePrefix).value,
             checkYourAnswersHelper.trusteesDateOfBirth(index).value,
-            checkYourAnswersHelper.trusteeAUKCitizen(index).value,
+            checkYourAnswersHelper.trusteeNinoYesNo(index).value,
             checkYourAnswersHelper.trusteesNino(index).value,
             checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
             checkYourAnswersHelper.trusteesUkAddress(index).value,
@@ -119,7 +119,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
             checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix).value,
             checkYourAnswersHelper.trusteesDateOfBirth(index).value,
-            checkYourAnswersHelper.trusteeAUKCitizen(index).value,
+            checkYourAnswersHelper.trusteeNinoYesNo(index).value,
             checkYourAnswersHelper.trusteesNino(index).value,
             checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
             checkYourAnswersHelper.trusteesUkAddress(index).value,
@@ -152,11 +152,11 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
         emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), true).success.value
-          .set(TrusteeOrgNamePage(index), "Amazon").success.value
-          .set(TrusteesUtrPage(index), "1234567890").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
-          .set(TrusteeOrgAddressUkPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
+          .set(UtrYesNoPage(index), true).success.value
+          .set(NamePage(index), "Amazon").success.value
+          .set(UtrPage(index), "1234567890").success.value
+          .set(AddressUkYesNoPage(index), true).success.value
+          .set(UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
           .set(TelephoneNumberPage(index), "1256723389").success.value
 
       val countryOptions = injector.instanceOf[CountryOptions]
@@ -175,8 +175,8 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeOrgName(index).value,
             checkYourAnswersHelper.trusteeUtr(index).value,
             checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-            checkYourAnswersHelper.trusteesOrgUkAddress(index).value,
-            checkYourAnswersHelper.orgTelephoneNumber(index).value
+            checkYourAnswersHelper.trusteesOrgUkAddress(index).value/*,
+            checkYourAnswersHelper.orgTelephoneNumber(index).value*/
           )
         )
       )
@@ -203,10 +203,10 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
         emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), false).success.value
-          .set(TrusteeOrgNamePage(index), "Amazon").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
-          .set(TrusteeOrgAddressInternationalPage(index), InternationalAddress("line1", "line2", Some("line3"), "Ukraine")).success.value
+          .set(UtrYesNoPage(index), false).success.value
+          .set(NamePage(index), "Amazon").success.value
+          .set(AddressUkYesNoPage(index), false).success.value
+          .set(InternationalAddressPage(index), InternationalAddress("line1", "line2", Some("line3"), "Ukraine")).success.value
           .set(TelephoneNumberPage(index), "1256723389").success.value
 
       val countryOptions = injector.instanceOf[CountryOptions]
@@ -224,8 +224,8 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             checkYourAnswersHelper.trusteeUtrYesNo(index).value,
             checkYourAnswersHelper.trusteeOrgName(index).value,
             checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-            checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value,
-            checkYourAnswersHelper.orgTelephoneNumber(index).value
+            checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value/*,
+            checkYourAnswersHelper.orgTelephoneNumber(index).value*/
           )
         )
       )

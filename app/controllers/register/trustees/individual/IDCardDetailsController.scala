@@ -19,9 +19,10 @@ package controllers.register.trustees.individual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.PassportOrIdCardFormProvider
+import forms.PassportOrIdCardFormProvider
 import javax.inject.Inject
 import navigation.Navigator
+import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{IDCardDetailsPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -49,36 +50,37 @@ class IDCardDetailsController @Inject()(
                                          val countryOptions: CountryOptions
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("iDCardDetails")
+  private val form = formProvider("trusteeIDCardDetails")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
       val preparedForm = request.userAnswers.get(IDCardDetailsPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, trusteeName))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
 
         value => {
           for {

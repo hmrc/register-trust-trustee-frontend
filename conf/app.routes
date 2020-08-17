@@ -17,6 +17,9 @@ GET        /timeout                                               controllers.Se
 
 GET        /feature-not-available                                 controllers.FeatureNotAvailableController.onPageLoad()
 
+->         /trustee/business                                      trusteeOrganisation.Routes
+->         /lead-trustee/business                                 leadTrusteeOrganisation.Routes
+
 ## Trustees
 
 GET        /:draftId/information-you-need                         controllers.register.trustees.TrusteesInfoController.onPageLoad(draftId: String)
@@ -86,30 +89,4 @@ POST       /:draftId/:index/individual/email-address-yes-no       controllers.re
 
 GET        /:draftId/:index/individual/email                      controllers.register.trustees.individual.EmailAddressController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual/email                      controllers.register.trustees.individual.EmailAddressController.onSubmit(index : Int, draftId: String)
-
-### Trustee Business
-
-GET        /:draftId/:index/business/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/business/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/business/telephone-number             controllers.register.trustees.organisation.TrusteeOrgTelephoneNumberController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/business/telephone-number             controllers.register.trustees.organisation.TrusteeOrgTelephoneNumberController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/business/is-a-uk-company              controllers.register.trustees.organisation.TrusteeUtrYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/business/is-a-uk-company              controllers.register.trustees.organisation.TrusteeUtrYesNoController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/business/name                         controllers.register.trustees.organisation.TrusteeBusinessNameController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/business/name                         controllers.register.trustees.organisation.TrusteeBusinessNameController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/business/utr                          controllers.register.trustees.organisation.TrusteeUtrController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/business/utr                          controllers.register.trustees.organisation.TrusteeUtrController.onSubmit(index: Int, draftId: String)
-
-GET        /:draftId/:index/business/uk-address-yes-no            controllers.register.trustees.organisation.TrusteeOrgAddressUkYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/business/uk-address-yes-no            controllers.register.trustees.organisation.TrusteeOrgAddressUkYesNoController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/business/uk-address                   controllers.register.trustees.organisation.TrusteesOrgUkAddressController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/business/uk-address                   controllers.register.trustees.organisation.TrusteesOrgUkAddressController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/business/international-address        controllers.register.trustees.organisation.TrusteeOrgAddressInternationalController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/business/international-address        controllers.register.trustees.organisation.TrusteeOrgAddressInternationalController.onSubmit(index : Int, draftId: String)
 

@@ -22,11 +22,9 @@ import base.SpecBase
 import generators.Generators
 import mapping.Mapping
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import pages.register.trustees._
+import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
-
+import pages.register.trustees.{organisation => org, _}
 
 class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -78,11 +76,11 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), true).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteesUtrPage(index), "1234567890").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
-          .set(TrusteeOrgAddressUkPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+          .set(org.UtrYesNoPage(index), true).success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.UtrPage(index), "1234567890").success.value
+          .set(org.AddressUkYesNoPage(index), true).success.value
+          .set(org.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
           .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
         leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
@@ -103,11 +101,11 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), true).success.value
-          .set(TrusteesUtrPage(index), "1234567890").success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
-          .set(TrusteeOrgAddressInternationalPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
+          .set(org.UtrYesNoPage(index), true).success.value
+          .set(org.UtrPage(index), "1234567890").success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.AddressUkYesNoPage(index), false).success.value
+          .set(org.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
           .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
         leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
@@ -128,10 +126,10 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), false).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
-          .set(TrusteeOrgAddressUkPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+          .set(org.UtrYesNoPage(index), false).success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.AddressUkYesNoPage(index), true).success.value
+          .set(org.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
           .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
         leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
@@ -159,10 +157,10 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), false).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
-          .set(TrusteeOrgAddressInternationalPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
+          .set(org.UtrYesNoPage(index), false).success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.AddressUkYesNoPage(index), false).success.value
+          .set(org.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
           .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
         leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
@@ -190,10 +188,10 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), false).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), false).success.value
-          .set(TrusteeOrgAddressInternationalPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
+          .set(org.UtrYesNoPage(index), false).success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.AddressUkYesNoPage(index), false).success.value
+          .set(org.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
           .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
         leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
@@ -231,7 +229,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
+          .set(org.NamePage(index), "Org Name").success.value
 
         leadTrusteeMapper.build(userAnswers) mustNot be(defined)
       }
@@ -259,11 +257,11 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(TrusteeUtrYesNoPage(index), true).success.value
-          .set(TrusteeOrgNamePage(index), "Org Name").success.value
-          .set(TrusteesUtrPage(index), "1234567890").success.value
-          .set(TrusteeOrgAddressUkYesNoPage(index), true).success.value
-          .set(TrusteeOrgAddressUkPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+          .set(org.UtrYesNoPage(index), true).success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.UtrPage(index), "1234567890").success.value
+          .set(org.AddressUkYesNoPage(index), true).success.value
+          .set(org.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
 
         leadTrusteeMapper.build(userAnswers) mustNot be(defined)
 

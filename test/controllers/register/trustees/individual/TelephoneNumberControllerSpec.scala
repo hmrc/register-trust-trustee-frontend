@@ -18,7 +18,7 @@ package controllers.register.trustees.individual
 
 import base.SpecBase
 import controllers.register.IndexValidation
-import forms.trustees.TelephoneNumberFormProvider
+import forms.TelephoneNumberFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}

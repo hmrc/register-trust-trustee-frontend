@@ -43,12 +43,12 @@ final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean
           .flatMap(_.remove(TrusteeAddressInTheUKPage(index)))
           .flatMap(_.remove(TrusteesUkAddressPage(index)))
 
-          .flatMap(_.remove(TrusteeUtrYesNoPage(index)))
-          .flatMap(_.remove(TrusteeOrgNamePage(index)))
-          .flatMap(_.remove(TrusteesUtrPage(index)))
-          .flatMap(_.remove(TrusteeOrgAddressUkYesNoPage(index)))
-          .flatMap(_.remove(TrusteeOrgAddressUkPage(index)))
-          .flatMap(_.remove(TrusteeOrgAddressInternationalPage(index)))
+          .flatMap(_.remove(UtrYesNoPage(index)))
+          .flatMap(_.remove(NamePage(index)))
+          .flatMap(_.remove(UtrPage(index)))
+          .flatMap(_.remove(AddressUkYesNoPage(index)))
+          .flatMap(_.remove(UkAddressPage(index)))
+          .flatMap(_.remove(InternationalAddressPage(index)))
 
           .flatMap(_.remove(TelephoneNumberPage(index)))
 

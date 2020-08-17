@@ -17,6 +17,7 @@
 package views
 
 import forms.trustees.EmailAddressFormProvider
+import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
@@ -25,7 +26,7 @@ import views.html.register.trustees.individual.EmailAddressView
 class EmailAddressViewSpec extends QuestionViewBehaviours[String] {
 
   val prefix = "emailAddress"
-  val name = "First Last"
+  val name = FullName("FirstName", None, "LastName")
   val index = 0
 
   override val form: Form[String] = new EmailAddressFormProvider().withPrefix(prefix)
@@ -33,16 +34,16 @@ class EmailAddressViewSpec extends QuestionViewBehaviours[String] {
   val view: EmailAddressView = viewFor[EmailAddressView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+    view.apply(form, fakeDraftId, index, name.toString)(fakeRequest, messages)
 
   "EmailAddress View" must {
 
-    behave like dynamicTitlePage(applyView(form), prefix, name)
+    behave like dynamicTitlePage(applyView(form), prefix, name.toString)
 
     behave like pageWithBackLink(applyView(form))
 
     behave like pageWithTextFields(form, applyView,
-      prefix, name)
+      prefix, Some(name.toString))
 
     behave like pageWithASubmitButton(applyView(form))
 

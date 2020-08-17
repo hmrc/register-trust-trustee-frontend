@@ -17,8 +17,9 @@
 package config
 
 import com.google.inject.AbstractModule
+import config.annotations.{LeadTrusteeOrganisation, TrusteeOrganisation}
 import controllers.actions.register._
-import navigation.{Navigator, TrusteeNavigator}
+import navigation.{LeadTrusteeOrganisationNavigator, Navigator, TrusteeNavigator, TrusteeOrganisationNavigator}
 import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
 
 class Module extends AbstractModule {
@@ -28,5 +29,8 @@ class Module extends AbstractModule {
     bind(classOf[RegistrationsRepository]).to(classOf[DefaultRegistrationsRepository]).asEagerSingleton()
     bind(classOf[RegistrationDataRequiredAction]).to(classOf[RegistrationDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[DraftIdRetrievalActionProvider]).to(classOf[DraftIdDataRetrievalActionProviderImpl]).asEagerSingleton()
+
+    bind(classOf[Navigator]).annotatedWith(classOf[TrusteeOrganisation]).to(classOf[TrusteeOrganisationNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[LeadTrusteeOrganisation]).to(classOf[LeadTrusteeOrganisationNavigator]).asEagerSingleton()
   }
 }
