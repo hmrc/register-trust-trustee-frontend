@@ -29,7 +29,6 @@ class TrusteeRequiredAction(index: Int, draftId: String)(implicit val executionC
   extends ActionRefiner[RegistrationDataRequest, RemoveIndexRequest] {
 
   override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, RemoveIndexRequest[A]]] = {
-
     Future.successful(
       request.userAnswers.get(Trustee(index)) match {
         case Some(trustee) =>
