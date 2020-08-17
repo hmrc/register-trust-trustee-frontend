@@ -18,7 +18,7 @@ package controllers.register.trustees.organisation
 
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
-import controllers.actions.register.organisation.NameRequiredActionImpl
+import controllers.actions.register.trustees.organisation.NameRequiredActionImpl
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator

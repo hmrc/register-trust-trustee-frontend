@@ -60,6 +60,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
 
   lazy val accessibilityLinkUrl: String = configuration.get[String]("urls.accessibility")
+  lazy val findLostUtrUrl: String = "https://www.gov.uk/find-lost-utr-number"
 
   lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
   lazy val timeoutLength: String = configuration.get[String]("timeout.length")

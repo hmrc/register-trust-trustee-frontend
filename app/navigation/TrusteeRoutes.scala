@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import javax.inject.Inject
 import models.ReadableUserAnswers
 import models.core.pages.IndividualOrBusiness
+import models.core.pages.IndividualOrBusiness._
 import models.registration.pages.AddATrustee
 import pages.Page
 import pages.register.trustees._
@@ -29,8 +30,8 @@ import sections.Trustees
 
 class TrusteeRoutes @Inject()(config: FrontendAppConfig){
   def route(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case IsThisLeadTrusteePage(index) =>_ => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
-    case TrusteeIndividualOrBusinessPage(index)  => ua => trusteeIndividualOrBusinessRoute(ua, index, draftId)
+    case IsThisLeadTrusteePage(index) => _ => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
+    case TrusteeIndividualOrBusinessPage(index) => ua => trusteeIndividualOrBusinessRoute(ua, index, draftId)
 
     case TrusteesNamePage(index) => _ => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
     case TrusteesDateOfBirthPage(index)  => ua => trusteeDateOfBirthRoute(ua, index, draftId)
@@ -99,9 +100,10 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
 
   private def trusteeIndividualOrBusinessRoute(answers: ReadableUserAnswers, index : Int, draftId: String) = {
     (answers.get(IsThisLeadTrusteePage(index)), answers.get(TrusteeIndividualOrBusinessPage(index))) match {
-      case (Some(_), Some(IndividualOrBusiness.Individual)) => controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId)
+      case (Some(false), Some(IndividualOrBusiness.Individual)) => controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId)
       case (Some(false), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, draftId)
-      case (Some(true), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
+      case (Some(true), Some(IndividualOrBusiness.Individual)) => controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId)
+      case (Some(true), Some(IndividualOrBusiness.Business)) => controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, draftId)
       case _ => sessionExpired
     }
   }

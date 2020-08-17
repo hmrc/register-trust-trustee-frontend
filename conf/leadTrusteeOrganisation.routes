@@ -1,0 +1,29 @@
+GET        /:draftId/:index/is-uk-registered             controllers.register.leadtrustee.organisation.UkRegisteredYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/is-uk-registered             controllers.register.leadtrustee.organisation.UkRegisteredYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/name                         controllers.register.leadtrustee.organisation.NameController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/name                         controllers.register.leadtrustee.organisation.NameController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/utr                          controllers.register.leadtrustee.organisation.UtrController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/utr                          controllers.register.leadtrustee.organisation.UtrController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/has-uk-address               controllers.register.leadtrustee.organisation.AddressUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/has-uk-address               controllers.register.leadtrustee.organisation.AddressUkYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/uk-address                   controllers.register.leadtrustee.organisation.UkAddressController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/uk-address                   controllers.register.leadtrustee.organisation.UkAddressController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/international-address        controllers.register.leadtrustee.organisation.InternationalAddressController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/international-address        controllers.register.leadtrustee.organisation.InternationalAddressController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/has-email                    controllers.register.leadtrustee.organisation.EmailAddressYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/has-email                    controllers.register.leadtrustee.organisation.EmailAddressYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/email                        controllers.register.leadtrustee.organisation.EmailAddressController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/email                        controllers.register.leadtrustee.organisation.EmailAddressController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/telephone-number             controllers.register.leadtrustee.organisation.TelephoneNumberController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/telephone-number             controllers.register.leadtrustee.organisation.TelephoneNumberController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/check-details                controllers.register.leadtrustee.organisation.CheckDetailsController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/check-details                controllers.register.leadtrustee.organisation.CheckDetailsController.onSubmit(index: Int, draftId: String)

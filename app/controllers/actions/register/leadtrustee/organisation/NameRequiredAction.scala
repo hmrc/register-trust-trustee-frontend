@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package controllers.actions.register.organisation
+package controllers.actions.register.leadtrustee.organisation
 
 import controllers.actions.register.TrusteeNameRequest
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
-import pages.register.trustees.organisation.NamePage
+import pages.register.leadtrustee.organisation.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 

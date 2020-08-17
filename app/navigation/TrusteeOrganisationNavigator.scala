@@ -28,9 +28,9 @@ class TrusteeOrganisationNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => UtrYesNoController.onPageLoad(index, draftId)
-    case UtrPage(index) => ???
-    case UkAddressPage(index) => ???
-    case InternationalAddressPage(index) => ???
+    case UtrPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+    case UkAddressPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+    case InternationalAddressPage(index) => CheckDetailsController.onPageLoad(index, draftId)
   }
 
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -46,7 +46,7 @@ class TrusteeOrganisationNavigator extends Navigator {
         ua,
         AddressYesNoPage(index),
         AddressUkYesNoController.onPageLoad(index, draftId),
-        ???
+        CheckDetailsController.onPageLoad(index, draftId)
       )
     case AddressUkYesNoPage(index) => ua =>
       yesNoNav(

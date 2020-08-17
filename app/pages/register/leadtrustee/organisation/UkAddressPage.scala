@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package pages.register.leadtrustee.organisation
 
-import forms.Validation
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import models.core.pages.UKAddress
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.Trustees
 
-class TelephoneNumberFormProvider @Inject() extends Mappings {
+case class UkAddressPage(index: Int) extends QuestionPage[UKAddress] {
 
-  def apply(messagePrefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$messagePrefix.error.required")
-        .verifying(
-          firstError(
-            isNotEmpty("value", s"$messagePrefix.error.required"),
-            regexp(Validation.telephoneRegex, "telephoneNumber.error.invalid.characters")
-          ))
-    )
+  override def path: JsPath = Trustees.path \ index \ toString
+
+  override def toString: String = "address"
 }

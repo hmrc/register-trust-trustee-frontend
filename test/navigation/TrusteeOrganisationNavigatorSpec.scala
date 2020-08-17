@@ -49,9 +49,9 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
     }
 
-    "UTR page -> Check your answers page" ignore {
+    "UTR page -> Check your answers page" in {
       navigator.nextPage(UtrPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(???)
+        .mustBe(CheckDetailsController.onPageLoad(index, draftId))
     }
 
     "Do you know address page -> YES -> Is address in UK page" in {
@@ -62,12 +62,12 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .mustBe(AddressUkYesNoController.onPageLoad(index, fakeDraftId))
     }
 
-    "Do you know address page -> NO -> Check your answers page" ignore {
+    "Do you know address page -> NO -> Check your answers page" in {
       val answers = emptyUserAnswers
-        .set(AddressYesNoPage(index), true).success.value
+        .set(AddressYesNoPage(index), false).success.value
 
       navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
-        .mustBe(???)
+        .mustBe(CheckDetailsController.onPageLoad(index, draftId))
     }
 
     "Is address in UK page -> YES -> UK address page" in {
@@ -86,14 +86,14 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
     }
 
-    "UK address page -> Check your answers page" ignore {
+    "UK address page -> Check your answers page" in {
       navigator.nextPage(UkAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(???)
+        .mustBe(CheckDetailsController.onPageLoad(index, draftId))
     }
 
-    "International address page -> Check your answers page" ignore {
+    "International address page -> Check your answers page" in {
       navigator.nextPage(InternationalAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(???)
+        .mustBe(CheckDetailsController.onPageLoad(index, draftId))
     }
   }
 
