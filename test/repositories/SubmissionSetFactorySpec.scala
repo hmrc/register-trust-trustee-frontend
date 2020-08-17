@@ -176,7 +176,11 @@ class SubmissionSetFactorySpec extends SpecBase {
             Json.toJson(userAnswers),
             Some(Completed),
             List(
-              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson)
+              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+              RegistrationSubmission.MappedPiece("correspondence/address",
+                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
+              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
             ),
             leadTrusteeOnlySections
           )
@@ -218,7 +222,12 @@ class SubmissionSetFactorySpec extends SpecBase {
             Some(Completed),
             List(
               RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
-              RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson)
+              RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+              RegistrationSubmission.MappedPiece("correspondence/address",
+                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
+              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
+
             ),
             answerSections
           )
