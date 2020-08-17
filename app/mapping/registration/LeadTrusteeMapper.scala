@@ -32,7 +32,7 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
       case Nil => None
       case list =>
         list.find(_.isLead)
-            .map(buildLeadTrusteeType)
+          .map(buildLeadTrusteeType)
     }
   }
 

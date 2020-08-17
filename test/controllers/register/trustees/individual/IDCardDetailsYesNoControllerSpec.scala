@@ -27,7 +27,7 @@ import views.html.register.trustees.individual.IDCardDetailsYesNoView
 
 class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trusteeIDCardDetailsYesNo"
+  val trusteeMessagePrefix = "trusteesIdCardDetailsYesNo"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(trusteeMessagePrefix)
 

@@ -48,7 +48,7 @@ class PassportDetailsYesNoController @Inject()(
                                                 view: PassportDetailsYesNoView
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = yesNoFormProvider.withPrefix("passportDetailsYesNo")
+  private val form = yesNoFormProvider.withPrefix("trusteesPassportDetailsYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

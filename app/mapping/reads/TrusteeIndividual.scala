@@ -18,14 +18,21 @@ package mapping.reads
 
 import java.time.LocalDate
 
-import models.core.pages.{Address, FullName, IndividualOrBusiness}
+import models.core.pages.{Address, FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
+import models.registration.pages.PassportOrIdCardDetails
 import play.api.libs.json._
 
 final case class TrusteeIndividual(override val isLead : Boolean,
                                    name: FullName,
                                    dateOfBirth: Option[LocalDate],
                                    nino: Option[String],
-                                   address: Option[Address]) extends Trustee
+                                   address: Option[Address],
+                                   passport: Option[PassportOrIdCardDetails],
+                                   idCard: Option[PassportOrIdCardDetails]) extends Trustee {
+
+  def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
+
+}
 
 object TrusteeIndividual {
 
@@ -33,12 +40,20 @@ object TrusteeIndividual {
 
   implicit lazy val reads: Reads[TrusteeIndividual] = {
 
+    val addressReads: Reads[Option[Address]] =
+      (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
+        (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
+        Reads(_ => JsSuccess(None))
+
     val trusteeReads: Reads[TrusteeIndividual] = (
       (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").readNullable[LocalDate] and
         (__ \ "nino").readNullable[String] and
-        (__ \ "address").readNullable[Address]
-      )((name, dateOfBirth, nino, address) => TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address))
+        addressReads and
+        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
+        (__ \ "idCard").readNullable[PassportOrIdCardDetails]
+      )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
+      TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))
 
     ((__ \ "isThisLeadTrustee").read[Boolean] and
       (__ \ "individualOrBusiness").read[IndividualOrBusiness]) ((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
@@ -48,7 +63,7 @@ object TrusteeIndividual {
         } else {
           Reads(_ => JsError("trustee individual must not be a `business` or a `lead`"))
         }
-    }.andKeep(trusteeReads)
+    } andKeep trusteeReads
 
   }
 }

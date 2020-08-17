@@ -26,7 +26,7 @@
 @(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trusteeIDCardDetails.title")}"
+    title = s"${errorPrefix(form)} ${messages("trusteesIdCardDetails.title")}"
     ) {
 
     @formHelper(action = IDCardDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,10 +35,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("trusteeIDCardDetails.heading", Some(name.toString))
+        @components.heading("trusteesIdCardDetails.heading", Some(name.toString))
 
         @components.select(field = form("country"),
-            label = messages("trusteeIDCardDetails.country"),
+            label = messages("trusteesIdCardDetails.country"),
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,
             placeholder = Some("address.country.select"),
@@ -48,15 +48,15 @@
 
         @components.input_text(
             field = form("number"),
-            label = messages("trusteeIDCardDetails.number")
+            label = messages("trusteesIdCardDetails.number")
         )
 
         @components.input_date(
             field = form("expiryDate"),
-            legend = messages("trusteeIDCardDetails.expiryDate.title"),
+            legend = messages("trusteesIdCardDetails.expiryDate.title"),
             legendClass = "bold",
             legendAsHeading = false,
-            hint = Some(messages("trusteeIDCardDetails.expiryDate.hint"))
+            hint = Some(messages("trusteesIdCardDetails.expiryDate.hint"))
         )
 
         @components.submit_button()

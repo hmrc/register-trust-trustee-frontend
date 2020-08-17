@@ -19,7 +19,7 @@ package mapping.reads
 import java.time.LocalDate
 
 import models.core.pages.IndividualOrBusiness.Individual
-import models.core.pages.{Address, FullName}
+import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
 final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
@@ -39,6 +39,10 @@ object LeadTrusteeIndividual {
 
   implicit lazy val reads: Reads[LeadTrusteeIndividual] = {
 
+    val addressReads: Reads[Address] =
+      (__ \ 'ukAddress).read[UKAddress].widen[Address] or
+        (__ \ 'internationalAddress).read[InternationalAddress].widen[Address]
+
     val leadTrusteeReads: Reads[LeadTrusteeIndividual] = (
       (__ \ "isThisLeadTrustee").read[Boolean] and
         (__ \ "name").read[FullName] and
@@ -47,7 +51,7 @@ object LeadTrusteeIndividual {
         (__ \ "nino").readNullable[String] and
         (__ \ "passport").readNullable[String] and
         (__ \ "addressUKYesNo").read[Boolean] and
-        (__ \ "address").read[Address] and
+        addressReads and
         (__ \ "telephoneNumber").read[String]
       )(LeadTrusteeIndividual.apply _)
 
