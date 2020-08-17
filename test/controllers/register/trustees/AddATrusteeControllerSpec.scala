@@ -40,8 +40,8 @@ class AddATrusteeControllerSpec extends SpecBase {
   val yesNoForm = new YesNoFormProvider().withPrefix("addATrusteeYesNo")
 
   val trustee = List(
-    AddRow("First 0 Last 0", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/0/individual/remove"),
-    AddRow("First 1 Last 1", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/1/individual/remove")
+    AddRow("First 0 Last 0", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/0/remove"),
+    AddRow("First 1 Last 1", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/1/remove")
   )
 
   val userAnswersWithTrusteesComplete = emptyUserAnswers

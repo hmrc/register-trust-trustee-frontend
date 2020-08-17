@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package sections
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import viewmodels.addAnother.TrusteeViewModel
 
-trait RemoveForm {
+case class Trustee(index: Int) extends QuestionPage[TrusteeViewModel]{
 
-  def apply(prefix: String): Form[Boolean]
+  override def path: JsPath = JsPath \ Trustees \ index
 
-}
-
-class RemoveIndexFormProvider @Inject() extends Mappings with RemoveForm {
-
-  override def apply(prefix: String): Form[Boolean] =
-    Form(
-      "value" -> boolean(s"$prefix.error.required")
-    )
 }
