@@ -27,7 +27,6 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees._
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
 import play.api.mvc.Call
 import sections.Trustees
 
@@ -124,12 +123,12 @@ trait TestTrusteeRoutes {
       }
     }
 
-    "go to TrusteeIndividualOrBusinessPage from IsThisLeadTrusteePage page" in {
+    "go to IndividualOrBusinessPage from IsThisLeadTrusteePage page when YES selected" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
 
           navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, userAnswers)
-            .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
+            .mustBe(controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -157,7 +156,7 @@ trait TestTrusteeRoutes {
       }
     }
 
-    "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a lead trustee Business" ignore {
+    "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a lead trustee Business" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers
@@ -165,7 +164,7 @@ trait TestTrusteeRoutes {
             .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
           navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-            .mustBe(???)
+            .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -180,9 +179,6 @@ trait TestTrusteeRoutes {
             .mustBe(controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, fakeDraftId))
       }
     }
-
-
-
 
     "go to TrusteesDateOfBirthPage from TrusteesNamePage page" in {
       forAll(arbitrary[UserAnswers]) {

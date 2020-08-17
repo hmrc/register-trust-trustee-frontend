@@ -21,7 +21,7 @@ import config.annotations.TrusteeOrganisation
 import controllers.register.IndexValidation
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.{NamePage, UtrYesNoPage}
+import pages.register.trustees.organisation.NamePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -101,10 +101,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(UtrYesNoPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, nameRoute)

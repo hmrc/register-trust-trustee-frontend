@@ -16,7 +16,7 @@
 
 package mapping.reads
 
-import models.core.pages.{Address, IndividualOrBusiness}
+import models.core.pages.{Address, IndividualOrBusiness, InternationalAddress, UKAddress}
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
 final case class TrusteeOrganisation(override val isLead : Boolean,
@@ -24,17 +24,21 @@ final case class TrusteeOrganisation(override val isLead : Boolean,
                                      utr: Option[String],
                                      address: Option[Address]) extends Trustee
 
-
 object TrusteeOrganisation {
 
   import play.api.libs.functional.syntax._
 
   implicit lazy val reads: Reads[TrusteeOrganisation] = {
 
+    val addressReads: Reads[Option[Address]] =
+      (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
+        (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
+        Reads(_ => JsSuccess(None))
+
     val trusteeReads: Reads[TrusteeOrganisation] = (
       (__ \ "name").read[String] and
         (__ \ "utr").readNullable[String] and
-        (__ \ "address").readNullable[Address]
+        addressReads
       )((name, utr, address) => TrusteeOrganisation(isLead = false, name, utr, address))
 
     ((__ \ "isThisLeadTrustee").read[Boolean] and
@@ -43,7 +47,7 @@ object TrusteeOrganisation {
         if (individualOrBusiness == IndividualOrBusiness.Business && !isLead) {
           Reads(_ => JsSuccess((isLead, individualOrBusiness)))
         } else {
-          Reads(_ => JsError("trustee organisation must not be a `individual` or a `lead`"))
+          Reads(_ => JsError("trustee organisation must not be an `individual` or a `lead`"))
         }
     }.andKeep(trusteeReads)
 

@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package config.annotations;
 
-import forms.Validation
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import com.google.inject.BindingAnnotation;
 
-class TelephoneNumberFormProvider @Inject() extends Mappings {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  def apply(messagePrefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$messagePrefix.error.required")
-        .verifying(
-          firstError(
-            isNotEmpty("value", s"$messagePrefix.error.required"),
-            regexp(Validation.telephoneRegex, "telephoneNumber.error.invalid.characters")
-          ))
-    )
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface LeadTrusteeOrganisation {}

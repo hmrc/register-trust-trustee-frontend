@@ -19,7 +19,7 @@ package controllers.register.trustees.individual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.TelephoneNumberFormProvider
+import forms.TelephoneNumberFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator

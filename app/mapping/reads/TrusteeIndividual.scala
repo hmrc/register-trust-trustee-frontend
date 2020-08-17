@@ -18,7 +18,7 @@ package mapping.reads
 
 import java.time.LocalDate
 
-import models.core.pages.{Address, FullName, IndividualOrBusiness}
+import models.core.pages.{Address, FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import play.api.libs.json._
 
@@ -40,11 +40,16 @@ object TrusteeIndividual {
 
   implicit lazy val reads: Reads[TrusteeIndividual] = {
 
+    val addressReads: Reads[Option[Address]] =
+      (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
+        (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
+        Reads(_ => JsSuccess(None))
+
     val trusteeReads: Reads[TrusteeIndividual] = (
       (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").readNullable[LocalDate] and
         (__ \ "nino").readNullable[String] and
-        (__ \ "address").readNullable[Address] and
+        addressReads and
         (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
         (__ \ "idCard").readNullable[PassportOrIdCardDetails]
       )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
