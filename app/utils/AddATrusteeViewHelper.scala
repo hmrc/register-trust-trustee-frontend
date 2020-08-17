@@ -73,12 +73,10 @@ class AddATrusteeViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
     }
 
     val removeLink = viewModel.`type` match {
-      case Some(Individual) =>
-        controllers.register.trustees.individual.routes.RemoveTrusteeController.onPageLoad(index, draftId).url
       case Some(Business) =>
         controllers.register.trustees.organisation.routes.RemoveTrusteeOrgController.onPageLoad(index, draftId).url
       case _ =>
-        controllers.routes.FeatureNotAvailableController.onPageLoad().url
+        controllers.register.trustees.individual.routes.RemoveTrusteeController.onPageLoad(index, draftId).url
     }
 
     AddRow(
