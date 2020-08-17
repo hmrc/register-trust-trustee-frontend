@@ -21,7 +21,8 @@ import java.time.LocalDate
 import base.SpecBase
 import generators.Generators
 import mapping.Mapping
-import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
+import models.UserAnswers
+import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.trustees.individual._
 import pages.register.trustees.{organisation => org, _}
@@ -186,32 +187,61 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         )
       }
 
-      "be able to create a Trustee Organisation with full data" in {
+      "be able to create a Trustee Organisation with full data" when {
+
         val index = 0
-        val userAnswers = emptyUserAnswers
+
+        val baseAnswers: UserAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
           .set(org.NamePage(index), "Org Name").success.value
           .set(org.UtrYesNoPage(index), true).success.value
           .set(org.UtrPage(index), "1234567890").success.value
-          .set(TrusteeAddressYesNoPage(index), true).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
-          .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+          .set(org.AddressYesNoPage(index), true).success.value
 
-        trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
-          None,
-          trusteeOrg = Some(
-            TrusteeOrgType(
-              name = "Org Name",
-              phoneNumber = None,
-              email = None,
-              identification = IdentificationOrgType(
-                Some("1234567890"),
-                Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
+        "UK address" in {
+
+          val userAnswers = baseAnswers
+            .set(org.AddressUkYesNoPage(index), true).success.value
+            .set(org.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+
+          trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
+            None,
+            trusteeOrg = Some(
+              TrusteeOrgType(
+                name = "Org Name",
+                phoneNumber = None,
+                email = None,
+                identification = IdentificationOrgType(
+                  Some("1234567890"),
+                  Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
+                )
               )
             )
           )
-        )
+        }
+
+        "non-UK address" in {
+
+          val userAnswers = baseAnswers
+            .set(org.AddressUkYesNoPage(index), false).success.value
+            .set(org.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "DE")).success.value
+
+          trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
+            None,
+            trusteeOrg = Some(
+              TrusteeOrgType(
+                name = "Org Name",
+                phoneNumber = None,
+                email = None,
+                identification = IdentificationOrgType(
+                  Some("1234567890"),
+                  Some(AddressType("line1", "line2", None, None, None, "DE"))
+                )
+              )
+            )
+          )
+        }
       }
 
       "not be able to create a Trustee Individual when there is only a LeadTrustee" in {
@@ -238,9 +268,9 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(org.NamePage(index), "Org Name").success.value
           .set(org.UtrYesNoPage(index), true).success.value
           .set(org.UtrPage(index), "1234567890").success.value
-          .set(TrusteeAddressYesNoPage(index), true).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
-          .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+          .set(org.AddressYesNoPage(index), true).success.value
+          .set(org.AddressUkYesNoPage(index), true).success.value
+          .set(org.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
 
         trusteeMapper.build(userAnswers) mustNot be(defined)
 
