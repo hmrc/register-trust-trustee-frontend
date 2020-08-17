@@ -119,7 +119,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
