@@ -24,24 +24,23 @@
         appConfig: FrontendAppConfig
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], name: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, draftId: String, countryOptions: Seq[InputOption], trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("business.nonUkAddress.title")}"
 ) {
 
-    @formHelper(action = NonUkAddressController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("business.nonUkAddress.heading", Some(name))
+        @components.heading("business.nonUkAddress.heading", Some(trusteeName))
 
-        @components.non_uk_address(form, countryOptions)
+        @components.international_address(form, countryOptions)
 
         @components.submit_button()
 
-        <p><a href="@appConfig.registerEstateHubOverview">@messages("site.returnToRegistrationProgress")</a></p>
     }
 }

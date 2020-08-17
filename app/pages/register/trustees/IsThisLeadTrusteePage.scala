@@ -18,8 +18,8 @@ package pages.register.trustees
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
+import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesNamePage, TrusteesNinoPage, TrusteesUkAddressPage}
+import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage, UkAddressPage, UtrPage, UtrYesNoPage}
 import play.api.libs.json.JsPath
 import sections.Trustees
 

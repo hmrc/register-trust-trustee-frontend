@@ -20,8 +20,8 @@ import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
 import pages.QuestionPage
-import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
+import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesInternationalAddressPage, TrusteesNinoPage, TrusteesUkAddressPage}
+import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage, UkAddressPage, UtrPage, UtrYesNoPage}
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -45,7 +45,7 @@ final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPa
           .flatMap(_.remove(TelephoneNumberPage(index)))
 
       case Some(Individual) =>
-        userAnswers.remove(UtrYesNoPage(index))
+        userAnswers.remove(query = UtrYesNoPage(index))
           .flatMap(_.remove(NamePage(index)))
           .flatMap(_.remove(UtrPage(index)))
           .flatMap(_.remove(AddressUkYesNoPage(index)))

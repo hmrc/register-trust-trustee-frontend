@@ -21,8 +21,8 @@ import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import pages.register.trustees._
-import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
+import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesNamePage, TrusteesNinoPage, TrusteesUkAddressPage}
+import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage, UkAddressPage, UtrPage, UtrYesNoPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.answers.CheckYourAnswersHelper

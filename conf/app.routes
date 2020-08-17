@@ -90,3 +90,5 @@ POST       /:draftId/:index/individual/email-address-yes-no       controllers.re
 GET        /:draftId/:index/individual/email                      controllers.register.trustees.individual.EmailAddressController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual/email                      controllers.register.trustees.individual.EmailAddressController.onSubmit(index : Int, draftId: String)
 
+GET        /:draftId/:index/individual/international-address      controllers.register.trustees.individual.InternationalAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual/international-address      controllers.register.trustees.individual.InternationalAddressController.onSubmit(index : Int, draftId: String)
