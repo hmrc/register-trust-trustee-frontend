@@ -50,7 +50,7 @@ class IDCardDetailsController @Inject()(
                                          val countryOptions: CountryOptions
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("trusteeIDCardDetails")
+  private val form = formProvider("trusteesIdCardDetails")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
