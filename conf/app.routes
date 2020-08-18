@@ -17,7 +17,9 @@ GET        /timeout                                               controllers.Se
 
 GET        /feature-not-available                                 controllers.FeatureNotAvailableController.onPageLoad()
 
+->         /trustee/individual                                    trusteeIndividual.Routes
 ->         /trustee/business                                      trusteeOrganisation.Routes
+
 ->         /lead-trustee/business                                 leadTrusteeOrganisation.Routes
 
 ## Trustees
@@ -36,41 +38,3 @@ POST       /:draftId/:index/check-answers                         controllers.re
 GET        /:draftId/add                                          controllers.register.trustees.AddATrusteeController.onPageLoad(draftId: String)
 POST       /:draftId/add                                          controllers.register.trustees.AddATrusteeController.submitOne(draftId: String)
 POST       /:draftId/add-another                                  controllers.register.trustees.AddATrusteeController.submitAnother(draftId: String)
-
-### Trustee Individual
-
-GET        /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/individual/date-of-birth              controllers.register.trustees.individual.DateOfBirthController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/individual/date-of-birth              controllers.register.trustees.individual.DateOfBirthController.onSubmit(index: Int, draftId: String)
-
-GET        /:draftId/:index/individual/telephone-number           controllers.register.trustees.individual.TelephoneNumberController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/telephone-number           controllers.register.trustees.individual.TelephoneNumberController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/individual/is-a-uk-citizen            controllers.register.trustees.individual.NinoYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/is-a-uk-citizen            controllers.register.trustees.individual.NinoYesNoController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/individual/live-in-the-uk             controllers.register.trustees.individual.LiveInTheUKYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/live-in-the-uk             controllers.register.trustees.individual.LiveInTheUKYesNoController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/individual/nino                       controllers.register.trustees.individual.NinoController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/individual/nino                       controllers.register.trustees.individual.NinoController.onSubmit(index: Int, draftId: String)
-
-GET        /:draftId/:index/individual/uk-address                 controllers.register.trustees.individual.UkAddressController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/uk-address                 controllers.register.trustees.individual.UkAddressController.onSubmit(index : Int, draftId: String)
-
-GET        /:draftId/:index/individual/id-card                    controllers.register.trustees.individual.IDCardDetailsController.onPageLoad( index: Int, draftId: String)
-POST       /:draftId/:index/individual/id-card                    controllers.register.trustees.individual.IDCardDetailsController.onSubmit( index: Int, draftId: String)
-
-GET        /:draftId/:index/individual/id-card-yes-no             controllers.register.trustees.individual.IDCardDetailsYesNoController.onPageLoad( index: Int, draftId: String)
-POST       /:draftId/:index/individual/id-card-yes-no             controllers.register.trustees.individual.IDCardDetailsYesNoController.onSubmit( index: Int, draftId: String)
-
-GET        /:draftId/:index/individual/passport                   controllers.register.trustees.individual.PassportDetailsController.onPageLoad( index: Int, draftId: String)
-POST       /:draftId/:index/individual/passport                   controllers.register.trustees.individual.PassportDetailsController.onSubmit( index: Int, draftId: String)
-
-GET        /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onPageLoad( index: Int, draftId: String)
-POST       /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onSubmit( index: Int, draftId: String)
