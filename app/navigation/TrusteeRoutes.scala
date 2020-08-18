@@ -22,7 +22,6 @@ import models.ReadableUserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
 import models.registration.pages.AddATrustee
-import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import pages.Page
 import pages.register.trustees._
 import pages.register.trustees.individual._
@@ -33,20 +32,17 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
   def route(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case IsThisLeadTrusteePage(index) => _ => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
     case TrusteeIndividualOrBusinessPage(index) => ua => trusteeIndividualOrBusinessRoute(ua, index, draftId)
+
     case TrusteesNamePage(index) => _ => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
     case TrusteesDateOfBirthPage(index)  => ua => trusteeDateOfBirthRoute(ua, index, draftId)
     case TrusteeAUKCitizenPage(index)  => ua => trusteeAUKCitizenRoute(ua, index, draftId)
     case TrusteesNinoPage(index)  => _ => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
     case TrusteeAddressInTheUKPage(index)   => ua => trusteeLiveInTheUKRoute(ua, index, draftId)
-    case TrusteesUkAddressPage(index) => _ => controllers.register.trustees.individual.routes.EmailAddressYesNoController.onPageLoad(index, draftId)
-    case EmailAddressYesNoPage(index) => ua => emailAddressYesNoPageRoute(ua, index, draftId)
+    case TrusteesUkAddressPage(index) => _ => controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
     case TelephoneNumberPage(index)  => _ => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
     case TrusteesAnswerPage  => _ => controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)
     case AddATrusteePage  => addATrusteeRoute(draftId)
     case AddATrusteeYesNoPage  => addATrusteeYesNoRoute(draftId)
-    case TrusteeDetailsChoicePage(index) => ua => trusteeDetailsChoiceRoute(ua, index, draftId)
-    case IDCardDetailsPage(index) =>_ => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) =>_ => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
   }
 
   private def registrationTaskList(draftId: String): Call = {
@@ -86,13 +82,13 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
 
   private def trusteeAUKCitizenRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(TrusteeAUKCitizenPage(index)) match {
     case Some(true)   => controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, draftId)
-    case Some(false)  => controllers.register.trustees.individual.routes.TrusteeDetailsChoiceController.onPageLoad(index, draftId)
+    case Some(false)  => controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, draftId)
     case None         => sessionExpired
   }
 
   private def trusteeLiveInTheUKRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(TrusteeAddressInTheUKPage(index)) match {
     case Some(true)   => controllers.register.trustees.individual.routes.UkAddressController.onPageLoad(index, draftId)
-    case Some(false)  => controllers.register.trustees.individual.routes.InternationalAddressController.onPageLoad(index, draftId)
+    case Some(false)  => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
     case None         => sessionExpired
   }
 
@@ -112,20 +108,7 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
     }
   }
 
-  private def trusteeDetailsChoiceRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(TrusteeDetailsChoicePage(index)) match {
-    case Some(IdCard)   => controllers.register.trustees.individual.routes.IDCardDetailsController.onPageLoad(index, draftId)
-    case Some(Passport)  => controllers.register.trustees.individual.routes.PassportDetailsController.onPageLoad(index, draftId)
-    case None         => sessionExpired
-  }
-
-  private def emailAddressYesNoPageRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(EmailAddressYesNoPage(index)) match {
-    case Some(true)   => controllers.register.trustees.individual.routes.EmailAddressController.onPageLoad(index, draftId)
-    case Some(false)  => controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
-    case None         => sessionExpired
-  }
-
   private def sessionExpired = {
     controllers.routes.SessionExpiredController.onPageLoad()
   }
 }
-
