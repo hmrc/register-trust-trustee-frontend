@@ -190,15 +190,15 @@ addATrustee.business = Trustee Company
 addATrustee.error.required = Select yes if you want to add another trustee
 addATrustee.lead-trustee.required = You need to add or nominate a lead trustee.
 
-removeATrustee.title = Are you sure you want to remove the trustee?
-removeATrustee.heading = Are you sure you want to remove {0}?
-removeATrustee.default = the trustee
-removeATrustee.error.required = Select yes if you want to remove the trustee
+removeTrustee.title = Are you sure you want to remove the trustee?
+removeTrustee.heading = Are you sure you want to remove {0}?
+removeTrustee.error.required = Select yes if you want to remove the trustee
+removeTrustee.default = the trustee
 
-removeATrusteeOrg.title = Are you sure you want to remove the trustee?
-removeATrusteeOrg.heading = Are you sure you want to remove {0}?
-removeATrusteeOrg.default = the trustee
-removeATrusteeOrg.error.required = Select yes if you want to remove the trustee
+removeLeadTrustee.title = Are you sure you want to remove the lead trustee?
+removeLeadTrustee.heading = Are you sure you want to remove {0}?
+removeLeadTrustee.error.required = Select yes if you want to remove the lead trustee
+removeLeadTrustee.default = the lead trustee
 
 telephoneNumber.title = What is the trustee’s telephone number?
 telephoneNumber.heading = What is {0}’s telephone number?

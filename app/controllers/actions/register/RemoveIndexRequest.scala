@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package controllers.actions.register
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import models.UserAnswers
+import models.requests.RegistrationDataRequest
+import play.api.mvc.WrappedRequest
+import viewmodels.addAnother.TrusteeViewModel
 
-trait RemoveForm {
-
-  def apply(prefix: String): Form[Boolean]
-
-}
-
-class RemoveIndexFormProvider @Inject() extends Mappings with RemoveForm {
-
-  override def apply(prefix: String): Form[Boolean] =
-    Form(
-      "value" -> boolean(s"$prefix.error.required")
-    )
+case class RemoveIndexRequest[T](request: RegistrationDataRequest[T], trustee: TrusteeViewModel) extends WrappedRequest[T](request){
+  val userAnswers:UserAnswers = request.userAnswers
 }
