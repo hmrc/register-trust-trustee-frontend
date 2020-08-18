@@ -52,7 +52,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             emptyUserAnswers
               .set(IsThisLeadTrusteePage(index), false).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-              .set(TrusteesNamePage(index), FullName("first name", None, "last name")).success.value
+              .set(NamePage(index), FullName("first name", None, "last name")).success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
@@ -70,13 +70,13 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(IsThisLeadTrusteePage(index), false).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(TrusteesNamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
+            .set(NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
             .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
             .set(TrusteeAUKCitizenPage(index), true).success.value
-            .set(TrusteeAddressInTheUKPage(index), true).success.value
+            .set(AddressUkYesNoPage(index), true).success.value
             .set(PassportDetailsYesNoPage(index), true).success.value
             .set(TrusteesNinoPage(index), "AB123456C").success.value
-            .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+            .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
             .set(PassportDetailsPage(index), PassportOrIdCardDetails("GB", "3453", LocalDate.of(1999, 1, 1))).success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
@@ -126,9 +126,9 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             .set(org.NamePage(index), "Org Name").success.value
             .set(org.UtrYesNoPage(index), true).success.value
             .set(org.UtrPage(index), "1234567890").success.value
-            .set(TrusteeAddressYesNoPage(index), true).success.value
-            .set(TrusteeAddressInTheUKPage(index), true).success.value
-            .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+            .set(AddressYesNoPage(index), true).success.value
+            .set(AddressUkYesNoPage(index), true).success.value
+            .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             None,
@@ -156,11 +156,11 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           emptyUserAnswers
             .set(IsThisLeadTrusteePage(index0), false).success.value
             .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Individual).success.value
-            .set(TrusteesNamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
 
             .set(IsThisLeadTrusteePage(index1), false).success.value
             .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Individual).success.value
-            .set(TrusteesNamePage(index1), FullName("second name", None, "second name")).success.value
+            .set(NamePage(index1), FullName("second name", None, "second name")).success.value
 
         trusteeMapper.build(userAnswers).value mustBe List(TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
@@ -228,12 +228,12 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-          .set(TrusteesNamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
+          .set(NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
           .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
           .set(TrusteeAUKCitizenPage(index), true).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
+          .set(AddressUkYesNoPage(index), true).success.value
           .set(TrusteesNinoPage(index), "AB123456C").success.value
-          .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+          .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
@@ -367,12 +367,12 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-          .set(TrusteesNamePage(index), FullName("first name", Some("middle name"), "Last Name")).success.value
+          .set(NamePage(index), FullName("first name", Some("middle name"), "Last Name")).success.value
           .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
           .set(TrusteeAUKCitizenPage(index), true).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
+          .set(AddressUkYesNoPage(index), true).success.value
           .set(TrusteesNinoPage(index), "AB123456C").success.value
-          .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+          .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
 
         trusteeMapper.build(userAnswers) mustNot be(defined)
 

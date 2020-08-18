@@ -16,7 +16,6 @@
 
 package utils.answers
 
-import mapping.reads._
 import models.UserAnswers
 import pages.register.trustees._
 import pages.register.trustees.individual._
@@ -35,7 +34,7 @@ trait TrusteesIndividualAnswersHelper {
 
   implicit val  messages: Messages
 
-  def trusteeFullName(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(TrusteesNamePage(index)) map {
+  def trusteeFullName(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(NamePage(index)) map {
     x =>
       AnswerRow(
         s"$messagePrefix.checkYourAnswersLabel",
@@ -45,7 +44,7 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteeLiveInTheUK(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeAddressInTheUKPage(index)) map {
+  def trusteeLiveInTheUK(index: Int): Option[AnswerRow] = userAnswers.get(AddressUkYesNoPage(index)) map {
     x =>
       AnswerRow(
         "trusteeLiveInTheUK.checkYourAnswersLabel",
@@ -56,7 +55,7 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteesUkAddress(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesUkAddressPage(index)) map {
+  def trusteesUkAddress(index: Int): Option[AnswerRow] = userAnswers.get(UkAddressPage(index)) map {
     x =>
       AnswerRow(
         "trusteesUkAddress.checkYourAnswersLabel",

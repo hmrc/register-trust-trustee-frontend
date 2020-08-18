@@ -24,7 +24,7 @@ import models.core.pages.{FullName, IndividualOrBusiness}
 import models.registration.pages.AddATrustee
 import pages.entitystatus.TrusteeStatus
 import pages.register.trustees.TrusteeIndividualOrBusinessPage
-import pages.register.trustees.individual.TrusteesNamePage
+import pages.register.trustees.individual.NamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.AddRow
@@ -46,10 +46,10 @@ class AddATrusteeControllerSpec extends SpecBase {
 
   val userAnswersWithTrusteesComplete = emptyUserAnswers
     .set(TrusteeIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-    .set(TrusteesNamePage(0), FullName("First 0", None, "Last 0")).success.value
+    .set(NamePage(0), FullName("First 0", None, "Last 0")).success.value
     .set(TrusteeStatus(0), Completed).success.value
     .set(TrusteeIndividualOrBusinessPage(1), IndividualOrBusiness.Individual).success.value
-    .set(TrusteesNamePage(1), FullName("First 1", None, "Last 1")).success.value
+    .set(NamePage(1), FullName("First 1", None, "Last 1")).success.value
     .set(TrusteeStatus(1), Completed).success.value
 
   "AddATrustee Controller" when {

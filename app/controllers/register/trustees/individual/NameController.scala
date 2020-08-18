@@ -23,7 +23,7 @@ import forms.trustees.TrusteesNameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.TrusteesNamePage
+import pages.register.trustees.individual.NamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -65,7 +65,7 @@ class NameController @Inject()(
 
       val form = formProvider(messagePrefix)
 
-      val preparedForm = request.userAnswers.get(TrusteesNamePage(index)) match {
+      val preparedForm = request.userAnswers.get(NamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -91,9 +91,9 @@ class NameController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNamePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesNamePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
         }
       )
   }

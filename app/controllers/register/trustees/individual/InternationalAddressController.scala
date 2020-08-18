@@ -16,27 +16,26 @@
 
 package controllers.register.trustees.individual
 
-import config.annotations.TrusteeOrganisation
 import controllers.actions._
-import controllers.actions.register.trustees.organisation.NameRequiredActionImpl
+import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.organisation.InternationalAddressPage
+import pages.register.trustees.individual.InternationalAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.trustees.organisation.InternationalAddressView
+import views.html.register.trustees.individual.InternationalAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class InternationalAddressController @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 registrationsRepository: RegistrationsRepository,
-                                                @TrusteeOrganisation navigator: Navigator,
+                                                navigator: Navigator,
                                                 standardActionSets: StandardActionSets,
                                                 nameAction: NameRequiredActionImpl,
                                                 formProvider: InternationalAddressFormProvider,

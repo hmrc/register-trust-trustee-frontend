@@ -22,7 +22,7 @@ import forms.trustees.TrusteesNameFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees._
-import pages.register.trustees.individual.TrusteesNamePage
+import pages.register.trustees.individual.NamePage
 import play.api.i18n.Messages
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -190,7 +190,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(TrusteesNamePage(index), name).success.value
+          .set(NamePage(index), name).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -221,7 +221,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
           val userAnswers = emptyUserAnswers
             .set(IsThisLeadTrusteePage(index), false).success.value
-            .set(TrusteesNamePage(index), name).success.value
+            .set(NamePage(index), name).success.value
 
           val application =
             applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -300,7 +300,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         validateIndex(
           arbitrary[FullName],
-          TrusteesNamePage.apply,
+          NamePage.apply,
           getForIndex
         )
 
@@ -318,7 +318,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         validateIndex(
           arbitrary[FullName],
-          TrusteesNamePage.apply,
+          NamePage.apply,
           postForIndex
         )
       }
