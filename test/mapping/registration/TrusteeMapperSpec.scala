@@ -75,7 +75,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             .set(TrusteeAUKCitizenPage(index), true).success.value
             .set(AddressUkYesNoPage(index), true).success.value
             .set(PassportDetailsYesNoPage(index), true).success.value
-            .set(TrusteesNinoPage(index), "AB123456C").success.value
+            .set(NinoPage(index), "AB123456C").success.value
             .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
             .set(PassportDetailsPage(index), PassportOrIdCardDetails("GB", "3453", LocalDate.of(1999, 1, 1))).success.value
 
@@ -232,7 +232,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
           .set(TrusteeAUKCitizenPage(index), true).success.value
           .set(AddressUkYesNoPage(index), true).success.value
-          .set(TrusteesNinoPage(index), "AB123456C").success.value
+          .set(NinoPage(index), "AB123456C").success.value
           .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
@@ -371,7 +371,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
           .set(TrusteeAUKCitizenPage(index), true).success.value
           .set(AddressUkYesNoPage(index), true).success.value
-          .set(TrusteesNinoPage(index), "AB123456C").success.value
+          .set(NinoPage(index), "AB123456C").success.value
           .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
 
         trusteeMapper.build(userAnswers) mustNot be(defined)

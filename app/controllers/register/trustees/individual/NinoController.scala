@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{NamePage, TrusteesNinoPage}
+import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -66,7 +66,7 @@ class NinoController @Inject()(
 
       val form = formProvider(messagePrefix)
 
-      val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
+      val preparedForm = request.userAnswers.get(NinoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -100,9 +100,9 @@ class NinoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NinoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NinoPage(index), draftId, updatedAnswers))
         }
       )
   }

@@ -243,7 +243,7 @@ trait TestTrusteeRoutes {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            navigator.nextPage(TrusteesNinoPage(index), fakeDraftId, userAnswers)
+            navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers)
               .mustBe(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }

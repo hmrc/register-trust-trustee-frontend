@@ -99,7 +99,7 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteesNino(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesNinoPage(index)) map {
+  def trusteesNino(index: Int): Option[AnswerRow] = userAnswers.get(NinoPage(index)) map {
     x =>
       AnswerRow(
         "trusteesNino.checkYourAnswersLabel",

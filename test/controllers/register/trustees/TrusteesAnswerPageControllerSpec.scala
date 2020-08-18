@@ -48,7 +48,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
             .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
             .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
-            .set(individualPages.TrusteesNinoPage(index), "AB123456C").success.value
+            .set(individualPages.NinoPage(index), "AB123456C").success.value
             .set(individualPages.AddressUkYesNoPage(index), true).success.value
             .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
             .set(TelephoneNumberPage(index), "0191 1111111").success.value
@@ -207,7 +207,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
               .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
               .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
               .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
-              .set(individualPages.TrusteesNinoPage(index), "AB123456C").success.value
+              .set(individualPages.NinoPage(index), "AB123456C").success.value
               .set(individualPages.AddressUkYesNoPage(index), true).success.value
               .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
               .set(individualPages.PassportDetailsYesNoPage(index), true).success.value
