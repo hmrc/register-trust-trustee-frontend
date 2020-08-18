@@ -39,13 +39,14 @@ class AddATrusteeViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
 
     def renderForLead(message : String) = s"${messages("entities.lead")} $message"
 
-    val trusteeType = viewModel.`type` match {
-      case Some(k : IndividualOrBusiness) =>
-        val key = messages(s"entities.trustee.$k")
-
-        if(viewModel.isLead) renderForLead(key) else key
-      case None =>
-        s"${messages("entities.trustee")}"
+    val trusteeType = {
+      val key = viewModel.`type` match {
+        case Some(k : IndividualOrBusiness) =>
+          messages(s"entities.trustee.$k")
+        case None =>
+          s"${messages("entities.trustee")}"
+      }
+      if(viewModel.isLead) renderForLead(key) else key
     }
 
     case class ChangeLink(inProgressRoute: String, completedRoute: String)
@@ -68,22 +69,15 @@ class AddATrusteeViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
           ltoRts.UkRegisteredYesNoController.onPageLoad(index, draftId).url
         case TrusteeViewModel(true, _, Some(Business), Completed) =>
           ltoRts.CheckDetailsController.onPageLoad(index, draftId).url
-        case _ => controllers.routes.FeatureNotAvailableController.onPageLoad().url
+        case _ => controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId).url
       }
-    }
-
-    val removeLink = viewModel.`type` match {
-      case Some(Business) =>
-        controllers.register.trustees.organisation.routes.RemoveTrusteeOrgController.onPageLoad(index, draftId).url
-      case _ =>
-        controllers.register.trustees.individual.routes.RemoveTrusteeController.onPageLoad(index, draftId).url
     }
 
     AddRow(
       name = nameOfTrustee,
       typeLabel = trusteeType,
       changeUrl = changeLink,
-      removeUrl = removeLink
+      removeUrl = controllers.register.routes.RemoveIndexController.onPageLoad(index, draftId).url
     )
   }
 

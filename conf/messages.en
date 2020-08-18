@@ -190,15 +190,15 @@ addATrustee.business = Trustee Company
 addATrustee.error.required = Select yes if you want to add another trustee
 addATrustee.lead-trustee.required = You need to add or nominate a lead trustee.
 
-removeATrustee.title = Are you sure you want to remove the trustee?
-removeATrustee.heading = Are you sure you want to remove {0}?
-removeATrustee.default = the trustee
-removeATrustee.error.required = Select yes if you want to remove the trustee
+removeTrustee.title = Are you sure you want to remove the trustee?
+removeTrustee.heading = Are you sure you want to remove {0}?
+removeTrustee.error.required = Select yes if you want to remove the trustee
+removeTrustee.default = the trustee
 
-removeATrusteeOrg.title = Are you sure you want to remove the trustee?
-removeATrusteeOrg.heading = Are you sure you want to remove {0}?
-removeATrusteeOrg.default = the trustee
-removeATrusteeOrg.error.required = Select yes if you want to remove the trustee
+removeLeadTrustee.title = Are you sure you want to remove the lead trustee?
+removeLeadTrustee.heading = Are you sure you want to remove {0}?
+removeLeadTrustee.error.required = Select yes if you want to remove the lead trustee
+removeLeadTrustee.default = the lead trustee
 
 telephoneNumber.title = What is the trustee’s telephone number?
 telephoneNumber.heading = What is {0}’s telephone number?
@@ -273,6 +273,57 @@ trusteesUkAddress.heading = What is {0}’s address?
 trusteesUkAddress.checkYourAnswersLabel = What is {0}’s address?
 
 trusteesNonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
+
+trusteesPassportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
+trusteesPassportDetailsYesNo.title = Do you know the trustee’s passport details?
+trusteesPassportDetailsYesNo.heading = Do you know {0}’s passport details?
+trusteesPassportDetailsYesNo.error.required = Select yes if you know the trustee’s passport details
+
+trusteesPassportDetails.checkYourAnswersLabel = What are {0}’s passport details?
+trusteesPassportDetails.title = What are the trustee’s passport details?
+trusteesPassportDetails.heading = What are {0}’s passport details?
+trusteesPassportDetails.country = Passport country of issue
+trusteesPassportDetails.country.error.required = Enter the trustee’s passport country of issue
+trusteesPassportDetails.country.error.length = The trustee’s passport country must be 100 characters or less
+trusteesPassportDetails.number = Passport number
+trusteesPassportDetails.number.hint = For example, 502135326
+trusteesPassportDetails.number.error.required = Enter the trustee’s passport number
+trusteesPassportDetails.number.error.length = The trustee’s passport number must be 30 characters or less
+trusteesPassportDetails.number.error.invalid = Passport number can only include letters and numbers
+trusteesPassportDetails.expiryDate = Expiry date
+trusteesPassportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+trusteesPassportDetails.expiryDate.error.required.all = Enter the passport expiry date
+trusteesPassportDetails.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
+trusteesPassportDetails.expiryDate.error.required = Passport expiry date must include {0}
+trusteesPassportDetails.expiryDate.error.invalid = Enter a real date when the trustee’s passport expires
+trusteesPassportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+trusteesPassportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+
+trusteesIdCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s ID card details?
+trusteesIdCardDetailsYesNo.title = Do you know the trustee’s ID card details?
+trusteesIdCardDetailsYesNo.heading = Do you know {0}’s ID card details?
+trusteesIdCardDetailsYesNo.error.required = Select yes if you know the trustee’s ID card details
+
+trusteesIdCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
+
+trusteesIdCardDetails.title = What are the trustee’s ID card details?
+trusteesIdCardDetails.heading = What are {0}’s ID card details?
+trusteesIdCardDetails.country = ID card country of issue
+trusteesIdCardDetails.country.error.required = Enter the trustee’s ID card country of issue
+trusteesIdCardDetails.country.error.length = The trustee’s ID card country must be 100 characters or less
+trusteesIdCardDetails.number = ID card number
+trusteesIdCardDetails.number.error.required = Enter the trustee’s ID card number
+trusteesIdCardDetails.number.error.length = The trustee’s ID card number must be 30 characters or less
+trusteesIdCardDetails.number.error.invalid = ID card number can only include letters and numbers
+trusteesIdCardDetails.expiryDate = Expiry date
+trusteesIdCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+trusteesIdCardDetails.expiryDate.error.required.all = Enter the ID card expiry date
+trusteesIdCardDetails.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
+trusteesIdCardDetails.expiryDate.error.required = ID card expiry date must include a {0}
+trusteesIdCardDetails.expiryDate.error.invalid = Enter a real date when the trustee’s ID card expires
+trusteesIdCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+trusteesIdCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
 trusteesPassportOrIdCard.checkYourAnswersLabel = What are {0}’s Passport or ID card details
 
@@ -480,3 +531,60 @@ leadTrustee.organisation.telephoneNumber.error.invalid = Enter a telephone numbe
 
 leadTrustee.organisation.checkDetails.title = Check lead trustee details
 leadTrustee.organisation.checkDetails.heading = Check lead trustee details
+
+leadTrustee.individual.internationalAddress.line1.error.required = Enter address line 1
+leadTrustee.individual.internationalAddress.line2.error.required = Enter address line 2
+leadTrustee.individual.internationalAddress.country.error.required = Select a country
+leadTrustee.individual.internationalAddress.line1.error.length = Address line 1 must be 35 characters or less
+leadTrustee.individual.internationalAddress.line2.error.length = Address line 2 must be 35 characters or less
+leadTrustee.individual.internationalAddress.line3.error.length = Address line 3 must be 35 characters or less
+leadTrustee.individual.internationalAddress.internationalAddress.line1.error.invalid = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+leadTrustee.individual.line2.error.invalid = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+leadTrustee.individual.internationalAddress.line3.error.invalid = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
+leadTrustee.individual.trusteeDetailsChoice.title = Which of {0}'s details can you provide?
+leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}'s details can you provide?
+leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}'s details can you provide?
+leadTrustee.individual.trusteeDetailsChoice.idCard = IdCard
+leadTrustee.individual.trusteeDetailsChoice.passport = Passport
+leadTrustee.individual.trusteeDetailsChoice.error.required =
+
+leadTrustee.individual.iDCardDetails.title = What are the trustee’s ID card details?
+leadTrustee.individual.iDCardDetails.heading = What are {0}’s ID card details?
+leadTrustee.individual.iDCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
+leadTrustee.individual.iDCardDetails.country = ID card country of issue
+leadTrustee.individual.iDCardDetails.error.country.required = Enter the trustee’s ID card country of issue
+leadTrustee.individual.iDCardDetails.country.error.required = Enter the trustee’s ID card country of issue
+leadTrustee.individual.iDCardDetails.country.error.length = The trustee’s ID card country must be 100 characters or less
+leadTrustee.individual.iDCardDetails.number = ID card number
+leadTrustee.individual.iDCardDetails.number.error.required = Enter the trustee’s ID card number
+leadTrustee.individual.iDCardDetails.number.error.length = ID card number must be 30 characters or less
+leadTrustee.individual.iDCardDetails.number.error.invalid = ID card number can only include letters and numbers
+leadTrustee.individual.iDCardDetails.expiryDate.title = Expiry date
+leadTrustee.individual.iDCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+leadTrustee.individual.iDCardDetails.expiryDate.error.required.all = Enter the ID card expiry date
+leadTrustee.individual.iDCardDetails.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
+leadTrustee.individual.iDCardDetails.expiryDate.error.required = ID card expiry date must include a {0}
+leadTrustee.individual.iDCardDetails.expiryDate.error.invalid = Enter a real date when the trustee’s ID card expires
+leadTrustee.individual.iDCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+leadTrustee.individual.iDCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+
+leadTrustee.individual.PassportDetails.title = What are the individual beneficiary’s passport details?
+leadTrustee.individual.PassportDetails.heading = What are {0}’s passport details?
+leadTrustee.individual.PassportDetails.checkYourAnswersLabel = What are {0}’s passport details?
+leadTrustee.individual.PassportDetails.country = Passport country of issue
+leadTrustee.individual.PassportDetails.country.error.required = Enter the individual beneficiary’s passport country of issue
+leadTrustee.individual.PassportDetails.country.error.length = The individual beneficiary’s passport country must be 100 characters or less
+leadTrustee.individual.PassportDetails.number = Passport number
+leadTrustee.individual.PassportDetails.number.hint = For example, 502135326
+leadTrustee.individual.PassportDetails.number.error.required = Enter the individual beneficiary’s passport number
+leadTrustee.individual.PassportDetails.number.error.length = Passport number must be 30 characters or less
+leadTrustee.individual.PassportDetails.number.error.invalid = Passport number can only include letters and numbers
+leadTrustee.individual.PassportDetails.expiryDate.title = Expiry date
+leadTrustee.individual.PassportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+leadTrustee.individual.PassportDetails.expiryDate.error.required.all = Enter the passport expiry date
+leadTrustee.individual.PassportDetails.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
+leadTrustee.individual.PassportDetails.expiryDate.error.required = Passport expiry date must include {0}
+leadTrustee.individual.PassportDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s passport expires
+leadTrustee.individual.PassportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+leadTrustee.individual.PassportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100

@@ -21,6 +21,3 @@ POST       /:draftId/:index/international-address        controllers.register.tr
 
 GET        /:draftId/:index/check-details                controllers.register.trustees.organisation.CheckDetailsController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/check-details                controllers.register.trustees.organisation.CheckDetailsController.onSubmit(index: Int, draftId: String)
-
-GET        /:draftId/:index/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/remove                       controllers.register.trustees.organisation.RemoveTrusteeOrgController.onSubmit(index: Int, draftId: String)

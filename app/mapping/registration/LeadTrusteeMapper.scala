@@ -21,7 +21,6 @@ import mapping.Mapping
 import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustee, Trustees}
 import models.UserAnswers
 
-
 class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
                                   addressMapper: AddressMapper
                                  ) extends Mapping[LeadTrusteeType] {
@@ -33,7 +32,7 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
       case Nil => None
       case list =>
         list.find(_.isLead)
-            .map(buildLeadTrusteeType)
+          .map(buildLeadTrusteeType)
     }
   }
 

@@ -20,6 +20,7 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
+import models.registration.pages.PassportOrIdCardDetails
 import pages.register.trustees._
 import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesNamePage, TrusteesNinoPage, TrusteesUkAddressPage}
 import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage, UkAddressPage, UtrPage, UtrYesNoPage}
@@ -36,214 +37,230 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
 
   "TrusteesAnswerPage Controller" must {
 
-    "return OK and the correct view (for a lead trustee) for a GET" in {
+    "return OK and the correct view" when {
 
-      val answers =
-        emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-          .set(TrusteesNamePage(index), FullName("First", None, "Trustee")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-          .set(TrusteeAUKCitizenPage(index), true).success.value
-          .set(TrusteesNinoPage(index), "AB123456C").success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
-          .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
-          .set(TelephoneNumberPage(index), "0191 1111111").success.value
+      "lead trustee for a GET" in {
 
-      val countryOptions = injector.instanceOf[CountryOptions]
+        val answers =
+          emptyUserAnswers
+            .set(IsThisLeadTrusteePage(index), true).success.value
+            .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
+            .set(TrusteesNamePage(index), FullName("First", None, "Trustee")).success.value
+            .set(TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
+            .set(TrusteeAUKCitizenPage(index), true).success.value
+            .set(TrusteesNinoPage(index), "AB123456C").success.value
+            .set(TrusteeAddressInTheUKPage(index), true).success.value
+            .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
+            .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
+        val countryOptions = injector.instanceOf[CountryOptions]
 
-      val leadTrusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
-      val leadTrusteeFullNameMessagePrefix = "leadTrusteesName"
-      val titlePrefix = "leadTrusteesAnswerPage"
+        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
 
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          Seq(
-            checkYourAnswersHelper.trusteeIndividualOrBusiness(index, leadTrusteeIndividualOrBusinessMessagePrefix).value,
-            checkYourAnswersHelper.trusteeFullName(index, leadTrusteeFullNameMessagePrefix).value,
-            checkYourAnswersHelper.trusteesDateOfBirth(index).value,
-            checkYourAnswersHelper.trusteeNinoYesNo(index).value,
-            checkYourAnswersHelper.trusteesNino(index).value,
-            checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
-            checkYourAnswersHelper.trusteesUkAddress(index).value,
-            checkYourAnswersHelper.telephoneNumber(index).value
+        val leadTrusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
+        val leadTrusteeFullNameMessagePrefix = "leadTrusteesName"
+        val titlePrefix = "leadTrusteesAnswerPage"
+
+        val expectedSections = Seq(
+          AnswerSection(
+            None,
+            Seq(
+              checkYourAnswersHelper.trusteeIndividualOrBusiness(index, leadTrusteeIndividualOrBusinessMessagePrefix).value,
+              checkYourAnswersHelper.trusteeFullName(index, leadTrusteeFullNameMessagePrefix).value,
+              checkYourAnswersHelper.trusteesDateOfBirth(index).value,
+              checkYourAnswersHelper.trusteeNinoYesNo(index).value,
+              checkYourAnswersHelper.trusteesNino(index).value,
+              checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
+              checkYourAnswersHelper.trusteesUkAddress(index).value,
+              checkYourAnswersHelper.telephoneNumber(index).value
+            )
           )
         )
-      )
 
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
+        val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
+        val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteesAnswerPageView]
+        val view = application.injector.instanceOf[TrusteesAnswerPageView]
 
-      status(result) mustEqual OK
+        status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual
+          view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
 
-      application.stop()
-    }
-
-    "return OK and the correct view (for a trustee) for a GET" in {
-
-      val answers =
-        emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-          .set(TrusteesNamePage(index), FullName("First", None, "Trustee")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-          .set(TrusteeAUKCitizenPage(index), true).success.value
-          .set(TrusteesNinoPage(index), "AB123456C").success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
-          .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
-          .set(TelephoneNumberPage(index), "0191 1111111").success.value
-
-      val countryOptions = injector.instanceOf[CountryOptions]
-
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
-
-      val trusteeIndividualOrBusinessMessagePrefix = "trusteeIndividualOrBusiness"
-      val trusteeFullNameMessagePrefix = "trusteesName"
-      val titlePrefix = "trusteesAnswerPage"
-
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          Seq(
-            checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
-            checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix).value,
-            checkYourAnswersHelper.trusteesDateOfBirth(index).value,
-            checkYourAnswersHelper.trusteeNinoYesNo(index).value,
-            checkYourAnswersHelper.trusteesNino(index).value,
-            checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
-            checkYourAnswersHelper.trusteesUkAddress(index).value,
-            checkYourAnswersHelper.telephoneNumber(index).value
-          )
-        )
-      )
-
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
-
-      val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[TrusteesAnswerPageView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
-
-      application.stop()
-    }
+        application.stop()
+      }
 
 
+      "lead trustee" when {
+        "uk org with utr for a GET" in {
 
-    "return OK and the correct view (for a lead trustee uk org with utr) for a GET" in {
+          val answers =
+            emptyUserAnswers
+              .set(IsThisLeadTrusteePage(index), true).success.value
+              .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
+              .set(UtrYesNoPage(index), true).success.value
+              .set(NamePage(index), "Amazon").success.value
+              .set(UtrPage(index), "1234567890").success.value
+              .set(AddressUkYesNoPage(index), true).success.value
+              .set(UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
+              .set(TelephoneNumberPage(index), "1256723389").success.value
 
-      val answers =
-        emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(UtrYesNoPage(index), true).success.value
-          .set(NamePage(index), "Amazon").success.value
-          .set(UtrPage(index), "1234567890").success.value
-          .set(AddressUkYesNoPage(index), true).success.value
-          .set(UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
-          .set(TelephoneNumberPage(index), "1256723389").success.value
+          val countryOptions = injector.instanceOf[CountryOptions]
 
-      val countryOptions = injector.instanceOf[CountryOptions]
+          val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
 
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
+          val trusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
+          val titlePrefix = "leadTrusteesAnswerPage"
 
-      val trusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
-      val titlePrefix = "leadTrusteesAnswerPage"
-
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          Seq(
-            checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
-            checkYourAnswersHelper.trusteeUtrYesNo(index).value,
-            checkYourAnswersHelper.trusteeOrgName(index).value,
-            checkYourAnswersHelper.trusteeUtr(index).value,
-            checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-            checkYourAnswersHelper.trusteesOrgUkAddress(index).value/*,
+          val expectedSections = Seq(
+            AnswerSection(
+              None,
+              Seq(
+                checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
+                checkYourAnswersHelper.trusteeUtrYesNo(index).value,
+                checkYourAnswersHelper.trusteeOrgName(index).value,
+                checkYourAnswersHelper.trusteeUtr(index).value,
+                checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
+                checkYourAnswersHelper.trusteesOrgUkAddress(index).value/*,
             checkYourAnswersHelper.orgTelephoneNumber(index).value*/
+              )
+            )
           )
-        )
-      )
 
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
+          val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
+          val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
 
-      val result = route(application, request).value
+          val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteesAnswerPageView]
+          val view = application.injector.instanceOf[TrusteesAnswerPageView]
 
-      status(result) mustEqual OK
+          status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+          contentAsString(result) mustEqual
+            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
 
-      application.stop()
-    }
+          application.stop()
+        }
 
-    "return OK and the correct view (for a lead trustee international org with no utr) for a GET" in {
+        "international org with no utr for a GET" in {
 
-      val answers =
-        emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(UtrYesNoPage(index), false).success.value
-          .set(NamePage(index), "Amazon").success.value
-          .set(AddressUkYesNoPage(index), false).success.value
-          .set(InternationalAddressPage(index), InternationalAddress("line1", "line2", Some("line3"), "Ukraine")).success.value
-          .set(TelephoneNumberPage(index), "1256723389").success.value
+          val answers =
+            emptyUserAnswers
+              .set(IsThisLeadTrusteePage(index), true).success.value
+              .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
+              .set(UtrYesNoPage(index), false).success.value
+              .set(NamePage(index), "Amazon").success.value
+              .set(AddressUkYesNoPage(index), false).success.value
+              .set(InternationalAddressPage(index), InternationalAddress("line1", "line2", Some("line3"), "Ukraine")).success.value
+              .set(TelephoneNumberPage(index), "1256723389").success.value
 
-      val countryOptions = injector.instanceOf[CountryOptions]
+          val countryOptions = injector.instanceOf[CountryOptions]
 
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
+          val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
 
-      val trusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
-      val titlePrefix = "leadTrusteesAnswerPage"
+          val trusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
+          val titlePrefix = "leadTrusteesAnswerPage"
 
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          Seq(
-            checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
-            checkYourAnswersHelper.trusteeUtrYesNo(index).value,
-            checkYourAnswersHelper.trusteeOrgName(index).value,
-            checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-            checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value/*,
+          val expectedSections = Seq(
+            AnswerSection(
+              None,
+              Seq(
+                checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
+                checkYourAnswersHelper.trusteeUtrYesNo(index).value,
+                checkYourAnswersHelper.trusteeOrgName(index).value,
+                checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
+                checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value/*,
             checkYourAnswersHelper.orgTelephoneNumber(index).value*/
+              )
+            )
           )
-        )
-      )
 
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
+          val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
+          val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
 
-      val result = route(application, request).value
+          val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TrusteesAnswerPageView]
+          val view = application.injector.instanceOf[TrusteesAnswerPageView]
 
-      status(result) mustEqual OK
+          status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+          contentAsString(result) mustEqual
+            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
 
-      application.stop()
+          application.stop()
+        }
+
+      }
+
+      "trustee" when {
+        "individual" in {
+
+          val answers =
+            emptyUserAnswers
+              .set(IsThisLeadTrusteePage(index), false).success.value
+              .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
+              .set(TrusteesNamePage(index), FullName("First", None, "Trustee")).success.value
+              .set(TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
+              .set(TrusteeAUKCitizenPage(index), true).success.value
+              .set(TrusteesNinoPage(index), "AB123456C").success.value
+              .set(TrusteeAddressInTheUKPage(index), true).success.value
+              .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
+              .set(PassportDetailsYesNoPage(index), true).success.value
+              .set(PassportDetailsPage(index), PassportOrIdCardDetails("UK", "987654345678", LocalDate.now())).success.value
+              .set(IDCardDetailsYesNoPage(index), true).success.value
+              .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "345678238", LocalDate.now())).success.value
+              .set(TelephoneNumberPage(index), "0191 1111111").success.value
+
+          val countryOptions = injector.instanceOf[CountryOptions]
+
+          val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
+
+          val trusteeIndividualOrBusinessMessagePrefix = "trusteeIndividualOrBusiness"
+          val trusteeFullNameMessagePrefix = "trusteesName"
+          val titlePrefix = "trusteesAnswerPage"
+
+          val expectedSections = Seq(
+            AnswerSection(
+              None,
+              Seq(
+                checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
+                checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix).value,
+                checkYourAnswersHelper.trusteesDateOfBirth(index).value,
+                checkYourAnswersHelper.trusteeNinoYesNo(index).value,
+                checkYourAnswersHelper.trusteesNino(index).value,
+                checkYourAnswersHelper.trusteeLiveInTheUK(index).value,
+                checkYourAnswersHelper.trusteesUkAddress(index).value,
+                checkYourAnswersHelper.trusteePassportDetailsYesNo(index).value,
+                checkYourAnswersHelper.trusteesPassportDetails(index).value,
+                checkYourAnswersHelper.trusteeIDCardDetailsYesNo(index).value,
+                checkYourAnswersHelper.trusteesIDCardDetails(index).value,
+                checkYourAnswersHelper.telephoneNumber(index).value
+              )
+            )
+          )
+
+          val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+          val request = FakeRequest(GET, routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId).url)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[TrusteesAnswerPageView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+
+          application.stop()
+        }
+      }
+
     }
 
     "redirect to the next page when valid data is submitted" in {
@@ -266,7 +283,6 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
 
       application.stop()
     }
-
 
     "redirect to TrusteeIndividualOrBuisnessPage when valid data is submitted with no business or individual answer" in {
 

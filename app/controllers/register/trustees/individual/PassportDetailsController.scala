@@ -50,7 +50,7 @@ class PassportDetailsController @Inject()(
                                            val countryOptions: CountryOptions
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("passportDetails")
+  private val form = formProvider("trusteesPassportDetails")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

@@ -19,6 +19,7 @@ GET        /feature-not-available                                 controllers.Fe
 
 ->         /trustee/business                                      trusteeOrganisation.Routes
 ->         /lead-trustee/business                                 leadTrusteeOrganisation.Routes
+->         /lead-trustee/Individual                               leadTrusteeIndividual.Routes
 
 ## Trustees
 
@@ -38,9 +39,6 @@ POST       /:draftId/add                                          controllers.re
 POST       /:draftId/add-another                                  controllers.register.trustees.AddATrusteeController.submitAnother(draftId: String)
 
 ### Trustee Individual
-
-GET        /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onSubmit(index : Int, draftId: String)
 
 GET        /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onSubmit(index : Int, draftId: String)
@@ -74,6 +72,9 @@ POST       /:draftId/:index/individual/passport                   controllers.re
 
 GET        /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onPageLoad( index: Int, draftId: String)
 POST       /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onSubmit( index: Int, draftId: String)
+
+GET        /:draftId/:index/remove                                controllers.register.RemoveIndexController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/remove                                controllers.register.RemoveIndexController.onSubmit(index: Int, draftId: String)
 
 GET        /:draftId/:index/individual/details-choice             controllers.register.trustees.individual.TrusteeDetailsChoiceController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual/details-choice             controllers.register.trustees.individual.TrusteeDetailsChoiceController.onSubmit(index : Int, draftId: String)
