@@ -68,10 +68,7 @@ class RemoveIndexController @Inject()(
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(Trustee(index).path))
               _ <- registrationsRepository.set(updatedAnswers)
-            } yield {
-              println(remove)
-              redirect(draftId)
-            }
+            } yield redirect(draftId)
           } else {
             Future.successful(redirect(draftId))
           }
