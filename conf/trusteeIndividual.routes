@@ -1,9 +1,6 @@
 
 ### Trustee Individual
 
-GET        /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/remove                     controllers.register.trustees.individual.RemoveTrusteeController.onSubmit(index : Int, draftId: String)
-
 GET        /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onSubmit(index : Int, draftId: String)
 

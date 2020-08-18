@@ -38,3 +38,8 @@ POST       /:draftId/:index/check-answers                         controllers.re
 GET        /:draftId/add                                          controllers.register.trustees.AddATrusteeController.onPageLoad(draftId: String)
 POST       /:draftId/add                                          controllers.register.trustees.AddATrusteeController.submitOne(draftId: String)
 POST       /:draftId/add-another                                  controllers.register.trustees.AddATrusteeController.submitAnother(draftId: String)
+
+### Trustee Individual
+
+GET        /:draftId/:index/remove                                controllers.register.RemoveIndexController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/remove                                controllers.register.RemoveIndexController.onSubmit(index: Int, draftId: String)
