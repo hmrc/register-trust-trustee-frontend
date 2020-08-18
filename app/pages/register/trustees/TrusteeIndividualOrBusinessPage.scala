@@ -21,7 +21,8 @@ import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
 import pages.QuestionPage
 import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
+import pages.register.trustees.{organisation => torg}
+import pages.register.leadtrustee.{organisation => ltorg}
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -43,15 +44,27 @@ final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPa
           .flatMap(_.remove(TrusteesUkAddressPage(index)))
           .flatMap(_.remove(TrusteesInternationalAddressPage(index)))
           .flatMap(_.remove(TelephoneNumberPage(index)))
+        // TODO - remaining individual pages
 
       case Some(Individual) =>
-        userAnswers.remove(UtrYesNoPage(index))
-          .flatMap(_.remove(NamePage(index)))
-          .flatMap(_.remove(UtrPage(index)))
-          .flatMap(_.remove(AddressUkYesNoPage(index)))
-          .flatMap(_.remove(UkAddressPage(index)))
-          .flatMap(_.remove(InternationalAddressPage(index)))
-          .flatMap(_.remove(TelephoneNumberPage(index)))
+        userAnswers
+          .remove(ltorg.UkRegisteredYesNoPage(index))
+          .flatMap(_.remove(ltorg.NamePage(index)))
+          .flatMap(_.remove(ltorg.UtrPage(index)))
+          .flatMap(_.remove(ltorg.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(ltorg.UkAddressPage(index)))
+          .flatMap(_.remove(ltorg.InternationalAddressPage(index)))
+          .flatMap(_.remove(ltorg.EmailAddressYesNoPage(index)))
+          .flatMap(_.remove(ltorg.EmailAddressPage(index)))
+          .flatMap(_.remove(ltorg.TelephoneNumberPage(index)))
+
+          .flatMap(_.remove(torg.NamePage(index)))
+          .flatMap(_.remove(torg.UtrYesNoPage(index)))
+          .flatMap(_.remove(torg.UtrPage(index)))
+          .flatMap(_.remove(torg.AddressYesNoPage(index)))
+          .flatMap(_.remove(torg.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(torg.UkAddressPage(index)))
+          .flatMap(_.remove(torg.InternationalAddressPage(index)))
 
       case _ => super.cleanup(value, userAnswers)
     }
