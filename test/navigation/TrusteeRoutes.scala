@@ -244,7 +244,7 @@ trait TestTrusteeRoutes {
           userAnswers =>
 
             navigator.nextPage(TrusteesNinoPage(index), fakeDraftId, userAnswers)
-              .mustBe(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -266,7 +266,7 @@ trait TestTrusteeRoutes {
             val answers = userAnswers.set(AddressUkYesNoPage(index), value = false).success.value
 
             navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
+              .mustBe(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 

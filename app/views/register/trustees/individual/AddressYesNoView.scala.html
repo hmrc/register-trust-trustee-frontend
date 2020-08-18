@@ -21,27 +21,23 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustee.individual.ukAddress.title")}"
-    ) {
+    title = s"${errorPrefix(form)} ${messages("trustee.individual.addressYesNo.title")}"
+) {
 
-    @formHelper(action = UkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        <fieldset>
-
-            <legend>
-                @components.heading("trustee.individual.ukAddress.heading", optionalParam = Some(trusteeName))
-            </legend>
-
-            @components.uk_address(form)
-
-        </fieldset>
+        @components.input_yes_no(
+            field = form("value"),
+            label = messages("trustee.individual.addressYesNo.heading", name),
+            legendAsHeading = true
+        )
 
         @components.submit_button()
     }

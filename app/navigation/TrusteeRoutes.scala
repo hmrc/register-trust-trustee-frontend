@@ -36,7 +36,7 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
     case NamePage(index) => _ => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
     case TrusteesDateOfBirthPage(index)  => ua => trusteeDateOfBirthRoute(ua, index, draftId)
     case TrusteeAUKCitizenPage(index)  => ua => trusteeAUKCitizenRoute(ua, index, draftId)
-    case TrusteesNinoPage(index)  => _ => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
+    case TrusteesNinoPage(index)  => _ => controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId)
     case AddressUkYesNoPage(index)   => ua => trusteeLiveInTheUKRoute(ua, index, draftId)
     case UkAddressPage(index) => _ => controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
     case TelephoneNumberPage(index)  => _ => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
@@ -88,7 +88,7 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
 
   private def trusteeLiveInTheUKRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(AddressUkYesNoPage(index)) match {
     case Some(true)   => controllers.register.trustees.individual.routes.UkAddressController.onPageLoad(index, draftId)
-    case Some(false)  => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
+    case Some(false)  => controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId)
     case None         => sessionExpired
   }
 

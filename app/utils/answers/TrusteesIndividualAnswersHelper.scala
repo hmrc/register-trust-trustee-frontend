@@ -49,7 +49,7 @@ trait TrusteesIndividualAnswersHelper {
       AnswerRow(
         "trusteeLiveInTheUK.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
         canEdit = canEdit
       )

@@ -70,7 +70,7 @@ class NameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, heading))
+      Ok(view(preparedForm, draftId, index))
 
   }
 
@@ -79,15 +79,11 @@ class NameController @Inject()(
 
       val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
 
-      val messagePrefix = if (isLead) "leadTrusteesName" else "trusteesName"
-
-      val heading = Messages(s"$messagePrefix.heading")
-
-      val form = formProvider(messagePrefix)
+      val form = formProvider("trustee.individual.name")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, heading))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
           for {

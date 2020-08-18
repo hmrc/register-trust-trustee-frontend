@@ -41,38 +41,9 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
     "return Ok and the correct view for a GET" when {
 
-      "is lead trustee" in {
-
-        val messageKeyPrefix = "leadTrusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
-
-        val application = applicationBuilder(Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, trusteesNameRoute)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[NameView]
-
-        val form = formProvider(messageKeyPrefix)
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, heading)(fakeRequest, messages).toString
-
-        application.stop()
-      }
-
       "is trustee" in {
 
-        val messageKeyPrefix = "trusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
+        val messageKeyPrefix = "trustee.individual.name"
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
@@ -90,7 +61,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(form, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -101,9 +72,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
       "is lead trustee" in {
 
-        val messageKeyPrefix = "leadTrusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
+        val messageKeyPrefix = "trustee.individual.name"
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), true).success.value
@@ -126,16 +95,14 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
       }
 
       "is trustee" in {
 
-        val messageKeyPrefix = "trusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
+        val messageKeyPrefix = "trustee.individual.name"
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
@@ -158,7 +125,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
 
@@ -184,8 +151,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
       "populate the view correctly on a GET when the question has previously been answered" in {
 
-        val messageKeyPrefix = "trusteesName"
-
         val name = FullName("first name", Some("middle name"), "last name")
 
         val userAnswers = emptyUserAnswers
@@ -200,14 +165,12 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         val result = route(application, request).value
 
-        val heading = Messages(s"$messageKeyPrefix.heading")
-
-        val form = formProvider(messageKeyPrefix)
+        val form = formProvider("trustee.individual.name")
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(name), fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(form.fill(name), fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
       }

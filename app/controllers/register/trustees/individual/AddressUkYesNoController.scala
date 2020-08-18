@@ -31,11 +31,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.LiveInTheUKYesNoView
+import views.html.register.trustees.individual.AddressUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LiveInTheUKYesNoController @Inject()(
+class AddressUkYesNoController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               registrationsRepository: RegistrationsRepository,
                                               navigator: Navigator,
@@ -46,7 +46,7 @@ class LiveInTheUKYesNoController @Inject()(
                                               requiredAnswer: RequiredAnswerActionProvider,
                                               formProvider: YesNoFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: LiveInTheUKYesNoView
+                                              view: AddressUkYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
@@ -71,7 +71,7 @@ class LiveInTheUKYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
+      Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
   private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
@@ -96,7 +96,7 @@ class LiveInTheUKYesNoController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeName))),
 
         value => {
           for {

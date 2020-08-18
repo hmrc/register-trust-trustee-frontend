@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import viewmodels.AnswerSection
 @import controllers.register.trustees.individual.routes._
 
 @this(
@@ -21,27 +22,19 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustee.individual.ukAddress.title")}"
-    ) {
+    title = messages("trustee.individual.checkDetails.title")
+) {
 
-    @formHelper(action = UkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.heading("trustee.individual.checkDetails.heading")
 
-        <fieldset>
-
-            <legend>
-                @components.heading("trustee.individual.ukAddress.heading", optionalParam = Some(trusteeName))
-            </legend>
-
-            @components.uk_address(form)
-
-        </fieldset>
+        @components.answer_section(answerSection)
 
         @components.submit_button()
     }
