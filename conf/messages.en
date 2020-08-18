@@ -306,12 +306,12 @@ addATrusteeYesNo.title = Do you want to add a trustee?
 addATrusteeYesNo.heading = Do you want to add a trustee?
 addATrusteeYesNo.error.required = Select yes if you want to add a trustee
 
-trustee.organisation.name.title = What is the business name?
-trustee.organisation.name.heading = What is the business name?
-trustee.organisation.name.error.required = Enter the business name
+trustee.organisation.name.title = What is the business’s name?
+trustee.organisation.name.heading = What is the business’s name?
+trustee.organisation.name.error.required = Enter the business’s name
 trustee.organisation.name.error.length = Business name must be 56 characters or less
 trustee.organisation.name.error.invalid = Business name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-trustee.organisation.name.checkYourAnswersLabel = What is the business name?
+trustee.organisation.name.checkYourAnswersLabel = What is the business’s name?
 
 trustee.organisation.utrYesNo.title = Do you know the trustee’s Unique Taxpayer Reference (UTR)?
 trustee.organisation.utrYesNo.heading = Do you know {0}’s Unique Taxpayer Reference (UTR)?
@@ -363,11 +363,11 @@ leadTrustee.organisation.ukRegisteredYesNo.heading = Is this trustee a UK regist
 leadTrustee.organisation.ukRegisteredYesNo.checkYourAnswersLabel = Is this trustee a UK registered company?
 leadTrustee.organisation.ukRegisteredYesNo.error.required = Select yes if the trustee is a UK registered company
 
-leadTrustee.organisation.name.title = What is the business name?
-leadTrustee.organisation.name.heading = What is the business name?
-leadTrustee.organisation.name.checkYourAnswersLabel = What is the business name?
+leadTrustee.organisation.name.title = What is the business’s name?
+leadTrustee.organisation.name.heading = What is the business’s name?
+leadTrustee.organisation.name.checkYourAnswersLabel = What is the business’s name?
 leadTrustee.organisation.name.hint = Enter the name as it appears on tax returns and other letters about Corporation Tax.
-leadTrustee.organisation.name.error.required = Enter the business name
+leadTrustee.organisation.name.error.required = Enter the business’s name
 leadTrustee.organisation.name.error.length = Business name must be 56 characters or less
 leadTrustee.organisation.name.error.invalid = Business name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
