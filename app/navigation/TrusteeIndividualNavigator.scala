@@ -19,6 +19,7 @@ package navigation
 import controllers.register.trustees.individual.routes._
 import models.ReadableUserAnswers
 import pages.Page
+import pages.register.trustees.{IsThisLeadTrusteePage, TelephoneNumberPage, TrusteesAnswerPage}
 import pages.register.trustees.individual._
 import play.api.mvc.Call
 
@@ -27,13 +28,23 @@ class TrusteeIndividualNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case NamePage(index) => NinoYesNoController.onPageLoad(index, draftId)
-    case NinoPage(index) => CheckDetailsController.onPageLoad(index, draftId)
-    case UkAddressPage(index) => CheckDetailsController.onPageLoad(index, draftId)
-    case InternationalAddressPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+    case IsThisLeadTrusteePage(index) => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
+    case NamePage(index) => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
+    case NinoPage(index) => controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId)
+    case UkAddressPage(index) =>  controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
+    case TelephoneNumberPage(index) => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
+    case TrusteesAnswerPage  => controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)
+
   }
 
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case TrusteesDateOfBirthPage(index) => ua =>
+      yesNoNav(
+        ua,
+        IsThisLeadTrusteePage(index),
+        controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, draftId),
+        controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
+      )
     case NinoYesNoPage(index) => ua =>
       yesNoNav(
         ua,
