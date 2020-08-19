@@ -21,7 +21,6 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{AddressUkYesNoPage, NamePage}
@@ -62,9 +61,7 @@ class AddressUkYesNoController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
+      val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
 
       val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
         case None => form
@@ -74,25 +71,12 @@ class AddressUkYesNoController @Inject()(
       Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteeLiveInTheUK"
-    } else {
-      "trusteeLiveInTheUK"
-    }
-    messagePrefix
-  }
-
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
+      val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

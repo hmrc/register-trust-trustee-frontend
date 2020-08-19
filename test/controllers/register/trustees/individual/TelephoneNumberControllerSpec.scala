@@ -30,8 +30,7 @@ import views.html.register.trustees.individual.TelephoneNumberView
 
 class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesTelephoneNumber"
-  val trusteeMessagePrefix = "telephoneNumber"
+  val trusteeMessagePrefix = "trustee.individual.telephoneNumber"
   val formProvider = new TelephoneNumberFormProvider()
   val form = formProvider(trusteeMessagePrefix)
 
@@ -43,29 +42,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
   "TelephoneNumber Controller" must {
 
-    "return OK and the correct view (lead trustee) for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, telephoneNumberRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[TelephoneNumberView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view (trustee) for a GET" in {
+    "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
@@ -82,7 +59,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -105,7 +82,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("0191 1111111"), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill("0191 1111111"), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -191,7 +168,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

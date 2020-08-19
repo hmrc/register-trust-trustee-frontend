@@ -32,7 +32,7 @@ import views.html.register.trustees.individual.IDCardDetailsView
 
 class IDCardDetailsControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trusteesIdCardDetails"
+  val trusteeMessagePrefix = "trustee.individual.idCardDetails"
   val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
   val form = formProvider(trusteeMessagePrefix)
   val cardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())

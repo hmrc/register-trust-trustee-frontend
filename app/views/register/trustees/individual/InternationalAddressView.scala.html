@@ -25,7 +25,7 @@
 @(form: Form[_], countryOptions: Seq[InputOption], index: Int, draftId: String, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustee.organisation.internationalAddress.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustee.individual.internationalAddress.title")}"
 ) {
 
     @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -37,7 +37,7 @@
         <fieldset>
 
             <legend>
-                @components.heading("trustee.organisation.internationalAddress.heading", Some(name))
+                @components.heading("trustee.individual.internationalAddress.heading", Some(name))
             </legend>
 
             @components.international_address(form, countryOptions)

@@ -21,10 +21,10 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, messagePrefix: String, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index : Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
+    title = s"${errorPrefix(form)} ${messages("trustee.individual.telephoneNumber.title")}"
     ) {
 
     @formHelper(action = TelephoneNumberController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,10 +35,10 @@
 
         @components.input_tele(
             field = form("value"),
-            label = messages("telephoneNumber.heading", trusteeName),
+            label = messages("trustee.individual.telephoneNumber.heading", trusteeName),
             labelClass = Some("heading-large"),
             labelAsHeading = true,
-            hint = Some(messages(s"telephoneNumber.hint"))
+            hint = Some(messages("trustee.individual.telephoneNumber.hint"))
         )
 
         @components.submit_button()

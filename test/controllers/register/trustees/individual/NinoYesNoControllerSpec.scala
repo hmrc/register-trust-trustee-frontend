@@ -33,8 +33,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val leadTrusteeMessagePrefix = "leadTrusteeAUKCitizen"
-  val trusteeMessagePrefix = "trusteeAUKCitizen"
+  val trusteeMessagePrefix = "trustee.individual.ninoYesNo"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(trusteeMessagePrefix)
 
@@ -46,29 +45,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
   "trusteeAUKCitizen Controller" must {
 
-    "return OK and the correct view (lead trustee) for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeAUKCitizenRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[NinoYesNoView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view (trustee) for a GET" in {
+    "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
@@ -85,7 +62,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -108,7 +85,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -193,7 +170,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

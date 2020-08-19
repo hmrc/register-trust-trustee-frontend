@@ -61,8 +61,6 @@ class UkAddressController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
       val preparedForm = request.userAnswers.get(UkAddressPage(index)) match {
@@ -73,21 +71,8 @@ class UkAddressController @Inject()(
       Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteeUkAddress"
-    } else {
-      "trusteesUkAddress"
-    }
-    messagePrefix
-  }
-
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      val messagePrefix: String = getMessagePrefix(index, request)
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 

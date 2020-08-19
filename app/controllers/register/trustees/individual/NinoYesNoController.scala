@@ -36,18 +36,18 @@ import views.html.register.trustees.individual.NinoYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class NinoYesNoController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             registrationsRepository: RegistrationsRepository,
-                                             navigator: Navigator,
-                                             validateIndex: IndexActionFilterProvider,
-                                             identify: RegistrationIdentifierAction,
-                                             getData: DraftIdRetrievalActionProvider,
-                                             requireData: RegistrationDataRequiredAction,
-                                             requiredAnswer: RequiredAnswerActionProvider,
-                                             formProvider: YesNoFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: NinoYesNoView
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     override val messagesApi: MessagesApi,
+                                     registrationsRepository: RegistrationsRepository,
+                                     navigator: Navigator,
+                                     validateIndex: IndexActionFilterProvider,
+                                     identify: RegistrationIdentifierAction,
+                                     getData: DraftIdRetrievalActionProvider,
+                                     requireData: RegistrationDataRequiredAction,
+                                     requiredAnswer: RequiredAnswerActionProvider,
+                                     formProvider: YesNoFormProvider,
+                                     val controllerComponents: MessagesControllerComponents,
+                                     view: NinoYesNoView
+                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -62,16 +62,14 @@ class NinoYesNoController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form = formProvider.withPrefix(messagePrefix)
+      val form = formProvider.withPrefix("trustee.individual.ninoYesNo")
 
       val preparedForm = request.userAnswers.get(TrusteeAUKCitizenPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
+      Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -79,13 +77,11 @@ class NinoYesNoController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form = formProvider.withPrefix(messagePrefix)
+      val form = formProvider.withPrefix("trustee.individual.ninoYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeName))),
 
         value => {
           for {
@@ -94,17 +90,6 @@ class NinoYesNoController @Inject()(
           } yield Redirect(navigator.nextPage(TrusteeAUKCitizenPage(index), draftId, updatedAnswers))
         }
       )
-  }
-
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteeAUKCitizen"
-    } else {
-      "trusteeAUKCitizen"
-    }
-    messagePrefix
   }
 
 }
