@@ -57,7 +57,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua,
         AddressYesNoPage(index),
         AddressUkYesNoController.onPageLoad(index, draftId),
-        CheckDetailsController.onPageLoad(index, draftId)
+        controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
       )
     case AddressUkYesNoPage(index) => ua =>
       yesNoNav(

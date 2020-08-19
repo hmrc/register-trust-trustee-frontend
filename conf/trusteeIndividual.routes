@@ -39,6 +39,3 @@ POST       /:draftId/:index/individual/passport                   controllers.re
 
 GET        /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onPageLoad( index: Int, draftId: String)
 POST       /:draftId/:index/individual/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onSubmit( index: Int, draftId: String)
-
-GET        /:draftId/:index/check-details                         controllers.register.trustees.individual.CheckDetailsController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/check-details                         controllers.register.trustees.individual.CheckDetailsController.onSubmit(index: Int, draftId: String)
