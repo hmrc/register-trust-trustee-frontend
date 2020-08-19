@@ -28,13 +28,13 @@ class TrusteesDateOfBirthFormProvider @Inject()(appConfig: FrontendAppConfig) ex
   def apply(): Form[LocalDate] =
     Form(
       "value" -> localDate(
-        invalidKey     = "trusteesDateOfBirth.error.invalid",
-        allRequiredKey = "trusteesDateOfBirth.error.required.all",
-        twoRequiredKey = "trusteesDateOfBirth.error.required.two",
-        requiredKey    = "trusteesDateOfBirth.error.required"
+        invalidKey     = "trustee.individual.dateOfBirth.error.invalid",
+        allRequiredKey = "trustee.individual.dateOfBirth.error.required.all",
+        twoRequiredKey = "trustee.individual.dateOfBirth.error.required.two",
+        requiredKey    = "trustee.individual.dateOfBirth.error.required"
       ).verifying(firstError(
-        maxDate(LocalDate.now, s"trusteesDateOfBirth.error.future", "day", "month", "year"),
-        minDate(appConfig.minDate, s"trusteesDateOfBirth.error.past", "day", "month", "year")
+        maxDate(LocalDate.now, "trustee.individual.dateOfBirth.error.future", "day", "month", "year"),
+        minDate(appConfig.minDate, "trustee.individual.dateOfBirth.error.past", "day", "month", "year")
       ))
     )
 }

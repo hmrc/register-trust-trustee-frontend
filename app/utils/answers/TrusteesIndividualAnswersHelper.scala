@@ -34,10 +34,10 @@ trait TrusteesIndividualAnswersHelper {
 
   implicit val  messages: Messages
 
-  def trusteeFullName(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(NamePage(index)) map {
+  def trusteeFullName(index: Int): Option[AnswerRow] = userAnswers.get(NamePage(index)) map {
     x =>
       AnswerRow(
-        s"$messagePrefix.checkYourAnswersLabel",
+        "trustee.individual.name.checkYourAnswersLabel",
         HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
         Some(controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId).url),
         canEdit = canEdit
@@ -47,7 +47,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteeLiveInTheUK(index: Int): Option[AnswerRow] = userAnswers.get(AddressUkYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "trusteeLiveInTheUK.checkYourAnswersLabel",
+        "trustee.individual.addressUkYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -58,7 +58,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteesUkAddress(index: Int): Option[AnswerRow] = userAnswers.get(UkAddressPage(index)) map {
     x =>
       AnswerRow(
-        "trusteesUkAddress.checkYourAnswersLabel",
+        "trustee.individual.ukAddress.checkYourAnswersLabel",
         ukAddress(x),
         Some(controllers.register.trustees.individual.routes.UkAddressController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -69,7 +69,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteesDateOfBirth(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesDateOfBirthPage(index)) map {
     x =>
       AnswerRow(
-        "trusteesDateOfBirth.checkYourAnswersLabel",
+        "trustee.individual.dateOfBirth.checkYourAnswersLabel",
         HtmlFormat.escape(x.format(dateFormatter)),
         Some(controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -80,7 +80,7 @@ trait TrusteesIndividualAnswersHelper {
   def telephoneNumber(index: Int): Option[AnswerRow] = userAnswers.get(TelephoneNumberPage(index)) map {
     x =>
       AnswerRow(
-        "telephoneNumber.checkYourAnswersLabel",
+        "trustee.individual.telephoneNumber.checkYourAnswersLabel",
         HtmlFormat.escape(x),
         Some(controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -91,7 +91,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteeNinoYesNo(index: Int): Option[AnswerRow] = userAnswers.get(NinoYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "trusteeAUKCitizen.checkYourAnswersLabel",
+        "trustee.individual.ninoYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -102,7 +102,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteesNino(index: Int): Option[AnswerRow] = userAnswers.get(NinoPage(index)) map {
     x =>
       AnswerRow(
-        "trusteesNino.checkYourAnswersLabel",
+        "trustee.individual.nino.checkYourAnswersLabel",
         HtmlFormat.escape(formatNino(x)),
         Some(controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -113,7 +113,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteePassportDetailsYesNo(index: Int): Option[AnswerRow] = userAnswers.get(PassportDetailsYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "trusteeAUKCitizen.checkYourAnswersLabel",
+        "trustee.individual.passportDetailsYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(controllers.register.trustees.individual.routes.PassportDetailsYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -124,7 +124,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteesPassportDetails(index: Int): Option[AnswerRow] = userAnswers.get(PassportDetailsPage(index)) map {
     x =>
       AnswerRow(
-        "trusteesNino.checkYourAnswersLabel",
+        "trustee.individual.passportDetails.checkYourAnswersLabel",
         passportOrIDCard(x, countryOptions),
         Some(controllers.register.trustees.individual.routes.PassportDetailsController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -135,7 +135,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteeIDCardDetailsYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IDCardDetailsYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "trusteeAUKCitizen.checkYourAnswersLabel",
+        "trustee.individual.idCardDetailsYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(controllers.register.trustees.individual.routes.IDCardDetailsYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
@@ -146,7 +146,7 @@ trait TrusteesIndividualAnswersHelper {
   def trusteesIDCardDetails(index: Int): Option[AnswerRow] = userAnswers.get(IDCardDetailsPage(index)) map {
     x =>
       AnswerRow(
-        "trusteesNino.checkYourAnswersLabel",
+        "trustee.individual.idCardDetails.checkYourAnswersLabel",
         passportOrIDCard(x, countryOptions),
         Some(controllers.register.trustees.individual.routes.IDCardDetailsController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
