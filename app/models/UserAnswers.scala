@@ -23,9 +23,15 @@ import queries.{Gettable, Settable}
 import scala.util.{Failure, Success, Try}
 
 trait ReadableUserAnswers {
+
   val data: JsObject
+
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
-    Reads.at(page.path).reads(data) match {
+    getAtPath(page.path)
+  }
+
+  def getAtPath[A](path: JsPath)(implicit rds: Reads[A]): Option[A] = {
+    Reads.at(path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
       case JsError(_) => None
     }
@@ -44,7 +50,9 @@ final case class UserAnswers(
                               internalAuthId :String
                             ) extends ReadableUserAnswers {
 
-  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
+  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A], reads: Reads[A]): Try[UserAnswers] = {
+
+    val hasValueChanged: Boolean = !getAtPath(page.path).contains(value)
 
     val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
@@ -58,7 +66,7 @@ final case class UserAnswers(
     updatedData.flatMap {
       d =>
         val updatedAnswers = copy (data = d)
-        page.cleanup(Some(value), updatedAnswers)
+        if (hasValueChanged) page.cleanup(Some(value), updatedAnswers) else Success(updatedAnswers)
     }
   }
 

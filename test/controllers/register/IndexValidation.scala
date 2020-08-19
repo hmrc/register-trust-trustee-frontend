@@ -40,7 +40,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import play.api.Application
 import play.api.http.Writeable
-import play.api.libs.json.Writes
+import play.api.libs.json.{Reads, Writes}
 import play.api.mvc.Request
 import play.api.test.Helpers._
 import views.html.ErrorTemplate
@@ -51,7 +51,7 @@ trait IndexValidation extends SpecBase with ScalaCheckPropertyChecks with Mockit
                                 generator: Gen[A],
                                 createPage: Int => QuestionPage[A],
                                 requestForIndex: Int => Request[B]
-                              )(implicit writes: Writes[A], writeable: Writeable[B]): Unit = {
+                              )(implicit writes: Writes[A], writeable: Writeable[B], reads: Reads[A]): Unit = {
 
     "return not found if a given index is out of bounds" in {
       implicit val generatorDrivenConfig: PropertyCheckConfiguration = PropertyCheckConfiguration(

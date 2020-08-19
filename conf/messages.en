@@ -88,6 +88,12 @@ site.address.international.line2 = Address line 2
 site.address.international.line3 = Address line 3 (optional)
 site.address.international.country = Country
 
+featureNotAvailable.title = This part of the online service is not available yet
+featureNotAvailable.heading = This part of the online service is not available yet
+featureNotAvailable.p1 = If you need to make any changes to the trust you can
+featureNotAvailable.link = contact our trusts helpline (opens in a new window or tab)
+featureNotAvailable.p2 = You will be able to update these details online in the future.
+
 individualOrBusiness.individual = Individual
 individualOrBusiness.business = Business
 
@@ -102,7 +108,6 @@ internationalAddress.error.line2.invalidCharacters = Address line 2 must only in
 internationalAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 entity.trustee = Trustees
-
 
 entities.no.name.added = No name added
 entities.no.value.added = No value added
