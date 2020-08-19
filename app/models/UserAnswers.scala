@@ -52,10 +52,7 @@ final case class UserAnswers(
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A], reads: Reads[A]): Try[UserAnswers] = {
 
-    val hasValueChanged: Boolean = getAtPath(page.path) match {
-      case Some(x) => x != value
-      case None => true
-    }
+    val hasValueChanged: Boolean = !getAtPath(page.path).contains(value)
 
     val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>

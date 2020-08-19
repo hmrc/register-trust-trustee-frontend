@@ -20,9 +20,8 @@ import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
 import pages.QuestionPage
-import pages.register.trustees.{individual => tind}
-import pages.register.trustees.{organisation => torg}
 import pages.register.leadtrustee.{organisation => ltorg}
+import pages.register.trustees.{individual => tind, organisation => torg}
 import play.api.libs.json.JsPath
 import sections.Trustees
 
