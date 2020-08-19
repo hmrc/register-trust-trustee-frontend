@@ -21,7 +21,8 @@ import controllers.register.IndexValidation
 import forms.TelephoneNumberFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.TrusteesNamePage
+import pages.register.trustees.individual.TrusteeAUKCitizenPage
 import pages.register.trustees.{IsThisLeadTrusteePage, TelephoneNumberPage}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest

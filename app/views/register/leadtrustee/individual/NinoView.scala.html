@@ -24,7 +24,7 @@
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("nino.title")}"
+    title = s"${errorPrefix(form)} ${messages("leadTrustee.individual.nino.title")}"
     ) {
 
     @formHelper(action = NinoController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,11 +35,11 @@
 
         @components.input_text(
           field = form("value"),
-          label = messages("trusteesNino.heading", name),
+          label = messages("leadTrustee.individual.nino.heading", name),
           labelClass = Some("heading-large"),
           labelAsHeading = true,
-          hint = Some(messages(s"trusteesNino.hint")),
-          readerHint = Some(messages("trusteesNino.hint.reader"))
+          hint = Some(messages(s"leadTrustee.individual.nino.hint")),
+          readerHint = Some(messages("leadTrustee.individual.nino.hint.reader"))
         )
 
         @components.submit_button()

@@ -19,10 +19,10 @@ package controllers.register.leadtrustee.individual
 import base.SpecBase
 import forms.YesNoFormProvider
 import models.core.pages.FullName
-import pages.register.trustees.individual.TrusteesNamePage
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.TrusteeDetailsChoiceView
+import views.html.register.leadtrustee.individual.TrusteeDetailsChoiceView
 
 class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
@@ -31,7 +31,6 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
   val form = formProvider.withPrefix(messageKeyPrefix)
 
   val index = 0
-  val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
   lazy val trusteeDetailsChoiceUKRoute: String = routes.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url
@@ -54,7 +53,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -75,7 +74,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -90,7 +89,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.register.trustees.individual.routes.NameController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -136,7 +135,7 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, messageKeyPrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

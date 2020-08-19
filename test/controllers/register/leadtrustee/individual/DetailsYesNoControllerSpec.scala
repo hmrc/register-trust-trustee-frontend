@@ -17,32 +17,34 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
-import forms.YesNoFormProvider
+import forms.trustees.TrusteeDetailsChoiceFormProvider
 import models.core.pages.FullName
+import models.registration.pages.DetailsChoice.IdCard
+import pages.register.leadtrustee.individual.{TrusteeDetailsChoicePage, TrusteesNamePage}
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsYesNoPage, TrusteesNamePage}
+import pages.register.trustees.individual.PassportDetailsYesNoPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.PassportDetailsYesNoView
+import views.html.register.leadtrustee.individual.TrusteeDetailsChoiceView
 
-class PassportDetailsYesNoControllerSpec extends SpecBase {
+class DetailsYesNoControllerSpec extends SpecBase {
 
   val trusteeMessagePrefix = "trusteesPassportDetailsYesNo"
-  val formProvider = new YesNoFormProvider()
+  val formProvider = new TrusteeDetailsChoiceFormProvider()
   val form = formProvider.withPrefix(trusteeMessagePrefix)
 
   val index = 0
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
-  lazy val passportDetailsYesNoRoute = routes.PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val passportDetailsYesNoRoute = routes.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url
 
-  "PassportDetailsYesNo Controller" must {
+  "DetailsYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -51,7 +53,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[PassportDetailsYesNoView]
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
       status(result) mustEqual OK
 
@@ -66,20 +68,20 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
+        .set(TrusteeDetailsChoicePage(index), IdCard).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, passportDetailsYesNoRoute)
 
-      val view = application.injector.instanceOf[PassportDetailsYesNoView]
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(IdCard), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -106,9 +108,9 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
+        .set(TrusteeDetailsChoicePage(index), IdCard).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -131,8 +133,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       "a GET when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(PassportDetailsYesNoPage(index), true).success.value
+          .set(IsThisLeadTrusteePage(index), true).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -150,8 +151,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       "a POST when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(PassportDetailsYesNoPage(index), true).success.value
+          .set(IsThisLeadTrusteePage(index), true).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -175,7 +175,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -186,7 +186,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[PassportDetailsYesNoView]
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
       val result = route(application, request).value
 

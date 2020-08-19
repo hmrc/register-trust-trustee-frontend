@@ -19,11 +19,11 @@ package controllers.register.leadtrustee.individual
 import base.SpecBase
 import forms.trustees.EmailAddressFormProvider
 import models.core.pages.FullName
-import pages.register.trustees.individual.TrusteesNamePage
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.EmailAddressView
+import views.html.register.leadtrustee.individual.EmailAddressView
 
 class EmailAddressControllerSpec extends SpecBase {
 

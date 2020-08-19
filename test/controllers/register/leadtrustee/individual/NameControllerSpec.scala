@@ -21,8 +21,8 @@ import controllers.register.IndexValidation
 import forms.trustees.TrusteesNameFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.trustees._
-import pages.register.trustees.individual.TrusteesNamePage
 import play.api.i18n.Messages
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -63,7 +63,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(form, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -90,7 +90,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(form, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -126,7 +126,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -158,7 +158,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
 
@@ -207,7 +207,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(name), fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(form.fill(name), fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
       }

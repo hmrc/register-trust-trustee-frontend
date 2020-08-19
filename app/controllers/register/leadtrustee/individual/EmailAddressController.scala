@@ -46,7 +46,7 @@ class EmailAddressController @Inject()(
                                         navigator: Navigator
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("emailAddress")
+  val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.email")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

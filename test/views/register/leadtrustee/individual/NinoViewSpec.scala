@@ -16,27 +16,31 @@
 
 package views.register.leadtrustee.individual
 
+import forms.NinoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
+import views.html.register.leadtrustee.individual.NinoView
 
 class NinoViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "leadtrustee.individual.nationalInsuranceNumber"
+  val messageKeyPrefix = "leadTrustee.individual.nino"
 
-  val form = new NationalInsuranceNumberFormProvider().withPrefix("leadtrustee.individual")
+  val index = 0
+
+  val form = new NinoFormProvider().apply("leadTrustee.individual.nino")
 
   "NationalInsuranceNumberView view" must {
 
-    val view = viewFor[NationalInsuranceNumberView](Some(emptyUserAnswers))
+    val view = viewFor[NinoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, "Lead Trustee")(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, "Lead Trustee")(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, "Lead Trustee")
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPage(form, applyView, messageKeyPrefix, Some("Lead Trustee"), routes.NationalInsuranceNumberController.onSubmit().url)
+    behave like stringPage(form, applyView, messageKeyPrefix, Some("Lead Trustee"))
   }
 }

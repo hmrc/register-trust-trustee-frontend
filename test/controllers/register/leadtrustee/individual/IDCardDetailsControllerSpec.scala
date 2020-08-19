@@ -22,8 +22,9 @@ import base.SpecBase
 import forms.PassportOrIdCardFormProvider
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{IDCardDetailsPage, TrusteesNamePage}
+import pages.register.trustees.individual.IDCardDetailsPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
@@ -64,7 +65,7 @@ class IDCardDetailsControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, fakeDraftId, index, trusteeName.toString)(fakeRequest, messages).toString
+        view(form, countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -87,7 +88,7 @@ class IDCardDetailsControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(cardDetails), countryOptions, fakeDraftId, index, trusteeName.toString)(fakeRequest, messages).toString
+        view(form.fill(cardDetails), countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -207,7 +208,7 @@ class IDCardDetailsControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, fakeDraftId, index, trusteeName.toString)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

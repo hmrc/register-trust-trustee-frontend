@@ -497,14 +497,6 @@ PassportDetails.expiryDate.error.invalid = Enter a real date when the individual
 PassportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 PassportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 
-emailAddressYesNo.title = Do you know {0}'s email address?
-emailAddressYesNo.heading = Do you know {0}'s email address?
-emailAddressYesNo.checkYourAnswersLabel = Do you know {0}'s email address?
-
-emailAddress.title = what is {0}'s email?
-emailAddress.heading = what is {0}'s email?
-emailAddress.checkYourAnswer = what is {0}'s email?
-
 internationalAddress.line1.error.required = Enter address line 1
 internationalAddress.line2.error.required = Enter address line 2
 internationalAddress.country.error.required = Select a country
@@ -581,3 +573,27 @@ leadTrustee.individual.PassportDetails.expiryDate.error.required = Passport expi
 leadTrustee.individual.PassportDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s passport expires
 leadTrustee.individual.PassportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 leadTrustee.individual.PassportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+
+leadTrustee.individual.nino.title = What is the trustee’s National Insurance number?
+leadTrustee.individual.nino.heading = What is {0}’s National Insurance number?
+leadTrustee.individual.nino.checkYourAnswersLabel = What is {0}’s National Insurance number?
+leadTrustee.individual.nino.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+leadTrustee.individual.nino.hint.reader = It is on their National Insurance card, benefit letter, payslip or P60. For example, Q Q 1 2 3 4 5 6 C.
+leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
+leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
+
+leadTrustee.individual.liveInTheUkUkYesNo.title = Does the trustee live in the UK?
+leadTrustee.individual.liveInTheUkUkYesNo.heading = Does {0} live in the UK?
+leadTrustee.individual.liveInTheUkUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
+leadTrustee.individual.liveInTheUkUkYesNo.error.required = Select yes if the trustee lives in the UK
+
+leadTrustee.individual.emailYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
+leadTrustee.individual.emailYesNo.title = Do you know the lead trustee’s email address?
+leadTrustee.individual.emailYesNo.heading = Do you know {0}’s email address?
+leadTrustee.individual.emailYesNo.error.required = Select yes if you know the lead trustee’s email address
+
+leadTrustee.individual.email.checkYourAnswersLabel = What is {0}’s email address?
+leadTrustee.individual.email.title = What is the lead trustee’s email address?
+leadTrustee.individual.email.heading = What is {0}’s email address?
+leadTrustee.individual.email.error.required = Enter the lead trustee’s email address
+leadTrustee.individual.email.error.invalid = Enter a valid email address with no spaces, like name@example.com

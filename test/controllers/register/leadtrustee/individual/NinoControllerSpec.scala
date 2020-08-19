@@ -21,30 +21,30 @@ import controllers.register.IndexValidation
 import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.register.leadtrustee.individual.{TrusteesNamePage, TrusteesNinoPage}
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesNamePage, TrusteesNinoPage}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.NinoView
+import views.html.register.leadtrustee.individual.NinoView
 
 class NinoControllerSpec extends SpecBase with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesNino"
-  val trusteeMessagePrefix = "trusteesNino"
+  val messagePrefix = "leadTrustee.individual.nino"
+
   val formProvider = new NinoFormProvider()
-  val form = formProvider(trusteeMessagePrefix)
+  val form = formProvider(messagePrefix)
 
   val index = 0
-  val emptyTrusteeName = ""
+
   val trusteeName = "FirstName LastName"
   val validAnswer = "NH111111A"
 
-  lazy val trusteesNinoRoute = routes.NinoController.onPageLoad(index, fakeDraftId).url
+  lazy val ninoRoute = controllers.register.leadtrustee.individual.routes.NinoController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteesNino Controller" must {
+  "Nino Controller" must {
 
-    "return OK and the correct view (lead trustee) for a GET" in {
+    "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
@@ -52,7 +52,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, ninoRoute)
 
       val result = route(application, request).value
 
@@ -61,29 +61,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view (trustee) for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteesNinoRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[NinoView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -97,7 +75,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, ninoRoute)
 
       val view = application.injector.instanceOf[NinoView]
 
@@ -106,19 +84,19 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNinoPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, ninoRoute)
 
       val result = route(application, request).value
 
@@ -132,14 +110,15 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNinoPage(index), validAnswer).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteesNinoRoute)
+        FakeRequest(POST, ninoRoute)
           .withFormUrlEncodedBody(("value", validAnswer))
 
       val result = route(application, request).value
@@ -153,13 +132,14 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNinoPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trusteesNinoRoute)
+        FakeRequest(POST, ninoRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
@@ -171,7 +151,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -180,7 +160,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trusteesNinoRoute)
+      val request = FakeRequest(GET, ninoRoute)
 
       val result = route(application, request).value
 
@@ -196,7 +176,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trusteesNinoRoute)
+        FakeRequest(POST, ninoRoute)
           .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(application, request).value

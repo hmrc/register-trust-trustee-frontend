@@ -21,11 +21,11 @@ import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
-import views.html.register.trustees.individual.EmailAddressView
+import views.html.register.leadtrustee.individual.EmailAddressView
 
 class EmailAddressViewSpec extends QuestionViewBehaviours[String] {
 
-  val prefix = "emailAddress"
+  val prefix = "leadTrustee.individual.email"
   val name = FullName("FirstName", None, "LastName")
   val index = 0
 

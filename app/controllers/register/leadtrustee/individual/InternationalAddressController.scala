@@ -19,7 +19,7 @@ package controllers.register.leadtrustee.individual
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.InternationalAddressFormProvider
+import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import models.core.pages.InternationalAddress
 import navigation.Navigator

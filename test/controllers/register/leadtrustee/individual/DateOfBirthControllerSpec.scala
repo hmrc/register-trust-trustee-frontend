@@ -24,8 +24,9 @@ import forms.trustees.TrusteesDateOfBirthFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesDateOfBirthPage, TrusteesNamePage}
+import pages.register.trustees.individual.TrusteesDateOfBirthPage
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -33,8 +34,7 @@ import views.html.register.trustees.individual.DateOfBirthView
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesDateOfBirth"
-  val trusteeMessagePrefix = "trusteesDateOfBirth"
+  val messagePrefix = "trusteesDateOfBirth"
   val formProvider = new TrusteesDateOfBirthFormProvider(frontendAppConfig)
   val form = formProvider()
 
@@ -65,7 +65,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, messagePrefix, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,7 +88,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, messagePrefix, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -157,7 +157,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, messagePrefix, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

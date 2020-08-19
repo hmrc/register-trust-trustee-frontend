@@ -26,7 +26,7 @@
 @(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("emailAddress.title")}"
+    title = s"${errorPrefix(form)} ${messages("leadTrustee.individual.email.title")}"
 ) {
 
     @formHelper(action = EmailAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -37,7 +37,7 @@
 
         @components.input_text(
             field = form("value"),
-            label = messages("emailAddress.heading", name),
+            label = messages("leadTrustee.individual.email.heading", name),
             labelAsHeading = true
         )
 

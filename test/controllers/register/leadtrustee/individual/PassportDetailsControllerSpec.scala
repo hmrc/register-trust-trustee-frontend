@@ -22,8 +22,9 @@ import base.SpecBase
 import forms.PassportOrIdCardFormProvider
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsPage, TrusteesNamePage}
+import pages.register.trustees.individual.PassportDetailsPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption

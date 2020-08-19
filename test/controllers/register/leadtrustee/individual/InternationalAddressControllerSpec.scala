@@ -17,33 +17,44 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
-import navigation.Navigator
+import config.annotations.{LeadTrusteeIndividual, LeadTrusteeOrganisation}
+import forms.InternationalAddressFormProvider
+import models.core.pages.{FullName, InternationalAddress}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.register.leadtrustee.individual.{InternationalAddressPage, TrusteesNamePage}
+import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.RegistrationsRepository
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.register.leadtrustee.individual.InternationalAddressView
 
 import scala.concurrent.Future
 
 class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new NonUkAddressFormProvider()
+  val formProvider = new InternationalAddressFormProvider()
   val form = formProvider()
 
-  lazy val nonUkAddressRoute = routes.NonUkAddressController.onPageLoad().url
+  lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(index , fakeDraftId).url
 
   val countryOptions = injector.instanceOf[CountryOptionsNonUK]
 
-  val name = Name("Lead", None, "Trustee")
+  val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
+
+  val name = FullName("Lead", None, "Trustee")
+
+  val index = 0
 
   override val emptyUserAnswers = super.emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(TrusteesNamePage(index), name).success.value
 
   val userAnswers = emptyUserAnswers
-    .set(NonUkAddressPage, NonUkAddress("value 1", "value 2", None, "the country")).success.value
+    .set(InternationalAddressPage(index), InternationalAddress("value 1", "value 2", None, "the country")).success.value
 
   "NonUkAddress Controller" must {
 
@@ -51,16 +62,16 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, nonUkAddressRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
-      val view = application.injector.instanceOf[NonUkAddressView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions.options, name.displayName)(request, messages).toString
+        view(form,index, fakeDraftId, countryOptions.options, name.toString)(request, messages).toString
 
       application.stop()
     }
@@ -69,41 +80,51 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, nonUkAddressRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
-      val view = application.injector.instanceOf[NonUkAddressView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(NonUkAddress("value 1", "value 2", None, "the country")), countryOptions.options, name.displayName)(fakeRequest, messages).toString
+        view(form.fill(InternationalAddress("value 1", "value 2", None, "the country")), index,fakeDraftId, countryOptions.options, name.toString)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val mockPlaybackRepository = mock[PlaybackRepository]
+      val userAnswers = emptyUserAnswers
+        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
+      "redirect to the next page when valid data is submitted" in {
 
-      val request =
-        FakeRequest(POST, nonUkAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "the country"))
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(
+              bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+            ).build()
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].toInstance(fakeNavigator))
-        .build()
+        val request =
+          FakeRequest(POST, internationalAddressRoute)
+            .withFormUrlEncodedBody(
+              ("line1", validAnswer.line1),
+              ("line2", validAnswer.line2),
+              ("country", validAnswer.country)
+            )
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-      application.stop()
+        application.stop()
+      }
+
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -111,19 +132,19 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, nonUkAddressRoute)
+        FakeRequest(POST, internationalAddressRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[NonUkAddressView]
+      val view = application.injector.instanceOf[InternationalAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions.options, name.displayName)(fakeRequest, messages).toString
+        view(boundForm, index, fakeDraftId, countryOptions.options, name.toString)(fakeRequest, messages).toString
 
        application.stop()
     }
@@ -132,7 +153,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, nonUkAddressRoute)
+      val request = FakeRequest(GET, internationalAddressRoute)
 
       val result = route(application, request).value
 
@@ -147,7 +168,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, nonUkAddressRoute)
+        FakeRequest(POST, internationalAddressRoute)
           .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
 
       val result = route(application, request).value

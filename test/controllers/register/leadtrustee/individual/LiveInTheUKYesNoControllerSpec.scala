@@ -19,18 +19,18 @@ package controllers.register.leadtrustee.individual
 import base.SpecBase
 import forms.YesNoFormProvider
 import models.core.pages.FullName
+import pages.register.leadtrustee.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAddressInTheUKPage, TrusteesNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.LiveInTheUKYesNoView
+import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
 class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
-  val leadTrusteeMessagePrefix = "leadTrusteeLiveInTheUK"
-  val trusteeMessagePrefix = "trusteeLiveInTheUK"
+
+  val messagePrefix = "leadTrustee.individual.liveInTheUkUkYesNo"
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  val form = formProvider.withPrefix(messagePrefix)
 
   val index = 0
   val emptyTrusteeName = ""
@@ -38,7 +38,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
   lazy val trusteeLiveInTheUKRoute = routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteeLiveInTheUK Controller" must {
+  "LiveInTheUkYesNo Controller" must {
 
     "return OK and the correct view (lead trustee) for a GET" in {
 
@@ -57,7 +57,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -79,7 +79,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -89,7 +89,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAddressInTheUKPage(index), true).success.value
+        .set(TrusteeAUKCitizenPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -102,7 +102,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -111,7 +111,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAddressInTheUKPage(index), true).success.value
+        .set(TrusteeAUKCitizenPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -131,7 +131,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAddressInTheUKPage(index), true).success.value
+        .set(TrusteeAUKCitizenPage(index), true).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -155,7 +155,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
+          .set(TrusteeAUKCitizenPage(index), true).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -174,7 +174,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(TrusteeAddressInTheUKPage(index), true).success.value
+          .set(TrusteeAUKCitizenPage(index), true).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -216,7 +216,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

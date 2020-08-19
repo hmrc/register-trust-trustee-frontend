@@ -61,7 +61,7 @@ class NinoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider("")
+      val form = formProvider("leadTrustee.individual.nino")
 
       val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
         case None => form
@@ -76,7 +76,7 @@ class NinoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider("")
+      val form = formProvider("leadTrustee.individual.nino")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
