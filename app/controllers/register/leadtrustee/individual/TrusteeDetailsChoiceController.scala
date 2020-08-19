@@ -23,7 +23,7 @@ import forms.trustees.TrusteeDetailsChoiceFormProvider
 import javax.inject.Inject
 import models.registration.pages.DetailsChoice
 import navigation.Navigator
-import pages.register.trustees.individual.{TrusteeDetailsChoicePage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{TrusteeDetailsChoicePage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

@@ -21,7 +21,7 @@ import models.ReadableUserAnswers
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import pages.Page
 import pages.register.leadtrustee.individual._
-import pages.register.trustees.individual.{IDCardDetailsPage, PassportDetailsPage, TrusteeAUKCitizenPage, TrusteesNinoPage}
+import pages.register.trustees.individual.{IDCardDetailsPage, PassportDetailsPage, TrusteeAUKCitizenPage}
 import play.api.mvc.Call
 
 class LeadTrusteeIndividualNavigator extends Navigator {

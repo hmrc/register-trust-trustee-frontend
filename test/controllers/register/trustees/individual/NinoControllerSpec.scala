@@ -22,7 +22,7 @@ import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesNamePage, TrusteesNinoPage}
+import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -48,7 +48,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -70,7 +70,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,8 +92,8 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteesNinoPage(index), validAnswer).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NinoPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -114,7 +114,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNinoPage(index), validAnswer).success.value
+        .set(NinoPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -133,7 +133,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -154,7 +154,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -218,7 +218,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[String],
-        TrusteesNinoPage.apply,
+        NinoPage.apply,
         getForIndex
       )
 
@@ -236,7 +236,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[String],
-        TrusteesNinoPage.apply,
+        NinoPage.apply,
         postForIndex
       )
     }

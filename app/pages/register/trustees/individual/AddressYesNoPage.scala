@@ -16,14 +16,27 @@
 
 package pages.register.trustees.individual
 
-import models.core.pages.FullName
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class TrusteesNamePage(index : Int) extends QuestionPage[FullName] {
+import scala.util.Try
+
+final case class AddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "name"
+  override def toString: String = "addressYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(false) =>
+        userAnswers
+          .remove(AddressUkYesNoPage(index))
+          .flatMap(_.remove(UkAddressPage(index)))
+          .flatMap(_.remove(InternationalAddressPage(index)))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }

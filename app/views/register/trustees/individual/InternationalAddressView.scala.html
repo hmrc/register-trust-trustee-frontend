@@ -15,19 +15,17 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
-@import config.FrontendAppConfig
 @import utils.InputOption
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF,
-        appConfig: FrontendAppConfig
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], index: Int, draftId: String, countryOptions: Seq[InputOption], trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], index: Int, draftId: String, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("business.nonUkAddress.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustee.organisation.internationalAddress.title")}"
 ) {
 
     @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -36,11 +34,16 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("business.nonUkAddress.heading", Some(trusteeName))
+        <fieldset>
 
-        @components.international_address(form, countryOptions)
+            <legend>
+                @components.heading("trustee.organisation.internationalAddress.heading", Some(name))
+            </legend>
 
-        @components.submit_button()
+            @components.international_address(form, countryOptions)
 
+        </fieldset>
+
+        @components.submit_button(submitClass = Some("countryLookupHelper"))
     }
 }

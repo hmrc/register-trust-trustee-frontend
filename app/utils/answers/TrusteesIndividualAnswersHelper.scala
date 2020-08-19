@@ -16,7 +16,6 @@
 
 package utils.answers
 
-import mapping.reads._
 import models.UserAnswers
 import pages.register.trustees._
 import pages.register.trustees.individual._
@@ -35,7 +34,7 @@ trait TrusteesIndividualAnswersHelper {
 
   implicit val  messages: Messages
 
-  def trusteeFullName(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(TrusteesNamePage(index)) map {
+  def trusteeFullName(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(NamePage(index)) map {
     x =>
       AnswerRow(
         s"$messagePrefix.checkYourAnswersLabel",
@@ -45,18 +44,18 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteeLiveInTheUK(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeAddressInTheUKPage(index)) map {
+  def trusteeLiveInTheUK(index: Int): Option[AnswerRow] = userAnswers.get(AddressUkYesNoPage(index)) map {
     x =>
       AnswerRow(
         "trusteeLiveInTheUK.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId).url),
+        Some(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId).url),
         trusteeName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def trusteesUkAddress(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesUkAddressPage(index)) map {
+  def trusteesUkAddress(index: Int): Option[AnswerRow] = userAnswers.get(UkAddressPage(index)) map {
     x =>
       AnswerRow(
         "trusteesUkAddress.checkYourAnswersLabel",
@@ -100,7 +99,7 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteesNino(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesNinoPage(index)) map {
+  def trusteesNino(index: Int): Option[AnswerRow] = userAnswers.get(NinoPage(index)) map {
     x =>
       AnswerRow(
         "trusteesNino.checkYourAnswersLabel",

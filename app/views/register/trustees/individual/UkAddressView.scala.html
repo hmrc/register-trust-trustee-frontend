@@ -21,10 +21,10 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, messagePrefix: String, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
+    title = s"${errorPrefix(form)} ${messages("trustee.individual.ukAddress.title")}"
     ) {
 
     @formHelper(action = UkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -36,7 +36,7 @@
         <fieldset>
 
             <legend>
-                @components.heading("trusteesUkAddress.heading", optionalParam = Some(trusteeName))
+                @components.heading("trustee.individual.ukAddress.heading", optionalParam = Some(trusteeName))
             </legend>
 
             @components.uk_address(form)

@@ -22,7 +22,7 @@ import forms.YesNoFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{EmailAddressYesNoPage, TrusteeAUKCitizenPage, TrusteesNamePage}
+import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}

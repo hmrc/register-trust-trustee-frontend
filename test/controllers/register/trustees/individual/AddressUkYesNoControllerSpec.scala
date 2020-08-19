@@ -17,45 +17,41 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
-import controllers.register.IndexValidation
 import forms.YesNoFormProvider
 import models.core.pages.FullName
-import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{EmailAddressYesNoPage, TrusteeAUKCitizenPage, TrusteesNamePage}
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import pages.register.trustees.individual.{AddressUkYesNoPage, NamePage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.{EmailAddressYesNoView, NinoYesNoView}
+import play.api.test.Helpers._
+import views.html.register.trustees.individual.AddressUkYesNoView
 
+class AddressUkYesNoControllerSpec extends SpecBase {
 
-class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
-
-  def onwardRoute = Call("GET", "/foo")
-
-  val messagePrefix = "emailAddressYesNo"
+  val trusteeMessagePrefix = "trusteeLiveInTheUK"
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(messagePrefix)
+  val form = formProvider.withPrefix(trusteeMessagePrefix)
 
   val index = 0
-  val trusteeName = FullName("FirstName", None, "LastName").toString
+  val emptyTrusteeName = ""
+  val trusteeName = "FirstName LastName"
 
-  lazy val emailAddressYesNoRoute = routes.EmailAddressYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeLiveInTheUKRoute = routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId).url
 
-  "emailAddressYesNo Controller" must {
+  "TrusteeLiveInTheUK Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, emailAddressYesNoRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[EmailAddressYesNoView]
+      val view = application.injector.instanceOf[AddressUkYesNoView]
 
       status(result) mustEqual OK
 
@@ -68,14 +64,15 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(EmailAddressYesNoPage(index), true).success.value
+        .set(IsThisLeadTrusteePage(index), true).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, emailAddressYesNoRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
-      val view = application.injector.instanceOf[EmailAddressYesNoView]
+      val view = application.injector.instanceOf[AddressUkYesNoView]
 
       val result = route(application, request).value
 
@@ -87,19 +84,21 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "redirect to NamePage when TrusteesName is not answered" in {
+    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
+
       val userAnswers = emptyUserAnswers
-        .set(EmailAddressYesNoPage(index), true).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, emailAddressYesNoRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -107,15 +106,16 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, emailAddressYesNoRoute)
+        FakeRequest(POST, trusteeLiveInTheUKRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -126,21 +126,67 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
+    "redirect to trusteeName must"  when{
+
+      "a GET when no name is found" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(AddressUkYesNoPage(index), true).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
+
+        application.stop()
+      }
+      "a POST when no name is found" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(AddressUkYesNoPage(index), true).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request =
+          FakeRequest(POST, trusteeLiveInTheUKRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
+
+        application.stop()
+
+      }
+    }
+
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, emailAddressYesNoRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        FakeRequest(POST, trusteeLiveInTheUKRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[EmailAddressYesNoView]
+      val view = application.injector.instanceOf[AddressUkYesNoView]
 
       val result = route(application, request).value
 
@@ -156,11 +202,12 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, emailAddressYesNoRoute)
+      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -171,7 +218,8 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, emailAddressYesNoRoute)
+        FakeRequest(POST, trusteeLiveInTheUKRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -181,39 +229,6 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
       application.stop()
     }
-
-    "for a GET" must {
-
-      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(GET, route)
-      }
-
-      validateIndex(
-        arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
-        getForIndex
-      )
-
-    }
-
-    "for a POST" must {
-
-      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
-
-        val route =
-          routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("value", "true"))
-      }
-
-      validateIndex(
-        arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
-        postForIndex
-      )
-    }
   }
 }
+

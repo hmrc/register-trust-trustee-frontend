@@ -16,75 +16,63 @@
 
 package controllers.register.trustees.individual
 
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
-import controllers.filters.IndexActionFilterProvider
-import forms.trustees.InternationalAddressFormProvider
+import controllers.actions._
+import controllers.actions.register.trustees.individual.NameRequiredActionImpl
+import forms.InternationalAddressFormProvider
 import javax.inject.Inject
-import models.core.pages.InternationalAddress
 import navigation.Navigator
-import pages.register.trustees.individual.{InternationalAddressPage, TrusteesNamePage}
+import pages.register.trustees.individual.InternationalAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.trustees.individual.InternationalAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class InternationalAddressController @Inject()(override val messagesApi: MessagesApi,
-                                               registrationsRepository: RegistrationsRepository,
-                                               navigator: Navigator,
-                                               validateIndex: IndexActionFilterProvider,
-                                               identify: RegistrationIdentifierAction,
-                                               getData: DraftIdRetrievalActionProvider,
-                                               requireData: RegistrationDataRequiredAction,
-                                               requiredAnswer: RequiredAnswerActionProvider,
-                                               formProvider: InternationalAddressFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               val countryOptions: CountryOptionsNonUK,
-                                               view: InternationalAddressView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class InternationalAddressController @Inject()(
+                                                override val messagesApi: MessagesApi,
+                                                registrationsRepository: RegistrationsRepository,
+                                                navigator: Navigator,
+                                                standardActionSets: StandardActionSets,
+                                                nameAction: NameRequiredActionImpl,
+                                                formProvider: InternationalAddressFormProvider,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: InternationalAddressView,
+                                                val countryOptions: CountryOptionsNonUK
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[InternationalAddress] = formProvider()
+  private val form = formProvider()
 
   private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
+    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
-
-      val preparedForm = request.userAnswers.get(InternationalAddressPage) match {
+      val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, index, draftId, countryOptions.options, trusteeName))
+      Ok(view(preparedForm, countryOptions.options, index, draftId, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
-
       form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options, trusteeName))),
+        (formWithErrors: Form[_]) =>
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.trusteeName))),
 
-        value =>
+        value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(InternationalAddressPage, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
+        }
       )
   }
 }

@@ -23,7 +23,7 @@ import forms.trustees.PassportOrIdCardFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{PassportDetailsPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

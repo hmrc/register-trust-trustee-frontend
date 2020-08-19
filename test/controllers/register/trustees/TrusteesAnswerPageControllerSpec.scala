@@ -22,10 +22,10 @@ import base.SpecBase
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import pages.register.trustees._
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesNamePage, TrusteesNinoPage, TrusteesUkAddressPage}
-import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage, UkAddressPage, UtrPage, UtrYesNoPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import pages.register.trustees.{individual => individualPages}
+import pages.register.trustees.{organisation => organisationPages}
 import utils.answers.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
@@ -45,12 +45,12 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           emptyUserAnswers
             .set(IsThisLeadTrusteePage(index), true).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(TrusteesNamePage(index), FullName("First", None, "Trustee")).success.value
-            .set(TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-            .set(TrusteeAUKCitizenPage(index), true).success.value
-            .set(TrusteesNinoPage(index), "AB123456C").success.value
-            .set(TrusteeAddressInTheUKPage(index), true).success.value
-            .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
+            .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
+            .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
+            .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
+            .set(individualPages.NinoPage(index), "AB123456C").success.value
+            .set(individualPages.AddressUkYesNoPage(index), true).success.value
+            .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
             .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
         val countryOptions = injector.instanceOf[CountryOptions]
@@ -101,11 +101,11 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             emptyUserAnswers
               .set(IsThisLeadTrusteePage(index), true).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-              .set(UtrYesNoPage(index), true).success.value
-              .set(NamePage(index), "Amazon").success.value
-              .set(UtrPage(index), "1234567890").success.value
-              .set(AddressUkYesNoPage(index), true).success.value
-              .set(UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
+              .set(organisationPages.UtrYesNoPage(index), true).success.value
+              .set(organisationPages.NamePage(index), "Amazon").success.value
+              .set(organisationPages.UtrPage(index), "1234567890").success.value
+              .set(organisationPages.AddressUkYesNoPage(index), true).success.value
+              .set(organisationPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
               .set(TelephoneNumberPage(index), "1256723389").success.value
 
           val countryOptions = injector.instanceOf[CountryOptions]
@@ -152,10 +152,10 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             emptyUserAnswers
               .set(IsThisLeadTrusteePage(index), true).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-              .set(UtrYesNoPage(index), false).success.value
-              .set(NamePage(index), "Amazon").success.value
-              .set(AddressUkYesNoPage(index), false).success.value
-              .set(InternationalAddressPage(index), InternationalAddress("line1", "line2", Some("line3"), "Ukraine")).success.value
+              .set(organisationPages.UtrYesNoPage(index), false).success.value
+              .set(organisationPages.NamePage(index), "Amazon").success.value
+              .set(organisationPages.AddressUkYesNoPage(index), false).success.value
+              .set(organisationPages.InternationalAddressPage(index), InternationalAddress("line1", "line2", Some("line3"), "Ukraine")).success.value
               .set(TelephoneNumberPage(index), "1256723389").success.value
 
           val countryOptions = injector.instanceOf[CountryOptions]
@@ -204,16 +204,16 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             emptyUserAnswers
               .set(IsThisLeadTrusteePage(index), false).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-              .set(TrusteesNamePage(index), FullName("First", None, "Trustee")).success.value
-              .set(TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-              .set(TrusteeAUKCitizenPage(index), true).success.value
-              .set(TrusteesNinoPage(index), "AB123456C").success.value
-              .set(TrusteeAddressInTheUKPage(index), true).success.value
-              .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
-              .set(PassportDetailsYesNoPage(index), true).success.value
-              .set(PassportDetailsPage(index), PassportOrIdCardDetails("UK", "987654345678", LocalDate.now())).success.value
-              .set(IDCardDetailsYesNoPage(index), true).success.value
-              .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "345678238", LocalDate.now())).success.value
+              .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
+              .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
+              .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
+              .set(individualPages.NinoPage(index), "AB123456C").success.value
+              .set(individualPages.AddressUkYesNoPage(index), true).success.value
+              .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
+              .set(individualPages.PassportDetailsYesNoPage(index), true).success.value
+              .set(individualPages.PassportDetailsPage(index), PassportOrIdCardDetails("UK", "987654345678", LocalDate.now())).success.value
+              .set(individualPages.IDCardDetailsYesNoPage(index), true).success.value
+              .set(individualPages.IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "345678238", LocalDate.now())).success.value
               .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
           val countryOptions = injector.instanceOf[CountryOptions]

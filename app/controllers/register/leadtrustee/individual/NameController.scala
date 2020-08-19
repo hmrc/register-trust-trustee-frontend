@@ -19,7 +19,7 @@ package controllers.register.leadtrustee.individual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.StringFormProvider
+import forms.trustees.TrusteesNameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesNamePage
@@ -42,7 +42,7 @@ class NameController @Inject()(
                                         getData: DraftIdRetrievalActionProvider,
                                         requireData: RegistrationDataRequiredAction,
                                         validateIndex: IndexActionFilterProvider,
-                                        formProvider: StringFormProvider,
+                                        formProvider: TrusteesNameFormProvider,
                                         requiredAnswer: RequiredAnswerActionProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: NameView
@@ -57,7 +57,7 @@ class NameController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val form = formProvider.withConfig("", 56)
+      val form = formProvider("")
 
       val preparedForm = request.userAnswers.get(TrusteesNamePage(index)) match {
         case None => form
@@ -71,7 +71,7 @@ class NameController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val form = formProvider.withConfig("", 56)
+      val form = formProvider("")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

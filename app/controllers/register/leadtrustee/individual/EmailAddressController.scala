@@ -22,14 +22,14 @@ import controllers.filters.IndexActionFilterProvider
 import forms.trustees.EmailAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.individual.{EmailAddressPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{EmailAddressPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.EmailAddressView
+import views.html.register.leadtrustee.individual.EmailAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 

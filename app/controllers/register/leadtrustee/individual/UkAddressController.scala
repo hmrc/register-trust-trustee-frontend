@@ -22,8 +22,7 @@ import controllers.filters.IndexActionFilterProvider
 import forms.UKAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.leadtrustee.individual.TrusteesNamePage
-import pages.register.trustees.individual.TrusteesUkAddressPage
+import pages.register.leadtrustee.individual.{TrusteesNamePage, UkAddressPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,7 +61,7 @@ class UkAddressController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val preparedForm = request.userAnswers.get(TrusteesUkAddressPage(index)) match {
+      val preparedForm = request.userAnswers.get(UkAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -81,9 +80,9 @@ class UkAddressController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesUkAddressPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesUkAddressPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UkAddressPage(index), draftId, updatedAnswers))
         }
       )
   }

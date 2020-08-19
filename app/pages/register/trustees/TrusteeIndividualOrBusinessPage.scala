@@ -20,8 +20,8 @@ import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
 import pages.QuestionPage
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteeAddressInTheUKPage, TrusteesDateOfBirthPage, TrusteesInternationalAddressPage, TrusteesNinoPage, TrusteesUkAddressPage}
-import pages.register.trustees.organisation.{AddressUkYesNoPage, InternationalAddressPage, NamePage, UkAddressPage, UtrPage, UtrYesNoPage}
+import pages.register.leadtrustee.{organisation => ltorg}
+import pages.register.trustees.{individual => tind, organisation => torg}
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -36,22 +36,33 @@ final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPa
   override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
       case Some(Business) =>
-        userAnswers.remove(TrusteesDateOfBirthPage(index))
-          .flatMap(_.remove(TrusteeAUKCitizenPage(index)))
-          .flatMap(_.remove(TrusteesNinoPage(index)))
-          .flatMap(_.remove(TrusteeAddressInTheUKPage(index)))
-          .flatMap(_.remove(TrusteesUkAddressPage(index)))
-          .flatMap(_.remove(TrusteesInternationalAddressPage(index)))
-          .flatMap(_.remove(TelephoneNumberPage(index)))
+        userAnswers.remove(tind.TrusteesDateOfBirthPage(index))
+          .flatMap(_.remove(tind.TrusteeAUKCitizenPage(index)))
+          .flatMap(_.remove(tind.NinoPage(index)))
+          .flatMap(_.remove(tind.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(tind.UkAddressPage(index)))
+          .flatMap(_.remove(tind.InternationalAddressPage(index)))
+        // TODO - lead trustee individual pages
 
       case Some(Individual) =>
-        userAnswers.remove(query = UtrYesNoPage(index))
-          .flatMap(_.remove(NamePage(index)))
-          .flatMap(_.remove(UtrPage(index)))
-          .flatMap(_.remove(AddressUkYesNoPage(index)))
-          .flatMap(_.remove(UkAddressPage(index)))
-          .flatMap(_.remove(InternationalAddressPage(index)))
-          .flatMap(_.remove(TelephoneNumberPage(index)))
+        userAnswers
+          .remove(ltorg.UkRegisteredYesNoPage(index))
+          .flatMap(_.remove(ltorg.NamePage(index)))
+          .flatMap(_.remove(ltorg.UtrPage(index)))
+          .flatMap(_.remove(ltorg.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(ltorg.UkAddressPage(index)))
+          .flatMap(_.remove(ltorg.InternationalAddressPage(index)))
+          .flatMap(_.remove(ltorg.EmailAddressYesNoPage(index)))
+          .flatMap(_.remove(ltorg.EmailAddressPage(index)))
+          .flatMap(_.remove(ltorg.TelephoneNumberPage(index)))
+
+          .flatMap(_.remove(torg.NamePage(index)))
+          .flatMap(_.remove(torg.UtrYesNoPage(index)))
+          .flatMap(_.remove(torg.UtrPage(index)))
+          .flatMap(_.remove(torg.AddressYesNoPage(index)))
+          .flatMap(_.remove(torg.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(torg.UkAddressPage(index)))
+          .flatMap(_.remove(torg.InternationalAddressPage(index)))
 
       case _ => super.cleanup(value, userAnswers)
     }

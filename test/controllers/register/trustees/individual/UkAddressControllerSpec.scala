@@ -22,7 +22,7 @@ import forms.UKAddressFormProvider
 import models.core.pages.{FullName, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesNamePage, TrusteesUkAddressPage}
+import pages.register.trustees.individual.{NamePage, UkAddressPage}
 import play.api.data.Form
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -47,7 +47,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -60,7 +60,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(request, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(request, messages).toString
 
       application.stop()
     }
@@ -69,8 +69,8 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteesUkAddressPage(index), validAnswer).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(UkAddressPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -83,7 +83,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -91,7 +91,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
-        .set(TrusteesUkAddressPage(index), validAnswer).success.value
+        .set(UkAddressPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -110,7 +110,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -132,7 +132,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -149,7 +149,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -195,7 +195,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[UKAddress],
-        TrusteesUkAddressPage.apply,
+        UkAddressPage.apply,
         getForIndex
       )
 
@@ -213,7 +213,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[UKAddress],
-        TrusteesUkAddressPage.apply,
+        UkAddressPage.apply,
         postForIndex
       )
     }

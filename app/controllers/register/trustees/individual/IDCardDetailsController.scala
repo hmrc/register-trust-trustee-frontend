@@ -23,7 +23,7 @@ import forms.PassportOrIdCardFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{IDCardDetailsPage, TrusteesNamePage}
+import pages.register.trustees.individual.{IDCardDetailsPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -57,13 +57,13 @@ class IDCardDetailsController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
       requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val name = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(IDCardDetailsPage(index)) match {
         case None => form
@@ -76,7 +76,7 @@ class IDCardDetailsController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val name = request.userAnswers.get(NamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

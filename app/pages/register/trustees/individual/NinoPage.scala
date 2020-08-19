@@ -16,14 +16,13 @@
 
 package pages.register.trustees.individual
 
-import models.core.pages.InternationalAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class TrusteesInternationalAddressPage(index: Int) extends QuestionPage[InternationalAddress] {
+final case class NinoPage(index : Int) extends QuestionPage[String] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "nino"
 }

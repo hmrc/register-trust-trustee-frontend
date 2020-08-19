@@ -15,33 +15,30 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
-@import config.FrontendAppConfig
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF,
-    appConfig: FrontendAppConfig
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("emailAddress.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustee.individual.addressYesNo.title")}"
 ) {
 
-    @formHelper(action = EmailAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
+        @components.input_yes_no(
             field = form("value"),
-            label = messages("emailAddress.heading", name),
-            labelAsHeading = true
+            label = messages("trustee.individual.addressYesNo.heading", name),
+            legendAsHeading = true
         )
 
         @components.submit_button()
-
     }
 }

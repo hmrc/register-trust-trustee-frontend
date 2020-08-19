@@ -15,32 +15,29 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
-@import models.registration.pages.DetailsChoice
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, messagePrefix: String, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index : Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
+title = s"${errorPrefix(form)} ${messages("trustee.individual.addressUkYesNo.title")}"
     ) {
 
-    @formHelper(action = TrusteeDetailsChoiceController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddressUkYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("trusteeDetailsChoice.heading", trusteeName),
+            label = messages("trustee.individual.addressUkYesNo.heading",trusteeName),
             legendClass = Some("heading-large"),
-            legendAsHeading = true,
-            fieldSetClass = Some("inline"),
-            inputs = DetailsChoice.options.toSeq
+            legendAsHeading = true
         )
 
         @components.submit_button()

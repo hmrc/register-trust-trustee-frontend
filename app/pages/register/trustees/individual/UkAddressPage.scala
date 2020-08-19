@@ -16,18 +16,14 @@
 
 package pages.register.trustees.individual
 
-import models.UserAnswers
-import models.registration.pages.DetailsChoice
+import models.core.pages.UKAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-import scala.util.Try
-
-final case class TrusteeDetailsChoicePage(index : Int) extends QuestionPage[DetailsChoice] {
+final case class UkAddressPage(index: Int) extends QuestionPage[UKAddress] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "trusteeDetailsChoice"
-
+  override def toString: String = "ukAddress"
 }

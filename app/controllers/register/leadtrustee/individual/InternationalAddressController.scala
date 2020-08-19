@@ -23,7 +23,7 @@ import forms.trustees.InternationalAddressFormProvider
 import javax.inject.Inject
 import models.core.pages.InternationalAddress
 import navigation.Navigator
-import pages.register.trustees.individual.{InternationalAddressPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{InternationalAddressPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -63,7 +63,7 @@ class InternationalAddressController @Inject()(override val messagesApi: Message
 
       val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val preparedForm = request.userAnswers.get(InternationalAddressPage) match {
+      val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -82,9 +82,9 @@ class InternationalAddressController @Inject()(override val messagesApi: Message
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(InternationalAddressPage, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
       )
   }
 }

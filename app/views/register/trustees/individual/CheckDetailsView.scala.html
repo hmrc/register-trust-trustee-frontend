@@ -14,33 +14,28 @@
  * limitations under the License.
  *@
 
+@import viewmodels.AnswerSection
 @import controllers.register.trustees.individual.routes._
 
 @this(
-main_template: MainTemplate,
-formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("emailAddressYesNo.title")}"
-    ) {
+    title = messages("trustee.individual.checkDetails.title")
+) {
 
-@formHelper(action = EmailAddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-@components.back_link()
+        @components.back_link()
 
-@components.error_summary(form.errors)
+        @components.heading("trustee.individual.checkDetails.heading")
 
-@components.input_yes_no(
-    field = form("value"),
-    label = messages("emailAddressYesNo.heading", name),
-    legendClass = Some("heading-large"),
-    legendAsHeading = true
-    )
+        @components.answer_section(answerSection)
 
-@components.submit_button()
-
+        @components.submit_button()
     }
 }
