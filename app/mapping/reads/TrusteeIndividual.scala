@@ -40,8 +40,6 @@ object TrusteeIndividual {
 
   implicit lazy val reads: Reads[TrusteeIndividual] = {
 
-    println("???????")
-
     val addressReads: Reads[Option[Address]] =
       (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
         (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
@@ -65,8 +63,6 @@ object TrusteeIndividual {
         if (individualOrBusiness == IndividualOrBusiness.Individual && !isLead) {
           Reads(_ => JsSuccess((isLead, individualOrBusiness)))
         } else {
-          println(individualOrBusiness)
-          println(isLead)
           Reads(_ => JsError("trustee individual must not be a `business` or a `lead`"))
         }
     }.andKeep(trusteeReads)
