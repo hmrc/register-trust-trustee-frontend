@@ -37,7 +37,7 @@ final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPa
     value match {
       case Some(Business) =>
         userAnswers.remove(tind.TrusteesDateOfBirthPage(index))
-          .flatMap(_.remove(tind.TrusteeAUKCitizenPage(index)))
+          .flatMap(_.remove(tind.NinoYesNoPage(index)))
           .flatMap(_.remove(tind.NinoPage(index)))
           .flatMap(_.remove(tind.AddressUkYesNoPage(index)))
           .flatMap(_.remove(tind.UkAddressPage(index)))

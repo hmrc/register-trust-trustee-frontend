@@ -17,12 +17,15 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
 import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, NinoPage}
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -113,7 +116,12 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteesNinoRoute)

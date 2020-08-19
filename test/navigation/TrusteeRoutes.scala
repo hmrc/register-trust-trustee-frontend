@@ -221,9 +221,9 @@ trait TestTrusteeRoutes {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            val answers = userAnswers.set(TrusteeAUKCitizenPage(index), value = true).success.value
+            val answers = userAnswers.set(NinoYesNoPage(index), value = true).success.value
 
-            navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
+            navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
               .mustBe(controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -232,9 +232,9 @@ trait TestTrusteeRoutes {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            val answers = userAnswers.set(TrusteeAUKCitizenPage(index), value = false).success.value
+            val answers = userAnswers.set(NinoYesNoPage(index), value = false).success.value
 
-            navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
+            navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
               .mustBe(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, fakeDraftId))
         }
       }

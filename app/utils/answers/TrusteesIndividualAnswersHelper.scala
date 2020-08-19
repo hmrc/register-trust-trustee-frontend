@@ -88,7 +88,7 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteeNinoYesNo(index: Int): Option[AnswerRow] = userAnswers.get(TrusteeAUKCitizenPage(index)) map {
+  def trusteeNinoYesNo(index: Int): Option[AnswerRow] = userAnswers.get(NinoYesNoPage(index)) map {
     x =>
       AnswerRow(
         "trusteeAUKCitizen.checkYourAnswersLabel",

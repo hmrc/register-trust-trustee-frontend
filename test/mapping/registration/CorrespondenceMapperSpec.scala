@@ -69,7 +69,6 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(NamePage(0), FullName("First", None, "Last")).success.value
             .set(TrusteesDateOfBirthPage(0), LocalDate.of(2010, 10, 10)).success.value
-            .set(TrusteeAUKCitizenPage(0), true).success.value
             .set(AddressUkYesNoPage(0), true).success.value
             .set(UkAddressPage(0), address).success.value
             .set(TelephoneNumberPage(0), "0191 222222").success.value

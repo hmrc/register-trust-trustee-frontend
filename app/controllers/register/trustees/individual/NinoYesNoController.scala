@@ -16,15 +16,15 @@
 
 package controllers.register.trustees.individual
 
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, NamePage}
+import pages.register.trustees.individual.{NamePage, NinoYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NinoYesNoController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      registrationsRepository: RegistrationsRepository,
-                                     navigator: Navigator,
+                                     @TrusteeIndividual navigator: Navigator,
                                      validateIndex: IndexActionFilterProvider,
                                      identify: RegistrationIdentifierAction,
                                      getData: DraftIdRetrievalActionProvider,
@@ -64,7 +64,7 @@ class NinoYesNoController @Inject()(
 
       val form = formProvider.withPrefix("trustee.individual.ninoYesNo")
 
-      val preparedForm = request.userAnswers.get(TrusteeAUKCitizenPage(index)) match {
+      val preparedForm = request.userAnswers.get(NinoYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -85,9 +85,9 @@ class NinoYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeAUKCitizenPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NinoYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeAUKCitizenPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NinoYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

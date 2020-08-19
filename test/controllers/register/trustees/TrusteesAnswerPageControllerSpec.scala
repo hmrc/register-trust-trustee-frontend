@@ -47,7 +47,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
             .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-            .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
+            .set(individualPages.NinoYesNoPage(index), true).success.value
             .set(individualPages.NinoPage(index), "AB123456C").success.value
             .set(individualPages.AddressUkYesNoPage(index), true).success.value
             .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
@@ -206,7 +206,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
               .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
               .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-              .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
+              .set(individualPages.NinoYesNoPage(index), true).success.value
               .set(individualPages.NinoPage(index), "AB123456C").success.value
               .set(individualPages.AddressUkYesNoPage(index), true).success.value
               .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
