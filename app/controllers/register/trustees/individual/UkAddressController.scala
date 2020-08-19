@@ -16,6 +16,7 @@
 
 package controllers.register.trustees.individual
 
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -36,18 +37,18 @@ import views.html.register.trustees.individual.UkAddressView
 import scala.concurrent.{ExecutionContext, Future}
 
 class UkAddressController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             registrationsRepository: RegistrationsRepository,
-                                             navigator: Navigator,
-                                             validateIndex: IndexActionFilterProvider,
-                                             identify: RegistrationIdentifierAction,
-                                             getData: DraftIdRetrievalActionProvider,
-                                             requireData: RegistrationDataRequiredAction,
-                                             requiredAnswer: RequiredAnswerActionProvider,
-                                             formProvider: UKAddressFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: UkAddressView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     override val messagesApi: MessagesApi,
+                                     registrationsRepository: RegistrationsRepository,
+                                     @TrusteeIndividual navigator: Navigator,
+                                     validateIndex: IndexActionFilterProvider,
+                                     identify: RegistrationIdentifierAction,
+                                     getData: DraftIdRetrievalActionProvider,
+                                     requireData: RegistrationDataRequiredAction,
+                                     requiredAnswer: RequiredAnswerActionProvider,
+                                     formProvider: UKAddressFormProvider,
+                                     val controllerComponents: MessagesControllerComponents,
+                                     view: UkAddressView
+                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
 
@@ -83,7 +84,7 @@ class UkAddressController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(UkAddressPage(index), draftId, updatedAnswers))
         }
       )

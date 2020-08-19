@@ -47,7 +47,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
             .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-            .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
+            .set(individualPages.NinoYesNoPage(index), true).success.value
             .set(individualPages.NinoPage(index), "AB123456C").success.value
             .set(individualPages.AddressUkYesNoPage(index), true).success.value
             .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
@@ -66,7 +66,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             None,
             Seq(
               checkYourAnswersHelper.trusteeIndividualOrBusiness(index, leadTrusteeIndividualOrBusinessMessagePrefix).value,
-              checkYourAnswersHelper.trusteeFullName(index, leadTrusteeFullNameMessagePrefix).value,
+              checkYourAnswersHelper.trusteeFullName(index).value,
               checkYourAnswersHelper.trusteesDateOfBirth(index).value,
               checkYourAnswersHelper.trusteeNinoYesNo(index).value,
               checkYourAnswersHelper.trusteesNino(index).value,
@@ -88,7 +88,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+          view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -141,7 +141,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+            view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
 
           application.stop()
         }
@@ -190,7 +190,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+            view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
 
           application.stop()
         }
@@ -206,7 +206,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
               .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
               .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
-              .set(individualPages.TrusteeAUKCitizenPage(index), true).success.value
+              .set(individualPages.NinoYesNoPage(index), true).success.value
               .set(individualPages.NinoPage(index), "AB123456C").success.value
               .set(individualPages.AddressUkYesNoPage(index), true).success.value
               .set(individualPages.UkAddressPage(index), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).success.value
@@ -229,7 +229,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
               None,
               Seq(
                 checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix).value,
-                checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix).value,
+                checkYourAnswersHelper.trusteeFullName(index).value,
                 checkYourAnswersHelper.trusteesDateOfBirth(index).value,
                 checkYourAnswersHelper.trusteeNinoYesNo(index).value,
                 checkYourAnswersHelper.trusteesNino(index).value,
@@ -255,7 +255,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
+            view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
 
           application.stop()
         }

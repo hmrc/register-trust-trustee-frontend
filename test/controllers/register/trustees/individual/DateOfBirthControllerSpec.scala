@@ -19,13 +19,16 @@ package controllers.register.trustees.individual
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
 import forms.trustees.TrusteesDateOfBirthFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesDateOfBirthPage, NamePage}
+import pages.register.trustees.individual.{NamePage, TrusteesDateOfBirthPage}
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -116,7 +119,13 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteesDateOfBirthRoute)
@@ -195,7 +204,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
 
       application.stop()
     }
-
 
     "for a GET" must {
 

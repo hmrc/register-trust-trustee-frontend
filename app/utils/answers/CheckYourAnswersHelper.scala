@@ -42,11 +42,12 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions)
 
         val trusteeIndividualOrBusinessMessagePrefix = if (trustee.isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
         val trusteeFullNameMessagePrefix = if (trustee.isLead) "leadTrusteesName" else "trusteesName"
+
         val questions = trustee match {
           case _: TrusteeIndividual | _: LeadTrusteeIndividual =>
             Seq(
               trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix),
-              trusteeFullName(index, trusteeFullNameMessagePrefix),
+              trusteeFullName(index),
               trusteesDateOfBirth(index),
               trusteeNinoYesNo(index),
               trusteesNino(index),

@@ -34,13 +34,13 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
     case TrusteeIndividualOrBusinessPage(index) => ua => trusteeIndividualOrBusinessRoute(ua, index, draftId)
 
     case NamePage(index) => _ => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
-    case TrusteesDateOfBirthPage(index)  => ua => trusteeDateOfBirthRoute(ua, index, draftId)
-    case TrusteeAUKCitizenPage(index)  => ua => trusteeAUKCitizenRoute(ua, index, draftId)
     case NinoPage(index)  => _ => controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId)
-    case AddressUkYesNoPage(index)   => ua => trusteeLiveInTheUKRoute(ua, index, draftId)
     case UkAddressPage(index) => _ => controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
     case TelephoneNumberPage(index)  => _ => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
     case TrusteesAnswerPage  => _ => controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)
+    case TrusteesDateOfBirthPage(index)  => ua => trusteeDateOfBirthRoute(ua, index, draftId)
+    case NinoYesNoPage(index)  => ua => trusteeAUKCitizenRoute(ua, index, draftId)
+    case AddressUkYesNoPage(index)   => ua => trusteeLiveInTheUKRoute(ua, index, draftId)
     case AddATrusteePage  => addATrusteeRoute(draftId)
     case AddATrusteeYesNoPage  => addATrusteeYesNoRoute(draftId)
   }
@@ -80,7 +80,7 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
     }
   }
 
-  private def trusteeAUKCitizenRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(TrusteeAUKCitizenPage(index)) match {
+  private def trusteeAUKCitizenRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(NinoYesNoPage(index)) match {
     case Some(true)   => controllers.register.trustees.individual.routes.NinoController.onPageLoad(index, draftId)
     case Some(false)  => controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, draftId)
     case None         => sessionExpired

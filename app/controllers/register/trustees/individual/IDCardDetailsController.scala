@@ -16,6 +16,7 @@
 
 package controllers.register.trustees.individual
 
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -38,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class IDCardDetailsController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          registrationsRepository: RegistrationsRepository,
-                                         navigator: Navigator,
+                                         @TrusteeIndividual navigator: Navigator,
                                          identify: RegistrationIdentifierAction,
                                          getData: DraftIdRetrievalActionProvider,
                                          validateIndex: IndexActionFilterProvider,

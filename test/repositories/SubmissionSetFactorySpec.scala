@@ -75,11 +75,11 @@ class SubmissionSetFactorySpec extends SpecBase {
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
       .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
       .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
-      .set(TrusteeAUKCitizenPage(index), true).success.value
-      .set(AddressUkYesNoPage(index), true).success.value
+      .set(NinoYesNoPage(index), true).success.value
       .set(NinoPage(index), "AB123456C").success.value
-      .set(TelephoneNumberPage(index), "0191 1111111").success.value
+      .set(AddressUkYesNoPage(index), true).success.value
       .set(UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+      .set(TelephoneNumberPage(index), "0191 1111111").success.value
   }
 
   "Submission set factory" must {
@@ -158,13 +158,13 @@ class SubmissionSetFactorySpec extends SpecBase {
               Some("answerPage.section.trustee.subheading 1"),
               List(
                 AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", ""),
-                AnswerRow("leadTrusteesName.checkYourAnswersLabel", "first name middle name Last Name", ""),
-                AnswerRow("trusteesDateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
-                AnswerRow("trusteeAUKCitizen.checkYourAnswersLabel", "Yes", "first name Last Name"),
-                AnswerRow("trusteesNino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
-                AnswerRow("trusteeLiveInTheUK.checkYourAnswersLabel", "Yes", "first name Last Name"),
-                AnswerRow("trusteesUkAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
-                AnswerRow("telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
+                AnswerRow("trustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
+                AnswerRow("trustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
+                AnswerRow("trustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
+                AnswerRow("trustee.individual.addressUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trustee.individual.ukAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
+                AnswerRow("trustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
               Some("answerPage.section.trustees.heading")
             )
@@ -194,13 +194,13 @@ class SubmissionSetFactorySpec extends SpecBase {
               Some("answerPage.section.trustee.subheading 1"),
               List(
                 AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", ""),
-                AnswerRow("leadTrusteesName.checkYourAnswersLabel", "first name middle name Last Name", ""),
-                AnswerRow("trusteesDateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
-                AnswerRow("trusteeAUKCitizen.checkYourAnswersLabel", "Yes", "first name Last Name"),
-                AnswerRow("trusteesNino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
-                AnswerRow("trusteeLiveInTheUK.checkYourAnswersLabel", "Yes", "first name Last Name"),
-                AnswerRow("trusteesUkAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
-                AnswerRow("telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
+                AnswerRow("trustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
+                AnswerRow("trustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
+                AnswerRow("trustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
+                AnswerRow("trustee.individual.addressUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("trustee.individual.ukAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
+                AnswerRow("trustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
               Some("answerPage.section.trustees.heading")
             ),

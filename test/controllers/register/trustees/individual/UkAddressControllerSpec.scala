@@ -17,13 +17,16 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
 import forms.UKAddressFormProvider
 import models.core.pages.{FullName, UKAddress}
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, UkAddressPage}
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -87,7 +90,6 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-
     "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(UkAddressPage(index), validAnswer).success.value
@@ -112,7 +114,12 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteesUkAddressRoute)

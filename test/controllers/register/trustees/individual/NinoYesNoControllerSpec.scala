@@ -17,12 +17,15 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
 import forms.YesNoFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, NamePage}
+import pages.register.trustees.individual.{NamePage, NinoYesNoPage}
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -72,7 +75,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(NinoYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +96,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to TrusteeNamePage when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(NinoYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -111,7 +114,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(NinoYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -133,7 +136,12 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteeAUKCitizenRoute)
@@ -215,7 +223,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
+        NinoYesNoPage.apply,
         getForIndex
       )
 
@@ -234,7 +242,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
+        NinoYesNoPage.apply,
         postForIndex
       )
     }

@@ -45,15 +45,17 @@ object TrusteeIndividual {
         (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
         Reads(_ => JsSuccess(None))
 
-    val trusteeReads: Reads[TrusteeIndividual] = (
-      (__ \ "name").read[FullName] and
-        (__ \ "dateOfBirth").readNullable[LocalDate] and
-        (__ \ "nino").readNullable[String] and
-        addressReads and
-        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
-        (__ \ "idCard").readNullable[PassportOrIdCardDetails]
-      )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
-      TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))
+    val trusteeReads: Reads[TrusteeIndividual] = {
+      (
+        (__ \ "name").read[FullName] and
+          (__ \ "dateOfBirth").readNullable[LocalDate] and
+          (__ \ "nino").readNullable[String] and
+          addressReads and
+          (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
+          (__ \ "idCard").readNullable[PassportOrIdCardDetails]
+        )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
+        TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))
+    }
 
     ((__ \ "isThisLeadTrustee").read[Boolean] and
       (__ \ "individualOrBusiness").read[IndividualOrBusiness]) ((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
@@ -63,7 +65,7 @@ object TrusteeIndividual {
         } else {
           Reads(_ => JsError("trustee individual must not be a `business` or a `lead`"))
         }
-    } andKeep trusteeReads
+    }.andKeep(trusteeReads)
 
   }
 }

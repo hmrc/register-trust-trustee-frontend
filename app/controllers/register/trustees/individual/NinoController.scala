@@ -16,6 +16,7 @@
 
 package controllers.register.trustees.individual
 
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -36,21 +37,21 @@ import views.html.register.trustees.individual.NinoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class NinoController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        registrationsRepository: RegistrationsRepository,
-                                        navigator: Navigator,
-                                        identify: RegistrationIdentifierAction,
-                                        getData: DraftIdRetrievalActionProvider,
-                                        requireData: RegistrationDataRequiredAction,
-                                        validateIndex : IndexActionFilterProvider,
-                                        requiredAnswer: RequiredAnswerActionProvider,
-                                        formProvider: NinoFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: NinoView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                override val messagesApi: MessagesApi,
+                                registrationsRepository: RegistrationsRepository,
+                                @TrusteeIndividual navigator: Navigator,
+                                identify: RegistrationIdentifierAction,
+                                getData: DraftIdRetrievalActionProvider,
+                                requireData: RegistrationDataRequiredAction,
+                                validateIndex: IndexActionFilterProvider,
+                                requiredAnswer: RequiredAnswerActionProvider,
+                                formProvider: NinoFormProvider,
+                                val controllerComponents: MessagesControllerComponents,
+                                view: NinoView
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index : Int, draftId: String) =
-      identify andThen
+  private def actions(index: Int, draftId: String) =
+    identify andThen
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
@@ -72,7 +73,7 @@ class NinoController @Inject()(
       Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
@@ -86,7 +87,7 @@ class NinoController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NinoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(NinoPage(index), draftId, updatedAnswers))
         }
       )

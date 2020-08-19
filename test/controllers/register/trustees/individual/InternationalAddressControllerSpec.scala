@@ -17,6 +17,7 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
 import forms.InternationalAddressFormProvider
 import models.UserAnswers
@@ -95,11 +96,11 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-//          .overrides(
-//            bind[Navigator]
-              //.qualifiedWith(classOf[TrusteeOrganisation])
-//              .toInstance(new FakeNavigator())
-//          )
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          )
       .build()
 
       val request =

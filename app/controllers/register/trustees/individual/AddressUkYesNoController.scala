@@ -16,6 +16,7 @@
 
 package controllers.register.trustees.individual
 
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -35,17 +36,17 @@ import views.html.register.trustees.individual.AddressUkYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressUkYesNoController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              navigator: Navigator,
-                                              validateIndex: IndexActionFilterProvider,
-                                              identify: RegistrationIdentifierAction,
-                                              getData: DraftIdRetrievalActionProvider,
-                                              requireData: RegistrationDataRequiredAction,
-                                              requiredAnswer: RequiredAnswerActionProvider,
-                                              formProvider: YesNoFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: AddressUkYesNoView
+                                          override val messagesApi: MessagesApi,
+                                          registrationsRepository: RegistrationsRepository,
+                                          @TrusteeIndividual navigator: Navigator,
+                                          validateIndex: IndexActionFilterProvider,
+                                          identify: RegistrationIdentifierAction,
+                                          getData: DraftIdRetrievalActionProvider,
+                                          requireData: RegistrationDataRequiredAction,
+                                          requiredAnswer: RequiredAnswerActionProvider,
+                                          formProvider: YesNoFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: AddressUkYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
