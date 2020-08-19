@@ -21,7 +21,7 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class TrusteesUkAddressPage(index: Int) extends QuestionPage[UKAddress] {
+final case class UkAddressPage(index: Int) extends QuestionPage[UKAddress] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 

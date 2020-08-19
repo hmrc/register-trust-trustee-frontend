@@ -20,7 +20,7 @@ import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
 import pages.QuestionPage
-import pages.register.trustees.individual._
+import pages.register.trustees.{individual => tind}
 import pages.register.trustees.{organisation => torg}
 import pages.register.leadtrustee.{organisation => ltorg}
 import play.api.libs.json.JsPath
@@ -37,14 +37,13 @@ final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPa
   override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
       case Some(Business) =>
-        userAnswers.remove(TrusteesDateOfBirthPage(index))
-          .flatMap(_.remove(TrusteeAUKCitizenPage(index)))
-          .flatMap(_.remove(TrusteesNinoPage(index)))
-          .flatMap(_.remove(TrusteeAddressInTheUKPage(index)))
-          .flatMap(_.remove(TrusteesUkAddressPage(index)))
-          .flatMap(_.remove(TrusteesInternationalAddressPage(index)))
-          .flatMap(_.remove(TelephoneNumberPage(index)))
-        // TODO - remaining individual pages
+        userAnswers.remove(tind.TrusteesDateOfBirthPage(index))
+          .flatMap(_.remove(tind.TrusteeAUKCitizenPage(index)))
+          .flatMap(_.remove(tind.NinoPage(index)))
+          .flatMap(_.remove(tind.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(tind.UkAddressPage(index)))
+          .flatMap(_.remove(tind.InternationalAddressPage(index)))
+        // TODO - lead trustee individual pages
 
       case Some(Individual) =>
         userAnswers

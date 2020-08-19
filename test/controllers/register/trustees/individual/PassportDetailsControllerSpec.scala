@@ -23,7 +23,7 @@ import forms.{PassportOrIdCardFormProvider, YesNoFormProvider}
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsPage, TrusteesNamePage}
+import pages.register.trustees.individual.{PassportDetailsPage, NamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
@@ -52,7 +52,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), trusteeName).success.value
+        .set(NamePage(index), trusteeName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,7 +74,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), trusteeName).success.value
+        .set(NamePage(index), trusteeName).success.value
         .set(PassportDetailsPage(index), passportDetails).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -96,7 +96,7 @@ class PassportDetailsControllerSpec extends SpecBase {
     "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), trusteeName).success.value
+        .set(NamePage(index), trusteeName).success.value
         .set(PassportDetailsPage(index), passportDetails).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -116,7 +116,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), trusteeName).success.value
+        .set(NamePage(index), trusteeName).success.value
         .set(PassportDetailsPage(index), passportDetails).success.value
 
       val application =
@@ -190,7 +190,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), trusteeName).success.value
+        .set(NamePage(index), trusteeName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -19,7 +19,7 @@ package pages.register.trustees
 import models.UserAnswers
 import pages.QuestionPage
 import pages.register.leadtrustee.{organisation => ltorg}
-import pages.register.trustees.{organisation => torg}
+import pages.register.trustees.{individual => tind, organisation => torg}
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -36,6 +36,15 @@ final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean
       case Some(true) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
+
+          .flatMap(_.remove(tind.NamePage(index)))
+          .flatMap(_.remove(tind.TrusteesDateOfBirthPage(index)))
+          .flatMap(_.remove(tind.TrusteeAUKCitizenPage(index)))
+          .flatMap(_.remove(tind.NinoPage(index)))
+          .flatMap(_.remove(tind.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(tind.UkAddressPage(index)))
+          .flatMap(_.remove(tind.InternationalAddressPage(index)))
+
           .flatMap(_.remove(torg.NamePage(index)))
           .flatMap(_.remove(torg.UtrYesNoPage(index)))
           .flatMap(_.remove(torg.UtrPage(index)))
@@ -43,11 +52,11 @@ final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean
           .flatMap(_.remove(torg.AddressUkYesNoPage(index)))
           .flatMap(_.remove(torg.UkAddressPage(index)))
           .flatMap(_.remove(torg.InternationalAddressPage(index)))
-      // TODO - trustee individual
 
       case Some(false) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
+          // TODO - lead trustee individual pages
           .flatMap(_.remove(ltorg.UkRegisteredYesNoPage(index)))
           .flatMap(_.remove(ltorg.NamePage(index)))
           .flatMap(_.remove(ltorg.UtrPage(index)))
@@ -57,7 +66,6 @@ final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean
           .flatMap(_.remove(ltorg.EmailAddressYesNoPage(index)))
           .flatMap(_.remove(ltorg.EmailAddressPage(index)))
           .flatMap(_.remove(ltorg.TelephoneNumberPage(index)))
-      // TODO - lead trustee individual
 
       case _ =>
         super.cleanup(value, userAnswers)

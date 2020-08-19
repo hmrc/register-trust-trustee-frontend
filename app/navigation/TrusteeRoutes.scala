@@ -33,12 +33,12 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
     case IsThisLeadTrusteePage(index) => _ => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
     case TrusteeIndividualOrBusinessPage(index) => ua => trusteeIndividualOrBusinessRoute(ua, index, draftId)
 
-    case TrusteesNamePage(index) => _ => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
+    case NamePage(index) => _ => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
     case TrusteesDateOfBirthPage(index)  => ua => trusteeDateOfBirthRoute(ua, index, draftId)
     case TrusteeAUKCitizenPage(index)  => ua => trusteeAUKCitizenRoute(ua, index, draftId)
-    case TrusteesNinoPage(index)  => _ => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
-    case TrusteeAddressInTheUKPage(index)   => ua => trusteeLiveInTheUKRoute(ua, index, draftId)
-    case TrusteesUkAddressPage(index) => _ => controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
+    case NinoPage(index)  => _ => controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId)
+    case AddressUkYesNoPage(index)   => ua => trusteeLiveInTheUKRoute(ua, index, draftId)
+    case UkAddressPage(index) => _ => controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
     case TelephoneNumberPage(index)  => _ => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
     case TrusteesAnswerPage  => _ => controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)
     case AddATrusteePage  => addATrusteeRoute(draftId)
@@ -86,9 +86,9 @@ class TrusteeRoutes @Inject()(config: FrontendAppConfig){
     case None         => sessionExpired
   }
 
-  private def trusteeLiveInTheUKRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(TrusteeAddressInTheUKPage(index)) match {
+  private def trusteeLiveInTheUKRoute(answers: ReadableUserAnswers, index: Int, draftId: String) = answers.get(AddressUkYesNoPage(index)) match {
     case Some(true)   => controllers.register.trustees.individual.routes.UkAddressController.onPageLoad(index, draftId)
-    case Some(false)  => controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, draftId)
+    case Some(false)  => controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId)
     case None         => sessionExpired
   }
 

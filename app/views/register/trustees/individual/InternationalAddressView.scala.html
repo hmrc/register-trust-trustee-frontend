@@ -15,31 +15,35 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
+@import utils.InputOption
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, messagePrefix: String, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], index: Int, draftId: String, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
-    ) {
+    title = s"${errorPrefix(form)} ${messages("trustee.organisation.internationalAddress.title")}"
+) {
 
-    @formHelper(action = LiveInTheUKYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
-            field = form("value"),
-            label = messages("trusteeLiveInTheUK.heading",trusteeName),
-            legendClass = Some("heading-large"),
-            legendAsHeading = true
-        )
+        <fieldset>
 
-        @components.submit_button()
+            <legend>
+                @components.heading("trustee.organisation.internationalAddress.heading", Some(name))
+            </legend>
+
+            @components.international_address(form, countryOptions)
+
+        </fieldset>
+
+        @components.submit_button(submitClass = Some("countryLookupHelper"))
     }
 }
