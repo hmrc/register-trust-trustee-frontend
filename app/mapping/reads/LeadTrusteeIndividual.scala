@@ -39,6 +39,8 @@ object LeadTrusteeIndividual {
 
   implicit lazy val reads: Reads[LeadTrusteeIndividual] = {
 
+    println(">>>>>>>>>>>")
+
     val addressReads: Reads[Address] =
       (__ \ 'ukAddress).read[UKAddress].widen[Address] or
         (__ \ 'internationalAddress).read[InternationalAddress].widen[Address]

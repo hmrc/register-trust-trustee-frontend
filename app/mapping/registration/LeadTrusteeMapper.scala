@@ -26,12 +26,13 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
                                  ) extends Mapping[LeadTrusteeType] {
 
   override def build(userAnswers: UserAnswers): Option[LeadTrusteeType] = {
-
+    println(userAnswers)
     val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(List.empty[Trustee])
     trustees match {
       case Nil => None
       case list =>
-        list.find(_.isLead)
+        list
+          .find(_.isLead)
           .map(buildLeadTrusteeType)
     }
   }
@@ -44,6 +45,7 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
   }
 
   private def buildLeadTrusteeIndividual(leadTrustee: LeadTrusteeIndividual) = {
+    println("?@")
     LeadTrusteeType(
       leadTrusteeInd = Some(
         LeadTrusteeIndType(

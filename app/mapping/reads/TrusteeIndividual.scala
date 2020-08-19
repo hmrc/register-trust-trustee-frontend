@@ -40,20 +40,24 @@ object TrusteeIndividual {
 
   implicit lazy val reads: Reads[TrusteeIndividual] = {
 
+    println("???????")
+
     val addressReads: Reads[Option[Address]] =
       (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
         (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
         Reads(_ => JsSuccess(None))
 
-    val trusteeReads: Reads[TrusteeIndividual] = (
-      (__ \ "name").read[FullName] and
-        (__ \ "dateOfBirth").readNullable[LocalDate] and
-        (__ \ "nino").readNullable[String] and
-        addressReads and
-        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
-        (__ \ "idCard").readNullable[PassportOrIdCardDetails]
-      )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
-      TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))
+    val trusteeReads: Reads[TrusteeIndividual] = {
+      (
+        (__ \ "name").read[FullName] and
+          (__ \ "dateOfBirth").readNullable[LocalDate] and
+          (__ \ "nino").readNullable[String] and
+          addressReads and
+          (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
+          (__ \ "idCard").readNullable[PassportOrIdCardDetails]
+        )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
+        TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))
+    }
 
     ((__ \ "isThisLeadTrustee").read[Boolean] and
       (__ \ "individualOrBusiness").read[IndividualOrBusiness]) ((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
@@ -61,9 +65,11 @@ object TrusteeIndividual {
         if (individualOrBusiness == IndividualOrBusiness.Individual && !isLead) {
           Reads(_ => JsSuccess((isLead, individualOrBusiness)))
         } else {
+          println(individualOrBusiness)
+          println(isLead)
           Reads(_ => JsError("trustee individual must not be a `business` or a `lead`"))
         }
-    } andKeep trusteeReads
+    }.andKeep(trusteeReads)
 
   }
 }
