@@ -24,18 +24,18 @@ import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAddressInTheUKPage, TrusteesNamePage}
+import pages.register.trustees.individual.{AddressUkYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.LiveInTheUKYesNoView
+import views.html.register.trustees.individual.AddressUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LiveInTheUKYesNoController @Inject()(
+class AddressUkYesNoController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               registrationsRepository: RegistrationsRepository,
                                               navigator: Navigator,
@@ -46,7 +46,7 @@ class LiveInTheUKYesNoController @Inject()(
                                               requiredAnswer: RequiredAnswerActionProvider,
                                               formProvider: YesNoFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: LiveInTheUKYesNoView
+                                              view: AddressUkYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
@@ -54,24 +54,24 @@ class LiveInTheUKYesNoController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
       requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
       val messagePrefix: String = getMessagePrefix(index, request)
 
       val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
 
-      val preparedForm = request.userAnswers.get(TrusteeAddressInTheUKPage(index)) match {
+      val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
+      Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
   private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
@@ -88,7 +88,7 @@ class LiveInTheUKYesNoController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
       val messagePrefix: String = getMessagePrefix(index, request)
 
@@ -96,13 +96,13 @@ class LiveInTheUKYesNoController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeName))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeAddressInTheUKPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUkYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeAddressInTheUKPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUkYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

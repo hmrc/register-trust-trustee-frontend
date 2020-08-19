@@ -21,8 +21,8 @@ import java.time.format.DateTimeFormatter
 import models.UserAnswers
 import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
-import pages.register.trustees.individual.TrusteesNamePage
-import pages.register.trustees.organisation.NamePage
+import pages.register.trustees.individual.{NamePage => IndividualNamePage}
+import pages.register.trustees.organisation.{NamePage => OrganisationNamePage}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
@@ -54,10 +54,10 @@ object CheckAnswersFormatters {
   def percentage(value: String): Html = escape(s"$value%")
 
   def trusteeName(index: Int, userAnswers: UserAnswers): String =
-    userAnswers.get(TrusteesNamePage(index)).map(_.toString).getOrElse("")
+    userAnswers.get(IndividualNamePage(index)).map(_.toString).getOrElse("")
 
   def orgName(index: Int, userAnswers: UserAnswers): String =
-    userAnswers.get(NamePage(index)).getOrElse("")
+    userAnswers.get(OrganisationNamePage(index)).getOrElse("")
 
   def answer[T](key: String, answer: T)(implicit messages: Messages): Html =
     HtmlFormat.escape(messages(s"$key.$answer"))

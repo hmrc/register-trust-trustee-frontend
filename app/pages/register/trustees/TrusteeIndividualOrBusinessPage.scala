@@ -20,8 +20,6 @@ import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
 import pages.QuestionPage
-import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -36,21 +34,21 @@ final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPa
   override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
       case Some(Business) =>
-        userAnswers.remove(TrusteesDateOfBirthPage(index))
-          .flatMap(_.remove(TrusteeAUKCitizenPage(index)))
-          .flatMap(_.remove(TrusteesNinoPage(index)))
-          .flatMap(_.remove(TrusteeAddressInTheUKPage(index)))
-          .flatMap(_.remove(TrusteesUkAddressPage(index)))
-          .flatMap(_.remove(TrusteesInternationalAddressPage(index)))
+        userAnswers.remove(individual.TrusteesDateOfBirthPage(index))
+          .flatMap(_.remove(individual.TrusteeAUKCitizenPage(index)))
+          .flatMap(_.remove(individual.NinoPage(index)))
+          .flatMap(_.remove(individual.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(individual.UkAddressPage(index)))
+          .flatMap(_.remove(individual.InternationalAddressPage(index)))
           .flatMap(_.remove(TelephoneNumberPage(index)))
 
       case Some(Individual) =>
-        userAnswers.remove(UtrYesNoPage(index))
-          .flatMap(_.remove(NamePage(index)))
-          .flatMap(_.remove(UtrPage(index)))
-          .flatMap(_.remove(AddressUkYesNoPage(index)))
-          .flatMap(_.remove(UkAddressPage(index)))
-          .flatMap(_.remove(InternationalAddressPage(index)))
+        userAnswers.remove(organisation.UtrYesNoPage(index))
+          .flatMap(_.remove(organisation.NamePage(index)))
+          .flatMap(_.remove(organisation.UtrPage(index)))
+          .flatMap(_.remove(organisation.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(organisation.UkAddressPage(index)))
+          .flatMap(_.remove(organisation.InternationalAddressPage(index)))
           .flatMap(_.remove(TelephoneNumberPage(index)))
 
       case _ => super.cleanup(value, userAnswers)

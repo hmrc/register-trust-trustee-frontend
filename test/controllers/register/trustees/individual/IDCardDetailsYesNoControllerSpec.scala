@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{IDCardDetailsYesNoPage, TrusteesNamePage}
+import pages.register.trustees.individual.{IDCardDetailsYesNoPage, NamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.trustees.individual.IDCardDetailsYesNoView
@@ -43,7 +43,7 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -65,7 +65,7 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(IDCardDetailsYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -87,7 +87,7 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
     "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(IDCardDetailsYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -107,7 +107,7 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(IDCardDetailsYesNoPage(index), true).success.value
 
       val application =
@@ -176,7 +176,7 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

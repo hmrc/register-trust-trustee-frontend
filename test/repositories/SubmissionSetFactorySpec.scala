@@ -73,13 +73,13 @@ class SubmissionSetFactorySpec extends SpecBase {
     userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
       .set(TrusteeStatus(index), Status.Completed).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-      .set(TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
+      .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
       .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
       .set(TrusteeAUKCitizenPage(index), true).success.value
-      .set(TrusteeAddressInTheUKPage(index), true).success.value
-      .set(TrusteesNinoPage(index), "AB123456C").success.value
+      .set(AddressUkYesNoPage(index), true).success.value
+      .set(NinoPage(index), "AB123456C").success.value
       .set(TelephoneNumberPage(index), "0191 1111111").success.value
-      .set(TrusteesUkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+      .set(UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
   }
 
   "Submission set factory" must {

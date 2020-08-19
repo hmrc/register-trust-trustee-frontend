@@ -18,8 +18,7 @@ package pages.register.trustees
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
+import pages.register.trustees._
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -36,19 +35,20 @@ final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean
       case Some(false) =>
         userAnswers.remove(TrusteeIndividualOrBusinessPage(index))
 
-          .flatMap(_.remove(TrusteesNamePage(index)))
-          .flatMap(_.remove(TrusteesDateOfBirthPage(index)))
-          .flatMap(_.remove(TrusteeAUKCitizenPage(index)))
-          .flatMap(_.remove(TrusteesNinoPage(index)))
-          .flatMap(_.remove(TrusteeAddressInTheUKPage(index)))
-          .flatMap(_.remove(TrusteesUkAddressPage(index)))
+          .flatMap(_.remove(individual.NamePage(index)))
+          .flatMap(_.remove(individual.TrusteesDateOfBirthPage(index)))
+          .flatMap(_.remove(individual.TrusteeAUKCitizenPage(index)))
+          .flatMap(_.remove(individual.NinoPage(index)))
+          .flatMap(_.remove(individual.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(individual.UkAddressPage(index)))
+          .flatMap(_.remove(individual.InternationalAddressPage(index)))
 
-          .flatMap(_.remove(UtrYesNoPage(index)))
-          .flatMap(_.remove(NamePage(index)))
-          .flatMap(_.remove(UtrPage(index)))
-          .flatMap(_.remove(AddressUkYesNoPage(index)))
-          .flatMap(_.remove(UkAddressPage(index)))
-          .flatMap(_.remove(InternationalAddressPage(index)))
+          .flatMap(_.remove(organisation.UtrYesNoPage(index)))
+          .flatMap(_.remove(organisation.NamePage(index)))
+          .flatMap(_.remove(organisation.UtrPage(index)))
+          .flatMap(_.remove(organisation.AddressUkYesNoPage(index)))
+          .flatMap(_.remove(organisation.UkAddressPage(index)))
+          .flatMap(_.remove(organisation.InternationalAddressPage(index)))
 
           .flatMap(_.remove(TelephoneNumberPage(index)))
 

@@ -184,7 +184,7 @@ trait TestTrusteeRoutes {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
 
-          navigator.nextPage(TrusteesNamePage(index), fakeDraftId, userAnswers)
+          navigator.nextPage(NamePage(index), fakeDraftId, userAnswers)
             .mustBe(controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, fakeDraftId))
       }
     }
@@ -243,8 +243,8 @@ trait TestTrusteeRoutes {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            navigator.nextPage(TrusteesNinoPage(index), fakeDraftId, userAnswers)
-              .mustBe(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
+            navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers)
+              .mustBe(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -252,9 +252,9 @@ trait TestTrusteeRoutes {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            val answers = userAnswers.set(TrusteeAddressInTheUKPage(index), value = true).success.value
+            val answers = userAnswers.set(AddressUkYesNoPage(index), value = true).success.value
 
-            navigator.nextPage(TrusteeAddressInTheUKPage(index), fakeDraftId, answers)
+            navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
               .mustBe(controllers.register.trustees.individual.routes.UkAddressController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -263,10 +263,10 @@ trait TestTrusteeRoutes {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            val answers = userAnswers.set(TrusteeAddressInTheUKPage(index), value = false).success.value
+            val answers = userAnswers.set(AddressUkYesNoPage(index), value = false).success.value
 
-            navigator.nextPage(TrusteeAddressInTheUKPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
+            navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
+              .mustBe(controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -274,7 +274,7 @@ trait TestTrusteeRoutes {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            navigator.nextPage(TrusteesUkAddressPage(index), fakeDraftId, userAnswers)
+            navigator.nextPage(UkAddressPage(index), fakeDraftId, userAnswers)
               .mustBe(controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, fakeDraftId))
         }
       }

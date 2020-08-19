@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesNamePage, TrusteesNinoPage}
+import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -54,19 +54,19 @@ class NinoController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
       requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
       val messagePrefix: String = getMessagePrefix(index, request)
 
       val form = formProvider(messagePrefix)
 
-      val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
+      val preparedForm = request.userAnswers.get(NinoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -88,7 +88,7 @@ class NinoController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+      val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
       val messagePrefix: String = getMessagePrefix(index, request)
 
@@ -100,9 +100,9 @@ class NinoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NinoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NinoPage(index), draftId, updatedAnswers))
         }
       )
   }

@@ -21,7 +21,7 @@ import controllers.register.IndexValidation
 import forms.TelephoneNumberFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
+import pages.register.trustees.individual.{TrusteeAUKCitizenPage, NamePage}
 import pages.register.trustees.{IsThisLeadTrusteePage, TelephoneNumberPage}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -47,7 +47,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -69,7 +69,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +91,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -131,7 +131,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
     "redirect to IsThisLeadTrustee page when IsThisLeadTrustee is not answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(TrusteeAUKCitizenPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -151,7 +151,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(TrusteeAUKCitizenPage(index), true).success.value
 
       val application =
@@ -174,7 +174,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
