@@ -33,8 +33,7 @@ import views.html.register.trustees.individual.DateOfBirthView
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesDateOfBirth"
-  val trusteeMessagePrefix = "trusteesDateOfBirth"
+  val trusteeMessagePrefix = "trustee.individual.dateOfBirth"
   val formProvider = new TrusteesDateOfBirthFormProvider(frontendAppConfig)
   val form = formProvider()
 
@@ -65,7 +64,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,7 +87,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -157,7 +156,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

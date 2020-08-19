@@ -27,7 +27,7 @@ import views.html.register.trustees.individual.AddressUkYesNoView
 
 class AddressUkYesNoControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trusteeLiveInTheUK"
+  val trusteeMessagePrefix = "trustee.individual.addressUkYesNo"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(trusteeMessagePrefix)
 

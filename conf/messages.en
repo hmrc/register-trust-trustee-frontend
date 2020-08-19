@@ -205,12 +205,12 @@ removeLeadTrustee.heading = Are you sure you want to remove {0}?
 removeLeadTrustee.error.required = Select yes if you want to remove the lead trustee
 removeLeadTrustee.default = the lead trustee
 
-telephoneNumber.title = What is the trustee’s telephone number?
-telephoneNumber.heading = What is {0}’s telephone number?
-telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
-telephoneNumber.error.required = Enter trustee’s telephone number
-telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
-telephoneNumber.hint = For international numbers include the country code
+trustee.individual.telephoneNumber.title = What is the trustee’s telephone number?
+trustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
+trustee.individual.telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
+trustee.individual.telephoneNumber.error.required = Enter trustee’s telephone number
+trustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+trustee.individual.telephoneNumber.hint = For international numbers include the country code
 
 emailAddress.checkYourAnswersLabel = What is {0}’s email address?
 
@@ -263,6 +263,14 @@ trustee.individual.addressUkYesNo.title = Does the trustee live in the UK?
 trustee.individual.addressUkYesNo.heading = Does {0} live in the UK?
 trustee.individual.addressUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 trustee.individual.addressUkYesNo.error.required = Select yes if the trustee lives in the UK
+
+trustee.individual.ukAddress.title = What is the trustee’s address?
+trustee.individual.ukAddress.heading = What is {0}’s address?
+trustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.individual.internationalAddress.title = What is the trustee’s address?
+trustee.individual.internationalAddress.heading = What is {0}’s address?
+trustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
 leadTrusteeLiveInTheUK.title = Does the lead trustee live in the UK?
 leadTrusteeLiveInTheUK.error.required = Select yes if the lead trustee lives in the UK

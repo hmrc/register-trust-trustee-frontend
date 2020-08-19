@@ -57,13 +57,7 @@ class NameController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-      val messagePrefix = if (isLead) "leadTrusteesName" else "trusteesName"
-
-      val heading = Messages(s"$messagePrefix.heading")
-
-      val form = formProvider(messagePrefix)
+      val form = formProvider("trustee.individual.name")
 
       val preparedForm = request.userAnswers.get(NamePage(index)) match {
         case None => form
@@ -76,8 +70,6 @@ class NameController @Inject()(
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
 
       val form = formProvider("trustee.individual.name")
 

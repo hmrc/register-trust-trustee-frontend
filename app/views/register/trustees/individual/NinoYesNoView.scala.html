@@ -21,10 +21,10 @@ main_template: MainTemplate,
 formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int, messagePrefix: String, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index : Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
+title = s"${errorPrefix(form)} ${messages("trustee.individual.ninoYesNo.title")}"
 ) {
 
   @formHelper(action = NinoYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@ title = s"${errorPrefix(form)} ${messages(messagePrefix+".title")}"
 
      @components.input_yes_no(
         field = form("value"),
-        label = messages("trusteeAUKCitizen.heading", trusteeName),
+        label = messages("trustee.individual.ninoYesNo.heading", trusteeName),
         legendClass = Some("heading-large"),
         legendAsHeading = true
      )

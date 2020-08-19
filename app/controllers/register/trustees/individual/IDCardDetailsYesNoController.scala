@@ -48,7 +48,7 @@ class IDCardDetailsYesNoController @Inject()(
                                               view: IDCardDetailsYesNoView
                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = yesNoFormProvider.withPrefix("trusteesIdCardDetailsYesNo")
+  private val form = yesNoFormProvider.withPrefix("trustee.individual.idCardDetailsYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
