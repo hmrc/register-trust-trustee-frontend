@@ -36,7 +36,12 @@ final case class AddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
           .remove(AddressUkYesNoPage(index))
           .flatMap(_.remove(UkAddressPage(index)))
           .flatMap(_.remove(InternationalAddressPage(index)))
-      case _ => super.cleanup(value, userAnswers)
+          .flatMap(_.remove(PassportDetailsYesNoPage(index)))
+          .flatMap(_.remove(PassportDetailsPage(index)))
+          .flatMap(_.remove(IDCardDetailsYesNoPage(index)))
+          .flatMap(_.remove(IDCardDetailsPage(index)))
+      case _ =>
+        super.cleanup(value, userAnswers)
     }
   }
 }
