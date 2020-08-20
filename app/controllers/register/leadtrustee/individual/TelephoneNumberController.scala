@@ -23,7 +23,6 @@ import forms.TelephoneNumberFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.{TelephoneNumberPage, TrusteesNamePage}
-import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -53,15 +52,14 @@ class TelephoneNumberController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider("")
+      val form = formProvider("leadTrustee.individual.telephoneNumber")
 
       val preparedForm = request.userAnswers.get(TelephoneNumberPage(index)) match {
         case None => form
@@ -76,7 +74,7 @@ class TelephoneNumberController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider("")
+      val form = formProvider("leadTrustee.individual.telephoneNumber")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

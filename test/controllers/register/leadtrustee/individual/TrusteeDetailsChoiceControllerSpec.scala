@@ -26,7 +26,7 @@ import views.html.register.leadtrustee.individual.TrusteeDetailsChoiceView
 
 class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
-  val messageKeyPrefix = "trusteeDetailsChoice"
+  val messageKeyPrefix = "leadTrustee.individual.trusteeDetailsChoice"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(messageKeyPrefix)
 

@@ -43,7 +43,6 @@ class NameController @Inject()(
                                         requireData: RegistrationDataRequiredAction,
                                         validateIndex: IndexActionFilterProvider,
                                         formProvider: TrusteesNameFormProvider,
-                                        requiredAnswer: RequiredAnswerActionProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: NameView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -51,13 +50,13 @@ class NameController @Inject()(
   private def actions(index: Int, draftId: String) =
     identify andThen getData(draftId) andThen
       requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+      validateIndex(index, Trustees)
+
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val form = formProvider("")
+      val form = formProvider("leadTrustee.individual.name")
 
       val preparedForm = request.userAnswers.get(TrusteesNamePage(index)) match {
         case None => form
@@ -71,7 +70,7 @@ class NameController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val form = formProvider("")
+      val form = formProvider("leadTrustee.individual.name")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

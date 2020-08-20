@@ -24,7 +24,7 @@
 @(form: Form[_], draftId: String, index : Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("leadTrustee.organisation.name.title")}"
+    title = s"${errorPrefix(form)} ${messages("leadTrustee.individual.name.title")}"
     ) {
 
     @formHelper(action = NameController.onSubmit(index, draftId),  'autoComplete -> "on") {
@@ -33,24 +33,30 @@
 
         @components.error_summary(form.errors)
 
+    <fieldset>
+
+        <legend>
+         @components.heading("leadTrustee.individual.name.heading")
+        </legend>
+
             @components.input_text(
             field = form("firstName"),
-            label = messages("trusteesName.firstName"),
+            label = messages("leadTrustee.individual.name.firstName"),
             autocomplete = Some("given-name")
             )
 
             @components.input_text(
             field = form("middleName"),
-            label = messages("trusteesName.middleName"),
+            label = messages("leadTrustee.individual.name.middleName"),
             autocomplete = Some("additional-name")
             )
 
             @components.input_text(
             field = form("lastName"),
-            label = messages("trusteesName.lastName"),
+            label = messages("leadTrustee.individual.name.lastName"),
             autocomplete = Some("family-name")
             )
-
+    </fieldset>
         @components.submit_button()
     }
 }

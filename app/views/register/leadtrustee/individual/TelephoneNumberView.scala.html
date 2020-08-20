@@ -24,7 +24,7 @@
 @(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("telephoneNumber.title")}"
+    title = s"${errorPrefix(form)} ${messages("leadTrustee.individual.telephoneNumber.title")}"
     ) {
 
     @formHelper(action = TelephoneNumberController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,10 +35,10 @@
 
         @components.input_tele(
             field = form("value"),
-            label = messages("telephoneNumber.heading", name),
+            label = messages("leadTrustee.individual.telephoneNumber.heading", name),
             labelClass = Some("heading-large"),
             labelAsHeading = true,
-            hint = Some(messages(s"telephoneNumber.hint"))
+            hint = Some(messages("leadTrustee.individual.telephoneNumber.hint"))
         )
 
         @components.submit_button()

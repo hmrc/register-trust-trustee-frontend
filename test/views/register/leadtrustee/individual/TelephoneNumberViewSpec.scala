@@ -17,6 +17,7 @@
 package views.register.leadtrustee.individual
 
 import forms.TelephoneNumberFormProvider
+import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
@@ -24,30 +25,25 @@ import views.html.register.leadtrustee.individual.TelephoneNumberView
 
 class TelephoneNumberViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "leadtrustee.individual.telephoneNumber"
-
-  val form = new TelephoneNumberFormProvider().apply("leadtrustee.individual.telephoneNumber")
-
+  val messageKeyPrefix = "leadTrustee.individual.telephoneNumber"
+  val name = FullName("First", None ,"last")
   val index = 0
 
-  val name = "Lead Trustee"
+  override val form: Form[String] = new TelephoneNumberFormProvider()(messageKeyPrefix)
 
-  "TelephoneNumberView view" must {
+  "TelephoneNumber view" must {
 
     val view = viewFor[TelephoneNumberView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name.toString)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString, "hint")
+
+    behave like pageWithHint(form, applyView, messageKeyPrefix)
+
+    behave like pageWithTextFields(form, applyView, messageKeyPrefix, Some(name.toString), "value")
 
     behave like pageWithBackLink(applyView(form))
-
-    behave like stringPage(form, applyView, messageKeyPrefix, Some(name))
-
-    "display hint text" in {
-      val doc = asDocument(applyView(form))
-      assertContainsText(doc, messages(s"site.telephone_number.hint"))
-    }
   }
 }

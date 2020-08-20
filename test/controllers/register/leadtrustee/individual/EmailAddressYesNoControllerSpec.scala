@@ -34,7 +34,7 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val messagePrefix = "emailAddressYesNo"
+  val messagePrefix = "leadTrustee.individual.emailAddressYesNo"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(messagePrefix)
 

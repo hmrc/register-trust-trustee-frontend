@@ -450,13 +450,6 @@ leadTrustee.organisation.email.heading = What is {0}’s email address?
 leadTrustee.organisation.email.error.required = Enter the lead trustee’s email address
 leadTrustee.organisation.email.error.invalid = Enter a valid email address with no spaces, like name@example.com
 
-trusteeDetailsChoice.title = Which of {0}'s details can you provide?
-trusteeDetailsChoice.heading = Which of {0}'s details can you provide?
-trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}'s details can you provide?
-trusteeDetailsChoice.idCard = IdCard
-trusteeDetailsChoice.passport = Passport
-trusteeDetailsChoice.error.required =
-
 iDCardDetails.title = What are the trustee’s ID card details?
 iDCardDetails.heading = What are {0}’s ID card details?
 iDCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
@@ -532,7 +525,7 @@ leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}'s details can
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}'s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.idCard = IdCard
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
-leadTrustee.individual.trusteeDetailsChoice.error.required =
+leadTrustee.individual.trusteeDetailsChoice.error.required = sdf
 
 leadTrustee.individual.iDCardDetails.title = What are the trustee’s ID card details?
 leadTrustee.individual.iDCardDetails.heading = What are {0}’s ID card details?
@@ -554,25 +547,30 @@ leadTrustee.individual.iDCardDetails.expiryDate.error.invalid = Enter a real dat
 leadTrustee.individual.iDCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 leadTrustee.individual.iDCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
-leadTrustee.individual.PassportDetails.title = What are the individual beneficiary’s passport details?
-leadTrustee.individual.PassportDetails.heading = What are {0}’s passport details?
-leadTrustee.individual.PassportDetails.checkYourAnswersLabel = What are {0}’s passport details?
-leadTrustee.individual.PassportDetails.country = Passport country of issue
-leadTrustee.individual.PassportDetails.country.error.required = Enter the individual beneficiary’s passport country of issue
-leadTrustee.individual.PassportDetails.country.error.length = The individual beneficiary’s passport country must be 100 characters or less
-leadTrustee.individual.PassportDetails.number = Passport number
-leadTrustee.individual.PassportDetails.number.hint = For example, 502135326
-leadTrustee.individual.PassportDetails.number.error.required = Enter the individual beneficiary’s passport number
-leadTrustee.individual.PassportDetails.number.error.length = Passport number must be 30 characters or less
-leadTrustee.individual.PassportDetails.number.error.invalid = Passport number can only include letters and numbers
-leadTrustee.individual.PassportDetails.expiryDate.title = Expiry date
-leadTrustee.individual.PassportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
-leadTrustee.individual.PassportDetails.expiryDate.error.required.all = Enter the passport expiry date
-leadTrustee.individual.PassportDetails.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
-leadTrustee.individual.PassportDetails.expiryDate.error.required = Passport expiry date must include {0}
-leadTrustee.individual.PassportDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s passport expires
-leadTrustee.individual.PassportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
-leadTrustee.individual.PassportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+leadTrustee.individual.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
+leadTrustee.individual.passportDetailsYesNo.title = Do you know the trustee’s passport details?
+leadTrustee.individual.passportDetailsYesNo.heading = Do you know {0}’s passport details?
+leadTrustee.individual.passportDetailsYesNo.error.required = Select yes if you know the trustee’s passport details
+
+leadTrustee.individual.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
+leadTrustee.individual.passportDetails.title = What are the trustee’s passport details?
+leadTrustee.individual.passportDetails.heading = What are {0}’s passport details?
+leadTrustee.individual.passportDetails.country = Passport country of issue
+leadTrustee.individual.passportDetails.country.error.required = Enter the trustee’s passport country of issue
+leadTrustee.individual.passportDetails.country.error.length = The trustee’s passport country must be 100 characters or less
+leadTrustee.individual.passportDetails.number = Passport number
+leadTrustee.individual.passportDetails.number.hint = For example, 502135326
+leadTrustee.individual.passportDetails.number.error.required = Enter the trustee’s passport number
+leadTrustee.individual.passportDetails.number.error.length = The trustee’s passport number must be 30 characters or less
+leadTrustee.individual.passportDetails.number.error.invalid = Passport number can only include letters and numbers
+leadTrustee.individual.passportDetails.expiryDate = Expiry date
+leadTrustee.individual.passportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+leadTrustee.individual.passportDetails.expiryDate.error.required.all = Enter the passport expiry date
+leadTrustee.individual.passportDetails.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
+leadTrustee.individual.passportDetails.expiryDate.error.required = Passport expiry date must include {0}
+leadTrustee.individual.passportDetails.expiryDate.error.invalid = Enter a real date when the trustee’s passport expires
+leadTrustee.individual.passportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+leadTrustee.individual.passportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 
 leadTrustee.individual.nino.title = What is the trustee’s National Insurance number?
 leadTrustee.individual.nino.heading = What is {0}’s National Insurance number?
@@ -587,13 +585,47 @@ leadTrustee.individual.liveInTheUkUkYesNo.heading = Does {0} live in the UK?
 leadTrustee.individual.liveInTheUkUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 leadTrustee.individual.liveInTheUkUkYesNo.error.required = Select yes if the trustee lives in the UK
 
-leadTrustee.individual.emailYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
-leadTrustee.individual.emailYesNo.title = Do you know the lead trustee’s email address?
-leadTrustee.individual.emailYesNo.heading = Do you know {0}’s email address?
-leadTrustee.individual.emailYesNo.error.required = Select yes if you know the lead trustee’s email address
+leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
+leadTrustee.individual.emailAddressYesNo.title = Do you know the lead trustee’s email address?
+leadTrustee.individual.emailAddressYesNo.heading = Do you know {0}’s email address?
+leadTrustee.individual.emailAddressYesNo.error.required = Enter the lead trustee’s email address
+leadTrustee.individual.emailAddressYesNo.error.invalid = Enter a valid email address with no spaces, like name@example.com
+
+leadTrustee.individual.telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
+leadTrustee.individual.telephoneNumber.title = What is the lead trustee’s telephone number?
+leadTrustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
+leadTrustee.individual.telephoneNumber.hint = For international numbers include the country code
+leadTrustee.individual.telephoneNumber.error.required = Enter the lead trustee’s telephone number
+leadTrustee.individual.telephoneNumber.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+
+leadTrustee.individual.name.title = What is the trustee’s name?
+leadTrustee.individual.name.heading = What is the trustee’s name?
+leadTrustee.individual.name.checkYourAnswersLabel = What is the trustee’s name?
+leadTrustee.individual.name.firstName = First name
+leadTrustee.individual.name.middleName = Middle names (optional)
+leadTrustee.individual.name.lastName = Last name
+leadTrustee.individual.name.error.firstnamerequired = Enter the trustee’s first name
+leadTrustee.individual.name.error.lastnamerequired = Enter the trustee’s last name
+leadTrustee.individual.name.error.lengthfirstname = Trustee’s first name must be 35 characters or less
+leadTrustee.individual.name.error.lengthmiddlename = Trustee’s middle names must be 35 characters or less
+leadTrustee.individual.name.error.lengthlastname = Trustee’s last name must be 35 characters or less
+leadTrustee.individual.name.error.invalidFirstNameCharacters = Trustee’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+leadTrustee.individual.name.error.invalidMiddleNameCharacters = Trustee’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+leadTrustee.individual.name.error.invalidLastNameCharacters = Trustee’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 leadTrustee.individual.email.checkYourAnswersLabel = What is {0}’s email address?
 leadTrustee.individual.email.title = What is the lead trustee’s email address?
 leadTrustee.individual.email.heading = What is {0}’s email address?
 leadTrustee.individual.email.error.required = Enter the lead trustee’s email address
 leadTrustee.individual.email.error.invalid = Enter a valid email address with no spaces, like name@example.com
+
+leadTrustee.individual.DateOfBirth.title = What is the lead trustee’s date of birth?
+leadTrustee.individual.dateOfBirth.heading = What is {0}’s date of birth?
+leadTrustee.individual.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+leadTrustee.individual.dateOfBirth.hint = For example, 31 3 1980
+leadTrustee.individual.dateOfBirth.error.required.all = Enter a date of birth
+leadTrustee.individual.dateOfBirth.error.required.two = Date of birth must include a {0} and a {1}
+leadTrustee.individual.dateOfBirth.error.required = Date of birth must include a {0}
+leadTrustee.individual.dateOfBirth.error.invalid = Enter a real date of birth
+leadTrustee.individual.dateOfBirth.error.future = Date of birth must be today or in the past
+leadTrustee.individual.dateOfBirth.error.past = Date of birth must be after 31 December 1499

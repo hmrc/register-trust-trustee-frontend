@@ -22,32 +22,28 @@ import forms.TelephoneNumberFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.individual.TrusteesNamePage
-import pages.register.trustees.individual.TrusteeAUKCitizenPage
-import pages.register.trustees.{IsThisLeadTrusteePage, TelephoneNumberPage}
+import pages.register.trustees.TelephoneNumberPage
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.TelephoneNumberView
+import views.html.register.leadtrustee.individual.TelephoneNumberView
 
 class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
-  val leadTrusteeMessagePrefix = "leadTrusteesTelephoneNumber"
-  val trusteeMessagePrefix = "telephoneNumber"
+  val messagePrefix = "leadTrustee.individual.telephoneNumber"
   val formProvider = new TelephoneNumberFormProvider()
-  val form = formProvider(trusteeMessagePrefix)
+  val form = formProvider(messagePrefix)
 
   val index = 0
-  val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
   lazy val telephoneNumberRoute = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
 
   "TelephoneNumber Controller" must {
 
-    "return OK and the correct view (lead trustee) for a GET" in {
+    "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -61,29 +57,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view (trustee) for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, telephoneNumberRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[TelephoneNumberView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -91,7 +65,6 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
@@ -106,15 +79,14 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("0191 1111111"), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill("0191 1111111"), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to TrusteeName when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -129,31 +101,11 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "redirect to IsThisLeadTrustee page when IsThisLeadTrustee is not answered" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, telephoneNumberRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -174,7 +126,6 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -192,7 +143,7 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }

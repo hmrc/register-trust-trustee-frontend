@@ -23,25 +23,23 @@ import forms.PassportOrIdCardFormProvider
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import pages.register.leadtrustee.individual.TrusteesNamePage
-import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.IDCardDetailsPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptions
-import views.html.register.trustees.individual.IDCardDetailsView
+import views.html.register.leadtrustee.individual.IDCardDetailsView
 
 class IDCardDetailsControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trusteesIdCardDetails"
+  val messagePrefix = "leadTrustee.individual.iDCardDetails"
   val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  val form = formProvider(trusteeMessagePrefix)
+  val form = formProvider(messagePrefix)
   val cardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
 
   val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
   val index = 0
-  val emptyTrusteeName = ""
   val trusteeName = FullName("FirstName", None, "LastName")
 
   lazy val idCardDetailsRoute = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
@@ -51,7 +49,6 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), trusteeName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -73,7 +70,6 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(IDCardDetailsPage(index), cardDetails).success.value
 
@@ -93,29 +89,9 @@ class IDCardDetailsControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(IDCardDetailsPage(index), cardDetails).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, idCardDetailsRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(IDCardDetailsPage(index), cardDetails).success.value
 
@@ -141,12 +117,11 @@ class IDCardDetailsControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to trusteeName must"  when{
+    "redirect to trusteeName page"  when {
 
       "a GET when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
           .set(IDCardDetailsPage(index), cardDetails).success.value
 
         val application =
@@ -162,10 +137,10 @@ class IDCardDetailsControllerSpec extends SpecBase {
 
         application.stop()
       }
+
       "a POST when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
           .set(IDCardDetailsPage(index), cardDetails).success.value
 
         val application =
@@ -190,7 +165,6 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

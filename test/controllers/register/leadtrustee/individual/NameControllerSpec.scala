@@ -23,11 +23,10 @@ import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.trustees._
-import play.api.i18n.Messages
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.individual.NameView
+import views.html.register.leadtrustee.individual.NameView
 
 class NameControllerSpec extends SpecBase with IndexValidation {
 
@@ -35,22 +34,17 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
   val index = 0
 
+  val name = FullName("first name", Some("middle name"), "last name")
+
+  val messageKeyPrefix = "leadTrustee.individual.name"
+
   lazy val trusteesNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
-  "TrusteesName Controller" must {
+  "Name Controller" must {
 
-    "return Ok and the correct view for a GET" when {
+    "return Ok and the correct view for a GET" in {
 
-      "is lead trustee" in {
-
-        val messageKeyPrefix = "leadTrusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
-
-        val application = applicationBuilder(Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         val request = FakeRequest(GET, trusteesNameRoute)
 
@@ -66,81 +60,12 @@ class NameControllerSpec extends SpecBase with IndexValidation {
           view(form, fakeDraftId, index)(fakeRequest, messages).toString
 
         application.stop()
-      }
-
-      "is trustee" in {
-
-        val messageKeyPrefix = "trusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, trusteesNameRoute)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[NameView]
-
-        val form = formProvider(messageKeyPrefix)
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(form, fakeDraftId, index)(fakeRequest, messages).toString
-
-        application.stop()
-      }
 
     }
 
-    "return a Bad Request and errors when invalid data is submitted" when {
+    "return a Bad Request and errors when invalid data is submitted" in {
 
-      "is lead trustee" in {
-
-        val messageKeyPrefix = "leadTrusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request =
-          FakeRequest(POST, trusteesNameRoute)
-            .withFormUrlEncodedBody(("value", ""))
-
-        val form = formProvider(messageKeyPrefix)
-
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[NameView]
-
-        val result = route(application, request).value
-
-
-        status(result) mustEqual BAD_REQUEST
-
-        contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
-
-        application.stop()
-      }
-
-      "is trustee" in {
-
-        val messageKeyPrefix = "trusteesName"
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         val request =
           FakeRequest(POST, trusteesNameRoute)
@@ -162,34 +87,11 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         application.stop()
 
-      }
-
-
-      "redirect to IsThisLeadTrustee a GET when no answer to IsThisLeadTrustee" in {
-
-        val userAnswers = emptyUserAnswers
-
-        val application = applicationBuilder(Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, trusteesNameRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
       }
 
       "populate the view correctly on a GET when the question has previously been answered" in {
 
-        val messageKeyPrefix = "trusteesName"
-
-        val name = FullName("first name", Some("middle name"), "last name")
-
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteesNamePage(index), name).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -199,8 +101,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         val view = application.injector.instanceOf[NameView]
 
         val result = route(application, request).value
-
-        val heading = Messages(s"$messageKeyPrefix.heading")
 
         val form = formProvider(messageKeyPrefix)
 
@@ -234,25 +134,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
-
-          application.stop()
-        }
-
-        "no answer to IsThisLeadTrustee is given" in {
-
-          val userAnswers = emptyUserAnswers
-
-          val application =
-            applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-          val request =
-            FakeRequest(POST, trusteesNameRoute)
-              .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
 
           application.stop()
         }
@@ -323,5 +204,4 @@ class NameControllerSpec extends SpecBase with IndexValidation {
         )
       }
     }
-  }
 }

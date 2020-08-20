@@ -56,7 +56,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
   val userAnswers = emptyUserAnswers
     .set(InternationalAddressPage(index), InternationalAddress("value 1", "value 2", None, "the country")).success.value
 
-  "NonUkAddress Controller" must {
+  "InternationalAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -100,10 +100,8 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      "redirect to the next page when valid data is submitted" in {
-
         val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          applicationBuilder(userAnswers = Some(userAnswers))
             .overrides(
               bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
             ).build()
@@ -124,8 +122,6 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
         application.stop()
       }
-
-    }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 

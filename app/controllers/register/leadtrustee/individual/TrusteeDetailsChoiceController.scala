@@ -60,9 +60,7 @@ class TrusteeDetailsChoiceController @Inject()(
 
       val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val messagePrefix: String = "trusteeDetailsChoice"
-
-      val form: Form[DetailsChoice] = formProvider.withPrefix(messagePrefix)
+      val form: Form[DetailsChoice] = formProvider.withPrefix("leadTrustee.individual.trusteeDetailsChoice")
 
       val preparedForm = request.userAnswers.get(TrusteeDetailsChoicePage(index)) match {
         case None => form
@@ -78,9 +76,7 @@ class TrusteeDetailsChoiceController @Inject()(
 
       val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val messagePrefix: String = "trusteeDetailsChoice"
-
-      val form: Form[DetailsChoice] = formProvider.withPrefix(messagePrefix)
+      val form: Form[DetailsChoice] = formProvider.withPrefix("leadTrustee.individual.trusteeDetailsChoice")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

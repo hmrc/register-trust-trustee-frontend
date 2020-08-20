@@ -30,8 +30,8 @@ class EmailAddressControllerSpec extends SpecBase {
   lazy val emailAddressRoute: String = routes.EmailAddressController.onPageLoad(index, fakeDraftId).url
   val index = 0
   val formProvider = new EmailAddressFormProvider()
-  val form: Form[String] = formProvider.withPrefix("emailAddress")
-  val trusteeName = "FirstName LastName"
+  val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.email")
+  val name = FullName("FirstName", None, "LastName").toString
 
   val validAnswer: String = "email@example.com"
 
@@ -53,7 +53,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -74,7 +74,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -119,7 +119,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }

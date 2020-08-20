@@ -16,17 +16,18 @@
 
 package views.register.leadtrustee.individual
 
-import forms.StringFormProvider
+import forms.trustees.TrusteesNameFormProvider
+import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
-import views.html.register.trustees.organisation.NameView
+import views.behaviours.QuestionViewBehaviours
+import views.html.register.leadtrustee.individual.NameView
 
-class NameViewSpec extends StringViewBehaviours {
+class NameViewSpec extends QuestionViewBehaviours[FullName] {
 
-  val prefix = "trustee.organisation.name"
+  val prefix = "leadTrustee.individual.name"
   val index = 0
-  override val form: Form[String] = new StringFormProvider().withConfig(prefix, 56)
+  val form: Form[FullName] = new TrusteesNameFormProvider()(prefix)
   val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
 
   "Name View" must {
@@ -38,7 +39,13 @@ class NameViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPage(form, applyView, prefix)
+    behave like pageWithTextFields(
+      form,
+      applyView,
+      prefix,
+      None,
+      "firstName", "middleName", "lastName"
+    )
 
     behave like pageWithASubmitButton(applyView(form))
 

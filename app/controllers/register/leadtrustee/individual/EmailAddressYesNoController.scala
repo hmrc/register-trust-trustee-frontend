@@ -47,7 +47,7 @@ class EmailAddressYesNoController @Inject()(
                                              view: EmailAddressYesNoView
                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("emailAddressYesNo")
+  private val form = formProvider.withPrefix("leadTrustee.individual.emailAddressYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
