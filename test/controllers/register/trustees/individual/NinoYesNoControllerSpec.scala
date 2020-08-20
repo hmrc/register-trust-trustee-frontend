@@ -17,12 +17,15 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
 import forms.YesNoFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, NamePage}
+import pages.register.trustees.individual.{NamePage, NinoYesNoPage}
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -33,8 +36,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val leadTrusteeMessagePrefix = "leadTrusteeAUKCitizen"
-  val trusteeMessagePrefix = "trusteeAUKCitizen"
+  val trusteeMessagePrefix = "trustee.individual.ninoYesNo"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(trusteeMessagePrefix)
 
@@ -46,29 +48,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
   "trusteeAUKCitizen Controller" must {
 
-    "return OK and the correct view (lead trustee) for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeAUKCitizenRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[NinoYesNoView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view (trustee) for a GET" in {
+    "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
@@ -85,7 +65,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -95,7 +75,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), true).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(NinoYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -108,7 +88,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, leadTrusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -116,7 +96,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to TrusteeNamePage when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(NinoYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -134,7 +114,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(NinoYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -156,7 +136,12 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteeAUKCitizenRoute)
@@ -193,7 +178,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeMessagePrefix, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -238,7 +223,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
+        NinoYesNoPage.apply,
         getForIndex
       )
 
@@ -257,7 +242,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
+        NinoYesNoPage.apply,
         postForIndex
       )
     }

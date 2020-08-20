@@ -28,7 +28,6 @@ import play.api.libs.json.{JsBoolean, JsString, Json}
 class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) {
 
   def build(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
-
     val result = userAnswers.get(Trustees).getOrElse(Nil) match {
       case Nil => None
       case list =>

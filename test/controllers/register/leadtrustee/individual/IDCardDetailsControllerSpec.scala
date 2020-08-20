@@ -23,7 +23,7 @@ import forms.PassportOrIdCardFormProvider
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import pages.register.leadtrustee.individual.TrusteesNamePage
-import pages.register.trustees.individual.IDCardDetailsPage
+import pages.register.leadtrustee.individual.IDCardDetailsPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption

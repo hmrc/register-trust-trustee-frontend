@@ -16,6 +16,8 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -36,8 +38,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject()(
                                         override val messagesApi: MessagesApi,
+                                        implicit val frontendAppConfig: FrontendAppConfig,
                                         registrationsRepository: RegistrationsRepository,
-                                        navigator: Navigator,
+                                        @TrusteeIndividual navigator: Navigator,
                                         identify: RegistrationIdentifierAction,
                                         getData: DraftIdRetrievalActionProvider,
                                         requireData: RegistrationDataRequiredAction,
@@ -57,13 +60,7 @@ class NameController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-      val messagePrefix = if (isLead) "leadTrusteesName" else "trusteesName"
-
-      val heading = Messages(s"$messagePrefix.heading")
-
-      val form = formProvider(messagePrefix)
+      val form = formProvider("trustee.individual.name")
 
       val preparedForm = request.userAnswers.get(NamePage(index)) match {
         case None => form
@@ -76,8 +73,6 @@ class NameController @Inject()(
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
 
       val form = formProvider("trustee.individual.name")
 

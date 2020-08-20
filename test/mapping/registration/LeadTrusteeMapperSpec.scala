@@ -50,15 +50,16 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
-          .set(TrusteeAUKCitizenPage(index), true).success.value
-          .set(AddressUkYesNoPage(index), true).success.value
+          .set(DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+          .set(NinoYesNoPage(index), true).success.value
           .set(NinoPage(index), "AB123456C").success.value
-          .set(TelephoneNumberPage(index), "0191 1111111").success.value
+          .set(AddressUkYesNoPage(index), true).success.value
           .set(UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
+          .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
-        leadTrusteeMapper.build(userAnswers).value mustBe  LeadTrusteeType(
-          leadTrusteeInd = Some(LeadTrusteeIndType(NameType("first name", Some("middle name"), "Last Name"),
+        leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
+          leadTrusteeInd = Some(LeadTrusteeIndType(
+            NameType("first name", Some("middle name"), "Last Name"),
             dateOfBirth = LocalDate.of(1500,10,10),
             phoneNumber = "0191 1111111",
             email = None,
@@ -220,7 +221,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+          .set(DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
 
         leadTrusteeMapper.build(userAnswers) mustNot be(defined)
       }
@@ -242,8 +243,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
-          .set(TrusteeAUKCitizenPage(index), true).success.value
+          .set(DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+          .set(NinoYesNoPage(index), true).success.value
           .set(AddressUkYesNoPage(index), true).success.value
           .set(NinoPage(index), "AB123456C").success.value
           .set(UkAddressPage(index), UKAddress("line1", "line2",None, Some("line4"), "NE65QA")).success.value

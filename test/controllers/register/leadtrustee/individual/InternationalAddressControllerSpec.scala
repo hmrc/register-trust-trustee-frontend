@@ -17,23 +17,18 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
-import config.annotations.{LeadTrusteeIndividual, LeadTrusteeOrganisation}
+import config.annotations.LeadTrusteeIndividual
 import forms.InternationalAddressFormProvider
 import models.core.pages.{FullName, InternationalAddress}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.leadtrustee.individual.{InternationalAddressPage, TrusteesNamePage}
 import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.RegistrationsRepository
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.leadtrustee.individual.InternationalAddressView
-
-import scala.concurrent.Future
 
 class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 

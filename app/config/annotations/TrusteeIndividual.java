@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package config.annotations;
 
-import java.time.LocalDate
+import com.google.inject.BindingAnnotation;
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-final case class  TrusteesDateOfBirthPage(index: Int) extends QuestionPage[LocalDate] {
-
-  override def path: JsPath = Trustees.path \ index \ toString
-
-  override def toString: String = "dateOfBirth"
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface TrusteeIndividual {}

@@ -19,11 +19,14 @@ package controllers.register.trustees.individual
 import java.time.LocalDate
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import forms.{PassportOrIdCardFormProvider, YesNoFormProvider}
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
+import navigation.{FakeNavigator, Navigator}
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsPage, NamePage}
+import pages.register.trustees.individual.{NamePage, PassportDetailsPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
@@ -32,7 +35,7 @@ import views.html.register.trustees.individual.PassportDetailsView
 
 class PassportDetailsControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trusteesPassportDetails"
+  val trusteeMessagePrefix = "trustee.individual.passportDetails"
   val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
   val form = formProvider(trusteeMessagePrefix)
 
@@ -120,7 +123,12 @@ class PassportDetailsControllerSpec extends SpecBase {
         .set(PassportDetailsPage(index), passportDetails).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, passportDetailsRoute)

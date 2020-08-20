@@ -16,6 +16,8 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -37,8 +39,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TelephoneNumberController @Inject()(
                                            override val messagesApi: MessagesApi,
+                                           implicit val frontendAppConfig: FrontendAppConfig,
                                            registrationsRepository: RegistrationsRepository,
-                                           navigator: Navigator,
+                                           @TrusteeIndividual navigator: Navigator,
                                            validateIndex: IndexActionFilterProvider,
                                            identify: RegistrationIdentifierAction,
                                            getData: DraftIdRetrievalActionProvider,
@@ -62,27 +65,14 @@ class TelephoneNumberController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form = formProvider(messagePrefix)
+      val form = formProvider("trustee.individual.telephoneNumber")
 
       val preparedForm = request.userAnswers.get(TelephoneNumberPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
-  }
-
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteesTelephoneNumber"
-    } else {
-      "telephoneNumber"
-    }
-    messagePrefix
+      Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -90,13 +80,11 @@ class TelephoneNumberController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form = formProvider(messagePrefix)
+      val form = formProvider("trustee.individual.telephoneNumber")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeName))),
 
         value => {
           val answers = request.userAnswers.set(TelephoneNumberPage(index), value)

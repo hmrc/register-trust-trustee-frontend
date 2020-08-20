@@ -16,13 +16,15 @@
 
 package pages.register.trustees.individual
 
+import java.time.LocalDate
+
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class  TrusteeAUKCitizenPage(index : Int) extends QuestionPage[Boolean] {
+final case class  DateOfBirthYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "isUKCitizen"
+  override def toString: String = "dateOfBirthYesNo"
 }

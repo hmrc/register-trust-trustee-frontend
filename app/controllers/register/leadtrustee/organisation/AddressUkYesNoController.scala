@@ -16,6 +16,7 @@
 
 package controllers.register.leadtrustee.organisation
 
+import config.FrontendAppConfig
 import config.annotations.LeadTrusteeOrganisation
 import controllers.actions._
 import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
@@ -34,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AddressUkYesNoController @Inject()(
                                           override val messagesApi: MessagesApi,
+                                          implicit val frontendAppConfig: FrontendAppConfig,
                                           registrationsRepository: RegistrationsRepository,
                                           @LeadTrusteeOrganisation navigator: Navigator,
                                           standardActionSets: StandardActionSets,

@@ -26,6 +26,8 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
   val navigator = new TrusteeOrganisationNavigator
   val index = 0
 
+  implicit val config = frontendAppConfig
+
   "TrusteeOrganisation Navigator" must {
 
     "Name page -> UTR yes no page" in {

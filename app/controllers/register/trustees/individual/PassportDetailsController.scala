@@ -16,6 +16,8 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -23,7 +25,7 @@ import forms.PassportOrIdCardFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsPage, NamePage}
+import pages.register.trustees.individual.{NamePage, PassportDetailsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,8 +39,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PassportDetailsController @Inject()(
                                            override val messagesApi: MessagesApi,
+                                           implicit val frontendAppConfig: FrontendAppConfig,
                                            registrationsRepository: RegistrationsRepository,
-                                           navigator: Navigator,
+                                           @TrusteeIndividual navigator: Navigator,
                                            identify: RegistrationIdentifierAction,
                                            getData: DraftIdRetrievalActionProvider,
                                            validateIndex: IndexActionFilterProvider,
@@ -50,7 +53,7 @@ class PassportDetailsController @Inject()(
                                            val countryOptions: CountryOptions
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("trusteesPassportDetails")
+  private val form = formProvider("trustee.individual.passportDetails")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

@@ -14,86 +14,148 @@
  * limitations under the License.
  */
 
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package navigation
 
+import java.time.LocalDate
+
 import base.SpecBase
-import controllers.register.leadtrustee.organisation.routes._
+import controllers.register.leadtrustee.individual.routes._
+import models.core.pages.{FullName, InternationalAddress, UKAddress}
+import models.registration.pages.DetailsChoice.{IdCard, Passport}
+import models.registration.pages.PassportOrIdCardDetails
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.leadtrustee.organisation._
+import pages.register.leadtrustee.individual._
 
 class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val navigator = new LeadTrusteeOrganisationNavigator
+  val navigator = new LeadTrusteeIndividualNavigator
   val index = 0
+  implicit val config = frontendAppConfig
 
-  "LeadTrusteeOrganisation Navigator" must {
+  "LeadTrusteeIndividual Navigator" must {
 
-    "UK registered yes no page -> YES -> Name page" in {
+    "name page -> Name -> DOB page" in {
       val answers = emptyUserAnswers
-        .set(UkRegisteredYesNoPage(index), true).success.value
+        .set(TrusteesNamePage(index), FullName("First", None, "Last")).success.value
 
-      navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
-        .mustBe(NameController.onPageLoad(index, fakeDraftId))
+      navigator.nextPage(TrusteesNamePage(index), fakeDraftId, answers)
+        .mustBe(DateOfBirthController.onPageLoad(index, fakeDraftId))
     }
 
-    "UK registered yes no page -> NO -> Name page" in {
+    "DOB page -> DOB -> NinoYesNo page" in {
       val answers = emptyUserAnswers
-        .set(UkRegisteredYesNoPage(index), false).success.value
+        .set(TrusteesDateOfBirthPage(index), LocalDate.now()).success.value
 
-      navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
-        .mustBe(NameController.onPageLoad(index, fakeDraftId))
+      navigator.nextPage(TrusteesDateOfBirthPage(index), fakeDraftId, answers)
+        .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
     }
 
-    "Name page" when {
+    "NinoYesNo -> Yes -> Nino page" in {
+      val answers = emptyUserAnswers
+        .set(TrusteeNinoYesNoPage(index), true).success.value
 
-      "UK registered" must {
-        "-> UTR page" in {
-          val answers = emptyUserAnswers
-            .set(UkRegisteredYesNoPage(index), true).success.value
-
-          navigator.nextPage(NamePage(index), fakeDraftId, answers)
-            .mustBe(UtrController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "Not UK registered" must {
-        "-> Address UK yes no page" in {
-          val answers = emptyUserAnswers
-            .set(UkRegisteredYesNoPage(index), false).success.value
-
-          navigator.nextPage(NamePage(index), fakeDraftId, answers)
-            .mustBe(AddressUkYesNoController.onPageLoad(index, fakeDraftId))
-        }
-      }
+      navigator.nextPage(TrusteeNinoYesNoPage(index), fakeDraftId, answers)
+        .mustBe(NinoController.onPageLoad(index, fakeDraftId))
     }
 
-    "Is address in UK page -> YES -> UK address page" in {
+    "Nino Page -> Nino -> AUKCitizen Page" in {
       val answers = emptyUserAnswers
-        .set(AddressUkYesNoPage(index), true).success.value
+        .set(TrusteesNinoPage(index), "aa123456b").success.value
 
-      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
+      navigator.nextPage(TrusteesNinoPage(index), fakeDraftId, answers)
+        .mustBe(LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
+    }
+
+    "NinoYesNo -> No -> Details page" in {
+      val answers = emptyUserAnswers
+        .set(TrusteeNinoYesNoPage(index), false).success.value
+
+      navigator.nextPage(TrusteeNinoYesNoPage(index), fakeDraftId, answers)
+        .mustBe(TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId))
+    }
+
+    "TrusteeDetailsChoice Page -> IdCard -> IDCard page" in {
+      val answers = emptyUserAnswers
+        .set(TrusteeDetailsChoicePage(index), IdCard).success.value
+
+      navigator.nextPage(TrusteeDetailsChoicePage(index), fakeDraftId, answers)
+        .mustBe(IDCardDetailsController.onPageLoad(index, fakeDraftId))
+    }
+
+    "TrusteeDetailsChoice Page -> Passport -> Passport page" in {
+      val answers = emptyUserAnswers
+        .set(TrusteeDetailsChoicePage(index), Passport).success.value
+
+      navigator.nextPage(TrusteeDetailsChoicePage(index), fakeDraftId, answers)
+        .mustBe(PassportDetailsController.onPageLoad(index, fakeDraftId))
+    }
+
+    "IDCard Page -> IDCard -> AUKCitizen Page" in {
+      val answers = emptyUserAnswers
+        .set(IDCardDetailsPage(index), PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())).success.value
+
+      navigator.nextPage(IDCardDetailsPage(index), fakeDraftId, answers)
+        .mustBe(LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
+    }
+
+    "Passport Page -> Passport -> AUKCitizen Page" in {
+      val answers = emptyUserAnswers
+        .set(PassportDetailsPage(index), PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())).success.value
+
+      navigator.nextPage(PassportDetailsPage(index), fakeDraftId, answers)
+        .mustBe(LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId))
+    }
+
+    "AUKCitizen Page -> Yes -> UkAddress Page" in {
+      val answers = emptyUserAnswers
+        .set(TrusteeAUKCitizenPage(index), true).success.value
+
+      navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
         .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
     }
 
-    "Is address in UK page -> NO -> International address page" in {
-      val answers = emptyUserAnswers
-        .set(AddressUkYesNoPage(index), false).success.value
 
-      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
+    "AUKCitizen Page -> No -> InternationalAddress Page" in {
+      val answers = emptyUserAnswers
+        .set(TrusteeAUKCitizenPage(index), false).success.value
+
+      navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
         .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
     }
 
-    "UK address page -> Email address yes no page" in {
-      navigator.nextPage(UkAddressPage(index), fakeDraftId, emptyUserAnswers)
+    "UkAddress Page -> UkAddress -> emailYesNo Page" in {
+      val answers = emptyUserAnswers
+        .set(UkAddressPage(index), UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")).success.value
+
+      navigator.nextPage(UkAddressPage(index), fakeDraftId, answers)
         .mustBe(EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
     }
 
-    "International address page -> Email address yes no page" in {
-      navigator.nextPage(InternationalAddressPage(index), fakeDraftId, emptyUserAnswers)
+    "InternationalAddress Page -> InternationalAddress -> emailYesNo Page" in {
+      val answers = emptyUserAnswers
+        .set(InternationalAddressPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
+
+      navigator.nextPage(InternationalAddressPage(index), fakeDraftId, answers)
         .mustBe(EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
     }
 
-    "Email address yes no page -> YES -> Email address page" in {
+    "emailYesNo Page -> Yes -> email Page" in {
       val answers = emptyUserAnswers
         .set(EmailAddressYesNoPage(index), true).success.value
 
@@ -101,7 +163,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
         .mustBe(EmailAddressController.onPageLoad(index, fakeDraftId))
     }
 
-    "Email address yes no page -> NO -> Telephone number page" in {
+    "emailYesNo Page -> No -> TelephoneNumber Page" in {
       val answers = emptyUserAnswers
         .set(EmailAddressYesNoPage(index), false).success.value
 
@@ -109,14 +171,21 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
         .mustBe(TelephoneNumberController.onPageLoad(index, fakeDraftId))
     }
 
-    "Email address page -> Telephone number page" in {
-      navigator.nextPage(EmailAddressPage(index), fakeDraftId, emptyUserAnswers)
+
+    "email Page -> emailaddress -> TelephoneNumber Page" in {
+      val answers = emptyUserAnswers
+        .set(EmailAddressPage(index), "test@test.com").success.value
+
+      navigator.nextPage(EmailAddressPage(index), fakeDraftId, answers)
         .mustBe(TelephoneNumberController.onPageLoad(index, fakeDraftId))
     }
 
-    "Telephone number page -> Check your answers page" in {
-      navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+    "TelephoneNumber Page -> TelephoneNumber -> CheckDetails Page" in {
+      val answers = emptyUserAnswers
+        .set(TelephoneNumberPage(index), "123456789").success.value
+
+      navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, answers)
+        .mustBe(controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
     }
   }
 

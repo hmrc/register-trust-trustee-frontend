@@ -16,6 +16,8 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -24,7 +26,7 @@ import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteesDateOfBirthPage, NamePage}
+import pages.register.trustees.individual.{NamePage, DateOfBirthPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,8 +39,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DateOfBirthController @Inject()(
                                        override val messagesApi: MessagesApi,
+                                       implicit val frontendAppConfig: FrontendAppConfig,
                                        registrationsRepository: RegistrationsRepository,
-                                       navigator: Navigator,
+                                       @TrusteeIndividual navigator: Navigator,
                                        identify: RegistrationIdentifierAction,
                                        getData: DraftIdRetrievalActionProvider,
                                        requireData: RegistrationDataRequiredAction,
@@ -66,14 +69,12 @@ class DateOfBirthController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val preparedForm = request.userAnswers.get(TrusteesDateOfBirthPage(index)) match {
+      val preparedForm = request.userAnswers.get(DateOfBirthPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
+      Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -81,30 +82,17 @@ class DateOfBirthController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeName))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesDateOfBirthPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesDateOfBirthPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DateOfBirthPage(index), draftId, updatedAnswers))
         }
       )
-  }
-
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteesDateOfBirth"
-    } else {
-      "trusteesDateOfBirth"
-    }
-    messagePrefix
   }
 
 }

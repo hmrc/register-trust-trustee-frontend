@@ -16,14 +16,15 @@
 
 package pages.register.trustees.individual
 
-import models.registration.pages.PassportOrIdCardDetails
+import java.time.LocalDate
+
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class IDCardDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+final case class  DateOfBirthPage(index: Int) extends QuestionPage[LocalDate] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "idCard"
+  override def toString: String = "dateOfBirth"
 }

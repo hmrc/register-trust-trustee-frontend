@@ -26,6 +26,8 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
   val navigator = new LeadTrusteeOrganisationNavigator
   val index = 0
 
+  implicit val config = frontendAppConfig
+
   "LeadTrusteeOrganisation Navigator" must {
 
     "UK registered yes no page -> YES -> Name page" in {

@@ -16,6 +16,8 @@
 
 package controllers.register.leadtrustee.individual
 
+import config.FrontendAppConfig
+import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -35,8 +37,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DateOfBirthController @Inject()(
                                        override val messagesApi: MessagesApi,
+                                       implicit val frontendAppConfig: FrontendAppConfig,
                                        registrationsRepository: RegistrationsRepository,
-                                       navigator: Navigator,
+                                       @LeadTrusteeIndividual navigator: Navigator,
                                        identify: RegistrationIdentifierAction,
                                        getData: DraftIdRetrievalActionProvider,
                                        requireData: RegistrationDataRequiredAction,

@@ -16,21 +16,23 @@
 
 package navigation
 
+import config.FrontendAppConfig
 import controllers.register.leadtrustee.individual.routes._
 import models.ReadableUserAnswers
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import pages.Page
 import pages.register.leadtrustee.individual._
-import pages.register.trustees.individual.{IDCardDetailsPage, PassportDetailsPage, TrusteeAUKCitizenPage}
 import play.api.mvc.Call
 
 class LeadTrusteeIndividualNavigator extends Navigator {
 
-  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
+  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
+                       (implicit config: FrontendAppConfig): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteesNamePage(index) => _ => DateOfBirthController.onPageLoad(index, draftId)
-    case TrusteesDateOfBirthPage(index) => ua => NinoYesNoRoute(ua, index, draftId)
+    case TrusteesDateOfBirthPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
+    case TrusteeNinoYesNoPage(index) => ua => NinoYesNoRoute(ua, index, draftId)
     case TrusteesNinoPage(index) => _ => LiveInTheUKYesNoController.onPageLoad(index, draftId)
     case TrusteeDetailsChoicePage(index) => ua => detailsRoutes(ua, index, draftId)
     case PassportDetailsPage(index) => _ => LiveInTheUKYesNoController.onPageLoad(index, draftId)

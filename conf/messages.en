@@ -88,6 +88,12 @@ site.address.international.line2 = Address line 2
 site.address.international.line3 = Address line 3 (optional)
 site.address.international.country = Country
 
+featureNotAvailable.title = This part of the online service is not available yet
+featureNotAvailable.heading = This part of the online service is not available yet
+featureNotAvailable.p1 = If you need to make any changes to the trust you can
+featureNotAvailable.link = contact our trusts helpline (opens in a new window or tab)
+featureNotAvailable.p2 = You will be able to update these details online in the future.
+
 individualOrBusiness.individual = Individual
 individualOrBusiness.business = Business
 
@@ -102,7 +108,6 @@ internationalAddress.error.line2.invalidCharacters = Address line 2 must only in
 internationalAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 entity.trustee = Trustees
-
 
 entities.no.name.added = No name added
 entities.no.value.added = No value added
@@ -132,9 +137,6 @@ leadTrusteeIndividualOrBusiness.title = Is the lead trustee an individual or a b
 leadTrusteeIndividualOrBusiness.heading = Is the lead trustee an individual or a business?
 leadTrusteeIndividualOrBusiness.checkYourAnswersLabel = Is the lead trustee an individual or a business?
 leadTrusteeIndividualOrBusiness.error.required = Select if the lead trustee is an individual or a business
-
-trustDetailsAnswerPage.title = Check trust details
-trustDetailsAnswerPage.heading = Check trust details
 
 trusteeBusinessAddressInUK.checkYourAnswersLabel = Is {0}’s address in the UK?
 
@@ -200,12 +202,12 @@ removeLeadTrustee.heading = Are you sure you want to remove {0}?
 removeLeadTrustee.error.required = Select yes if you want to remove the lead trustee
 removeLeadTrustee.default = the lead trustee
 
-telephoneNumber.title = What is the trustee’s telephone number?
-telephoneNumber.heading = What is {0}’s telephone number?
-telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
-telephoneNumber.error.required = Enter trustee’s telephone number
-telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
-telephoneNumber.hint = For international numbers include the country code
+trustee.individual.telephoneNumber.title = What is the trustee’s telephone number?
+trustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
+trustee.individual.telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
+trustee.individual.telephoneNumber.error.required = Enter trustee’s telephone number
+trustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+trustee.individual.telephoneNumber.hint = For international numbers include the country code
 
 emailAddress.checkYourAnswersLabel = What is {0}’s email address?
 
@@ -216,6 +218,11 @@ trustee.individual.ninoYesNo.title = Is the trustee a UK citizen?
 trustee.individual.ninoYesNo.heading = Is {0} a UK citizen?
 trustee.individual.ninoYesNo.checkYourAnswersLabel = Is {0} a UK citizen?
 trustee.individual.ninoYesNo.error.required = Select yes if the trustee is a UK citizen
+
+trustee.individual.dateOfBirthYesNo.title = Do you the trustee's date of birth?
+trustee.individual.dateOfBirthYesNo.heading = Do you {0}'s date of birth?
+trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel = Do you {0}'s date of birth?
+trustee.individual.dateOfBirthYesNo.error.required = Select yes if you know the trustee's date of birth
 
 leadTrusteeAUKCitizen.title = Is the lead trustee a UK citizen?
 leadTrusteeAUKCitizen.error.required = Select yes if the lead trustee is a UK citizen
@@ -254,10 +261,23 @@ leadTrusteesNino.title = What is the lead trustee’s National Insurance number?
 leadTrusteesNino.error.required = Enter the lead trustee’s National Insurance number
 leadTrusteesNino.error.invalidFormat = Enter the lead trustee’s National Insurance number in the correct format
 
+trustee.individual.addressYesNo.title = Do you know the trustee’s address?
+trustee.individual.addressYesNo.heading = Do you know {0}’s address?
+trustee.individual.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+trustee.individual.addressYesNo.checkYourAnswersLabel = Select yes if you know the trustee’s address
+
 trustee.individual.addressUkYesNo.title = Does the trustee live in the UK?
 trustee.individual.addressUkYesNo.heading = Does {0} live in the UK?
 trustee.individual.addressUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 trustee.individual.addressUkYesNo.error.required = Select yes if the trustee lives in the UK
+
+trustee.individual.ukAddress.title = What is the trustee’s address?
+trustee.individual.ukAddress.heading = What is {0}’s address?
+trustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.individual.internationalAddress.title = What is the trustee’s address?
+trustee.individual.internationalAddress.heading = What is {0}’s address?
+trustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
 leadTrusteeLiveInTheUK.title = Does the lead trustee live in the UK?
 leadTrusteeLiveInTheUK.error.required = Select yes if the lead trustee lives in the UK

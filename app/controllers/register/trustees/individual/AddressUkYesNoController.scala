@@ -16,12 +16,13 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{AddressUkYesNoPage, NamePage}
@@ -36,17 +37,18 @@ import views.html.register.trustees.individual.AddressUkYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressUkYesNoController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              navigator: Navigator,
-                                              validateIndex: IndexActionFilterProvider,
-                                              identify: RegistrationIdentifierAction,
-                                              getData: DraftIdRetrievalActionProvider,
-                                              requireData: RegistrationDataRequiredAction,
-                                              requiredAnswer: RequiredAnswerActionProvider,
-                                              formProvider: YesNoFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: AddressUkYesNoView
+                                          override val messagesApi: MessagesApi,
+                                          implicit val frontendAppConfig: FrontendAppConfig,
+                                          registrationsRepository: RegistrationsRepository,
+                                          @TrusteeIndividual navigator: Navigator,
+                                          validateIndex: IndexActionFilterProvider,
+                                          identify: RegistrationIdentifierAction,
+                                          getData: DraftIdRetrievalActionProvider,
+                                          requireData: RegistrationDataRequiredAction,
+                                          requiredAnswer: RequiredAnswerActionProvider,
+                                          formProvider: YesNoFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: AddressUkYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
@@ -62,9 +64,7 @@ class AddressUkYesNoController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
+      val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
 
       val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
         case None => form
@@ -74,25 +74,12 @@ class AddressUkYesNoController @Inject()(
       Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteeLiveInTheUK"
-    } else {
-      "trusteeLiveInTheUK"
-    }
-    messagePrefix
-  }
-
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
+      val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

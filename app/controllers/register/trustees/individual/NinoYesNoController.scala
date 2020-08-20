@@ -16,15 +16,16 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{TrusteeAUKCitizenPage, NamePage}
+import pages.register.trustees.individual.{NamePage, NinoYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,18 +37,19 @@ import views.html.register.trustees.individual.NinoYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class NinoYesNoController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             registrationsRepository: RegistrationsRepository,
-                                             navigator: Navigator,
-                                             validateIndex: IndexActionFilterProvider,
-                                             identify: RegistrationIdentifierAction,
-                                             getData: DraftIdRetrievalActionProvider,
-                                             requireData: RegistrationDataRequiredAction,
-                                             requiredAnswer: RequiredAnswerActionProvider,
-                                             formProvider: YesNoFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: NinoYesNoView
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     override val messagesApi: MessagesApi,
+                                     implicit val frontendAppConfig: FrontendAppConfig,
+                                     registrationsRepository: RegistrationsRepository,
+                                     @TrusteeIndividual navigator: Navigator,
+                                     validateIndex: IndexActionFilterProvider,
+                                     identify: RegistrationIdentifierAction,
+                                     getData: DraftIdRetrievalActionProvider,
+                                     requireData: RegistrationDataRequiredAction,
+                                     requiredAnswer: RequiredAnswerActionProvider,
+                                     formProvider: YesNoFormProvider,
+                                     val controllerComponents: MessagesControllerComponents,
+                                     view: NinoYesNoView
+                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -62,16 +64,14 @@ class NinoYesNoController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
+      val form = formProvider.withPrefix("trustee.individual.ninoYesNo")
 
-      val form = formProvider.withPrefix(messagePrefix)
-
-      val preparedForm = request.userAnswers.get(TrusteeAUKCitizenPage(index)) match {
+      val preparedForm = request.userAnswers.get(NinoYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, messagePrefix, trusteeName))
+      Ok(view(preparedForm, draftId, index, trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -79,32 +79,19 @@ class NinoYesNoController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val messagePrefix: String = getMessagePrefix(index, request)
-
-      val form = formProvider.withPrefix(messagePrefix)
+      val form = formProvider.withPrefix("trustee.individual.ninoYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, messagePrefix, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeName))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeAUKCitizenPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NinoYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeAUKCitizenPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NinoYesNoPage(index), draftId, updatedAnswers))
         }
       )
-  }
-
-  private def getMessagePrefix(index: Int, request: RegistrationDataRequest[AnyContent]) = {
-    val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
-
-    val messagePrefix = if (isLead) {
-      "leadTrusteeAUKCitizen"
-    } else {
-      "trusteeAUKCitizen"
-    }
-    messagePrefix
   }
 
 }

@@ -36,6 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,
+                                        implicit val frontendAppConfig: FrontendAppConfig,
                                         registrationsRepository: RegistrationsRepository,
                                         navigator: Navigator,
                                         standardActionSets: StandardActionSets,

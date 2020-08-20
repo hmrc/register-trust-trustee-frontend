@@ -17,17 +17,20 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{PassportDetailsYesNoPage, NamePage}
+import pages.register.trustees.individual.{NamePage, PassportDetailsYesNoPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.trustees.individual.PassportDetailsYesNoView
 
 class PassportDetailsYesNoControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trusteesPassportDetailsYesNo"
+  val trusteeMessagePrefix = "trustee.individual.passportDetailsYesNo"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(trusteeMessagePrefix)
 
@@ -111,7 +114,12 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
         .set(PassportDetailsYesNoPage(index), true).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, passportDetailsYesNoRoute)
@@ -170,7 +178,6 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
       }
     }
-
 
     "return a Bad Request and errors when invalid data is submitted" in {
 

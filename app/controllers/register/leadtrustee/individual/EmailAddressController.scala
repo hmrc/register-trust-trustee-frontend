@@ -16,6 +16,8 @@
 
 package controllers.register.leadtrustee.individual
 
+import config.FrontendAppConfig
+import config.annotations.LeadTrusteeIndividual
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
@@ -35,6 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EmailAddressController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
+                                        implicit val frontendAppConfig: FrontendAppConfig,
                                         validateIndex: IndexActionFilterProvider,
                                         identify: RegistrationIdentifierAction,
                                         getData: DraftIdRetrievalActionProvider,
@@ -43,7 +46,7 @@ class EmailAddressController @Inject()(
                                         formProvider: EmailAddressFormProvider,
                                         view: EmailAddressView,
                                         registrationsRepository: RegistrationsRepository,
-                                        navigator: Navigator
+                                        @LeadTrusteeIndividual navigator: Navigator
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.email")

@@ -16,37 +16,33 @@
 
 package views.register.trustees.individual
 
-import forms.InternationalAddressFormProvider
+import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import utils.InputOption
-import utils.countryOptions.CountryOptionsNonUK
-import views.behaviours.InternationalAddressViewBehaviours
-import views.html.register.trustees.individual.InternationalAddressView
+import views.behaviours.YesNoViewBehaviours
+import views.html.register.trustees.individual.DateOfBirthYesNoView
 
-class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
+class DateOfBirthYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "trustee.individual.internationalAddress"
+  val prefix = "trustee.individual.dateOfBirthYesNo"
+  val index = 0
   val fakeName = "Test"
 
-  val index: Int = 0
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
-  override val form = new InternationalAddressFormProvider()()
+  "DateOfBirthYesNo View" must {
 
-  "InternationalAddress View" must {
-
-    val view = viewFor[InternationalAddressView](Some(emptyUserAnswers))
-
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val view = viewFor[DateOfBirthYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, index, fakeDraftId, fakeName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
+
+    behave like dynamicTitlePage(applyView(form), prefix, fakeName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like internationalAddress(applyView, Some(prefix), fakeName)
+    behave like yesNoPage(form, applyView, prefix, Seq(fakeName))
 
     behave like pageWithASubmitButton(applyView(form))
-
   }
 }

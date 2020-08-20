@@ -16,7 +16,8 @@
 
 package controllers.register.trustees.individual
 
-import config.annotations.TrusteeOrganisation
+import config.FrontendAppConfig
+import config.annotations.{TrusteeIndividual, TrusteeOrganisation}
 import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import forms.YesNoFormProvider
@@ -33,15 +34,16 @@ import views.html.register.trustees.individual.AddressYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressYesNoController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          registrationsRepository: RegistrationsRepository,
-                                          navigator: Navigator,
-                                          standardActionSets: StandardActionSets,
-                                          nameAction: NameRequiredActionImpl,
-                                          formProvider: YesNoFormProvider,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: AddressYesNoView
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        override val messagesApi: MessagesApi,
+                                        implicit val frontendAppConfig: FrontendAppConfig,
+                                        registrationsRepository: RegistrationsRepository,
+                                        @TrusteeIndividual navigator: Navigator,
+                                        standardActionSets: StandardActionSets,
+                                        nameAction: NameRequiredActionImpl,
+                                        formProvider: YesNoFormProvider,
+                                        val controllerComponents: MessagesControllerComponents,
+                                        view: AddressYesNoView
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
@@ -69,7 +71,7 @@ class AddressYesNoController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
         }
       )

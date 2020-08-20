@@ -16,6 +16,7 @@
 
 package controllers.register.trustees
 
+import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
@@ -39,6 +40,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TrusteesAnswerPageController @Inject()(
                                               override val messagesApi: MessagesApi,
+                                              implicit val frontendAppConfig: FrontendAppConfig,
                                               registrationsRepository: RegistrationsRepository,
                                               identify: RegistrationIdentifierAction,
                                               navigator: Navigator,
@@ -65,10 +67,7 @@ class TrusteesAnswerPageController @Inject()(
 
       val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
 
-      val titleMessagePrefix = if(isLead) "leadTrusteesAnswerPage" else "trusteesAnswerPage"
-
       val trusteeIndividualOrBusinessMessagePrefix = if (isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
-      val trusteeFullNameMessagePrefix = if (isLead) "leadTrusteesName" else "trusteesName"
 
       val sections = Seq(
         AnswerSection(
@@ -77,7 +76,7 @@ class TrusteesAnswerPageController @Inject()(
             case Some(IndividualOrBusiness.Individual) =>
               Seq(
                 checkYourAnswersHelper.trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix),
-                checkYourAnswersHelper.trusteeFullName(index, trusteeFullNameMessagePrefix),
+                checkYourAnswersHelper.trusteeFullName(index),
                 checkYourAnswersHelper.trusteesDateOfBirth(index),
                 checkYourAnswersHelper.trusteeNinoYesNo(index),
                 checkYourAnswersHelper.trusteesNino(index),
@@ -107,7 +106,7 @@ class TrusteesAnswerPageController @Inject()(
         )
       )
 
-      Ok(view(index, draftId ,sections, titleMessagePrefix))
+      Ok(view(index, draftId ,sections))
   }
 
   def onSubmit(index : Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
