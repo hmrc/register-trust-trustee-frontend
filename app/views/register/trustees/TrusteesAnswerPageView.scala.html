@@ -25,12 +25,12 @@
 @(index : Int, draftId: String, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("leadTrusteesAnswerPage.title")
+    title = messages("trusteesAnswerPage.title")
     ) {
 
     @components.back_link()
 
-    @components.heading("leadTrusteesAnswerPage.heading")
+    @components.heading("trusteesAnswerPage.heading")
 
     @for(section <- answerSections){
         @{
