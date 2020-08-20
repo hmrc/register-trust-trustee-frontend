@@ -16,6 +16,7 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
@@ -37,6 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class IDCardDetailsYesNoController @Inject()(
                                               override val messagesApi: MessagesApi,
+                                              implicit val frontendAppConfig: FrontendAppConfig,
                                               registrationsRepository: RegistrationsRepository,
                                               @TrusteeIndividual navigator: Navigator,
                                               identify: RegistrationIdentifierAction,

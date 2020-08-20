@@ -16,6 +16,7 @@
 
 package navigation
 
+import config.FrontendAppConfig
 import controllers.register.leadtrustee.organisation.routes._
 import models.ReadableUserAnswers
 import pages.Page
@@ -24,7 +25,8 @@ import play.api.mvc.Call
 
 class LeadTrusteeOrganisationNavigator extends Navigator {
 
-  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
+  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
+                       (implicit config: FrontendAppConfig): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case UkRegisteredYesNoPage(index) => _ => NameController.onPageLoad(index, draftId)

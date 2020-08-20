@@ -16,6 +16,7 @@
 
 package controllers.register.trustees.individual
 
+import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
@@ -35,6 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class InternationalAddressController @Inject()(
                                                 override val messagesApi: MessagesApi,
+                                                implicit val frontendAppConfig: FrontendAppConfig,
                                                 registrationsRepository: RegistrationsRepository,
                                                 @TrusteeIndividual navigator: Navigator,
                                                 standardActionSets: StandardActionSets,

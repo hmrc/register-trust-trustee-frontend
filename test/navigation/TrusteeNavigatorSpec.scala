@@ -24,10 +24,11 @@ import pages._
 class TrusteeNavigatorSpec extends SpecBase
   with ScalaCheckPropertyChecks
   with Generators
-  with TestTrusteeRoutes
 {
 
   implicit val navigator : Navigator = injector.instanceOf[Navigator]
+
+  implicit val config = frontendAppConfig
 
   "Navigator" when {
 
@@ -38,7 +39,6 @@ class TrusteeNavigatorSpec extends SpecBase
         navigator.nextPage(UnknownPage, fakeDraftId, emptyUserAnswers) mustBe controllers.routes.IndexController.onPageLoad(fakeDraftId)
       }
 
-      behave like trusteeRoutes
     }
   }
 }

@@ -16,6 +16,7 @@
 
 package controllers.register.trustees
 
+import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.YesNoFormProvider
 import forms.trustees.AddATrusteeFormProvider
@@ -36,6 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AddATrusteeController @Inject()(
                                        override val messagesApi: MessagesApi,
+                                       implicit val frontendAppConfig: FrontendAppConfig,
                                        registrationsRepository: RegistrationsRepository,
                                        navigator: Navigator,
                                        identify: RegistrationIdentifierAction,

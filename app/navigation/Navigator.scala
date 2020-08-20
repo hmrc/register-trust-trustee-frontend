@@ -16,13 +16,15 @@
 
 package navigation
 
+import config.FrontendAppConfig
 import models.{Mode, ReadableUserAnswers}
 import pages._
 import play.api.mvc.Call
 
 trait Navigator {
 
-  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call
+  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
+              (implicit config: FrontendAppConfig): Call
 
   def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
