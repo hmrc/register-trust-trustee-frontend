@@ -40,7 +40,7 @@ class TrusteeIndividualNavigator extends Navigator {
     case IsThisLeadTrusteePage(index) => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
     case NamePage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => NinoYesNoController.onPageLoad(index, draftId)
-    case NinoPage(index) => AddressUkYesNoController.onPageLoad(index, draftId)
+    case NinoPage(index) => AddressYesNoController.onPageLoad(index, draftId)
     case UkAddressPage(index) =>  TelephoneNumberController.onPageLoad(index, draftId)
     case TelephoneNumberPage(index) => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
     case TrusteesAnswerPage  => controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)
