@@ -38,9 +38,10 @@ class TrusteeIndividualNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, Call] = {
     case IsThisLeadTrusteePage(index) => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
-    case NamePage(index) => controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, draftId)
-    case NinoPage(index) => controllers.register.trustees.individual.routes.AddressUkYesNoController.onPageLoad(index, draftId)
-    case UkAddressPage(index) =>  controllers.register.trustees.individual.routes.TelephoneNumberController.onPageLoad(index, draftId)
+    case NamePage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
+    case DateOfBirthPage(index) => NinoYesNoController.onPageLoad(index, draftId)
+    case NinoPage(index) => AddressUkYesNoController.onPageLoad(index, draftId)
+    case UkAddressPage(index) =>  TelephoneNumberController.onPageLoad(index, draftId)
     case TelephoneNumberPage(index) => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
     case TrusteesAnswerPage  => controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)
   }
@@ -48,7 +49,7 @@ class TrusteeIndividualNavigator extends Navigator {
   private def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeIndividualOrBusinessPage(index) => ua => {
       (ua.get(IsThisLeadTrusteePage(index)), ua.get(TrusteeIndividualOrBusinessPage(index))) match {
-        case (Some(_), Some(IndividualOrBusiness.Individual)) => controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId)
+        case (Some(_), Some(IndividualOrBusiness.Individual)) => NameController.onPageLoad(index, draftId)
         case (Some(false), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, draftId)
         case (Some(true), Some(IndividualOrBusiness.Business)) => controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, draftId)
         case _ => controllers.routes.SessionExpiredController.onPageLoad()
@@ -81,12 +82,12 @@ class TrusteeIndividualNavigator extends Navigator {
         case _ => controllers.routes.SessionExpiredController.onPageLoad()
       }
     }
-    case DateOfBirthPage(index) => ua =>
+    case DateOfBirthYesNoPage(index) => ua =>
       yesNoNav(
         ua,
-        IsThisLeadTrusteePage(index),
-        controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, draftId),
-        controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
+        DateOfBirthYesNoPage(index),
+        DateOfBirthController.onPageLoad(index, draftId),
+        NinoYesNoController.onPageLoad(index, draftId)
       )
     case NinoYesNoPage(index) => ua =>
       yesNoNav(

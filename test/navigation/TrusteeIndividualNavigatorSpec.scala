@@ -170,40 +170,27 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
       }
 
-      "go to TrusteeUtrYesNoPage from TrusteeIndividualOrBusinessPage page for a lead trustee Business" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val answers = userAnswers
-              .set(IsThisLeadTrusteePage(index), true).success.value
-              .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-
-            navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to TrusteesDateOfBirthPage from TrusteesNamePage page" in {
+      "go to DateOfBirthYesNoPage from NamePage" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
             navigator.nextPage(NamePage(index), fakeDraftId, userAnswers)
+              .mustBe(controllers.register.trustees.individual.routes.DateOfBirthYesNoController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
+      "go to TrusteesDateOfBirthPage from DateOfBirthYesNoPage page when user answers yes" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            val answers = userAnswers.set(DateOfBirthYesNoPage(index), value = true).success.value
+
+            navigator.nextPage(DateOfBirthYesNoPage(index), fakeDraftId, answers)
               .mustBe(controllers.register.trustees.individual.routes.DateOfBirthController.onPageLoad(index, fakeDraftId))
         }
       }
 
-      "go to TrusteeAnswersPage" when {
-        "from TrusteesDateOfBirthPage" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-
-              val answers = userAnswers.set(IsThisLeadTrusteePage(index), false).success.value
-
-              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, answers)
-                .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
-          }
-        }
-
-        "from TrusteeTelephoneNumberPage" in {
+      "go to TrusteeAnswersPage from TrusteeTelephoneNumberPage" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
@@ -211,20 +198,30 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
                 .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
           }
         }
-      }
 
-      "go to TrusteesNinoYesNoPage from TrusteesDateOfBirthPage page" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "go to TrusteesNinoYesNoPage" when {
+        "from TrusteesDateOfBirthPage page" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
 
-            val answers = userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
+              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, userAnswers)
+                .mustBe(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
 
-            navigator.nextPage(DateOfBirthPage(index), fakeDraftId, answers)
-              .mustBe(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, fakeDraftId))
+        "from DateOfBirthYesNoPage page when user answers no" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(DateOfBirthYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, userAnswers)
+                .mustBe(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, fakeDraftId))
+          }
         }
       }
 
-      "go to TrusteesNinoPage from TrusteeAUKCitizen when user answers Yes" in {
+      "go to TrusteesNinoPage from TrusteesNinoYesNoPage when user answers Yes" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
