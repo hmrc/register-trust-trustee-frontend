@@ -16,6 +16,7 @@
 
 package controllers.register.trustees.organisation
 
+import config.FrontendAppConfig
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
 import forms.StringFormProvider
@@ -33,6 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject()(
                                 override val messagesApi: MessagesApi,
+                                implicit val frontendAppConfig: FrontendAppConfig,
                                 registrationsRepository: RegistrationsRepository,
                                 @TrusteeOrganisation navigator: Navigator,
                                 standardActionSets: StandardActionSets,

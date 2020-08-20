@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
 @import controllers.register.trustees.individual.routes._
 
 @this(
@@ -22,20 +21,25 @@
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index : Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trustee.individual.checkDetails.title")
+    title = s"${errorPrefix(form)} ${messages("trustee.individual.dateOfBirthYesNo.title")}"
 ) {
 
-    @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
+  @formHelper(action = DateOfBirthYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+     @components.back_link()
 
-        @components.heading("trustee.individual.checkDetails.heading")
+     @components.error_summary(form.errors)
 
-        @components.answer_section(answerSection)
+     @components.input_yes_no(
+        field = form("value"),
+        label = messages("trustee.individual.dateOfBirthYesNo.heading", trusteeName),
+        legendClass = Some("heading-large"),
+        legendAsHeading = true
+     )
 
-        @components.submit_button()
-    }
+     @components.submit_button()
+  }
 }

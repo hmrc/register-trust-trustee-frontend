@@ -66,7 +66,7 @@ trait TrusteesIndividualAnswersHelper {
       )
   }
 
-  def trusteesDateOfBirth(index: Int): Option[AnswerRow] = userAnswers.get(TrusteesDateOfBirthPage(index)) map {
+  def trusteesDateOfBirth(index: Int): Option[AnswerRow] = userAnswers.get(DateOfBirthPage(index)) map {
     x =>
       AnswerRow(
         "trustee.individual.dateOfBirth.checkYourAnswersLabel",

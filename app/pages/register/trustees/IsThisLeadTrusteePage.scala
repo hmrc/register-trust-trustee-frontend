@@ -38,7 +38,7 @@ final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean
           .remove(TrusteeIndividualOrBusinessPage(index))
 
           .flatMap(_.remove(tind.NamePage(index)))
-          .flatMap(_.remove(tind.TrusteesDateOfBirthPage(index)))
+          .flatMap(_.remove(tind.DateOfBirthPage(index)))
           .flatMap(_.remove(tind.NinoYesNoPage(index)))
           .flatMap(_.remove(tind.NinoPage(index)))
           .flatMap(_.remove(tind.AddressUkYesNoPage(index)))

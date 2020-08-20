@@ -46,7 +46,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
             .set(IsThisLeadTrusteePage(index), true).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
-            .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
+            .set(individualPages.DateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
             .set(individualPages.NinoYesNoPage(index), true).success.value
             .set(individualPages.NinoPage(index), "AB123456C").success.value
             .set(individualPages.AddressUkYesNoPage(index), true).success.value
@@ -205,7 +205,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
               .set(IsThisLeadTrusteePage(index), false).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
               .set(individualPages.NamePage(index), FullName("First", None, "Trustee")).success.value
-              .set(individualPages.TrusteesDateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
+              .set(individualPages.DateOfBirthPage(index), LocalDate.now(ZoneOffset.UTC)).success.value
               .set(individualPages.NinoYesNoPage(index), true).success.value
               .set(individualPages.NinoPage(index), "AB123456C").success.value
               .set(individualPages.AddressUkYesNoPage(index), true).success.value

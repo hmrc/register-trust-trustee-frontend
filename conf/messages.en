@@ -138,9 +138,6 @@ leadTrusteeIndividualOrBusiness.heading = Is the lead trustee an individual or a
 leadTrusteeIndividualOrBusiness.checkYourAnswersLabel = Is the lead trustee an individual or a business?
 leadTrusteeIndividualOrBusiness.error.required = Select if the lead trustee is an individual or a business
 
-trustDetailsAnswerPage.title = Check trust details
-trustDetailsAnswerPage.heading = Check trust details
-
 trusteeBusinessAddressInUK.checkYourAnswersLabel = Is {0}’s address in the UK?
 
 trustee.individual.name.title = What is the trustee’s name?
@@ -222,6 +219,11 @@ trustee.individual.ninoYesNo.heading = Is {0} a UK citizen?
 trustee.individual.ninoYesNo.checkYourAnswersLabel = Is {0} a UK citizen?
 trustee.individual.ninoYesNo.error.required = Select yes if the trustee is a UK citizen
 
+trustee.individual.dateOfBirthYesNo.title = Do you the trustee's date of birth?
+trustee.individual.dateOfBirthYesNo.heading = Do you {0}'s date of birth?
+trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel = Do you {0}'s date of birth?
+trustee.individual.dateOfBirthYesNo.error.required = Select yes if you know the trustee's date of birth
+
 leadTrusteeAUKCitizen.title = Is the lead trustee a UK citizen?
 leadTrusteeAUKCitizen.error.required = Select yes if the lead trustee is a UK citizen
 
@@ -258,6 +260,11 @@ trustee.individual.nino.error.invalidFormat = Enter the trustee’s National Ins
 leadTrusteesNino.title = What is the lead trustee’s National Insurance number?
 leadTrusteesNino.error.required = Enter the lead trustee’s National Insurance number
 leadTrusteesNino.error.invalidFormat = Enter the lead trustee’s National Insurance number in the correct format
+
+trustee.individual.addressYesNo.title = Do you know the trustee’s address?
+trustee.individual.addressYesNo.heading = Do you know {0}’s address?
+trustee.individual.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+trustee.individual.addressYesNo.checkYourAnswersLabel = Select yes if you know the trustee’s address
 
 trustee.individual.addressUkYesNo.title = Does the trustee live in the UK?
 trustee.individual.addressUkYesNo.heading = Does {0} live in the UK?

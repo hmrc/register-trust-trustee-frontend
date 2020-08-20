@@ -25,18 +25,18 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{IDCardDetailsYesNoPage, NamePage}
+import pages.register.trustees.individual.{DateOfBirthYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.IDCardDetailsYesNoView
+import views.html.register.trustees.individual.DateOfBirthYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IDCardDetailsYesNoController @Inject()(
+class DateOfBirthYesNoController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               implicit val frontendAppConfig: FrontendAppConfig,
                                               registrationsRepository: RegistrationsRepository,
@@ -48,10 +48,10 @@ class IDCardDetailsYesNoController @Inject()(
                                               requiredAnswer: RequiredAnswerActionProvider,
                                               yesNoFormProvider: YesNoFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: IDCardDetailsYesNoView
+                                              view: DateOfBirthYesNoView
                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = yesNoFormProvider.withPrefix("trustee.individual.idCardDetailsYesNo")
+  private val form = yesNoFormProvider.withPrefix("trustee.individual.dateOfBirthYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -66,7 +66,7 @@ class IDCardDetailsYesNoController @Inject()(
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(IDCardDetailsYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(DateOfBirthYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -85,9 +85,9 @@ class IDCardDetailsYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IDCardDetailsYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IDCardDetailsYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DateOfBirthYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

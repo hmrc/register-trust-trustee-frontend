@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.register.trustees.individual
 
-import config.FrontendAppConfig
-import models.{Mode, ReadableUserAnswers}
-import pages._
-import play.api.mvc.Call
+import java.time.LocalDate
 
-trait Navigator {
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.Trustees
 
-  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
-              (implicit config: FrontendAppConfig): Call
+final case class  DateOfBirthPage(index: Int) extends QuestionPage[LocalDate] {
 
-  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
-  }
+  override def path: JsPath = Trustees.path \ index \ toString
 
+  override def toString: String = "dateOfBirth"
 }
