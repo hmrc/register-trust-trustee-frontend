@@ -138,9 +138,6 @@ leadTrusteeIndividualOrBusiness.heading = Is the lead trustee an individual or a
 leadTrusteeIndividualOrBusiness.checkYourAnswersLabel = Is the lead trustee an individual or a business?
 leadTrusteeIndividualOrBusiness.error.required = Select if the lead trustee is an individual or a business
 
-trustDetailsAnswerPage.title = Check trust details
-trustDetailsAnswerPage.heading = Check trust details
-
 trusteeBusinessAddressInUK.checkYourAnswersLabel = Is {0}’s address in the UK?
 
 trustee.individual.name.title = What is the trustee’s name?
