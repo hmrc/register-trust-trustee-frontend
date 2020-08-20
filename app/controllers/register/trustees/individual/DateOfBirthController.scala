@@ -26,7 +26,7 @@ import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{NamePage, TrusteesDateOfBirthPage}
+import pages.register.trustees.individual.{NamePage, DateOfBirthPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -69,7 +69,7 @@ class DateOfBirthController @Inject()(
 
       val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
-      val preparedForm = request.userAnswers.get(TrusteesDateOfBirthPage(index)) match {
+      val preparedForm = request.userAnswers.get(DateOfBirthPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -88,9 +88,9 @@ class DateOfBirthController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesDateOfBirthPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesDateOfBirthPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DateOfBirthPage(index), draftId, updatedAnswers))
         }
       )
   }

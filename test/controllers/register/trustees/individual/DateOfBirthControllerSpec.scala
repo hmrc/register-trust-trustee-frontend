@@ -27,7 +27,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{NamePage, TrusteesDateOfBirthPage}
+import pages.register.trustees.individual.{NamePage, DateOfBirthPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -77,7 +77,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
+        .set(DateOfBirthPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -98,7 +98,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
     "redirect to Trustee Name page when TrusteesName is not answered" in {
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
+        .set(DateOfBirthPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -215,7 +215,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
 
       validateIndex(
         Gen.const(LocalDate.of(2010,10,10)),
-        TrusteesDateOfBirthPage.apply,
+        DateOfBirthPage.apply,
         getForIndex
       )
 
@@ -237,7 +237,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
 
       validateIndex(
         Gen.const(LocalDate.of(2010,10,10)),
-        TrusteesDateOfBirthPage.apply,
+        DateOfBirthPage.apply,
         postForIndex
       )
     }

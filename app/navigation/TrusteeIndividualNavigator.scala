@@ -81,7 +81,7 @@ class TrusteeIndividualNavigator extends Navigator {
         case _ => controllers.routes.SessionExpiredController.onPageLoad()
       }
     }
-    case TrusteesDateOfBirthPage(index) => ua =>
+    case DateOfBirthPage(index) => ua =>
       yesNoNav(
         ua,
         IsThisLeadTrusteePage(index),

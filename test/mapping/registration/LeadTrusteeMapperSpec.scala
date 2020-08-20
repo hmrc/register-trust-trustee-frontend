@@ -50,7 +50,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+          .set(DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
           .set(NinoYesNoPage(index), true).success.value
           .set(NinoPage(index), "AB123456C").success.value
           .set(AddressUkYesNoPage(index), true).success.value
@@ -221,7 +221,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+          .set(DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
 
         leadTrusteeMapper.build(userAnswers) mustNot be(defined)
       }
@@ -243,7 +243,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           .set(IsThisLeadTrusteePage(index), true).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+          .set(DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
           .set(NinoYesNoPage(index), true).success.value
           .set(AddressUkYesNoPage(index), true).success.value
           .set(NinoPage(index), "AB123456C").success.value

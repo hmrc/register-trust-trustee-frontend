@@ -4,6 +4,9 @@
 GET        /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual/name                       controllers.register.trustees.individual.NameController.onSubmit(index : Int, draftId: String)
 
+GET        /:draftId/:index/individual/know-date-of-birth         controllers.register.trustees.individual.DateOfBirthYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/individual/know-date-of-birth         controllers.register.trustees.individual.DateOfBirthYesNoController.onSubmit(index: Int, draftId: String)
+
 GET        /:draftId/:index/individual/date-of-birth              controllers.register.trustees.individual.DateOfBirthController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/individual/date-of-birth              controllers.register.trustees.individual.DateOfBirthController.onSubmit(index: Int, draftId: String)
 

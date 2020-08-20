@@ -121,7 +121,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           }
         }
       }
-      
+
       "go to IndividualOrBusinessPage from IsThisLeadTrusteePage page when YES selected" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
@@ -198,7 +198,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
               val answers = userAnswers.set(IsThisLeadTrusteePage(index), false).success.value
 
-              navigator.nextPage(TrusteesDateOfBirthPage(index), fakeDraftId, answers)
+              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, answers)
                 .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -219,7 +219,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             val answers = userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
 
-            navigator.nextPage(TrusteesDateOfBirthPage(index), fakeDraftId, answers)
+            navigator.nextPage(DateOfBirthPage(index), fakeDraftId, answers)
               .mustBe(controllers.register.trustees.individual.routes.NinoYesNoController.onPageLoad(index, fakeDraftId))
         }
       }

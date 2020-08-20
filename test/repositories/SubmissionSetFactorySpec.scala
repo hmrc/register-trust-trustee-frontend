@@ -74,7 +74,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       .set(TrusteeStatus(index), Status.Completed).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
       .set(NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-      .set(TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+      .set(DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
       .set(NinoYesNoPage(index), true).success.value
       .set(NinoPage(index), "AB123456C").success.value
       .set(AddressUkYesNoPage(index), true).success.value
