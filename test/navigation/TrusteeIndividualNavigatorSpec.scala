@@ -200,13 +200,42 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           }
         }
 
-        "from AddressYesNo when user answers No" in {
+        "from PassportDetailsPage" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(PassportDetailsPage(index), fakeDraftId, userAnswers)
+                .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from IdCardDetailsPage" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(IDCardDetailsPage(index), fakeDraftId, userAnswers)
+                .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from AddressYesNoPage when user answers No" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
               val answers = userAnswers.set(AddressYesNoPage(index), value = false).success.value
 
               navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
+                .mustBe(controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from IDCardDetailsYesNoPage when user answers No" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(IDCardDetailsYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(IDCardDetailsYesNoPage(index), fakeDraftId, answers)
                 .mustBe(controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -286,6 +315,39 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
               .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
+      "go to PassportDetailsPage from PassportDetailsYesNoPage when answer is yes" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            val answers = userAnswers.set(PassportDetailsYesNoPage(index), value = true).success.value
+
+            navigator.nextPage(PassportDetailsYesNoPage(index), fakeDraftId, answers)
+              .mustBe(PassportDetailsController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
+      "go to IDCardDetailsPage from IDCardDetailsYesNoPage when answer is yes" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            val answers = userAnswers.set(IDCardDetailsYesNoPage(index), value = true).success.value
+
+            navigator.nextPage(IDCardDetailsYesNoPage(index), fakeDraftId, answers)
+              .mustBe(IDCardDetailsController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
+      "go to IdCardDetailsYesNoPage from PassportDetailsYesNoPage when answer is no" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            val answers = userAnswers.set(PassportDetailsYesNoPage(index), value = false).success.value
+
+            navigator.nextPage(PassportDetailsYesNoPage(index), fakeDraftId, answers)
+              .mustBe(IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 

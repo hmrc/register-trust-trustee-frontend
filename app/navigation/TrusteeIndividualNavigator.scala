@@ -18,6 +18,7 @@ package navigation
 
 import config.FrontendAppConfig
 import controllers.register.trustees.individual.routes._
+import controllers.register.trustees.routes._
 import models.ReadableUserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.registration.pages.AddATrustee
@@ -37,13 +38,15 @@ class TrusteeIndividualNavigator extends Navigator {
   }
 
   private def simpleNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, Call] = {
-    case IsThisLeadTrusteePage(index) => controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
+    case IsThisLeadTrusteePage(index) => TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
     case NamePage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => AddressYesNoController.onPageLoad(index, draftId)
     case UkAddressPage(index) =>  TelephoneNumberController.onPageLoad(index, draftId)
-    case TelephoneNumberPage(index) => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
-    case TrusteesAnswerPage  => controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)
+    case PassportDetailsPage(index) => TrusteesAnswerPageController.onPageLoad(index, draftId)
+    case IDCardDetailsPage(index) => TrusteesAnswerPageController.onPageLoad(index, draftId)
+    case TelephoneNumberPage(index) => TrusteesAnswerPageController.onPageLoad(index, draftId)
+    case TrusteesAnswerPage  => AddATrusteeController.onPageLoad(draftId)
   }
 
   private def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -59,7 +62,7 @@ class TrusteeIndividualNavigator extends Navigator {
       yesNoNav(
         ua,
         AddATrusteeYesNoPage,
-        controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(0, draftId),
+        IsThisLeadTrusteeController.onPageLoad(0, draftId),
         registrationTaskList(draftId)
       )
     }
@@ -69,9 +72,9 @@ class TrusteeIndividualNavigator extends Navigator {
         val trustees = ua.get(Trustees).getOrElse(List.empty)
         trustees match {
           case Nil =>
-            controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(0, draftId)
+            IsThisLeadTrusteeController.onPageLoad(0, draftId)
           case t if t.nonEmpty =>
-            controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(t.size, draftId)
+            IsThisLeadTrusteeController.onPageLoad(t.size, draftId)
         }
       }
       addAnother match {
@@ -101,7 +104,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua,
         AddressYesNoPage(index),
         AddressUkYesNoController.onPageLoad(index, draftId),
-        controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
+        TrusteesAnswerPageController.onPageLoad(index, draftId)
       )
     case AddressUkYesNoPage(index) => ua =>
       yesNoNav(
@@ -109,6 +112,20 @@ class TrusteeIndividualNavigator extends Navigator {
         AddressUkYesNoPage(index),
         UkAddressController.onPageLoad(index, draftId),
         InternationalAddressController.onPageLoad(index, draftId)
+      )
+    case PassportDetailsYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        PassportDetailsYesNoPage(index),
+        PassportDetailsController.onPageLoad(index, draftId),
+        IDCardDetailsYesNoController.onPageLoad(index, draftId)
+      )
+    case IDCardDetailsYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        IDCardDetailsYesNoPage(index),
+        IDCardDetailsController.onPageLoad(index, draftId),
+        TrusteesAnswerPageController.onPageLoad(index, draftId)
       )
   }
 
