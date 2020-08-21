@@ -19,13 +19,12 @@ package controllers.register.trustees.individual
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
 import forms.PassportOrIdCardFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{IDCardDetailsPage, NamePage}
+import pages.register.trustees.individual.IDCardDetailsPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,11 +41,9 @@ class IDCardDetailsController @Inject()(
                                          implicit val frontendAppConfig: FrontendAppConfig,
                                          registrationsRepository: RegistrationsRepository,
                                          @TrusteeIndividual navigator: Navigator,
-                                         identify: RegistrationIdentifierAction,
-                                         getData: DraftIdRetrievalActionProvider,
+                                         standardActionSets: StandardActionSets,
+                                         nameAction: NameRequiredActionImpl,
                                          validateIndex: IndexActionFilterProvider,
-                                         requireData: RegistrationDataRequiredAction,
-                                         requiredAnswer: RequiredAnswerActionProvider,
                                          formProvider: PassportOrIdCardFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: IDCardDetailsView,
@@ -56,33 +53,25 @@ class IDCardDetailsController @Inject()(
   private val form = formProvider("trustee.individual.idCardDetails")
 
   private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
+    standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val name = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(IDCardDetailsPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val name = request.userAnswers.get(NamePage(index)).get
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.trusteeName))),
 
         value => {
           for {

@@ -19,14 +19,13 @@ package controllers.register.trustees.individual
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
 import forms.TelephoneNumberFormProvider
 import javax.inject.Inject
-import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.trustees.individual.NamePage
-import pages.register.trustees.{IsThisLeadTrusteePage, TelephoneNumberPage}
+import pages.register.trustees.TelephoneNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,27 +41,19 @@ class TelephoneNumberController @Inject()(
                                            implicit val frontendAppConfig: FrontendAppConfig,
                                            registrationsRepository: RegistrationsRepository,
                                            @TrusteeIndividual navigator: Navigator,
+                                           standardActionSets: StandardActionSets,
+                                           nameAction: NameRequiredActionImpl,
                                            validateIndex: IndexActionFilterProvider,
-                                           identify: RegistrationIdentifierAction,
-                                           getData: DraftIdRetrievalActionProvider,
-                                           requireData: RegistrationDataRequiredAction,
-                                           requiredAnswer: RequiredAnswerActionProvider,
                                            formProvider: TelephoneNumberFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
                                            view: TelephoneNumberView
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
+    standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
 
       val form = formProvider("trustee.individual.telephoneNumber")
 
@@ -71,19 +62,17 @@ class TelephoneNumberController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val trusteeName = request.userAnswers.get(NamePage(index)).get.toString
-
       val form = formProvider("trustee.individual.telephoneNumber")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
           val answers = request.userAnswers.set(TelephoneNumberPage(index), value)

@@ -19,15 +19,13 @@ package controllers.register.trustees.individual
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.trustees.TrusteesNameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.NamePage
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
@@ -41,20 +39,15 @@ class NameController @Inject()(
                                         implicit val frontendAppConfig: FrontendAppConfig,
                                         registrationsRepository: RegistrationsRepository,
                                         @TrusteeIndividual navigator: Navigator,
-                                        identify: RegistrationIdentifierAction,
-                                        getData: DraftIdRetrievalActionProvider,
-                                        requireData: RegistrationDataRequiredAction,
+                                        standardActionSets: StandardActionSets,
                                         validateIndex: IndexActionFilterProvider,
                                         formProvider: TrusteesNameFormProvider,
-                                        requiredAnswer: RequiredAnswerActionProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: NameView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
-    identify andThen getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees)
+    standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
