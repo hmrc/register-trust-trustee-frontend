@@ -14,82 +14,82 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees.individual
+package controllers.register.leadtrustee.individual
 
 import config.FrontendAppConfig
-import config.annotations.TrusteeIndividual
+import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.PassportOrIdCardFormProvider
+import forms.TelephoneNumberFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{NamePage, PassportDetailsPage}
+import pages.register.leadtrustee.individual.{TelephoneNumberPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.countryOptions.CountryOptions
-import views.html.register.trustees.individual.PassportDetailsView
+import views.html.register.leadtrustee.individual.TelephoneNumberView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PassportDetailsController @Inject()(
+class TelephoneNumberController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            implicit val frontendAppConfig: FrontendAppConfig,
                                            registrationsRepository: RegistrationsRepository,
-                                           @TrusteeIndividual navigator: Navigator,
+                                           @LeadTrusteeIndividual navigator: Navigator,
+                                           validateIndex: IndexActionFilterProvider,
                                            identify: RegistrationIdentifierAction,
                                            getData: DraftIdRetrievalActionProvider,
-                                           validateIndex: IndexActionFilterProvider,
                                            requireData: RegistrationDataRequiredAction,
                                            requiredAnswer: RequiredAnswerActionProvider,
-                                           formProvider: PassportOrIdCardFormProvider,
+                                           formProvider: TelephoneNumberFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: PassportDetailsView,
-                                           val countryOptions: CountryOptions
+                                           view: TelephoneNumberView
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-
-  private val form = formProvider("trustee.individual.passportDetails")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val name = request.userAnswers.get(NamePage(index)).get.toString
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val preparedForm = request.userAnswers.get(PassportDetailsPage(index)) match {
+      val form = formProvider("leadTrustee.individual.telephoneNumber")
+
+      val preparedForm = request.userAnswers.get(TelephoneNumberPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
+      Ok(view(preparedForm, draftId, index, name))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val name = request.userAnswers.get(NamePage(index)).get.toString
+      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
+
+      val form = formProvider("leadTrustee.individual.telephoneNumber")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
 
         value => {
+          val answers = request.userAnswers.set(TelephoneNumberPage(index), value)
+
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportDetailsPage(index), value))
+            updatedAnswers <- Future.fromTry(answers)
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportDetailsPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TelephoneNumberPage(index), draftId, updatedAnswers))
         }
       )
   }

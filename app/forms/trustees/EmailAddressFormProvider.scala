@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package forms.trustees
 
-import models.registration.pages.PassportOrIdCardDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
+import forms.Validation
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-final case class PassportDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+class EmailAddressFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = Trustees.path  \ index \ toString
-
-  override def toString: String = "passportDetails"
+  def withPrefix(prefix: String): Form[String] =
+    Form(
+      "value" -> text(s"$prefix.error.required")
+        .verifying(
+          firstError(
+            regexp(Validation.emailRegex, s"$prefix.error.invalid")
+          )
+        )
+    )
 }

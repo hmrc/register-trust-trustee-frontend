@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package config.annotations;
 
-import models.registration.pages.PassportOrIdCardDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
+import com.google.inject.BindingAnnotation;
 
-final case class PassportDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  override def path: JsPath = Trustees.path  \ index \ toString
-
-  override def toString: String = "passportDetails"
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface LeadTrusteeIndividual {}

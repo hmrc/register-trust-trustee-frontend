@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees.individual
+package controllers.register.leadtrustee.individual
 
 import config.FrontendAppConfig
-import config.annotations.TrusteeIndividual
+import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.PassportOrIdCardFormProvider
+import forms.trustees.PassportOrIdCardFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{NamePage, PassportDetailsPage}
+import pages.register.leadtrustee.individual.{PassportDetailsPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,7 +33,7 @@ import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
-import views.html.register.trustees.individual.PassportDetailsView
+import views.html.register.leadtrustee.individual.PassportDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,7 +41,7 @@ class PassportDetailsController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            implicit val frontendAppConfig: FrontendAppConfig,
                                            registrationsRepository: RegistrationsRepository,
-                                           @TrusteeIndividual navigator: Navigator,
+                                           @LeadTrusteeIndividual navigator: Navigator,
                                            identify: RegistrationIdentifierAction,
                                            getData: DraftIdRetrievalActionProvider,
                                            validateIndex: IndexActionFilterProvider,
@@ -53,37 +53,36 @@ class PassportDetailsController @Inject()(
                                            val countryOptions: CountryOptions
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider("trustee.individual.passportDetails")
+  private val form = formProvider("leadTrustee.individual.passportDetailsYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val name = request.userAnswers.get(NamePage(index)).get.toString
+      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
       val preparedForm = request.userAnswers.get(PassportDetailsPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val name = request.userAnswers.get(NamePage(index)).get.toString
+      val trusteeName = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, trusteeName))),
 
         value => {
           for {

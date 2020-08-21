@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package pages.register.leadtrustee.individual
 
 import models.registration.pages.PassportOrIdCardDetails
 import pages.QuestionPage

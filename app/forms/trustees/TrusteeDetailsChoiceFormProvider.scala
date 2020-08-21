@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package forms.trustees
 
-import models.registration.pages.PassportOrIdCardDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.registration.pages.DetailsChoice
+import play.api.data.Form
 
-final case class PassportDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+class TrusteeDetailsChoiceFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = Trustees.path  \ index \ toString
-
-  override def toString: String = "passportDetails"
+  def withPrefix(prefix: String): Form[DetailsChoice] =
+    Form(
+      "value" -> enumerable[DetailsChoice](s"$prefix.error.required")
+    )
 }
