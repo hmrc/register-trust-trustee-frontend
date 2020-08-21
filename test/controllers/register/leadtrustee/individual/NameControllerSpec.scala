@@ -17,12 +17,15 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
+import config.annotations.LeadTrusteeIndividual
 import controllers.register.IndexValidation
 import forms.trustees.TrusteesNameFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.trustees._
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -117,14 +120,15 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         "valid data is submitted" in {
 
-          val name = FullName("first name", Some("middle name"), "last name")
-
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(index), false).success.value
             .set(TrusteesNamePage(index), name).success.value
 
           val application =
-            applicationBuilder(userAnswers = Some(userAnswers)).build()
+            applicationBuilder(userAnswers = Some(userAnswers))
+              .overrides(
+                bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+              )
+              .build()
 
           val request =
             FakeRequest(POST, trusteesNameRoute)

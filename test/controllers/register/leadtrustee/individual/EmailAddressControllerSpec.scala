@@ -17,10 +17,13 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
+import config.annotations.LeadTrusteeIndividual
 import forms.trustees.EmailAddressFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import pages.register.leadtrustee.individual.TrusteesNamePage
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.leadtrustee.individual.EmailAddressView
@@ -84,7 +87,11 @@ class EmailAddressControllerSpec extends SpecBase {
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+          )
+          .build()
 
       val request =
         FakeRequest(POST, emailAddressRoute)

@@ -17,12 +17,15 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
+import config.annotations.LeadTrusteeIndividual
 import controllers.register.IndexValidation
 import forms.TelephoneNumberFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.trustees.TelephoneNumberPage
+import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -88,7 +91,12 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+          )
+          .build()
 
       val request = FakeRequest(GET, telephoneNumberRoute)
 
@@ -108,7 +116,10 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
         .set(TelephoneNumberPage(index), "0191 1111111").success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, telephoneNumberRoute)

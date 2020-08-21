@@ -17,10 +17,13 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
+import config.annotations.LeadTrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import pages.register.leadtrustee.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
 import pages.register.trustees.IsThisLeadTrusteePage
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
@@ -40,29 +43,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
   "LiveInTheUkYesNo Controller" must {
 
-    "return OK and the correct view (lead trustee) for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[LiveInTheUKYesNoView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view (trustee) for a GET" in {
+    "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
         .set(IsThisLeadTrusteePage(index), false).success.value
@@ -87,7 +68,6 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(TrusteeAUKCitizenPage(index), true).success.value
 
@@ -107,34 +87,17 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(TrusteeAUKCitizenPage(index), true).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+          ).build()
 
       val request =
         FakeRequest(POST, trusteeLiveInTheUKRoute)
@@ -154,7 +117,6 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       "a GET when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeAUKCitizenPage(index), true).success.value
 
         val application =
@@ -173,7 +135,6 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       "a POST when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
           .set(TrusteeAUKCitizenPage(index), true).success.value
 
         val application =
@@ -198,7 +159,6 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
