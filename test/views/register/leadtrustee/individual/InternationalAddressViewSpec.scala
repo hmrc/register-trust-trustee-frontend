@@ -22,11 +22,11 @@ import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.behaviours.InternationalAddressViewBehaviours
-import views.html.register.trustees.organisation.InternationalAddressView
+import views.html.register.leadtrustee.individual.InternationalAddressView
 
 class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
 
-  val prefix = "trustee.organisation.internationalAddress"
+  val prefix = "leadTrustee.individual.internationalAddress"
   val fakeName = "Test"
 
   val index: Int = 0
@@ -40,7 +40,7 @@ class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, index, fakeDraftId, fakeName)(fakeRequest, messages)
+      view.apply(form, index, fakeDraftId, countryOptions, fakeName)(fakeRequest, messages)
 
     behave like pageWithBackLink(applyView(form))
 

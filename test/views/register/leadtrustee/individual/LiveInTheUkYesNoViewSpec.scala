@@ -20,19 +20,19 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.register.trustees.organisation.AddressUkYesNoView
+import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
 class LiveInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "trustee.organisation.addressUkYesNo"
+  val prefix = "leadTrustee.individual.liveInTheUkUkYesNo"
   val index = 0
   val fakeName = "Test"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
-  "AddressUkYesNo View" must {
+  "LiveInTheUKYesNo View" must {
 
-    val view = viewFor[AddressUkYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[LiveInTheUKYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
