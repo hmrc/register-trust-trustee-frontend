@@ -41,6 +41,7 @@ class LeadTrusteeIndividualNavigator extends Navigator {
     case InternationalAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
     case EmailAddressYesNoPage(index) => ua => EmailAddressRoute(ua, index, draftId)
+    case EmailAddressPage(index) => _ => TelephoneNumberController.onPageLoad(index, draftId)
     case TelephoneNumberPage(index) => _ => controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
   }
 
