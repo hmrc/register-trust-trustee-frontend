@@ -54,8 +54,7 @@ class NameController @Inject()(
   private def actions(index: Int, draftId: String) =
     identify andThen getData(draftId) andThen
       requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+      validateIndex(index, Trustees)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

@@ -111,24 +111,6 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(NinoYesNoPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeAUKCitizenRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
