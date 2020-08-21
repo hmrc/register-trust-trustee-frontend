@@ -58,8 +58,6 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
         val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
 
         val leadTrusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
-        val leadTrusteeFullNameMessagePrefix = "leadTrusteesName"
-        val titlePrefix = "leadTrusteesAnswerPage"
 
         val expectedSections = Seq(
           AnswerSection(
