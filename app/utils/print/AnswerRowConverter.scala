@@ -21,7 +21,7 @@ import java.time.LocalDate
 import com.google.inject.Inject
 import models.{Enumerable, UserAnswers}
 import models.core.pages.{Address, FullName}
-import models.registration.pages.PassportOrIdCardDetails
+import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat

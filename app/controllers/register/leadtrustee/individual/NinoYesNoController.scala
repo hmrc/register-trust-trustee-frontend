@@ -25,7 +25,6 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
-import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -63,7 +62,7 @@ class NinoYesNoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider.withPrefix("")
+      val form = formProvider.withPrefix("leadTrustee.individual.ninoYesNo")
 
       val preparedForm = request.userAnswers.get(TrusteeAUKCitizenPage(index)) match {
         case None => form
@@ -78,7 +77,7 @@ class NinoYesNoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider.withPrefix("")
+      val form = formProvider.withPrefix("leadTrustee.individual.ninoYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
