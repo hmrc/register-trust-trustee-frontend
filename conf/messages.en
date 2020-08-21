@@ -438,7 +438,7 @@ leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}'s details can
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}'s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.idCard = IdCard
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
-leadTrustee.individual.trusteeDetailsChoice.error.required = sdf
+leadTrustee.individual.trusteeDetailsChoice.error.required = Select which details you can provide
 
 leadTrustee.individual.iDCardDetails.title = What are the trustee’s ID card details?
 leadTrustee.individual.iDCardDetails.heading = What are {0}’s ID card details?
