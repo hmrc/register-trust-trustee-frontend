@@ -140,7 +140,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
                 .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
               navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-                .mustBe(NameController.onPageLoad(index, fakeDraftId))
+                .mustBe(controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, fakeDraftId))
           }
         }
 
