@@ -168,6 +168,19 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           }
         }
 
+
+        "for a lead trustee Business" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers
+                .set(IsThisLeadTrusteePage(index), true).success.value
+                .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+
+              navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
+                .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
       }
 
       "go to DateOfBirthYesNoPage from NamePage" in {
