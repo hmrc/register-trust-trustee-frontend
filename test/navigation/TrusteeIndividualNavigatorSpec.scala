@@ -140,7 +140,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
                 .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
               navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-                .mustBe(NameController.onPageLoad(index, fakeDraftId))
+                .mustBe(controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -165,6 +165,19 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
               navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
                 .mustBe(controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+
+        "for a lead trustee Business" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers
+                .set(IsThisLeadTrusteePage(index), true).success.value
+                .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+
+              navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
+                .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
 

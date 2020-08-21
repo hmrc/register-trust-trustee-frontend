@@ -52,7 +52,8 @@ class TrusteeIndividualNavigator extends Navigator {
   private def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeIndividualOrBusinessPage(index) => ua => {
       (ua.get(IsThisLeadTrusteePage(index)), ua.get(TrusteeIndividualOrBusinessPage(index))) match {
-        case (Some(_), Some(IndividualOrBusiness.Individual)) => NameController.onPageLoad(index, draftId)
+        case (Some(false), Some(IndividualOrBusiness.Individual)) => controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId)
+        case (Some(true), Some(IndividualOrBusiness.Individual)) => controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, draftId)
         case (Some(false), Some(IndividualOrBusiness.Business)) => controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, draftId)
         case (Some(true), Some(IndividualOrBusiness.Business)) => controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, draftId)
         case _ => controllers.routes.SessionExpiredController.onPageLoad()

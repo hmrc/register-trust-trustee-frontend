@@ -618,9 +618,9 @@ leadTrustee.individual.telephoneNumber.hint = For international numbers include 
 leadTrustee.individual.telephoneNumber.error.required = Enter the lead trustee’s telephone number
 leadTrustee.individual.telephoneNumber.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
-leadTrustee.individual.name.title = What is the trustee’s name?
-leadTrustee.individual.name.heading = What is the trustee’s name?
-leadTrustee.individual.name.checkYourAnswersLabel = What is the trustee’s name?
+leadTrustee.individual.name.title = What is the lead trustee’s name?
+leadTrustee.individual.name.heading = What is the lead trustee’s name?
+leadTrustee.individual.name.checkYourAnswersLabel = What is the lead trustee’s name?
 leadTrustee.individual.name.firstName = First name
 leadTrustee.individual.name.middleName = Middle names (optional)
 leadTrustee.individual.name.lastName = Last name
