@@ -352,6 +352,9 @@ trustee.organisation.checkDetails.heading = Check trustee details
 trustee.default = the trustee
 leadTrustee.default = the lead trustee
 
+individualOrBusiness.individual = Individual
+individualOrBusiness.business = Business
+
 leadTrustee.individualOrBusiness.title = Is the lead trustee an individual or a business?
 leadTrustee.individualOrBusiness.heading = Is the lead trustee an individual or a business?
 leadTrustee.individualOrBusiness.checkYourAnswersLabel = Is the lead trustee an individual or a business?
