@@ -418,15 +418,20 @@ leadTrustee.organisation.telephoneNumber.error.invalid = Enter a telephone numbe
 leadTrustee.organisation.checkDetails.title = Check lead trustee details
 leadTrustee.organisation.checkDetails.heading = Check lead trustee details
 
-leadTrustee.individual.internationalAddress.line1.error.required = Enter address line 1
-leadTrustee.individual.internationalAddress.line2.error.required = Enter address line 2
-leadTrustee.individual.internationalAddress.country.error.required = Select a country
-leadTrustee.individual.internationalAddress.line1.error.length = Address line 1 must be 35 characters or less
-leadTrustee.individual.internationalAddress.line2.error.length = Address line 2 must be 35 characters or less
-leadTrustee.individual.internationalAddress.line3.error.length = Address line 3 must be 35 characters or less
-leadTrustee.individual.internationalAddress.internationalAddress.line1.error.invalid = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-leadTrustee.individual.line2.error.invalid = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-leadTrustee.individual.internationalAddress.line3.error.invalid = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+# Lead trustee individual
+
+leadTrustee.individual.ninoYesNo.title = Is the lead trustee a UK citizen?
+leadTrustee.individual.ninoYesNo.heading = Is {0} a UK citizen?
+leadTrustee.individual.ninoYesNo.checkYourAnswersLabel = Is {0} a UK citizen?
+leadTrustee.individual.ninoYesNo.error.required = Select yes if the lead trustee is a UK citizen
+
+leadTrustee.individual.ukAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.ukAddress.heading = What is {0}’s address?
+leadTrustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.individual.internationalAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.internationalAddress.heading = What is {0}’s address?
+leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
 leadTrustee.individual.trusteeDetailsChoice.title = Which of {0}'s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}'s details can you provide?
@@ -484,7 +489,6 @@ leadTrustee.individual.nino.title = What is the trustee’s National Insurance n
 leadTrustee.individual.nino.heading = What is {0}’s National Insurance number?
 leadTrustee.individual.nino.checkYourAnswersLabel = What is {0}’s National Insurance number?
 leadTrustee.individual.nino.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
-leadTrustee.individual.nino.hint.reader = It is on their National Insurance card, benefit letter, payslip or P60. For example, Q Q 1 2 3 4 5 6 C.
 leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 
@@ -527,7 +531,7 @@ leadTrustee.individual.email.heading = What is {0}’s email address?
 leadTrustee.individual.email.error.required = Enter the lead trustee’s email address
 leadTrustee.individual.email.error.invalid = Enter a valid email address with no spaces, like name@example.com
 
-leadTrustee.individual.DateOfBirth.title = What is the lead trustee’s date of birth?
+leadTrustee.individual.dateOfBirth.title = What is the lead trustee’s date of birth?
 leadTrustee.individual.dateOfBirth.heading = What is {0}’s date of birth?
 leadTrustee.individual.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
 leadTrustee.individual.dateOfBirth.hint = For example, 31 3 1980

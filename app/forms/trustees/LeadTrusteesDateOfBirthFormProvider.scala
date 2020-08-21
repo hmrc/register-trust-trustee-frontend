@@ -28,13 +28,13 @@ class LeadTrusteesDateOfBirthFormProvider @Inject()(appConfig: FrontendAppConfig
   def apply(): Form[LocalDate] =
     Form(
       "value" -> localDate(
-        invalidKey     = "leadTrustee.individual.DateOfBirth.error.invalid",
-        allRequiredKey = "leadTrustee.individual.DateOfBirth.error.required.all",
-        twoRequiredKey = "leadTrustee.individual.DateOfBirth.error.required.two",
-        requiredKey    = "leadTrustee.individual.DateOfBirth.error.required"
+        invalidKey     = "leadTrustee.individual.dateOfBirth.error.invalid",
+        allRequiredKey = "leadTrustee.individual.dateOfBirth.error.required.all",
+        twoRequiredKey = "leadTrustee.individual.dateOfBirth.error.required.two",
+        requiredKey    = "leadTrustee.individual.dateOfBirth.error.required"
       ).verifying(firstError(
-        maxDate(LocalDate.now, s"leadTrustee.individual.DateOfBirth.error.future", "day", "month", "year"),
-        minDate(appConfig.minDate, s"leadTrustee.individual.DateOfBirth.error.past", "day", "month", "year")
+        maxDate(LocalDate.now, s"leadTrustee.individual.dateOfBirth.error.future", "day", "month", "year"),
+        minDate(appConfig.minDate, s"leadTrustee.individual.dateOfBirth.error.past", "day", "month", "year")
       ))
     )
 }

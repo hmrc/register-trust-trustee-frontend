@@ -49,8 +49,8 @@ package views.register.leadtrustee.individual
 // * See the License for the specific language governing permissions and
 // * limitations under the License.
 // */
-//
-//package views.leadtrustee.individual
+
+//package views.register.leadtrustee.individual
 //
 //import forms.PassportDetailsFormProvider
 //import play.api.data.Form

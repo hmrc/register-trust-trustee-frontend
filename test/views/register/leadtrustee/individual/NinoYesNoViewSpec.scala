@@ -16,38 +16,37 @@
 
 package views.register.leadtrustee.individual
 
-import forms.UKAddressFormProvider
-import models.core.pages.{FullName, UKAddress}
+import forms.YesNoFormProvider
+import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.UkAddressViewBehaviours
-import views.html.register.leadtrustee.individual.UkAddressView
+import views.behaviours.YesNoViewBehaviours
+import views.html.register.leadtrustee.individual.NinoYesNoView
 
-class UkAddressViewSpec extends UkAddressViewBehaviours {
+class NinoYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "leadTrustee.individual.ukAddress"
-  val name: FullName = FullName("First", Some("Middle"), "Last")
+  val messageKeyPrefix = "leadTrustee.individual.ninoYesNo"
+
   val index = 0
 
-  override val form: Form[UKAddress] = new UKAddressFormProvider().apply()
+  val form = new YesNoFormProvider().withPrefix("leadTrustee.individual.ninoYesNo")
 
-  "UkAddressView" must {
+  val name = FullName("FirstName", None, "LastName").toString
 
-    val view = viewFor[UkAddressView](Some(emptyUserAnswers))
+  "NinoYesNoView view" must {
+
+    val view = viewFor[NinoYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index,  name.toString)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like ukAddressPage(
-      applyView,
-      Some(messageKeyPrefix),
-      name.toString
-    )
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Seq(name))
 
     behave like pageWithASubmitButton(applyView(form))
+
   }
 }

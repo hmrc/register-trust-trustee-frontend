@@ -26,7 +26,7 @@ import views.html.register.leadtrustee.individual.DateOfBirthView
 
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "leadtrustee.individual.dateOfBirth"
+  val messageKeyPrefix = "leadTrustee.individual.dateOfBirth"
   val index = 0
 
   val form = new TrusteesDateOfBirthFormProvider(frontendAppConfig).apply()
