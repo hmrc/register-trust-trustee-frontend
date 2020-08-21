@@ -21,7 +21,7 @@ GET        /feature-not-available                                 controllers.Fe
 ->         /trustee/business                                      trusteeOrganisation.Routes
 
 ->         /lead-trustee/business                                 leadTrusteeOrganisation.Routes
-->         /lead-trustee/Individual                               leadTrusteeIndividual.Routes
+->         /lead-trustee/individual                               leadTrusteeIndividual.Routes
 
 ## Trustees
 
