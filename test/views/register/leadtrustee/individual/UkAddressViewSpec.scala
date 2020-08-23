@@ -25,7 +25,7 @@ import views.html.register.leadtrustee.individual.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "ukAddress"
+  val messageKeyPrefix = "leadTrustee.individual.ukAddress"
   val name: FullName = FullName("First", Some("Middle"), "Last")
   val index = 0
 
