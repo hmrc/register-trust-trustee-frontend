@@ -72,7 +72,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           None,
           Seq(
             AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
-            AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(NameController.onPageLoad(index, fakeDraftId).url), name.toString),
+            AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(NinoYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel", Html("passport"), Some(TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url), name.toString),
@@ -91,7 +91,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           .set(TrusteesDateOfBirthPage(index), dob).success.value
           .set(TrusteeNinoYesNoPage(index), false).success.value
           .set(TrusteeDetailsChoicePage(index), IdCard).success.value
-          .set(PassportDetailsPage(index), idCard).success.value
+          .set(IDCardDetailsPage(index), idCard).success.value
           .set(TrusteeAUKCitizenPage(index), false).success.value
           .set(InternationalAddressPage(index), internationalAddress).success.value
           .set(EmailAddressYesNoPage(index), true).success.value
@@ -104,12 +104,12 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           None,
           Seq(
             AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
-            AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(NameController.onPageLoad(index, fakeDraftId).url), name.toString),
+            AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(NinoYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel", Html("idCard"), Some(TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.iDCardDetails.checkYourAnswersLabel", Html("Germany<br />0987654321234<br />21 August 2020"), Some(IDCardDetailsController.onPageLoad(index, fakeDraftId).url), name.toString),
-            AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", Html("yes"), Some(LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
+            AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.internationalAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Germany"), Some(InternationalAddressController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", Html("Yes"), Some(EmailAddressYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.email.checkYourAnswersLabel", Html("email@example.com"), Some(EmailAddressController.onPageLoad(index, fakeDraftId).url), name.toString),
