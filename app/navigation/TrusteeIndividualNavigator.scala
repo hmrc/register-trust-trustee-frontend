@@ -43,7 +43,8 @@ class TrusteeIndividualNavigator extends Navigator {
     case NamePage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => AddressYesNoController.onPageLoad(index, draftId)
-    case UkAddressPage(index) =>  TelephoneNumberController.onPageLoad(index, draftId)
+    case UkAddressPage(index) =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
+    case InternationalAddressPage(index) =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
     case PassportDetailsPage(index) => CheckDetailsController.onPageLoad(index, draftId)
     case IDCardDetailsPage(index) => CheckDetailsController.onPageLoad(index, draftId)
 

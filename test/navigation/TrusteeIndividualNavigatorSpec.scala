@@ -323,6 +323,24 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
+      "go to PassportDetailsYesNoPage from UkAddressPage when answer is yes" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            navigator.nextPage(UkAddressPage(index), fakeDraftId, userAnswers)
+              .mustBe(PassportDetailsYesNoController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
+      "go to PassportDetailsYesNoPage from InternationalAddressPage when answer is yes" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            navigator.nextPage(InternationalAddressPage(index), fakeDraftId, userAnswers)
+              .mustBe(PassportDetailsYesNoController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
       "go to PassportDetailsPage from PassportDetailsYesNoPage when answer is yes" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
