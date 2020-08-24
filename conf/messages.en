@@ -281,6 +281,9 @@ trustee.individual.idCardDetails.expiryDate.error.invalid = Enter a real date wh
 trustee.individual.idCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 trustee.individual.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
+trustee.individual.checkDetails.title = Check trustee details
+trustee.individual.checkDetails.heading = Check trustee details
+
 trusteesInfo.title = Trustee: information you’ll need to provide
 trusteesInfo.heading = Trustee: information you’ll need to provide
 trusteesInfo.subheading1 = Lead trustee
@@ -543,3 +546,6 @@ leadTrustee.individual.dateOfBirth.error.required = Date of birth must include a
 leadTrustee.individual.dateOfBirth.error.invalid = Enter a real date of birth
 leadTrustee.individual.dateOfBirth.error.future = Date of birth must be today or in the past
 leadTrustee.individual.dateOfBirth.error.past = Date of birth must be after 31 December 1499
+
+leadTrustee.individual.checkDetails.title = Check lead trustee details
+leadTrustee.individual.checkDetails.heading = Check lead trustee details

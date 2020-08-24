@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package controllers.actions.register.leadtrustee.organisation
+package controllers.actions.register.leadtrustee.individual
 
 import controllers.actions.register.TrusteeNameRequest
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
-import pages.register.leadtrustee.organisation.NamePage
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 
@@ -35,8 +35,8 @@ class NameRequiredAction(index: Int)(implicit val executionContext: ExecutionCon
   }
 
   private def getName[A](request: RegistrationDataRequest[A]): String = {
-    request.userAnswers.get(NamePage(index)) match {
-      case Some(name) => name
+    request.userAnswers.get(TrusteesNamePage(index)) match {
+      case Some(name) => name.toString
       case _ => request.messages(messagesApi)("leadTrustee.default")
     }
   }

@@ -23,8 +23,8 @@ import models.ReadableUserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.registration.pages.AddATrustee
 import pages.Page
-import pages.register.trustees.{AddATrusteePage, AddATrusteeYesNoPage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage, TrusteesAnswerPage}
 import pages.register.trustees.individual._
+import pages.register.trustees._
 import play.api.mvc.Call
 import sections.Trustees
 
@@ -37,18 +37,17 @@ class TrusteeIndividualNavigator extends Navigator {
     Call("GET", config.registrationProgressUrl(draftId))
   }
 
-  private def checkYourAnswersPage(index: Int, draftId: String): Call =
-    controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, draftId)
-
   private def simpleNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, Call] = {
     case IsThisLeadTrusteePage(index) => TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
+
     case NamePage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => NinoYesNoController.onPageLoad(index, draftId)
-    case NinoPage(index) => checkYourAnswersPage(index, draftId)
+    case NinoPage(index) => CheckDetailsController.onPageLoad(index, draftId)
     case UkAddressPage(index) =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => checkYourAnswersPage(index, draftId)
-    case IDCardDetailsPage(index) => checkYourAnswersPage(index, draftId)
+    case PassportDetailsPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+    case IDCardDetailsPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+
     case TrusteesAnswerPage  => AddATrusteeController.onPageLoad(draftId)
   }
 
@@ -108,7 +107,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua,
         AddressYesNoPage(index),
         AddressUkYesNoController.onPageLoad(index, draftId),
-        checkYourAnswersPage(index, draftId)
+        CheckDetailsController.onPageLoad(index, draftId)
       )
     case AddressUkYesNoPage(index) => ua =>
       yesNoNav(
@@ -129,7 +128,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua,
         IDCardDetailsYesNoPage(index),
         IDCardDetailsController.onPageLoad(index, draftId),
-        checkYourAnswersPage(index, draftId)
+        CheckDetailsController.onPageLoad(index, draftId)
       )
   }
 

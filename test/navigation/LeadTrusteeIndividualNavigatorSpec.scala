@@ -185,7 +185,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(TelephoneNumberPage(index), "123456789").success.value
 
       navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, answers)
-        .mustBe(controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+        .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
     }
   }
 

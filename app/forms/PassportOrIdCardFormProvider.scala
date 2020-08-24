@@ -42,7 +42,7 @@ import play.api.data.Forms._
 
 class PassportOrIdCardFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings {
 
-  val maxLengthCountyField = 100
+  val maxLengthCountryField = 100
   val maxLengthNumberField = 30
 
   def apply(prefix: String): Form[PassportOrIdCardDetails] = Form(
@@ -50,7 +50,7 @@ class PassportOrIdCardFormProvider @Inject()(appConfig: FrontendAppConfig) exten
       "country" -> text(s"$prefix.country.error.required")
         .verifying(
           firstError(
-            maxLength(maxLengthCountyField, s"$prefix.country.error.length"),
+            maxLength(maxLengthCountryField, s"$prefix.country.error.length"),
             isNotEmpty("country", s"$prefix.country.error.required")
           )
         ),

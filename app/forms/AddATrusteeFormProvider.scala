@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package pages.register.trustees
+package forms
 
-import pages.{MetaData, QuestionPage}
-import play.api.libs.json.JsPath
-import sections.Trustees
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.registration.pages.AddATrustee
+import play.api.data.Form
 
-case class TrusteeMetaData(index: Int) extends QuestionPage[MetaData] {
+class AddATrusteeFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = Trustees.path \ index \ toString
-
-  override def toString: String = "metaData"
-
+  def apply(): Form[AddATrustee] =
+    Form(
+      "value" -> enumerable[AddATrustee]("addATrustee.error.required")
+    )
 }

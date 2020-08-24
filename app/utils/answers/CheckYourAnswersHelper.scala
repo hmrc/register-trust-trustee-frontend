@@ -19,14 +19,13 @@ package utils.answers
 import javax.inject.Inject
 import mapping.reads._
 import models.UserAnswers
-import pages.register.trustees._
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
-import viewmodels.{AnswerRow, AnswerSection}
+import utils.print._
+import viewmodels.AnswerSection
 
-class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions)
+class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions,
+                                       printHelpers: PrintHelpers)
                                       (val userAnswers: UserAnswers,
                                        val draftId: String,
                                        val canEdit: Boolean)
@@ -40,63 +39,24 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions)
     } yield indexed.map {
       case (trustee, index) =>
 
-        val trusteeIndividualOrBusinessMessagePrefix = if (trustee.isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
-
         val questions = trustee match {
-          case _: TrusteeIndividual | _: LeadTrusteeIndividual =>
-            Seq(
-              trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix),
-              trusteeFullName(index),
-              trusteesDateOfBirth(index),
-              trusteeNinoYesNo(index),
-              trusteesNino(index),
-              trusteeLiveInTheUK(index),
-              trusteesUkAddress(index),
-              //TODO - international address, passport/ID card details etc.
-              telephoneNumber(index)
-            ).flatten
-          case _: TrusteeOrganisation | _: LeadTrusteeOrganisation =>
-            Seq(
-              trusteeIndividualOrBusiness(index, trusteeIndividualOrBusinessMessagePrefix),
-              trusteeUtrYesNo(index),
-              trusteeOrgName(index),
-              trusteeUtr(index),
-              orgAddressInTheUkYesNo(index),
-              trusteesOrgUkAddress(index),
-              trusteeOrgInternationalAddress(index)/*,
-              orgTelephoneNumber(index)*/
-            ).flatten
+          case x: TrusteeIndividual =>
+            printHelpers.trusteeIndividual(userAnswers, x.name.toString, index, draftId)
+          case x: TrusteeOrganisation =>
+            printHelpers.trusteeOrganisation(userAnswers, x.name, index, draftId)
+          case x: LeadTrusteeIndividual =>
+            printHelpers.leadTrusteeIndividual(userAnswers, x.name.toString, index, draftId)
+          case x: LeadTrusteeOrganisation =>
+            printHelpers.leadTrusteeOrganisation(userAnswers, x.name, index, draftId)
         }
-
 
         val sectionKey = if (index == 0) Some(messages("answerPage.section.trustees.heading")) else None
 
         AnswerSection(
           headingKey = Some(Messages("answerPage.section.trustee.subheading") + " " + (index + 1)),
-          rows = questions,
+          rows = questions.rows,
           sectionKey = sectionKey
         )
     }
   }
-
-  def isThisLeadTrustee(index: Int): Option[AnswerRow] = userAnswers.get(IsThisLeadTrusteePage(index)) map {
-    x =>
-      AnswerRow(
-        "isThisLeadTrustee.checkYourAnswersLabel",
-        yesOrNo(x),
-        Some(controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId).url),
-        canEdit = canEdit
-      )
-  }
-
-  def trusteeIndividualOrBusiness(index: Int, messagePrefix: String): Option[AnswerRow] = userAnswers.get(TrusteeIndividualOrBusinessPage(index)) map {
-    x =>
-      AnswerRow(
-        s"$messagePrefix.checkYourAnswersLabel",
-        HtmlFormat.escape(messages(s"individualOrBusiness.$x")),
-        Some(controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId).url),
-        canEdit = canEdit
-      )
-  }
-
 }
