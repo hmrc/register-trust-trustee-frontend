@@ -22,6 +22,7 @@ import models.Status.{Completed, InProgress}
 import models._
 import models.registration.pages.AddATrustee
 import pages.register.trustees.AddATrusteePage
+import play.api.Logger
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.answers.CheckYourAnswersHelper
@@ -35,7 +36,6 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = trusteesStatus(userAnswers)
-    answerSectionsIfCompleted(userAnswers, status)
 
     RegistrationSubmission.DataSet(
       Json.toJson(userAnswers),
@@ -51,39 +51,54 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
     userAnswers.get(_root_.sections.Trustees) match {
       case Some(l) =>
         if (l.isEmpty) {
+          Logger.info(s"[SubmissionSetFactory] no trustees to determine a status")
           None
         } else {
           val hasLeadTrustee = l.exists(_.isLead)
           val isComplete = !l.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
 
           if (isComplete) {
+            Logger.info(s"[SubmissionSetFactory] trustee status is completed")
             Some(Completed)
           } else {
+            Logger.info(s"[SubmissionSetFactory] trustee status is in progress")
             Some(InProgress)
           }
         }
-      case None => None
+      case None =>
+        Logger.info(s"[SubmissionSetFactory] no trustees to determine a status")
+        None
     }
   }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
+
+    Logger.info(s"[SubmissionSetFactory] attempting to generate mapped data, status is $status")
+
     if (status.contains(Status.Completed)) {
-      val result: Option[List[RegistrationSubmission.MappedPiece]] = for {
-        leadTrustees <- leadTrusteeMapper.build(userAnswers)
-      } yield {
-        val leadTrusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", Json.toJson(leadTrustees))
-        trusteeMapper.build(userAnswers) match {
-          case Some(trustees) =>
-            val trusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/trustees", Json.toJson(trustees))
-            List(leadTrusteesPiece, trusteesPiece)
-          case _ => List(leadTrusteesPiece)
-        }
-      }
-      result match {
-        case Some(pieces) => pieces ++ correspondenceMapper.build(userAnswers)
-        case None => List.empty
+
+      val result: Option[List[RegistrationSubmission.MappedPiece]] = leadTrusteeMapper.build(userAnswers) match {
+        case Some(x) =>
+          val leadTrusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", Json.toJson(x))
+
+          trusteeMapper.build(userAnswers) match {
+            case Some(trustees) =>
+              val trusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/trustees", Json.toJson(trustees))
+              Some(List(leadTrusteesPiece, trusteesPiece))
+            case _ =>
+              Some(List(leadTrusteesPiece))
+          }
+        case None =>
+          Logger.warn(s"[SubmissionSetFactory][mappedDataIfCompleted] unable to generate a lead trustee")
+          None
       }
 
+      result match {
+        case Some(pieces) => pieces ++ correspondenceMapper.build(userAnswers)
+        case None =>
+          Logger.warn(s"[SubmissionSetFactory][mappedDataIfCompleted] lead trustee status is complete, no data to map")
+          List.empty
+      }
     } else {
       List.empty
     }
