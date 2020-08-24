@@ -1,6 +1,3 @@
-
-### Trustee Individual
-
 GET        /:draftId/:index/name                       controllers.register.trustees.individual.NameController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/name                       controllers.register.trustees.individual.NameController.onSubmit(index : Int, draftId: String)
 
@@ -16,8 +13,8 @@ POST       /:draftId/:index/telephone-number           controllers.register.trus
 GET        /:draftId/:index/is-a-uk-citizen            controllers.register.trustees.individual.NinoYesNoController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/is-a-uk-citizen            controllers.register.trustees.individual.NinoYesNoController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/has-address                           controllers.register.trustees.individual.AddressYesNoController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/has-address                           controllers.register.trustees.individual.AddressYesNoController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/has-address                controllers.register.trustees.individual.AddressYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/has-address                controllers.register.trustees.individual.AddressYesNoController.onSubmit(index: Int, draftId: String)
 
 GET        /:draftId/:index/live-in-the-uk             controllers.register.trustees.individual.AddressUkYesNoController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/live-in-the-uk             controllers.register.trustees.individual.AddressUkYesNoController.onSubmit(index : Int, draftId: String)
@@ -42,3 +39,6 @@ POST       /:draftId/:index/passport                   controllers.register.trus
 
 GET        /:draftId/:index/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onPageLoad( index: Int, draftId: String)
 POST       /:draftId/:index/passport-yes-no            controllers.register.trustees.individual.PassportDetailsYesNoController.onSubmit( index: Int, draftId: String)
+
+GET        /:draftId/:index/check-details              controllers.register.trustees.individual.CheckDetailsController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/check-details              controllers.register.trustees.individual.CheckDetailsController.onSubmit(index: Int, draftId: String)

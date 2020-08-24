@@ -543,3 +543,6 @@ leadTrustee.individual.dateOfBirth.error.required = Date of birth must include a
 leadTrustee.individual.dateOfBirth.error.invalid = Enter a real date of birth
 leadTrustee.individual.dateOfBirth.error.future = Date of birth must be today or in the past
 leadTrustee.individual.dateOfBirth.error.past = Date of birth must be after 31 December 1499
+
+leadTrustee.individual.checkDetails.title = Check lead trustee details
+leadTrustee.individual.checkDetails.heading = Check lead trustee details
