@@ -89,23 +89,6 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "redirect to TrusteeNamePage when TrusteesName is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(TrusteeNinoYesNoPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, ninoYesNo)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers

@@ -22,7 +22,7 @@ import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
-class LiveInTheUkYesNoViewSpec extends YesNoViewBehaviours {
+class LiveInTheUKYesNoViewSpec extends YesNoViewBehaviours {
 
   val prefix = "leadTrustee.individual.liveInTheUkYesNo"
   val index = 0

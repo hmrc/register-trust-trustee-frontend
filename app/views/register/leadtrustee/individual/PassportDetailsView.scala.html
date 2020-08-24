@@ -35,7 +35,7 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("leadTrustee.individual.passportDetails.heading", Some(name.toString))
+        @components.heading("leadTrustee.individual.passportDetails.heading", Some(name))
 
         @components.select(field = form("country"),
             label = messages("leadTrustee.individual.passportDetails.country"),

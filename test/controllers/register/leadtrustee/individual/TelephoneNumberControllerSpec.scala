@@ -87,28 +87,6 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "redirect to TrusteeName when TrusteesName is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(TelephoneNumberPage(index), "0191 1111111").success.value
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-          )
-          .build()
-
-      val request = FakeRequest(GET, telephoneNumberRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers

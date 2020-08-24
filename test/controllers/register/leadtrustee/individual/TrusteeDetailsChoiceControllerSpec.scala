@@ -82,22 +82,6 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to trusteeNamePage when trustee name is not answered" in {
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers

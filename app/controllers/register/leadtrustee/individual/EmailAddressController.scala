@@ -18,9 +18,8 @@ package controllers.register.leadtrustee.individual
 
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
-import controllers.filters.IndexActionFilterProvider
+import controllers.actions.StandardActionSets
+import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.EmailAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -29,7 +28,6 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.EmailAddressView
 
@@ -38,48 +36,36 @@ import scala.concurrent.{ExecutionContext, Future}
 class EmailAddressController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         implicit val frontendAppConfig: FrontendAppConfig,
-                                        validateIndex: IndexActionFilterProvider,
-                                        identify: RegistrationIdentifierAction,
-                                        getData: DraftIdRetrievalActionProvider,
-                                        requireData: RegistrationDataRequiredAction,
-                                        requiredAnswer: RequiredAnswerActionProvider,
+                                        standardActionSets: StandardActionSets,
+                                        nameAction: NameRequiredActionImpl,
                                         formProvider: EmailAddressFormProvider,
                                         view: EmailAddressView,
                                         registrationsRepository: RegistrationsRepository,
                                         @LeadTrusteeIndividual navigator: Navigator
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.email")
+  private val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.email")
 
   private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
-
+    standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
       val preparedForm = request.userAnswers.get(EmailAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, name))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
-
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value =>
           for {
