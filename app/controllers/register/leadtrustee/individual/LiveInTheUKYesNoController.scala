@@ -24,7 +24,7 @@ import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.leadtrustee.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{AddressUkYesNoPage, TrusteesNamePage}
 import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -65,7 +65,7 @@ class LiveInTheUKYesNoController @Inject()(
 
       val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.individual.liveInTheUkYesNo")
 
-      val preparedForm = request.userAnswers.get(TrusteeAUKCitizenPage(index)) match {
+      val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -86,9 +86,9 @@ class LiveInTheUKYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeAUKCitizenPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUkYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeAUKCitizenPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUkYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

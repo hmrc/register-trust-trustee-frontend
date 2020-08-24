@@ -61,7 +61,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           .set(TrusteeNinoYesNoPage(index), false).success.value
           .set(TrusteeDetailsChoicePage(index), Passport).success.value
           .set(PassportDetailsPage(index), passport).success.value
-          .set(TrusteeAUKCitizenPage(index), true).success.value
+          .set(AddressUkYesNoPage(index), true).success.value
           .set(UkAddressPage(index), ukAddress).success.value
           .set(EmailAddressYesNoPage(index), false).success.value
           .set(TelephoneNumberPage(index), tel).success.value
@@ -92,7 +92,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           .set(TrusteeNinoYesNoPage(index), false).success.value
           .set(TrusteeDetailsChoicePage(index), IdCard).success.value
           .set(IDCardDetailsPage(index), idCard).success.value
-          .set(TrusteeAUKCitizenPage(index), false).success.value
+          .set(AddressUkYesNoPage(index), false).success.value
           .set(InternationalAddressPage(index), internationalAddress).success.value
           .set(EmailAddressYesNoPage(index), true).success.value
           .set(EmailAddressPage(index), email).success.value

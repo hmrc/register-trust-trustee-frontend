@@ -21,7 +21,7 @@ import config.annotations.LeadTrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import pages.register.leadtrustee.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{AddressUkYesNoPage, TrusteesNamePage}
 import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -69,7 +69,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +91,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -117,7 +117,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       "a GET when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeAUKCitizenPage(index), true).success.value
+          .set(AddressUkYesNoPage(index), true).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -135,7 +135,7 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       "a POST when no name is found" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeAUKCitizenPage(index), true).success.value
+          .set(AddressUkYesNoPage(index), true).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers)).build()

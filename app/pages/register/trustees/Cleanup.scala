@@ -56,7 +56,7 @@ trait Cleanup {
       .flatMap(_.remove(TrusteeDetailsChoicePage(index)))
       .flatMap(_.remove(PassportDetailsPage(index)))
       .flatMap(_.remove(IDCardDetailsPage(index)))
-      .flatMap(_.remove(TrusteeAUKCitizenPage(index)))
+      .flatMap(_.remove(AddressUkYesNoPage(index)))
       .flatMap(_.remove(UkAddressPage(index)))
       .flatMap(_.remove(InternationalAddressPage(index)))
       .flatMap(_.remove(EmailAddressYesNoPage(index)))
