@@ -19,12 +19,11 @@ package controllers.register.trustees.individual
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{DateOfBirthYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -41,11 +40,9 @@ class DateOfBirthYesNoController @Inject()(
                                               implicit val frontendAppConfig: FrontendAppConfig,
                                               registrationsRepository: RegistrationsRepository,
                                               @TrusteeIndividual navigator: Navigator,
-                                              identify: RegistrationIdentifierAction,
-                                              getData: DraftIdRetrievalActionProvider,
+                                              standardActionSets: StandardActionSets,
+                                              nameAction: NameRequiredActionImpl,
                                               validateIndex: IndexActionFilterProvider,
-                                              requireData: RegistrationDataRequiredAction,
-                                              requiredAnswer: RequiredAnswerActionProvider,
                                               yesNoFormProvider: YesNoFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: DateOfBirthYesNoView
@@ -54,34 +51,25 @@ class DateOfBirthYesNoController @Inject()(
   private val form = yesNoFormProvider.withPrefix("trustee.individual.dateOfBirthYesNo")
 
   private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId))) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+    standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val name = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(DateOfBirthYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, name.toString))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val name = request.userAnswers.get(NamePage(index)).get
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name.toString))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
           for {

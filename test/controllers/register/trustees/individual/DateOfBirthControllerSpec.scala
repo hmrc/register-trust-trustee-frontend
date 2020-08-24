@@ -21,13 +21,13 @@ import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
-import forms.trustees.TrusteesDateOfBirthFormProvider
+import forms.DateFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.IsThisLeadTrusteePage
-import pages.register.trustees.individual.{NamePage, DateOfBirthPage}
+import pages.register.trustees.individual.{DateOfBirthPage, NamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -36,9 +36,9 @@ import views.html.register.trustees.individual.DateOfBirthView
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
-  val trusteeMessagePrefix = "trustee.individual"
-  val formProvider = new TrusteesDateOfBirthFormProvider(frontendAppConfig)
-  val form = formProvider(trusteeMessagePrefix)
+  val trusteeMessagePrefix = "trustee.individual.dateOfBirth"
+  val formProvider = new DateFormProvider(frontendAppConfig)
+  val form = formProvider.withPrefix(trusteeMessagePrefix)
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
@@ -91,24 +91,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
 
       contentAsString(result) mustEqual
         view(form.fill(validAnswer), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "redirect to Trustee Name page when TrusteesName is not answered" in {
-      val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
-        .set(DateOfBirthPage(index), validAnswer).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
