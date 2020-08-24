@@ -75,7 +75,7 @@ ukAddress.error.line1.invalidCharacters = Address line 1 must only include lette
 ukAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 ukAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 ukAddress.error.line4.invalidCharacters = Address line 4 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-ukAddress.error.postcode.invalidCharacters = Enter a real postcode
+ukAddress.error.postcode.invalid = Enter a real postcode
 
 site.address.international.line1 = Address line 1
 site.address.international.line2 = Address line 2
@@ -510,7 +510,7 @@ leadTrustee.individual.telephoneNumber.title = What is the lead trustee’s tele
 leadTrustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
 leadTrustee.individual.telephoneNumber.hint = For international numbers include the country code
 leadTrustee.individual.telephoneNumber.error.required = Enter the lead trustee’s telephone number
-leadTrustee.individual.telephoneNumber.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+leadTrustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
 leadTrustee.individual.name.title = What is the lead trustee’s name?
 leadTrustee.individual.name.heading = What is the lead trustee’s name?
