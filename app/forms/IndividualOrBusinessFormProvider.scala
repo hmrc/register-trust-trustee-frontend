@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.registration.pages.AddATrustee
+import models.core.pages.IndividualOrBusiness
 import play.api.data.Form
 
-class AddATrusteeFormProvider @Inject() extends Mappings {
+class IndividualOrBusinessFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[AddATrustee] =
+  def apply(messagePrefix: String): Form[IndividualOrBusiness] =
     Form(
-      "value" -> enumerable[AddATrustee]("addATrustee.error.required")
+      "value" -> enumerable[IndividualOrBusiness](s"$messagePrefix.error.required")
     )
 }

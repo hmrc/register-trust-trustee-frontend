@@ -18,7 +18,7 @@ package controllers.register.trustees
 
 import base.SpecBase
 import controllers.register.IndexValidation
-import forms.trustees.TrusteeIndividualOrBusinessFormProvider
+import forms.IndividualOrBusinessFormProvider
 import models.NormalMode
 import models.core.pages.IndividualOrBusiness
 import org.scalacheck.Arbitrary.arbitrary
@@ -35,7 +35,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
   lazy val trusteeIndividualOrBusinessRoute = routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
-  val formProvider = new TrusteeIndividualOrBusinessFormProvider()
+  val formProvider = new IndividualOrBusinessFormProvider()
 
   "TrusteeIndividualOrBusiness Controller" must {
 

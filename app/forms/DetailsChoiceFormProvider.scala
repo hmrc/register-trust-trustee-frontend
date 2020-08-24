@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
 import models.registration.pages.DetailsChoice
 import play.api.data.Form
 
-class TrusteeDetailsChoiceFormProvider @Inject() extends Mappings {
+class DetailsChoiceFormProvider @Inject() extends Mappings {
 
   def withPrefix(prefix: String): Form[DetailsChoice] =
     Form(

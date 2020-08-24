@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.TrusteesNameFormProvider
+import forms.NameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.individual.NamePage
@@ -35,15 +35,15 @@ import views.html.register.trustees.individual.NameView
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        implicit val frontendAppConfig: FrontendAppConfig,
-                                        registrationsRepository: RegistrationsRepository,
-                                        @TrusteeIndividual navigator: Navigator,
-                                        standardActionSets: StandardActionSets,
-                                        validateIndex: IndexActionFilterProvider,
-                                        formProvider: TrusteesNameFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: NameView
+                                override val messagesApi: MessagesApi,
+                                implicit val frontendAppConfig: FrontendAppConfig,
+                                registrationsRepository: RegistrationsRepository,
+                                @TrusteeIndividual navigator: Navigator,
+                                standardActionSets: StandardActionSets,
+                                validateIndex: IndexActionFilterProvider,
+                                formProvider: NameFormProvider,
+                                val controllerComponents: MessagesControllerComponents,
+                                view: NameView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =

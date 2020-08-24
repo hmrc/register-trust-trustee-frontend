@@ -21,7 +21,7 @@ import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.TrusteeDetailsChoiceFormProvider
+import forms.DetailsChoiceFormProvider
 import javax.inject.Inject
 import models.registration.pages.DetailsChoice
 import navigation.Navigator
@@ -37,18 +37,18 @@ import views.html.register.leadtrustee.individual.TrusteeDetailsChoiceView
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrusteeDetailsChoiceController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              implicit val frontendAppConfig: FrontendAppConfig,
-                                              registrationsRepository: RegistrationsRepository,
-                                              @LeadTrusteeIndividual navigator: Navigator,
-                                              validateIndex: IndexActionFilterProvider,
-                                              identify: RegistrationIdentifierAction,
-                                              getData: DraftIdRetrievalActionProvider,
-                                              requireData: RegistrationDataRequiredAction,
-                                              requiredAnswer: RequiredAnswerActionProvider,
-                                              formProvider: TrusteeDetailsChoiceFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: TrusteeDetailsChoiceView
+                                                override val messagesApi: MessagesApi,
+                                                implicit val frontendAppConfig: FrontendAppConfig,
+                                                registrationsRepository: RegistrationsRepository,
+                                                @LeadTrusteeIndividual navigator: Navigator,
+                                                validateIndex: IndexActionFilterProvider,
+                                                identify: RegistrationIdentifierAction,
+                                                getData: DraftIdRetrievalActionProvider,
+                                                requireData: RegistrationDataRequiredAction,
+                                                requiredAnswer: RequiredAnswerActionProvider,
+                                                formProvider: DetailsChoiceFormProvider,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: TrusteeDetailsChoiceView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
