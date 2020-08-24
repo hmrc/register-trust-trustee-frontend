@@ -205,6 +205,15 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
       "go to TrusteeAnswersPage" when {
 
+        "from TrusteesNinoPage" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers)
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
         "from PassportDetailsPage" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
@@ -287,15 +296,6 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
               val answers = userAnswers.set(NinoYesNoPage(index), value = false).success.value
 
               navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
-                .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
-          }
-        }
-
-        "from TrusteesNinoPage" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-
-              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers)
                 .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
