@@ -67,6 +67,8 @@ class TrusteesAnswerPageController @Inject()(
 
       val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
 
+      val messageKeyPrefix = if (isLead) "leadTrusteesAnswerPage" else "trusteesAnswerPage"
+
       val trusteeIndividualOrBusinessMessagePrefix = if (isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
 
       val sections = Seq(
@@ -106,7 +108,7 @@ class TrusteesAnswerPageController @Inject()(
         )
       )
 
-      Ok(view(index, draftId ,sections))
+      Ok(view(index, draftId ,sections, messageKeyPrefix))
   }
 
   def onSubmit(index : Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
