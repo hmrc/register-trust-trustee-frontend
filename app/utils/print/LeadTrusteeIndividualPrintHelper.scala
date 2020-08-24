@@ -42,6 +42,7 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
                      (implicit messages: Messages): Seq[AnswerRow] = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val prefix: String = "leadTrustee.individual"
 
     Seq(
       bound.enumQuestion[IndividualOrBusiness](
@@ -50,33 +51,22 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
         TrusteeIndividualOrBusinessController.onPageLoad(index, draftId).url,
         "individualOrBusiness"
       ),
-      bound.nameQuestion(TrusteesNamePage(index),
-        "leadTrustee.individual.name", NameController.onPageLoad(index, draftId).url),
-      bound.dateQuestion(DateOfBirthPage(index),
-        "leadTrustee.individual.dateOfBirth", DateOfBirthController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(TrusteeNinoYesNoPage(index),
-        "leadTrustee.individual.ninoYesNo", NinoYesNoController.onPageLoad(index, draftId).url),
-      bound.stringQuestion(TrusteesNinoPage(index),
-        "leadTrustee.individual.nino", NinoController.onPageLoad(index, draftId).url),
+      bound.nameQuestion(TrusteesNamePage(index), s"$prefix.name", NameController.onPageLoad(index, draftId).url),
+      bound.dateQuestion(DateOfBirthPage(index), s"$prefix.dateOfBirth", DateOfBirthController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(TrusteeNinoYesNoPage(index), s"$prefix.ninoYesNo", NinoYesNoController.onPageLoad(index, draftId).url),
+      bound.stringQuestion(TrusteesNinoPage(index), s"$prefix.nino", NinoController.onPageLoad(index, draftId).url),
       bound.enumQuestion(TrusteeDetailsChoicePage(index),
-        "leadTrustee.individual.trusteeDetailsChoice", TrusteeDetailsChoiceController.onPageLoad(index, draftId).url,
-        "passport"),
-      bound.passportDetailsQuestion(IDCardDetailsPage(index),
-        "leadTrustee.individual.iDCardDetails", IDCardDetailsController.onPageLoad(index, draftId).url),
-      bound.passportDetailsQuestion(PassportDetailsPage(index),
-        "leadTrustee.individual.passportDetails", PassportDetailsController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(TrusteeAUKCitizenPage(index),
-        "leadTrustee.individual.liveInTheUkYesNo", LiveInTheUKYesNoController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(UkAddressPage(index),
-        "leadTrustee.individual.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(InternationalAddressPage(index),
-        "leadTrustee.individual.internationalAddress", InternationalAddressController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(EmailAddressYesNoPage(index),
-        "leadTrustee.individual.emailAddressYesNo", EmailAddressYesNoController.onPageLoad(index, draftId).url),
-      bound.stringQuestion(EmailAddressPage(index),
-        "leadTrustee.individual.email", EmailAddressController.onPageLoad(index, draftId).url),
-      bound.stringQuestion(TelephoneNumberPage(index),
-        "leadTrustee.individual.telephoneNumber", TelephoneNumberController.onPageLoad(index, draftId).url)
+        s"$prefix.trusteeDetailsChoice", TrusteeDetailsChoiceController.onPageLoad(index, draftId).url,
+        s"$prefix.trusteeDetailsChoice"
+      ),
+      bound.passportDetailsQuestion(IDCardDetailsPage(index), s"$prefix.iDCardDetails", IDCardDetailsController.onPageLoad(index, draftId).url),
+      bound.passportDetailsQuestion(PassportDetailsPage(index), s"$prefix.passportDetails", PassportDetailsController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(TrusteeAUKCitizenPage(index), s"$prefix.liveInTheUkYesNo", LiveInTheUKYesNoController.onPageLoad(index, draftId).url),
+      bound.addressQuestion(UkAddressPage(index), s"$prefix.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
+      bound.addressQuestion(InternationalAddressPage(index), s"$prefix.internationalAddress", InternationalAddressController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(EmailAddressYesNoPage(index), s"$prefix.emailAddressYesNo", EmailAddressYesNoController.onPageLoad(index, draftId).url),
+      bound.stringQuestion(EmailAddressPage(index), s"$prefix.email", EmailAddressController.onPageLoad(index, draftId).url),
+      bound.stringQuestion(TelephoneNumberPage(index), s"$prefix.telephoneNumber", TelephoneNumberController.onPageLoad(index, draftId).url)
     ).flatten
   }
 

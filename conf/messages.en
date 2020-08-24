@@ -540,7 +540,7 @@ leadTrustee.individual.ninoYesNo.error.required = Select yes if you know the lea
 leadTrustee.individual.trusteeDetailsChoice.title = Which of {0}'s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}'s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}'s details can you provide?
-leadTrustee.individual.trusteeDetailsChoice.idCard = IdCard
+leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
 leadTrustee.individual.trusteeDetailsChoice.error.required = Select yes if the trustee is a UK citizen
 
