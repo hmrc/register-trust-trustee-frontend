@@ -106,7 +106,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua,
         AddressYesNoPage(index),
         AddressUkYesNoController.onPageLoad(index, draftId),
-        TrusteesAnswerPageController.onPageLoad(index, draftId)
+        CheckDetailsController.onPageLoad(index, draftId)
       )
     case AddressUkYesNoPage(index) => ua =>
       yesNoNav(
@@ -127,7 +127,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua,
         IDCardDetailsYesNoPage(index),
         IDCardDetailsController.onPageLoad(index, draftId),
-        TrusteesAnswerPageController.onPageLoad(index, draftId)
+        CheckDetailsController.onPageLoad(index, draftId)
       )
   }
 

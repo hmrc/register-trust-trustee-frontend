@@ -230,7 +230,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
               val answers = userAnswers.set(AddressYesNoPage(index), value = false).success.value
 
               navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
-                .mustBe(controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -241,7 +241,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
               val answers = userAnswers.set(IDCardDetailsYesNoPage(index), value = false).success.value
 
               navigator.nextPage(IDCardDetailsYesNoPage(index), fakeDraftId, answers)
-                .mustBe(controllers.register.trustees.routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
           }
         }
       }
