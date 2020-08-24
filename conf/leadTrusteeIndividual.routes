@@ -1,38 +1,38 @@
-GET        /:draftId/:index/individual/date-of-birth              controllers.register.leadtrustee.individual.DateOfBirthController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/individual/date-of-birth              controllers.register.leadtrustee.individual.DateOfBirthController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/date-of-birth              controllers.register.leadtrustee.individual.DateOfBirthController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/date-of-birth              controllers.register.leadtrustee.individual.DateOfBirthController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/individual/live-in-the-uk             controllers.register.leadtrustee.individual.LiveInTheUKYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/live-in-the-uk             controllers.register.leadtrustee.individual.LiveInTheUKYesNoController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/live-in-the-uk             controllers.register.leadtrustee.individual.LiveInTheUKYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/live-in-the-uk             controllers.register.leadtrustee.individual.LiveInTheUKYesNoController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/name                       controllers.register.leadtrustee.individual.NameController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/name                       controllers.register.leadtrustee.individual.NameController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/name                       controllers.register.leadtrustee.individual.NameController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/name                       controllers.register.leadtrustee.individual.NameController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/nino                       controllers.register.leadtrustee.individual.NinoController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/individual/nino                       controllers.register.leadtrustee.individual.NinoController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/nino                       controllers.register.leadtrustee.individual.NinoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/nino                       controllers.register.leadtrustee.individual.NinoController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/individual/is-a-uk-citizen            controllers.register.leadtrustee.individual.NinoYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/is-a-uk-citizen            controllers.register.leadtrustee.individual.NinoYesNoController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/is-a-uk-citizen            controllers.register.leadtrustee.individual.NinoYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/is-a-uk-citizen            controllers.register.leadtrustee.individual.NinoYesNoController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/telephone-number           controllers.register.leadtrustee.individual.TelephoneNumberController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/telephone-number           controllers.register.leadtrustee.individual.TelephoneNumberController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/telephone-number           controllers.register.leadtrustee.individual.TelephoneNumberController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/telephone-number           controllers.register.leadtrustee.individual.TelephoneNumberController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/uk-address                 controllers.register.leadtrustee.individual.UkAddressController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/uk-address                 controllers.register.leadtrustee.individual.UkAddressController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/uk-address                 controllers.register.leadtrustee.individual.UkAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/uk-address                 controllers.register.leadtrustee.individual.UkAddressController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/details-choice             controllers.register.leadtrustee.individual.TrusteeDetailsChoiceController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/details-choice             controllers.register.leadtrustee.individual.TrusteeDetailsChoiceController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/details-choice             controllers.register.leadtrustee.individual.TrusteeDetailsChoiceController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/details-choice             controllers.register.leadtrustee.individual.TrusteeDetailsChoiceController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/id-card                    controllers.register.leadtrustee.individual.IDCardDetailsController.onPageLoad( index: Int, draftId: String)
-POST       /:draftId/:index/individual/id-card                    controllers.register.leadtrustee.individual.IDCardDetailsController.onSubmit( index: Int, draftId: String)
+GET        /:draftId/:index/id-card                    controllers.register.leadtrustee.individual.IDCardDetailsController.onPageLoad( index: Int, draftId: String)
+POST       /:draftId/:index/id-card                    controllers.register.leadtrustee.individual.IDCardDetailsController.onSubmit( index: Int, draftId: String)
 
-GET        /:draftId/:index/individual/passport                   controllers.register.leadtrustee.individual.PassportDetailsController.onPageLoad( index: Int, draftId: String)
-POST       /:draftId/:index/individual/passport                   controllers.register.leadtrustee.individual.PassportDetailsController.onSubmit( index: Int, draftId: String)
+GET        /:draftId/:index/passport                   controllers.register.leadtrustee.individual.PassportDetailsController.onPageLoad( index: Int, draftId: String)
+POST       /:draftId/:index/passport                   controllers.register.leadtrustee.individual.PassportDetailsController.onSubmit( index: Int, draftId: String)
 
-GET        /:draftId/:index/individual/international-address      controllers.register.leadtrustee.individual.InternationalAddressController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/international-address      controllers.register.leadtrustee.individual.InternationalAddressController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/international-address      controllers.register.leadtrustee.individual.InternationalAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/international-address      controllers.register.leadtrustee.individual.InternationalAddressController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/email-address-yes-no       controllers.register.leadtrustee.individual.EmailAddressYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/email-address-yes-no       controllers.register.leadtrustee.individual.EmailAddressYesNoController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/email-address-yes-no       controllers.register.leadtrustee.individual.EmailAddressYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/email-address-yes-no       controllers.register.leadtrustee.individual.EmailAddressYesNoController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual/email                      controllers.register.leadtrustee.individual.EmailAddressController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual/email                      controllers.register.leadtrustee.individual.EmailAddressController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/email                      controllers.register.leadtrustee.individual.EmailAddressController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/email                      controllers.register.leadtrustee.individual.EmailAddressController.onSubmit(index : Int, draftId: String)
