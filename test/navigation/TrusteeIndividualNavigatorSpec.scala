@@ -204,11 +204,11 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "go to TrusteeAnswersPage" when {
-        "from TrusteeTelephoneNumberPage" in {
+        "from TrusteesNinoPage" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, userAnswers)
+              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers)
                 .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -298,15 +298,6 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
                 .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
-
-        "from TrusteesNinoPage" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-
-              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers)
-                .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
-          }
-        }
       }
 
       "go to TrusteesUkAddressPage from TrusteeLivesInUKPage when answer is yes" in {
@@ -364,12 +355,21 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "go to TrusteeTelephoneNumberPage from TrusteesUkAddressPage" in {
+      "go to PassportDetailsYesNoPage from TrusteesUkAddressPage" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
             navigator.nextPage(UkAddressPage(index), fakeDraftId, userAnswers)
-              .mustBe(TelephoneNumberController.onPageLoad(index, fakeDraftId))
+              .mustBe(PassportDetailsYesNoController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
+      "go to PassportDetailsYesNoPage from InternationalAddressPage" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            navigator.nextPage(InternationalAddressPage(index), fakeDraftId, userAnswers)
+              .mustBe(PassportDetailsYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
