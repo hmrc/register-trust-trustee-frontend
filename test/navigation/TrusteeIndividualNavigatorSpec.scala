@@ -25,7 +25,7 @@ import models.core.pages.IndividualOrBusiness.{Business, Individual}
 import models.registration.pages.AddATrustee
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.trustees.{AddATrusteePage, AddATrusteeYesNoPage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage, TrusteesAnswerPage}
+import pages.register.trustees._
 import pages.register.trustees.individual._
 import play.api.mvc.Call
 import sections.Trustees
@@ -204,21 +204,13 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "go to TrusteeAnswersPage" when {
-        "from TrusteeTelephoneNumberPage" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-
-              navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, userAnswers)
-                .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
-          }
-        }
 
         "from PassportDetailsPage" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
               navigator.nextPage(PassportDetailsPage(index), fakeDraftId, userAnswers)
-                .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -227,7 +219,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
             userAnswers =>
 
               navigator.nextPage(IDCardDetailsPage(index), fakeDraftId, userAnswers)
-                .mustBe(routes.TrusteesAnswerPageController.onPageLoad(index, fakeDraftId))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -361,15 +353,6 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
             navigator.nextPage(PassportDetailsYesNoPage(index), fakeDraftId, answers)
               .mustBe(IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to TrusteeTelephoneNumberPage from TrusteesUkAddressPage" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-
-            navigator.nextPage(UkAddressPage(index), fakeDraftId, userAnswers)
-              .mustBe(TelephoneNumberController.onPageLoad(index, fakeDraftId))
         }
       }
 

@@ -23,8 +23,8 @@ import models.ReadableUserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.registration.pages.AddATrustee
 import pages.Page
-import pages.register.trustees.{AddATrusteePage, AddATrusteeYesNoPage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage, TrusteesAnswerPage}
 import pages.register.trustees.individual._
+import pages.register.trustees._
 import play.api.mvc.Call
 import sections.Trustees
 
@@ -39,13 +39,14 @@ class TrusteeIndividualNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, Call] = {
     case IsThisLeadTrusteePage(index) => TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
+
     case NamePage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => AddressYesNoController.onPageLoad(index, draftId)
     case UkAddressPage(index) =>  TelephoneNumberController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => TrusteesAnswerPageController.onPageLoad(index, draftId)
-    case IDCardDetailsPage(index) => TrusteesAnswerPageController.onPageLoad(index, draftId)
-    case TelephoneNumberPage(index) => TrusteesAnswerPageController.onPageLoad(index, draftId)
+    case PassportDetailsPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+    case IDCardDetailsPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+
     case TrusteesAnswerPage  => AddATrusteeController.onPageLoad(draftId)
   }
 
