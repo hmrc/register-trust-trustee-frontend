@@ -26,12 +26,14 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.answers.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
+import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
 
 class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      leadTrusteeMapper: LeadTrusteeMapper,
                                      correspondenceMapper: CorrespondenceMapper,
-                                     countryOptions: CountryOptions) {
+                                     countryOptions: CountryOptions,
+                                     printHelpers: PrintHelpers) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = trusteesStatus(userAnswers)
@@ -92,7 +94,7 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
   private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
                                (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
     if (status.contains(Status.Completed)) {
-        val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, canEdit = false)
+        val helper = new CheckYourAnswersHelper(countryOptions, printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
 
         helper.trustees match {
           case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission

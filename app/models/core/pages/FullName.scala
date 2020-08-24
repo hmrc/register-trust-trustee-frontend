@@ -22,6 +22,10 @@ case class FullName(firstName: String, middleName: Option[String], lastName: Str
 
   override def toString = s"$firstName $lastName"
 
+  private val middleNameFormatted = middleName.fold(" ")(m => s" $m ")
+
+  def fullName: String = firstName + middleNameFormatted + lastName
+
 }
 
 object FullName {
