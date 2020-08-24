@@ -7,9 +7,6 @@ POST       /:draftId/:index/know-date-of-birth         controllers.register.trus
 GET        /:draftId/:index/date-of-birth              controllers.register.trustees.individual.DateOfBirthController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/date-of-birth              controllers.register.trustees.individual.DateOfBirthController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/telephone-number           controllers.register.trustees.individual.TelephoneNumberController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/telephone-number           controllers.register.trustees.individual.TelephoneNumberController.onSubmit(index : Int, draftId: String)
-
 GET        /:draftId/:index/is-a-uk-citizen            controllers.register.trustees.individual.NinoYesNoController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/is-a-uk-citizen            controllers.register.trustees.individual.NinoYesNoController.onSubmit(index : Int, draftId: String)
 
