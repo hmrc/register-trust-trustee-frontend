@@ -22,7 +22,7 @@
     formHelper: FormWithCSRF
 )
 
-@(index : Int, draftId: String, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(index : Int, draftId: String, answerSections: Seq[Section], messageKeyPrefix: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("trusteesAnswerPage.title")
@@ -30,7 +30,7 @@
 
     @components.back_link()
 
-    @components.heading("trusteesAnswerPage.heading")
+    @components.heading(s"$messageKeyPrefix.heading")
 
     @for(section <- answerSections){
         @{

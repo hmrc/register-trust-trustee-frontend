@@ -20,21 +20,19 @@ import base.SpecBase
 import forms.YesNoFormProvider
 import models.Status._
 import models.UserAnswers
+import models.core.pages.FullName
 import models.core.pages.IndividualOrBusiness._
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import pages.entitystatus.TrusteeStatus
-import pages.register.trustees.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
-import pages.register.trustees.{organisation => torg}
-import pages.register.leadtrustee.{organisation => ltorg}
+import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
+import pages.register.trustees.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage, individual => tind, organisation => torg}
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import repositories.RegistrationsRepository
 import sections.Trustee
 import views.html.RemoveIndexView
-import play.api.inject.bind
 
 import scala.concurrent.Future
 
@@ -45,6 +43,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
   private val index = 0
   private val fakeName = "Test"
+  private val fakeFullName: FullName = FullName("John", None, "Doe")
   private val defaultTrusteeName = "the trustee"
   private val defaultLeadTrusteeName = "the lead trustee"
 
@@ -129,8 +128,25 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           application.stop()
         }
 
-        "has name" ignore {
+        "has name" in {
 
+          val userAnswers = baseAnswers
+            .set(tind.NamePage(index), fakeFullName).success.value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          val request = FakeRequest(GET, removeRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[RemoveIndexView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(form(prefix), fakeDraftId, index, fakeFullName.toString, prefix)(fakeRequest, messages).toString
+
+          application.stop()
         }
       }
 
@@ -210,8 +226,25 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           application.stop()
         }
 
-        "has name" ignore {
+        "has name" in {
 
+          val userAnswers = baseAnswers
+            .set(ltind.TrusteesNamePage(index), fakeFullName).success.value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          val request = FakeRequest(GET, removeRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[RemoveIndexView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(form(prefix), fakeDraftId, index, fakeFullName.toString, prefix)(fakeRequest, messages).toString
+
+          application.stop()
         }
       }
 

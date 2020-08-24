@@ -106,23 +106,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
     }
 
-    "redirect to IsThisLeadTrustee a GET when no answer to IsThisLeadTrustee" in {
-
-      val userAnswers = emptyUserAnswers
-
-      val application = applicationBuilder(Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteesNameRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val name = FullName("first name", Some("middle name"), "last name")
@@ -149,54 +132,33 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "redirect to the next page on a POST" when {
+    "redirect to the next page on a POST valid data is submitted" in {
 
-      "valid data is submitted" in {
+      val name = FullName("first name", Some("middle name"), "last name")
 
-        val name = FullName("first name", Some("middle name"), "last name")
+      val userAnswers = emptyUserAnswers
+        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(NamePage(index), name).success.value
 
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(NamePage(index), name).success.value
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator]
+              .qualifiedWith(classOf[TrusteeIndividual])
+              .toInstance(new FakeNavigator())
+          ).build()
 
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
-            .overrides(
-              bind[Navigator]
-                .qualifiedWith(classOf[TrusteeIndividual])
-                .toInstance(new FakeNavigator())
-            ).build()
+      val request =
+        FakeRequest(POST, trusteesNameRoute)
+          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
 
-        val request =
-          FakeRequest(POST, trusteesNameRoute)
-            .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+      val result = route(application, request).value
 
-        val result = route(application, request).value
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+      application.stop()
 
-        application.stop()
-      }
-
-      "no answer to IsThisLeadTrustee is given" in {
-
-        val userAnswers = emptyUserAnswers
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request =
-          FakeRequest(POST, trusteesNameRoute)
-            .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-      }
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

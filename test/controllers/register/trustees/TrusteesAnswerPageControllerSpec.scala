@@ -86,7 +86,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
+          view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -139,7 +139,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
+            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
 
           application.stop()
         }
@@ -188,7 +188,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
+            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
 
           application.stop()
         }
@@ -253,7 +253,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(index, fakeDraftId, expectedSections)(fakeRequest, messages).toString
+            view(index, fakeDraftId, expectedSections, titlePrefix)(fakeRequest, messages).toString
 
           application.stop()
         }

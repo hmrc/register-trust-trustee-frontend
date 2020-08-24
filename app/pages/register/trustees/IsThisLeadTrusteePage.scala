@@ -18,14 +18,12 @@ package pages.register.trustees
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.leadtrustee.{organisation => ltorg}
-import pages.register.trustees.{individual => tind, organisation => torg}
 import play.api.libs.json.JsPath
 import sections.Trustees
 
 import scala.util.Try
 
-final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean] {
+final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean] with Cleanup {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
@@ -36,36 +34,14 @@ final case class IsThisLeadTrusteePage(index : Int) extends QuestionPage[Boolean
       case Some(true) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
-
-          .flatMap(_.remove(tind.NamePage(index)))
-          .flatMap(_.remove(tind.DateOfBirthPage(index)))
-          .flatMap(_.remove(tind.NinoYesNoPage(index)))
-          .flatMap(_.remove(tind.NinoPage(index)))
-          .flatMap(_.remove(tind.AddressUkYesNoPage(index)))
-          .flatMap(_.remove(tind.UkAddressPage(index)))
-          .flatMap(_.remove(tind.InternationalAddressPage(index)))
-
-          .flatMap(_.remove(torg.NamePage(index)))
-          .flatMap(_.remove(torg.UtrYesNoPage(index)))
-          .flatMap(_.remove(torg.UtrPage(index)))
-          .flatMap(_.remove(torg.AddressYesNoPage(index)))
-          .flatMap(_.remove(torg.AddressUkYesNoPage(index)))
-          .flatMap(_.remove(torg.UkAddressPage(index)))
-          .flatMap(_.remove(torg.InternationalAddressPage(index)))
+          .flatMap(ua => removeTrusteeIndividual(ua, index))
+          .flatMap(ua => removeTrusteeBusiness(ua, index))
 
       case Some(false) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
-          // TODO - lead trustee individual pages
-          .flatMap(_.remove(ltorg.UkRegisteredYesNoPage(index)))
-          .flatMap(_.remove(ltorg.NamePage(index)))
-          .flatMap(_.remove(ltorg.UtrPage(index)))
-          .flatMap(_.remove(ltorg.AddressUkYesNoPage(index)))
-          .flatMap(_.remove(ltorg.UkAddressPage(index)))
-          .flatMap(_.remove(ltorg.InternationalAddressPage(index)))
-          .flatMap(_.remove(ltorg.EmailAddressYesNoPage(index)))
-          .flatMap(_.remove(ltorg.EmailAddressPage(index)))
-          .flatMap(_.remove(ltorg.TelephoneNumberPage(index)))
+          .flatMap(ua => removeLeadTrusteeIndividual(ua, index))
+          .flatMap(ua => removeLeadTrusteeBusiness(ua, index))
 
       case _ =>
         super.cleanup(value, userAnswers)

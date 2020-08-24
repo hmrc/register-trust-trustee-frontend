@@ -24,8 +24,7 @@ import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.leadtrustee.individual.{TrusteeAUKCitizenPage, TrusteesNamePage}
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.leadtrustee.individual.{TrusteeAUKCitizenPage, TrusteeNinoYesNoPage, TrusteesNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -63,9 +62,9 @@ class NinoYesNoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider.withPrefix("")
+      val form = formProvider.withPrefix("leadTrustee.individual.ninoYesNo")
 
-      val preparedForm = request.userAnswers.get(TrusteeAUKCitizenPage(index)) match {
+      val preparedForm = request.userAnswers.get(TrusteeNinoYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -78,7 +77,7 @@ class NinoYesNoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form = formProvider.withPrefix("")
+      val form = formProvider.withPrefix("leadTrustee.individual.ninoYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
@@ -86,9 +85,9 @@ class NinoYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeAUKCitizenPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeNinoYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeAUKCitizenPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TrusteeNinoYesNoPage(index), draftId, updatedAnswers))
         }
       )
   }

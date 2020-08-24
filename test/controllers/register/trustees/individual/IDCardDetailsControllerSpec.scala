@@ -67,7 +67,7 @@ class IDCardDetailsControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form, countryOptions, fakeDraftId, index, trusteeName.toString)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -90,26 +90,7 @@ class IDCardDetailsControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(cardDetails), countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(IDCardDetailsPage(index), cardDetails).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, idCardDetailsRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.register.trustees.routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
+        view(form.fill(cardDetails), countryOptions, fakeDraftId, index, trusteeName.toString)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -148,51 +129,6 @@ class IDCardDetailsControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to trusteeName must"  when{
-
-      "a GET when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(IDCardDetailsPage(index), cardDetails).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, idCardDetailsRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-      }
-      "a POST when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-          .set(IDCardDetailsPage(index), cardDetails).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request =
-          FakeRequest(POST, idCardDetailsRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-
-      }
-    }
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
@@ -214,7 +150,7 @@ class IDCardDetailsControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, index, trusteeName.toString)(fakeRequest, messages).toString
 
       application.stop()
     }

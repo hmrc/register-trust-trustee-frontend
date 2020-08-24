@@ -17,9 +17,10 @@
 package controllers.register.trustees.individual
 
 import config.FrontendAppConfig
-import config.annotations.{TrusteeIndividual, TrusteeOrganisation}
+import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
+import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -28,6 +29,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.trustees.individual.AddressYesNoView
 
@@ -40,13 +42,14 @@ class AddressYesNoController @Inject()(
                                         @TrusteeIndividual navigator: Navigator,
                                         standardActionSets: StandardActionSets,
                                         nameAction: NameRequiredActionImpl,
+                                        validateIndex: IndexActionFilterProvider,
                                         formProvider: YesNoFormProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: AddressYesNoView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
+    standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressYesNo")
 

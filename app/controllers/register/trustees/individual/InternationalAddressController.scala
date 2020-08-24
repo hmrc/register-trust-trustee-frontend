@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
+import controllers.filters.IndexActionFilterProvider
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -28,6 +29,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.trustees.individual.InternationalAddressView
@@ -41,6 +43,7 @@ class InternationalAddressController @Inject()(
                                                 @TrusteeIndividual navigator: Navigator,
                                                 standardActionSets: StandardActionSets,
                                                 nameAction: NameRequiredActionImpl,
+                                                validateIndex: IndexActionFilterProvider,
                                                 formProvider: InternationalAddressFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: InternationalAddressView,
@@ -50,7 +53,7 @@ class InternationalAddressController @Inject()(
   private val form = formProvider()
 
   private def actions(index: Int, draftId: String) =
-    standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
+    standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
