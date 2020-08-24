@@ -23,7 +23,7 @@ import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.leadtrustee.individual.{EmailAddressYesNoPage, TrusteeAUKCitizenPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{EmailAddressYesNoPage, AddressUkYesNoPage, TrusteesNamePage}
 import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -199,7 +199,7 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
+        AddressUkYesNoPage.apply,
         getForIndex
       )
 
@@ -218,7 +218,7 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
       validateIndex(
         arbitrary[Boolean],
-        TrusteeAUKCitizenPage.apply,
+        AddressUkYesNoPage.apply,
         postForIndex
       )
     }

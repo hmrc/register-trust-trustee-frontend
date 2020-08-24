@@ -28,7 +28,7 @@ object DetailsChoice extends Enumerable.Implicits {
   case object Passport extends WithName("passport") with DetailsChoice
 
   val values: List[DetailsChoice] = List(
-    IdCard, Passport
+    Passport, IdCard
   )
 
   val options: List[RadioOption] = values.map {

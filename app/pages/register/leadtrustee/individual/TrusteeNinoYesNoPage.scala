@@ -23,7 +23,7 @@ import sections.Trustees
 
 import scala.util.Try
 
-final case class  TrusteeNinoYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class TrusteeNinoYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 

@@ -22,17 +22,17 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.leadtrustee.individual._
 
-class TrusteeAUKCitizenPageSpec extends PageBehaviours {
+class AddressUkYesNoPageSpec extends PageBehaviours {
 
   val index = 0
 
   "TrusteeAUKCitizen Page" must {
 
-    beRetrievable[Boolean](TrusteeAUKCitizenPage(index))
+    beRetrievable[Boolean](AddressUkYesNoPage(index))
 
-    beSettable[Boolean](TrusteeAUKCitizenPage(index))
+    beSettable[Boolean](AddressUkYesNoPage(index))
 
-    beRemovable[Boolean](TrusteeAUKCitizenPage(index))
+    beRemovable[Boolean](AddressUkYesNoPage(index))
 
     "implement cleanup logic" when {
 
@@ -42,7 +42,7 @@ class TrusteeAUKCitizenPageSpec extends PageBehaviours {
             val result: UserAnswers =
               userAnswers
                 .set(InternationalAddressPage(index), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).success.value
-                .set(TrusteeAUKCitizenPage(index), true).success.value
+                .set(AddressUkYesNoPage(index), true).success.value
 
             result.get(InternationalAddressPage(index)) mustNot be(defined)
         }
@@ -54,7 +54,7 @@ class TrusteeAUKCitizenPageSpec extends PageBehaviours {
             val result: UserAnswers =
               userAnswers
                 .set(UkAddressPage(index), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).success.value
-                .set(TrusteeAUKCitizenPage(index), false).success.value
+                .set(AddressUkYesNoPage(index), false).success.value
 
             result.get(UkAddressPage(index)) mustNot be(defined)
         }

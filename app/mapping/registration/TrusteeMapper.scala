@@ -22,7 +22,9 @@ import mapping.reads.{Trustee, TrusteeIndividual, TrusteeOrganisation, Trustees}
 import models.UserAnswers
 import models.registration.pages.PassportOrIdCardDetails
 
-class TrusteeMapper @Inject()(nameMapper: NameMapper, addressMapper: AddressMapper) extends Mapping[List[TrusteeType]] {
+class TrusteeMapper @Inject()(nameMapper: NameMapper,
+                              addressMapper: AddressMapper,
+                              passportOrIdCardMapper: PassportOrIdCardMapper) extends Mapping[List[TrusteeType]] {
 
   override def build(userAnswers: UserAnswers): Option[List[TrusteeType]] = {
     val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(List.empty[Trustee])
@@ -72,19 +74,13 @@ class TrusteeMapper @Inject()(nameMapper: NameMapper, addressMapper: AddressMapp
   private def identificationMap(trustee: TrusteeIndividual): Option[IdentificationType] = {
     val identificationType = IdentificationType(
       trustee.nino,
-      passportOrIdMap(trustee.passportOrId),
+      passportOrIdCardMapper.build(trustee.passportOrId),
       addressMapper.build(trustee.address)
     )
 
     identificationType match {
       case IdentificationType(None, None, None) => None
       case _ => Some(identificationType)
-    }
-  }
-
-  private def passportOrIdMap(passportOrIdCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] = {
-    passportOrIdCardDetails map { passportOrIdCardDetails =>
-      PassportType(passportOrIdCardDetails.cardNumber, passportOrIdCardDetails.expiryDate, passportOrIdCardDetails.country)
     }
   }
 }

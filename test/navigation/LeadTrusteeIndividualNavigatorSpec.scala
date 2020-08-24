@@ -124,18 +124,18 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
 
     "AUKCitizen Page -> Yes -> UkAddress Page" in {
       val answers = emptyUserAnswers
-        .set(TrusteeAUKCitizenPage(index), true).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
 
-      navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
+      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
         .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
     }
 
 
     "AUKCitizen Page -> No -> InternationalAddress Page" in {
       val answers = emptyUserAnswers
-        .set(TrusteeAUKCitizenPage(index), false).success.value
+        .set(AddressUkYesNoPage(index), false).success.value
 
-      navigator.nextPage(TrusteeAUKCitizenPage(index), fakeDraftId, answers)
+      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
         .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
     }
 

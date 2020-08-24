@@ -25,8 +25,8 @@ import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
 import models.registration.pages.AddATrustee
 import models.{RegistrationSubmission, Status, UserAnswers}
 import pages.entitystatus.TrusteeStatus
-import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TelephoneNumberPage, TrusteeIndividualOrBusinessPage, organisation => torg}
 import pages.register.leadtrustee.{individual => ltind}
+import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage, organisation => torg}
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
 class SubmissionSetFactorySpec extends SpecBase {
@@ -77,7 +77,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
       .set(ltind.TrusteeNinoYesNoPage(index), true).success.value
       .set(ltind.TrusteesNinoPage(index), "AB123456C").success.value
-      .set(ltind.TrusteeAUKCitizenPage(index), true).success.value
+      .set(ltind.AddressUkYesNoPage(index), true).success.value
       .set(ltind.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
       .set(ltind.EmailAddressYesNoPage(index), false).success.value
       .set(ltind.TelephoneNumberPage(index), "0191 1111111").success.value

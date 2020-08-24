@@ -61,7 +61,7 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
       ),
       bound.passportDetailsQuestion(IDCardDetailsPage(index), s"$prefix.iDCardDetails", IDCardDetailsController.onPageLoad(index, draftId).url),
       bound.passportDetailsQuestion(PassportDetailsPage(index), s"$prefix.passportDetails", PassportDetailsController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(TrusteeAUKCitizenPage(index), s"$prefix.liveInTheUkYesNo", LiveInTheUKYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(AddressUkYesNoPage(index), s"$prefix.liveInTheUkYesNo", LiveInTheUKYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(UkAddressPage(index), s"$prefix.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
       bound.addressQuestion(InternationalAddressPage(index), s"$prefix.internationalAddress", InternationalAddressController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(EmailAddressYesNoPage(index), s"$prefix.emailAddressYesNo", EmailAddressYesNoController.onPageLoad(index, draftId).url),

@@ -44,8 +44,8 @@ class LeadTrusteeIndividualNavigator extends Navigator {
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeNinoYesNoPage(index) => ua =>
       yesNoNav(ua, TrusteeNinoYesNoPage(index), NinoController.onPageLoad(index, draftId), TrusteeDetailsChoiceController.onPageLoad(index, draftId))
-    case TrusteeAUKCitizenPage(index) => ua =>
-      yesNoNav(ua, TrusteeAUKCitizenPage(index), UkAddressController.onPageLoad(index, draftId), InternationalAddressController.onPageLoad(index, draftId))
+    case AddressUkYesNoPage(index) => ua =>
+      yesNoNav(ua, AddressUkYesNoPage(index), UkAddressController.onPageLoad(index, draftId), InternationalAddressController.onPageLoad(index, draftId))
     case TrusteeDetailsChoicePage(index) => ua =>
       detailsRoutes(ua, index, draftId)
     case EmailAddressYesNoPage(index) => ua =>
