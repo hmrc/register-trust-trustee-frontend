@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package forms
 
 import java.time.LocalDate
 
@@ -23,18 +23,18 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class LeadTrusteesDateOfBirthFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings {
+class DateFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings {
 
-  def apply(): Form[LocalDate] =
+  def withPrefix(prefix: String): Form[LocalDate] =
     Form(
       "value" -> localDate(
-        invalidKey     = "leadTrustee.individual.DateOfBirth.error.invalid",
-        allRequiredKey = "leadTrustee.individual.DateOfBirth.error.required.all",
-        twoRequiredKey = "leadTrustee.individual.DateOfBirth.error.required.two",
-        requiredKey    = "leadTrustee.individual.DateOfBirth.error.required"
+        invalidKey     = s"$prefix.error.invalid",
+        allRequiredKey = s"$prefix.error.required.all",
+        twoRequiredKey = s"$prefix.error.required.two",
+        requiredKey    = s"$prefix.error.required"
       ).verifying(firstError(
-        maxDate(LocalDate.now, s"leadTrustee.individual.DateOfBirth.error.future", "day", "month", "year"),
-        minDate(appConfig.minDate, s"leadTrustee.individual.DateOfBirth.error.past", "day", "month", "year")
+        maxDate(LocalDate.now, s"$prefix.error.future", "day", "month", "year"),
+        minDate(appConfig.minDate, s"$prefix.error.past", "day", "month", "year")
       ))
     )
 }

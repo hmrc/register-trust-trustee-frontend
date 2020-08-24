@@ -21,7 +21,7 @@ import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
 import controllers.register.IndexValidation
-import forms.trustees.LeadTrusteesDateOfBirthFormProvider
+import forms.DateFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
@@ -35,9 +35,9 @@ import views.html.register.leadtrustee.individual.DateOfBirthView
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
-  val messagePrefix = "leadTrustee.individual.DateOfBirth"
-  val formProvider = new LeadTrusteesDateOfBirthFormProvider(frontendAppConfig)
-  val form = formProvider()
+  val messagePrefix = "leadTrustee.individual.dateOfBirth"
+  val formProvider = new DateFormProvider(frontendAppConfig)
+  val form = formProvider.withPrefix(messagePrefix)
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
