@@ -183,10 +183,10 @@ trustee.individual.telephoneNumber.error.required = Enter trustee’s telephone 
 trustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 trustee.individual.telephoneNumber.hint = For international numbers include the country code
 
-trustee.individual.ninoYesNo.title = Is the trustee a UK citizen?
-trustee.individual.ninoYesNo.heading = Is {0} a UK citizen?
-trustee.individual.ninoYesNo.checkYourAnswersLabel = Is {0} a UK citizen?
-trustee.individual.ninoYesNo.error.required = Select yes if the trustee is a UK citizen
+trustee.individual.ninoYesNo.title = Do you know the trustee’s National Insurance number?
+trustee.individual.ninoYesNo.heading = Do you know {0}’s National Insurance number?
+trustee.individual.ninoYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
+trustee.individual.ninoYesNo.error.required = Select yes if you know the trustee’s National Insurance number
 
 trustee.individual.dateOfBirthYesNo.title = Do you know the trustee’s date of birth?
 trustee.individual.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
@@ -513,7 +513,7 @@ leadTrustee.individual.telephoneNumber.title = What is the lead trustee’s tele
 leadTrustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
 leadTrustee.individual.telephoneNumber.hint = For international numbers include the country code
 leadTrustee.individual.telephoneNumber.error.required = Enter the lead trustee’s telephone number
-leadTrustee.individual.telephoneNumber.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+leadTrustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
 leadTrustee.individual.name.title = What is the lead trustee’s name?
 leadTrustee.individual.name.heading = What is the lead trustee’s name?
