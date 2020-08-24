@@ -32,7 +32,7 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
 
   val name = FullName("First", None ,"last")
 
-  lazy val form = injector.instanceOf[PassportOrIdCardFormProvider].apply("leadtrustee.individual.passport")
+  lazy val form = injector.instanceOf[PassportOrIdCardFormProvider].apply("leadTrustee.individual.passportDetails")
 
   lazy val countryOptions: Seq[InputOption] = injector.instanceOf[CountryOptions].options
 
