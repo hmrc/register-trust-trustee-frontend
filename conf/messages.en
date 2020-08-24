@@ -219,9 +219,9 @@ trustee.individual.ninoYesNo.heading = Is {0} a UK citizen?
 trustee.individual.ninoYesNo.checkYourAnswersLabel = Is {0} a UK citizen?
 trustee.individual.ninoYesNo.error.required = Select yes if the trustee is a UK citizen
 
-trustee.individual.dateOfBirthYesNo.title = Do you the trustee’s date of birth?
-trustee.individual.dateOfBirthYesNo.heading = Do you {0}’s date of birth?
-trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel = Do you {0}’s date of birth?
+trustee.individual.dateOfBirthYesNo.title = Do you know the trustee’s date of birth?
+trustee.individual.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
+trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
 trustee.individual.dateOfBirthYesNo.error.required = Select yes if you know the trustee’s date of birth
 
 leadTrusteeAUKCitizen.title = Is the lead trustee a UK citizen?
