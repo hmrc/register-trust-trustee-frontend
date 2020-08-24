@@ -153,7 +153,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       }
 
       "there is a completed lead trustee, and section flagged as complete" must {
-        "return Completed with mapped data" ignore {
+        "return Completed with mapped data" in {
           val leadTrusteeOnlySections = List(
             AnswerSection(
               Some("answerPage.section.trustee.subheading 1"),
@@ -163,8 +163,9 @@ class SubmissionSetFactorySpec extends SpecBase {
                 AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.addressUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ukAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
+                AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
               Some("answerPage.section.trustees.heading")
@@ -189,7 +190,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       }
 
       "there is a completed lead trustee and trustee, and section flagged as complete" must {
-        "return Completed with mapped data" ignore {
+        "return Completed with mapped data" in {
           val answerSections = List(
             AnswerSection(
               Some("answerPage.section.trustee.subheading 1"),
@@ -199,8 +200,9 @@ class SubmissionSetFactorySpec extends SpecBase {
                 AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.addressUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
+                AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ukAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
+                AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
               Some("answerPage.section.trustees.heading")
@@ -208,8 +210,8 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               Some("answerPage.section.trustee.subheading 2"),
               List(
-                AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", "Business", ""),
-                AnswerRow("trusteeBusinessName.checkYourAnswersLabel", "Org Name1", "")),
+                AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", "Business", "Org Name1"),
+                AnswerRow("trustee.organisation.name.checkYourAnswersLabel", "Org Name1", "Org Name1")),
               None
             )
           )
