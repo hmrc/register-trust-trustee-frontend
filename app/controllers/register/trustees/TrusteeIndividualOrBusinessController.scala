@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.TrusteeIndividualOrBusinessFormProvider
+import forms.IndividualOrBusinessFormProvider
 import javax.inject.Inject
 import models.Enumerable
 import navigation.Navigator
@@ -44,7 +44,7 @@ class TrusteeIndividualOrBusinessController @Inject()(
                                                        getData: DraftIdRetrievalActionProvider,
                                                        requireData: RegistrationDataRequiredAction,
                                                        validateIndex: IndexActionFilterProvider,
-                                                       formProvider: TrusteeIndividualOrBusinessFormProvider,
+                                                       formProvider: IndividualOrBusinessFormProvider,
                                                        requiredAnswer: RequiredAnswerActionProvider,
                                                        val controllerComponents: MessagesControllerComponents,
                                                        view: TrusteeIndividualOrBusinessView

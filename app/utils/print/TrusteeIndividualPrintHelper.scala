@@ -51,8 +51,10 @@ class TrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowConver
         "individualOrBusiness"
       ),
       bound.nameQuestion(NamePage(index), s"$prefix.name", NameController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(NinoYesNoPage(index), s"$prefix.utrYesNo", NinoYesNoController.onPageLoad(index, draftId).url),
-      bound.stringQuestion(NinoPage(index), s"$prefix.utr", NinoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(DateOfBirthYesNoPage(index), s"$prefix.dateOfBirthYesNo", DateOfBirthYesNoController.onPageLoad(index, draftId).url),
+      bound.dateQuestion(DateOfBirthPage(index), s"$prefix.dateOfBirth", DateOfBirthController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(NinoYesNoPage(index), s"$prefix.ninoYesNo", NinoYesNoController.onPageLoad(index, draftId).url),
+      bound.ninoQuestion(NinoPage(index), s"$prefix.nino", NinoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressYesNoPage(index), s"$prefix.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUkYesNoPage(index), s"$prefix.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(UkAddressPage(index), s"$prefix.ukAddress", UkAddressController.onPageLoad(index, draftId).url),

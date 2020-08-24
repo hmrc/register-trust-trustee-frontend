@@ -19,7 +19,7 @@ package controllers.register.trustees.individual
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
-import forms.trustees.TrusteesNameFormProvider
+import forms.NameFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
@@ -34,7 +34,7 @@ import views.html.register.trustees.individual.NameView
 
 class NameControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new TrusteesNameFormProvider()
+  val formProvider = new NameFormProvider()
 
   val index = 0
 

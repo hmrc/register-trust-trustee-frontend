@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.core.pages.IndividualOrBusiness
+import models.registration.pages.DetailsChoice
 import play.api.data.Form
 
-class TrusteeIndividualOrBusinessFormProvider @Inject() extends Mappings {
+class DetailsChoiceFormProvider @Inject() extends Mappings {
 
-  def apply(messagePrefix: String): Form[IndividualOrBusiness] =
+  def withPrefix(prefix: String): Form[DetailsChoice] =
     Form(
-      "value" -> enumerable[IndividualOrBusiness](s"$messagePrefix.error.required")
+      "value" -> enumerable[DetailsChoice](s"$prefix.error.required")
     )
 }

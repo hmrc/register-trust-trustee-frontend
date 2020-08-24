@@ -16,7 +16,7 @@
 
 package views.register.leadtrustee.individual
 
-import forms.trustees.TrusteesNameFormProvider
+import forms.NameFormProvider
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -27,7 +27,7 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] {
 
   val prefix = "leadTrustee.individual.name"
   val index = 0
-  val form: Form[FullName] = new TrusteesNameFormProvider()(prefix)
+  val form: Form[FullName] = new NameFormProvider()(prefix)
   val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
 
   "Name View" must {

@@ -17,8 +17,7 @@
 package controllers.register.trustees
 
 import base.SpecBase
-import forms.YesNoFormProvider
-import forms.trustees.AddATrusteeFormProvider
+import forms.{AddATrusteeFormProvider, YesNoFormProvider}
 import models.Status.Completed
 import models.core.pages.{FullName, IndividualOrBusiness}
 import models.registration.pages.AddATrustee

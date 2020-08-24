@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package forms
 
-import forms.Validation
 import forms.mappings.Mappings
 import javax.inject.Inject
 import models.core.pages.FullName
@@ -24,7 +23,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 
 
-class TrusteesNameFormProvider @Inject() extends Mappings {
+class NameFormProvider @Inject() extends Mappings {
 
   def apply(messagePrefix: String): Form[FullName] = Form(
     mapping(

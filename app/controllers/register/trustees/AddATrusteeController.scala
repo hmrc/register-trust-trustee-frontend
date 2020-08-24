@@ -18,8 +18,7 @@ package controllers.register.trustees
 
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.YesNoFormProvider
-import forms.trustees.AddATrusteeFormProvider
+import forms.{AddATrusteeFormProvider, YesNoFormProvider}
 import javax.inject.Inject
 import models.Enumerable
 import navigation.Navigator

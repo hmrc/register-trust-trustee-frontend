@@ -21,7 +21,7 @@ import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.TrusteesNameFormProvider
+import forms.NameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesNamePage
@@ -37,17 +37,17 @@ import views.html.register.leadtrustee.individual.NameView
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        implicit val frontendAppConfig: FrontendAppConfig,
-                                        registrationsRepository: RegistrationsRepository,
-                                        @LeadTrusteeIndividual navigator: Navigator,
-                                        identify: RegistrationIdentifierAction,
-                                        getData: DraftIdRetrievalActionProvider,
-                                        requireData: RegistrationDataRequiredAction,
-                                        validateIndex: IndexActionFilterProvider,
-                                        formProvider: TrusteesNameFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: NameView
+                                override val messagesApi: MessagesApi,
+                                implicit val frontendAppConfig: FrontendAppConfig,
+                                registrationsRepository: RegistrationsRepository,
+                                @LeadTrusteeIndividual navigator: Navigator,
+                                identify: RegistrationIdentifierAction,
+                                getData: DraftIdRetrievalActionProvider,
+                                requireData: RegistrationDataRequiredAction,
+                                validateIndex: IndexActionFilterProvider,
+                                formProvider: NameFormProvider,
+                                val controllerComponents: MessagesControllerComponents,
+                                view: NameView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =

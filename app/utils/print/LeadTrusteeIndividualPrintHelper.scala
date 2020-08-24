@@ -54,7 +54,7 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
       bound.nameQuestion(TrusteesNamePage(index), s"$prefix.name", NameController.onPageLoad(index, draftId).url),
       bound.dateQuestion(DateOfBirthPage(index), s"$prefix.dateOfBirth", DateOfBirthController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(TrusteeNinoYesNoPage(index), s"$prefix.ninoYesNo", NinoYesNoController.onPageLoad(index, draftId).url),
-      bound.stringQuestion(TrusteesNinoPage(index), s"$prefix.nino", NinoController.onPageLoad(index, draftId).url),
+      bound.ninoQuestion(TrusteesNinoPage(index), s"$prefix.nino", NinoController.onPageLoad(index, draftId).url),
       bound.enumQuestion(TrusteeDetailsChoicePage(index),
         s"$prefix.trusteeDetailsChoice", TrusteeDetailsChoiceController.onPageLoad(index, draftId).url,
         s"$prefix.trusteeDetailsChoice"

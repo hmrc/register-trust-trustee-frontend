@@ -36,3 +36,6 @@ POST       /:draftId/:index/email-address-yes-no       controllers.register.lead
 
 GET        /:draftId/:index/email                      controllers.register.leadtrustee.individual.EmailAddressController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/email                      controllers.register.leadtrustee.individual.EmailAddressController.onSubmit(index : Int, draftId: String)
+
+GET        /:draftId/:index/check-details              controllers.register.leadtrustee.individual.CheckDetailsController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/check-details              controllers.register.leadtrustee.individual.CheckDetailsController.onSubmit(index: Int, draftId: String)
