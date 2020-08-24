@@ -41,7 +41,6 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions)
       case (trustee, index) =>
 
         val trusteeIndividualOrBusinessMessagePrefix = if (trustee.isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
-        val trusteeFullNameMessagePrefix = if (trustee.isLead) "leadTrusteesName" else "trusteesName"
 
         val questions = trustee match {
           case _: TrusteeIndividual | _: LeadTrusteeIndividual =>

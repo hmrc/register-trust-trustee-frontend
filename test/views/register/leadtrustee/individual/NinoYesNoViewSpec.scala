@@ -17,32 +17,36 @@
 package views.register.leadtrustee.individual
 
 import forms.YesNoFormProvider
+import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
+import views.html.register.leadtrustee.individual.NinoYesNoView
 
-class LiveInTheUkYesNoViewSpec extends YesNoViewBehaviours {
+class NinoYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "leadTrustee.individual.liveInTheUkYesNo"
+  val messageKeyPrefix = "leadTrustee.individual.ninoYesNo"
+
   val index = 0
-  val fakeName = "Test"
 
-  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
+  val form = new YesNoFormProvider().withPrefix("leadTrustee.individual.ninoYesNo")
 
-  "LiveInTheUKYesNo View" must {
+  val name = FullName("FirstName", None, "LastName").toString
 
-    val view = viewFor[LiveInTheUKYesNoView](Some(emptyUserAnswers))
+  "NinoYesNoView view" must {
+
+    val view = viewFor[NinoYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), prefix, fakeName)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, prefix, Seq(fakeName))
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Seq(name))
 
     behave like pageWithASubmitButton(applyView(form))
+
   }
 }

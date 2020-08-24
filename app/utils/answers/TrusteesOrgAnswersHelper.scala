@@ -34,17 +34,6 @@ trait TrusteesOrgAnswersHelper {
 
   implicit val messages: Messages
 
-//  def orgTelephoneNumber(index: Int): Option[AnswerRow] = userAnswers.get(TelephoneNumberPage(index)) map {
-//    x =>
-//      AnswerRow(
-//        "telephoneNumber.checkYourAnswersLabel",
-//        HtmlFormat.escape(x),
-//        Some(controllers.register.trustees.organisation.routes.TrusteeOrgTelephoneNumberController.onPageLoad(index, draftId).url),
-//        orgName(index, userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-
   def trusteeOrgName(index: Int): Option[AnswerRow] = userAnswers.get(NamePage(index)) map {
     x =>
       AnswerRow(

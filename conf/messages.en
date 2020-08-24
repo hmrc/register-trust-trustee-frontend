@@ -57,15 +57,12 @@ site.utr = Unique Taxpayer Reference
 site.sign_out = Sign out
 site.print-or-save = Print or save this page
 
-site.address.uk.title = What is the address?
-site.address.uk.heading = What is {0}’s address?
 site.address.uk.line1 = Address line 1
 site.address.uk.line2 = Address line 2
 site.address.uk.line3 = Address line 3 (optional)
 site.address.uk.line4 = Address line 4 (optional)
 site.address.uk.postcode = Postcode
 site.address.uk.postcode.hint = For example AB1 1AB
-site.address.uk.checkYourAnswersLabel = What is {0}’s address?
 
 ukAddress.error.line1.required = Enter address line 1
 ukAddress.error.line2.required = Enter address line 2
@@ -80,9 +77,6 @@ ukAddress.error.line3.invalidCharacters = Address line 3 must only include lette
 ukAddress.error.line4.invalidCharacters = Address line 4 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 ukAddress.error.postcode.invalidCharacters = Enter a real postcode
 
-site.address.international.title = What is the address?
-site.address.international.heading = What is {0}’s address?
-site.address.international.checkYourAnswersLabel = What is {0}’s address?
 site.address.international.line1 = Address line 1
 site.address.international.line2 = Address line 2
 site.address.international.line3 = Address line 3 (optional)
@@ -93,9 +87,6 @@ featureNotAvailable.heading = This part of the online service is not available y
 featureNotAvailable.p1 = If you need to make any changes to the trust you can
 featureNotAvailable.link = contact our trusts helpline (opens in a new window or tab)
 featureNotAvailable.p2 = You will be able to update these details online in the future.
-
-individualOrBusiness.individual = Individual
-individualOrBusiness.business = Business
 
 internationalAddress.error.line1.required = Enter address line 1
 internationalAddress.error.line2.required = Enter address line 2
@@ -138,8 +129,6 @@ leadTrusteeIndividualOrBusiness.heading = Is the lead trustee an individual or a
 leadTrusteeIndividualOrBusiness.checkYourAnswersLabel = Is the lead trustee an individual or a business?
 leadTrusteeIndividualOrBusiness.error.required = Select if the lead trustee is an individual or a business
 
-trusteeBusinessAddressInUK.checkYourAnswersLabel = Is {0}’s address in the UK?
-
 trustee.individual.name.title = What is the trustee’s name?
 trustee.individual.name.heading = What is the trustee’s name?
 trustee.individual.name.checkYourAnswersLabel = What is the trustee’s name?
@@ -154,21 +143,6 @@ trustee.individual.name.error.lengthlastname = Trustee’s last name must be 35 
 trustee.individual.name.error.invalidFirstNameCharacters = Trustee’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 trustee.individual.name.error.invalidMiddleNameCharacters = Trustee’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 trustee.individual.name.error.invalidLastNameCharacters = Trustee’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-
-leadTrusteesName.title = What is the lead trustee’s name?
-leadTrusteesName.heading = What is the lead trustee’s name?
-leadTrusteesName.checkYourAnswersLabel = What is the lead trustee’s name?
-leadTrusteesName.firstName = First name
-leadTrusteesName.middleName = Middle names (optional)
-leadTrusteesName.lastName = Last name
-leadTrusteesName.error.firstnamerequired = Enter the lead trustee’s first name
-leadTrusteesName.error.lastnamerequired = Enter the lead trustee’s last name
-leadTrusteesName.error.lengthfirstname = Lead trustee’s first name must be 35 characters or less
-leadTrusteesName.error.lengthmiddlename = Lead trustee’s middle names must be 35 characters or less
-leadTrusteesName.error.lengthlastname = Lead trustee’s last name must be 35 characters or less
-leadTrusteesName.error.invalidFirstNameCharacters = Lead trustee’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-leadTrusteesName.error.invalidMiddleNameCharacters = Lead trustee’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-leadTrusteesName.error.invalidLastNameCharacters = Lead trustee’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 trusteesAnswerPage.title = Check trustee details
 trusteesAnswerPage.heading = Check trustee details
@@ -209,11 +183,6 @@ trustee.individual.telephoneNumber.error.required = Enter trustee’s telephone 
 trustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 trustee.individual.telephoneNumber.hint = For international numbers include the country code
 
-emailAddress.checkYourAnswersLabel = What is {0}’s email address?
-
-leadTrusteesTelephoneNumber.title = What is the lead trustee’s telephone number?
-leadTrusteesTelephoneNumber.error.required = Enter lead trustee’s telephone number
-
 trustee.individual.ninoYesNo.title = Is the trustee a UK citizen?
 trustee.individual.ninoYesNo.heading = Is {0} a UK citizen?
 trustee.individual.ninoYesNo.checkYourAnswersLabel = Is {0} a UK citizen?
@@ -223,16 +192,6 @@ trustee.individual.dateOfBirthYesNo.title = Do you know the trustee’s date of 
 trustee.individual.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
 trustee.individual.dateOfBirthYesNo.error.required = Select yes if you know the trustee’s date of birth
-
-leadTrusteeAUKCitizen.title = Is the lead trustee a UK citizen?
-leadTrusteeAUKCitizen.error.required = Select yes if the lead trustee is a UK citizen
-
-trusteeUtrYesNo.checkYourAnswersLabel = Do you know {0}’s Unique Taxpayer Reference (UTR) number?
-
-leadTrusteeUtrYesNo.checkYourAnswersLabel = Is this trustee a UK registered company?
-leadTrusteeUtrYesNo.title = Is this trustee a UK registered company?
-leadTrusteeUtrYesNo.heading = Is this trustee a UK registered company?
-leadTrusteeUtrYesNo.error.required = Select yes if the trustee is a UK registered company
 
 trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
 
@@ -247,8 +206,6 @@ trustee.individual.dateOfBirth.error.invalid = Enter a real date of birth
 trustee.individual.dateOfBirth.error.future = Date of birth must be today or in the past
 trustee.individual.dateOfBirth.error.past = Date of birth must be after 31 December 1499
 
-leadTrusteesDateOfBirth.title = What is the lead trustee’s date of birth?
-
 trustee.individual.nino.title = What is the trustee’s National Insurance number?
 trustee.individual.nino.heading = What is {0}’s National Insurance number?
 trustee.individual.nino.checkYourAnswersLabel = What is {0}’s National Insurance number?
@@ -256,10 +213,6 @@ trustee.individual.nino.hint = It is on their National Insurance card, benefit l
 trustee.individual.nino.hint.reader = It is on their National Insurance card, benefit letter, payslip or P60. For example, Q Q 1 2 3 4 5 6 C.
 trustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 trustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
-
-leadTrusteesNino.title = What is the lead trustee’s National Insurance number?
-leadTrusteesNino.error.required = Enter the lead trustee’s National Insurance number
-leadTrusteesNino.error.invalidFormat = Enter the lead trustee’s National Insurance number in the correct format
 
 trustee.individual.addressYesNo.title = Do you know the trustee’s address?
 trustee.individual.addressYesNo.heading = Do you know {0}’s address?
@@ -278,16 +231,6 @@ trustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
 trustee.individual.internationalAddress.title = What is the trustee’s address?
 trustee.individual.internationalAddress.heading = What is {0}’s address?
 trustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
-
-leadTrusteeLiveInTheUK.title = Does the lead trustee live in the UK?
-leadTrusteeLiveInTheUK.error.required = Select yes if the lead trustee lives in the UK
-
-trusteeUkAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-trusteeTelephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
-trusteeEmailAddressYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
-trusteeEmailAddress.checkYourAnswersLabel = What is {0}’s email address?
-
-trustee.individual.addressUk.title = What is the trustee’s address?
 
 trustee.individual.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
 trustee.individual.passportDetailsYesNo.title = Do you know the trustee’s passport details?
@@ -337,13 +280,6 @@ trustee.individual.idCardDetails.expiryDate.error.required = ID card expiry date
 trustee.individual.idCardDetails.expiryDate.error.invalid = Enter a real date when the trustee’s ID card expires
 trustee.individual.idCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 trustee.individual.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
-
-trusteesPassportOrIdCard.checkYourAnswersLabel = What are {0}’s Passport or ID card details
-
-leadTrusteeUkAddress.title = What is the lead trustee’s address?
-
-trusteePassportOrIdCardYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
-trusteePassportOrIdCard.checkYourAnswersLabel = What are {0}’s passport or ID card details?
 
 trusteesInfo.title = Trustee: information you’ll need to provide
 trusteesInfo.heading = Trustee: information you’ll need to provide
@@ -417,6 +353,9 @@ trustee.organisation.checkDetails.heading = Check trustee details
 trustee.default = the trustee
 leadTrustee.default = the lead trustee
 
+individualOrBusiness.individual = Individual
+individualOrBusiness.business = Business
+
 leadTrustee.individualOrBusiness.title = Is the lead trustee an individual or a business?
 leadTrustee.individualOrBusiness.heading = Is the lead trustee an individual or a business?
 leadTrustee.individualOrBusiness.checkYourAnswersLabel = Is the lead trustee an individual or a business?
@@ -470,56 +409,6 @@ leadTrustee.organisation.email.heading = What is {0}’s email address?
 leadTrustee.organisation.email.error.required = Enter the lead trustee’s email address
 leadTrustee.organisation.email.error.invalid = Enter a valid email address with no spaces, like name@example.com
 
-iDCardDetails.title = What are the trustee’s ID card details?
-iDCardDetails.heading = What are {0}’s ID card details?
-iDCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
-iDCardDetails.country = ID card country of issue
-iDCardDetails.error.country.required = Enter the trustee’s ID card country of issue
-iDCardDetails.country.error.required = Enter the trustee’s ID card country of issue
-iDCardDetails.country.error.length = The trustee’s ID card country must be 100 characters or less
-iDCardDetails.number = ID card number
-iDCardDetails.number.error.required = Enter the trustee’s ID card number
-iDCardDetails.number.error.length = ID card number must be 30 characters or less
-iDCardDetails.number.error.invalid = ID card number can only include letters and numbers
-iDCardDetails.expiryDate.title = Expiry date
-iDCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
-iDCardDetails.expiryDate.error.required.all = Enter the ID card expiry date
-iDCardDetails.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
-iDCardDetails.expiryDate.error.required = ID card expiry date must include a {0}
-iDCardDetails.expiryDate.error.invalid = Enter a real date when the trustee’s ID card expires
-iDCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
-iDCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
-
-PassportDetails.title = What are the individual beneficiary’s passport details?
-PassportDetails.heading = What are {0}’s passport details?
-PassportDetails.checkYourAnswersLabel = What are {0}’s passport details?
-PassportDetails.country = Passport country of issue
-PassportDetails.country.error.required = Enter the individual beneficiary’s passport country of issue
-PassportDetails.country.error.length = The individual beneficiary’s passport country must be 100 characters or less
-PassportDetails.number = Passport number
-PassportDetails.number.hint = For example, 502135326
-PassportDetails.number.error.required = Enter the individual beneficiary’s passport number
-PassportDetails.number.error.length = Passport number must be 30 characters or less
-PassportDetails.number.error.invalid = Passport number can only include letters and numbers
-PassportDetails.expiryDate.title = Expiry date
-PassportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
-PassportDetails.expiryDate.error.required.all = Enter the passport expiry date
-PassportDetails.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
-PassportDetails.expiryDate.error.required = Passport expiry date must include {0}
-PassportDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s passport expires
-PassportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
-PassportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
-
-internationalAddress.line1.error.required = Enter address line 1
-internationalAddress.line2.error.required = Enter address line 2
-internationalAddress.country.error.required = Select a country
-internationalAddress.line1.error.length = Address line 1 must be 35 characters or less
-internationalAddress.line2.error.length = Address line 2 must be 35 characters or less
-internationalAddress.line3.error.length = Address line 3 must be 35 characters or less
-internationalAddress.line1.error.invalid = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-internationalAddress.line2.error.invalid = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-internationalAddress.line3.error.invalid = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-
 leadTrustee.organisation.telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
 leadTrustee.organisation.telephoneNumber.title = What is the lead trustee’s telephone number?
 leadTrustee.organisation.telephoneNumber.heading = What is {0}’s telephone number?
@@ -530,21 +419,29 @@ leadTrustee.organisation.telephoneNumber.error.invalid = Enter a telephone numbe
 leadTrustee.organisation.checkDetails.title = Check lead trustee details
 leadTrustee.organisation.checkDetails.heading = Check lead trustee details
 
+# Lead trustee individual
 
-
-leadTrustee.individual.ninoYesNo.title = Does lead trustee have a National Insurance number?
+leadTrustee.individual.ninoYesNo.title = Does the lead trustee have a National Insurance number?
 leadTrustee.individual.ninoYesNo.heading = Does {0} have a National Insurance number?
 leadTrustee.individual.ninoYesNo.checkYourAnswersLabel = Does {0} have a National Insurance number?
-leadTrustee.individual.ninoYesNo.error.required = Select yes if you know the lead trustee’s National Insurance number
+leadTrustee.individual.ninoYesNo.error.required = Select yes if the lead trustee has a National Insurance number
 
-leadTrustee.individual.trusteeDetailsChoice.title = Which of {0}’s details can you provide?
+leadTrustee.individual.ukAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.ukAddress.heading = What is {0}’s address?
+leadTrustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.individual.internationalAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.internationalAddress.heading = What is {0}’s address?
+leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.individual.trusteeDetailsChoice.title = Which of the lead trustees’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
-leadTrustee.individual.trusteeDetailsChoice.error.required = Select the option you can provide
+leadTrustee.individual.trusteeDetailsChoice.error.required = Select which details you can provide
 
-leadTrustee.individual.iDCardDetails.title = What are the trustee’s ID card details?
+leadTrustee.individual.iDCardDetails.title = What are the lead trustee’s ID card details?
 leadTrustee.individual.iDCardDetails.heading = What are {0}’s ID card details?
 leadTrustee.individual.iDCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
 leadTrustee.individual.iDCardDetails.country = ID card country of issue
@@ -565,12 +462,12 @@ leadTrustee.individual.iDCardDetails.expiryDate.error.future = ID card expiry da
 leadTrustee.individual.iDCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
 leadTrustee.individual.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
-leadTrustee.individual.passportDetailsYesNo.title = Do you know the trustee’s passport details?
+leadTrustee.individual.passportDetailsYesNo.title = Do you know the lead trustee’s passport details?
 leadTrustee.individual.passportDetailsYesNo.heading = Do you know {0}’s passport details?
 leadTrustee.individual.passportDetailsYesNo.error.required = Select yes if you know the trustee’s passport details
 
 leadTrustee.individual.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
-leadTrustee.individual.passportDetails.title = What are the trustee’s passport details?
+leadTrustee.individual.passportDetails.title = What are the lead trustee’s passport details?
 leadTrustee.individual.passportDetails.heading = What are {0}’s passport details?
 leadTrustee.individual.passportDetails.country = Passport country of issue
 leadTrustee.individual.passportDetails.country.error.required = Enter the trustee’s passport country of issue
@@ -590,16 +487,15 @@ leadTrustee.individual.passportDetails.expiryDate.error.invalid = Enter a real d
 leadTrustee.individual.passportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 leadTrustee.individual.passportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 
-leadTrustee.individual.nino.title = What is the trustee’s National Insurance number?
+leadTrustee.individual.nino.title = What is the lead trustee’s National Insurance number?
 leadTrustee.individual.nino.heading = What is {0}’s National Insurance number?
 leadTrustee.individual.nino.checkYourAnswersLabel = What is {0}’s National Insurance number?
 leadTrustee.individual.nino.p1 = Providing this information will help verify the trust and help correspondence.
 leadTrustee.individual.nino.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
-leadTrustee.individual.nino.hint.reader = It is on their National Insurance card, benefit letter, payslip or P60. For example, Q Q 1 2 3 4 5 6 C.
 leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 
-leadTrustee.individual.liveInTheUkYesNo.title = Does the trustee live in the UK?
+leadTrustee.individual.liveInTheUkYesNo.title = Does the lead trustee live in the UK?
 leadTrustee.individual.liveInTheUkYesNo.heading = Does {0} live in the UK?
 leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 leadTrustee.individual.liveInTheUkYesNo.error.required = Select yes if the trustee lives in the UK
@@ -647,11 +543,3 @@ leadTrustee.individual.dateOfBirth.error.required = Date of birth must include a
 leadTrustee.individual.dateOfBirth.error.invalid = Enter a real date of birth
 leadTrustee.individual.dateOfBirth.error.future = Date of birth must be today or in the past
 leadTrustee.individual.dateOfBirth.error.past = Date of birth must be after 31 December 1499
-
-leadTrustee.individual.ukAddress.title = What is the lead trustee’s address?
-leadTrustee.individual.ukAddress.heading = What is {0}’s address?
-leadTrustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-
-leadTrustee.individual.internationalAddress.title = What is the lead trustee’s address?
-leadTrustee.individual.internationalAddress.heading = What is {0}’s address?
-leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?

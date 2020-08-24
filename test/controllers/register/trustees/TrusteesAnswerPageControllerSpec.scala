@@ -41,6 +41,8 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
 
       "lead trustee for a GET" in {
 
+        val titlePrefix = "leadTrusteesAnswerPage"
+
         val answers =
           emptyUserAnswers
             .set(IsThisLeadTrusteePage(index), true).success.value
@@ -58,8 +60,6 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
         val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
 
         val leadTrusteeIndividualOrBusinessMessagePrefix = "leadTrusteeIndividualOrBusiness"
-        val leadTrusteeFullNameMessagePrefix = "leadTrusteesName"
-        val titlePrefix = "leadTrusteesAnswerPage"
 
         val expectedSections = Seq(
           AnswerSection(
@@ -124,8 +124,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
                 checkYourAnswersHelper.trusteeOrgName(index).value,
                 checkYourAnswersHelper.trusteeUtr(index).value,
                 checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-                checkYourAnswersHelper.trusteesOrgUkAddress(index).value/*,
-            checkYourAnswersHelper.orgTelephoneNumber(index).value*/
+                checkYourAnswersHelper.trusteesOrgUkAddress(index).value
               )
             )
           )
@@ -173,8 +172,7 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
                 checkYourAnswersHelper.trusteeUtrYesNo(index).value,
                 checkYourAnswersHelper.trusteeOrgName(index).value,
                 checkYourAnswersHelper.orgAddressInTheUkYesNo(index).value,
-                checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value/*,
-            checkYourAnswersHelper.orgTelephoneNumber(index).value*/
+                checkYourAnswersHelper.trusteeOrgInternationalAddress(index).value
               )
             )
           )
@@ -221,7 +219,6 @@ class TrusteesAnswerPageControllerSpec extends SpecBase {
           val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
 
           val trusteeIndividualOrBusinessMessagePrefix = "trusteeIndividualOrBusiness"
-          val trusteeFullNameMessagePrefix = "trusteesName"
           val titlePrefix = "trusteesAnswerPage"
 
           val expectedSections = Seq(
