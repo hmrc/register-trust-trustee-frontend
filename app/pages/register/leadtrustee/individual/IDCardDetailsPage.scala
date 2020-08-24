@@ -25,5 +25,5 @@ final case class IDCardDetailsPage(index : Int) extends QuestionPage[PassportOrI
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "idCardDetails"
+  override def toString: String = "idCard"
 }

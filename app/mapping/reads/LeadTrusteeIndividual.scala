@@ -20,18 +20,24 @@ import java.time.LocalDate
 
 import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
+import models.registration.pages.PassportOrIdCardDetails
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
 final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
                                        name: FullName,
                                        dateOfBirth: LocalDate,
-                                       isUKCitizen : Boolean,
                                        nino : Option[String],
-                                       passport: Option[String],
-                                       liveInUK: Boolean,
+                                       passport: Option[PassportOrIdCardDetails],
+                                       idCard: Option[PassportOrIdCardDetails],
+                                       addressUk: Boolean,
                                        address : Address,
-                                       telephoneNumber : String
-                                      ) extends Trustee
+                                       telephoneNumber : String,
+                                       email: Option[String]
+                                      ) extends Trustee {
+
+  def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
+
+}
 
 object LeadTrusteeIndividual {
 
@@ -47,12 +53,13 @@ object LeadTrusteeIndividual {
       (__ \ "isThisLeadTrustee").read[Boolean] and
         (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").read[LocalDate] and
-        (__ \ "ninoYesNo").read[Boolean] and
         (__ \ "nino").readNullable[String] and
-        (__ \ "passport").readNullable[String] and
+        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
+        (__ \ "idCard").readNullable[PassportOrIdCardDetails] and
         (__ \ "addressUKYesNo").read[Boolean] and
         addressReads and
-        (__ \ "telephoneNumber").read[String]
+        (__ \ "telephoneNumber").read[String] and
+        (__ \ "email").readNullable[String]
       )(LeadTrusteeIndividual.apply _)
 
     ((__ \ "isThisLeadTrustee").read[Boolean] and

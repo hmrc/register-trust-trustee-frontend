@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package mapping.registration
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
+import models.registration.pages.PassportOrIdCardDetails
 
-final case class TrusteePassportIDCardYesNoPage(index : Int) extends QuestionPage[Boolean] {
+class PassportOrIdCardMapper {
 
-  override def path: JsPath = Trustees.path \ index \ toString
+  def build(passportOrIdCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] = {
+    passportOrIdCardDetails map { passportOrIdCardDetails =>
+      PassportType(passportOrIdCardDetails.cardNumber, passportOrIdCardDetails.expiryDate, passportOrIdCardDetails.country)
+    }
+  }
 
-  override def toString: String = "passportIdCardYesNo"
 }

@@ -26,7 +26,8 @@ final case class LeadTrusteeOrganisation(override val isLead : Boolean = true,
                                          utr : Option[String],
                                          liveInUK: Boolean,
                                          address : Address,
-                                         telephoneNumber : String
+                                         telephoneNumber : String,
+                                         email: Option[String]
                                         ) extends Trustee
 
 object LeadTrusteeOrganisation {
@@ -46,7 +47,8 @@ object LeadTrusteeOrganisation {
         (__ \ "utr").readNullable[String] and
         (__ \ "addressUKYesNo").read[Boolean] and
         addressReads and
-        (__ \ "telephoneNumber").read[String]
+        (__ \ "telephoneNumber").read[String] and
+        (__ \ "email").readNullable[String]
       )(LeadTrusteeOrganisation.apply _)
 
     ((__ \ "isThisLeadTrustee").read[Boolean] and

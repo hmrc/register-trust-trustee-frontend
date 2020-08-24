@@ -22,7 +22,8 @@ import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustee, T
 import models.UserAnswers
 
 class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
-                                  addressMapper: AddressMapper
+                                  addressMapper: AddressMapper,
+                                  passportOrIdCardMapper: PassportOrIdCardMapper
                                  ) extends Mapping[LeadTrusteeType] {
 
   override def build(userAnswers: UserAnswers): Option[LeadTrusteeType] = {
@@ -43,22 +44,30 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
     }
   }
 
-  private def buildLeadTrusteeIndividual(leadTrustee: LeadTrusteeIndividual) =
+  private def buildLeadTrusteeIndividual(leadTrustee: LeadTrusteeIndividual) = {
+
+    val identification = if(leadTrustee.nino.isDefined) {
+      IdentificationType(nino = leadTrustee.nino, passport = None, address = None)
+    } else {
+      IdentificationType(nino = None,
+        passport = passportOrIdCardMapper.build(leadTrustee.passportOrId),
+        address = addressMapper.buildOptional(leadTrustee.address)
+      )
+    }
+
     LeadTrusteeType(
       leadTrusteeInd = Some(
         LeadTrusteeIndType(
           name = nameMapper.build(leadTrustee.name),
           dateOfBirth = leadTrustee.dateOfBirth,
           phoneNumber = leadTrustee.telephoneNumber,
-          identification = IdentificationType(
-            nino = leadTrustee.nino,
-            passport = None,
-            address = None
-          )
+          email = leadTrustee.email,
+          identification = identification
         )
       ),
       leadTrusteeOrg = None
     )
+  }
 
   private def buildLeadTrusteeBusiness(leadTrustee: LeadTrusteeOrganisation) = {
 
@@ -80,7 +89,7 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
           LeadTrusteeOrgType(
             name = leadTrustee.name,
             phoneNumber = leadTrustee.telephoneNumber,
-            email = None,
+            email = leadTrustee.email,
             identification = identification
           )
         )

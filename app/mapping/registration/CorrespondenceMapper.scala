@@ -35,7 +35,7 @@ class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) {
           case lti: LeadTrusteeIndividual =>
             val address = addressMapper.build(lti.address)
             List(
-              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lti.liveInUK)),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lti.addressUk)),
               RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(address)),
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lti.telephoneNumber))
             )
