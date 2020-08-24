@@ -24,7 +24,7 @@ import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
 class LiveInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "leadTrustee.individual.liveInTheUkUkYesNo"
+  val prefix = "leadTrustee.individual.liveInTheUkYesNo"
   val index = 0
   val fakeName = "Test"
 
