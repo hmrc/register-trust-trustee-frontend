@@ -52,7 +52,7 @@ class DateOfBirthController @Inject()(
                                        view: DateOfBirthView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form = formProvider("trustee.individual")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
