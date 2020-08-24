@@ -20,6 +20,7 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
+error.postcodeInvalid = Enter a real postcode
 
 #timeout dialog
 timeout.title=Your application will time out soon
@@ -414,7 +415,7 @@ leadTrustee.organisation.telephoneNumber.title = What is the lead trustee’s te
 leadTrustee.organisation.telephoneNumber.heading = What is {0}’s telephone number?
 leadTrustee.organisation.telephoneNumber.hint = For international numbers include the country code
 leadTrustee.organisation.telephoneNumber.error.required = Enter the lead trustee’s telephone number
-leadTrustee.organisation.telephoneNumber.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+leadTrustee.organisation.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
 leadTrustee.organisation.checkDetails.title = Check lead trustee details
 leadTrustee.organisation.checkDetails.heading = Check lead trustee details
@@ -510,7 +511,7 @@ leadTrustee.individual.telephoneNumber.title = What is the lead trustee’s tele
 leadTrustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
 leadTrustee.individual.telephoneNumber.hint = For international numbers include the country code
 leadTrustee.individual.telephoneNumber.error.required = Enter the lead trustee’s telephone number
-leadTrustee.individual.telephoneNumber.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+leadTrustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
 leadTrustee.individual.name.title = What is the lead trustee’s name?
 leadTrustee.individual.name.heading = What is the lead trustee’s name?
