@@ -31,7 +31,7 @@ import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
 
-  val messagePrefix = "leadTrustee.individual.liveInTheUkUkYesNo"
+  val messagePrefix = "leadTrustee.individual.liveInTheUkYesNo"
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix(messagePrefix)
 
