@@ -61,15 +61,16 @@ class IsThisLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
 
     "when there is a lead trustee" must {
 
-      "redirect to TrusteeIndividualOrBusiness Page for a different index to previously answered" in {
+      "redirect to TrusteeIndividualOrBusiness Page for a different index to previously answered" ignore {
+
+        // TODO - move to navigator spec
 
         val answers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(0), true).success.value
           .set(IsThisLeadTrusteePage(1), false).success.value
 
         val application =
-          applicationBuilder(userAnswers = Some(answers), navigator = injector.instanceOf[Navigator])
-            .build()
+          applicationBuilder(userAnswers = Some(answers)).build()
 
         val request = FakeRequest(GET, routes.IsThisLeadTrusteeController.onPageLoad(1, fakeDraftId).url)
 

@@ -26,10 +26,7 @@ import play.api.mvc.Call
 
 class LeadTrusteeIndividualNavigator extends Navigator {
 
-  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
-                       (implicit config: FrontendAppConfig): Call = routes(draftId)(page)(userAnswers)
-
-  private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteesNamePage(index) => _ => DateOfBirthController.onPageLoad(index, draftId)
     case TrusteesDateOfBirthPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
     case TrusteesNinoPage(index) => _ => LiveInTheUKYesNoController.onPageLoad(index, draftId)
@@ -41,7 +38,7 @@ class LeadTrusteeIndividualNavigator extends Navigator {
     case TelephoneNumberPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeNinoYesNoPage(index) => ua =>
       yesNoNav(ua, TrusteeNinoYesNoPage(index), NinoController.onPageLoad(index, draftId), TrusteeDetailsChoiceController.onPageLoad(index, draftId))
     case AddressUkYesNoPage(index) => ua =>
@@ -57,8 +54,4 @@ class LeadTrusteeIndividualNavigator extends Navigator {
     case Some(Passport) => PassportDetailsController.onPageLoad(index, draftId)
     case None => controllers.routes.SessionExpiredController.onPageLoad()
   }
-
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) orElse
-      conditionalNavigation(draftId)
 }

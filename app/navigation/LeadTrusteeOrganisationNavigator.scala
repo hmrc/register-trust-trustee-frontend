@@ -25,10 +25,7 @@ import play.api.mvc.Call
 
 class LeadTrusteeOrganisationNavigator extends Navigator {
 
-  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
-                       (implicit config: FrontendAppConfig): Call = routes(draftId)(page)(userAnswers)
-
-  private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case UkRegisteredYesNoPage(index) => _ => NameController.onPageLoad(index, draftId)
     case NamePage(index) => ua => nameRoute(ua, index, draftId)
     case UtrPage(index) => _ => AddressUkYesNoController.onPageLoad(index, draftId)
@@ -38,7 +35,7 @@ class LeadTrusteeOrganisationNavigator extends Navigator {
     case TelephoneNumberPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case AddressUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
@@ -62,8 +59,4 @@ class LeadTrusteeOrganisationNavigator extends Navigator {
       case None => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
-
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) orElse
-      conditionalNavigation(draftId)
 }
