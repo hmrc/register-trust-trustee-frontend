@@ -18,7 +18,7 @@ package controllers.register.leadtrustee.individual
 
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
-import forms.trustees.EmailAddressFormProvider
+import forms.EmailAddressFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import pages.register.leadtrustee.individual.TrusteesNamePage

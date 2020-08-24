@@ -16,12 +16,14 @@
 
 package controllers.register.leadtrustee.individual
 
+import java.time.LocalDate
+
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.LeadTrusteesDateOfBirthFormProvider
+import forms.DateFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.{TrusteesDateOfBirthPage, TrusteesNamePage}
@@ -45,12 +47,12 @@ class DateOfBirthController @Inject()(
                                        requireData: RegistrationDataRequiredAction,
                                        validateIndex: IndexActionFilterProvider,
                                        requiredAnswer: RequiredAnswerActionProvider,
-                                       formProvider: LeadTrusteesDateOfBirthFormProvider,
+                                       formProvider: DateFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DateOfBirthView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[LocalDate] = formProvider.withPrefix("leadTrustee.individual.dateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

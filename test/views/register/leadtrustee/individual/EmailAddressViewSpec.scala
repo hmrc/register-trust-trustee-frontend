@@ -16,7 +16,7 @@
 
 package views.register.leadtrustee.individual
 
-import forms.trustees.EmailAddressFormProvider
+import forms.EmailAddressFormProvider
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

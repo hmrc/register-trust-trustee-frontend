@@ -16,15 +16,17 @@
 
 package controllers.register.trustees.individual
 
+import java.time.LocalDate
+
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.TrusteesDateOfBirthFormProvider
+import forms.DateFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.individual.{DateOfBirthPage, NamePage}
+import pages.register.trustees.individual.DateOfBirthPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -43,12 +45,12 @@ class DateOfBirthController @Inject()(
                                        standardActionSets: StandardActionSets,
                                        nameAction: NameRequiredActionImpl,
                                        validateIndex: IndexActionFilterProvider,
-                                       formProvider: TrusteesDateOfBirthFormProvider,
+                                       formProvider: DateFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DateOfBirthView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[LocalDate] = formProvider.withPrefix("trustee.individual.dateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)

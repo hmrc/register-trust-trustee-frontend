@@ -21,7 +21,7 @@ import config.annotations.LeadTrusteeIndividual
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
-import forms.trustees.EmailAddressFormProvider
+import forms.EmailAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.{EmailAddressPage, TrusteesNamePage}

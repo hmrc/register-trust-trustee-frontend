@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package forms.trustees
+package forms
 
-import forms.Validation
+import java.time.LocalDate
+
+import config.FrontendAppConfig
 import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class EmailAddressFormProvider @Inject() extends Mappings {
+class DateFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings {
 
-  def withPrefix(prefix: String): Form[String] =
+  def withPrefix(prefix: String): Form[LocalDate] =
     Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(
-          firstError(
-            regexp(Validation.emailRegex, s"$prefix.error.invalid")
-          )
-        )
+      "value" -> localDate(
+        invalidKey     = s"$prefix.error.invalid",
+        allRequiredKey = s"$prefix.error.required.all",
+        twoRequiredKey = s"$prefix.error.required.two",
+        requiredKey    = s"$prefix.error.required"
+      ).verifying(firstError(
+        maxDate(LocalDate.now, s"$prefix.error.future", "day", "month", "year"),
+        minDate(appConfig.minDate, s"$prefix.error.past", "day", "month", "year")
+      ))
     )
 }
