@@ -435,7 +435,7 @@ leadTrustee.individual.internationalAddress.heading = What is {0}’s address?
 leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
 leadTrustee.individual.trusteeDetailsChoice.title = Which of the lead trustees’s details can you provide?
-leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}'s details can you provide?
+leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
