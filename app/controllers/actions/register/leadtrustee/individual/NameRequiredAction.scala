@@ -37,7 +37,7 @@ class NameRequiredAction(index: Int)(implicit val executionContext: ExecutionCon
   private def getName[A](request: RegistrationDataRequest[A]): String = {
     request.userAnswers.get(TrusteesNamePage(index)) match {
       case Some(name) => name.toString
-      case _ => request.messages(messagesApi)("trustee.default")
+      case _ => request.messages(messagesApi)("leadTrustee.default")
     }
   }
 }
