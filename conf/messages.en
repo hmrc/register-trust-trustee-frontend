@@ -542,7 +542,7 @@ leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}’s details c
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
-leadTrustee.individual.trusteeDetailsChoice.error.required = Select yes if the trustee is a UK citizen
+leadTrustee.individual.trusteeDetailsChoice.error.required = Select the option you can provide
 
 leadTrustee.individual.iDCardDetails.title = What are the trustee’s ID card details?
 leadTrustee.individual.iDCardDetails.heading = What are {0}’s ID card details?

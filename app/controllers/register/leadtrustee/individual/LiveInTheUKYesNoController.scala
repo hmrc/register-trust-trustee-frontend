@@ -63,7 +63,7 @@ class LiveInTheUKYesNoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.individual.liveInTheUkUkYesNo")
+      val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.individual.liveInTheUkYesNo")
 
       val preparedForm = request.userAnswers.get(TrusteeAUKCitizenPage(index)) match {
         case None => form
@@ -78,7 +78,7 @@ class LiveInTheUKYesNoController @Inject()(
 
       val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
-      val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.individual.liveInTheUkUkYesNo")
+      val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.individual.liveInTheUkYesNo")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

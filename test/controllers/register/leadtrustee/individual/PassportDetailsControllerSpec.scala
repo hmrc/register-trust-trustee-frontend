@@ -34,7 +34,7 @@ import views.html.register.leadtrustee.individual.PassportDetailsView
 
 class PassportDetailsControllerSpec extends SpecBase {
 
-  val messagePrefix = "leadTrustee.individual.passportDetailsYesNo"
+  val messagePrefix = "leadTrustee.individual.passportDetails"
   val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
   val form = formProvider(messagePrefix)
 
