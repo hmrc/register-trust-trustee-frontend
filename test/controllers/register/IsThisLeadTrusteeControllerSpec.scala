@@ -59,7 +59,7 @@ class IsThisLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
 
     "when there is a lead trustee" must {
 
-      "redirect to TrusteeIndividualOrBusiness Page for a different index to previously answered" ignore {
+      "redirect to TrusteeIndividualOrBusiness Page for a different index to previously answered" in {
 
         val answers = emptyUserAnswers
           .set(IsThisLeadTrusteePage(0), true).success.value

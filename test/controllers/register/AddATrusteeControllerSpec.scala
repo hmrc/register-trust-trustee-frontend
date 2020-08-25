@@ -171,7 +171,7 @@ class AddATrusteeControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddATrusteeView]
 
         status(result) mustEqual OK
-        
+
         contentAsString(result) mustEqual
           view(addTrusteeForm, fakeDraftId, Nil, trustee, isLeadTrusteeDefined = false, heading = "You have added 2 trustees")(fakeRequest, messages).toString
 
