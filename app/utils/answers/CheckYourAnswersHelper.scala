@@ -29,8 +29,7 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions,
                                       (val userAnswers: UserAnswers,
                                        val draftId: String,
                                        val canEdit: Boolean)
-                                      (implicit val messages: Messages)
-  extends TrusteesIndividualAnswersHelper with TrusteesOrgAnswersHelper {
+                                      (implicit val messages: Messages) {
 
   def trustees: Option[Seq[AnswerSection]] = {
     for {
