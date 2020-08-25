@@ -74,7 +74,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
         .mustBe(NinoController.onPageLoad(index, fakeDraftId))
     }
 
-    "Nino Page -> Nino -> AUKCitizen Page" in {
+    "Nino Page -> Nino -> LiveInTheUk Page" in {
       val answers = emptyUserAnswers
         .set(TrusteesNinoPage(index), "aa123456b").success.value
 
