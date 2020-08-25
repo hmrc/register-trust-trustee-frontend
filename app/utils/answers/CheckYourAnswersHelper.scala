@@ -49,10 +49,10 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions,
             printHelpers.leadTrusteeOrganisation(userAnswers, x.name, index, draftId)
         }
 
-        val sectionKey = if (index == 0) Some(messages("answerPage.section.trustees.heading")) else None
+        val sectionKey = if (index == 0) Some(messages("Trustees")) else None
 
         AnswerSection(
-          headingKey = Some(Messages("answerPage.section.trustee.subheading") + " " + (index + 1)),
+          headingKey = Some(Messages("Trustee") + " " + (index + 1)),
           rows = questions.rows,
           sectionKey = sectionKey
         )
