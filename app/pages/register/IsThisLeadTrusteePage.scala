@@ -14,35 +14,37 @@
  * limitations under the License.
  */
 
-package pages.register.trustees
+package pages.register
 
 import models.UserAnswers
-import models.core.pages.IndividualOrBusiness
-import models.core.pages.IndividualOrBusiness._
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
 import scala.util.Try
 
-final case class TrusteeIndividualOrBusinessPage(index : Int) extends QuestionPage[IndividualOrBusiness] with Cleanup {
+final case class IsThisLeadTrusteePage(index: Int) extends QuestionPage[Boolean] with Cleanup {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "individualOrBusiness"
+  override def toString: String = "isThisLeadTrustee"
 
-  override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
-      case Some(Business) =>
-        removeLeadTrusteeIndividual(userAnswers, index)
+      case Some(true) =>
+        userAnswers
+          .remove(TrusteeIndividualOrBusinessPage(index))
           .flatMap(ua => removeTrusteeIndividual(ua, index))
-
-      case Some(Individual) =>
-        removeLeadTrusteeBusiness(userAnswers, index)
           .flatMap(ua => removeTrusteeBusiness(ua, index))
 
-      case _ => super.cleanup(value, userAnswers)
+      case Some(false) =>
+        userAnswers
+          .remove(TrusteeIndividualOrBusinessPage(index))
+          .flatMap(ua => removeLeadTrusteeIndividual(ua, index))
+          .flatMap(ua => removeLeadTrusteeBusiness(ua, index))
+
+      case _ =>
+        super.cleanup(value, userAnswers)
     }
   }
-
 }

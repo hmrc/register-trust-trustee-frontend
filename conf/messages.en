@@ -20,7 +20,6 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
-error.postcodeInvalid = Enter a real postcode
 
 #timeout dialog
 timeout.title=Your application will time out soon
@@ -181,7 +180,7 @@ trustee.individual.telephoneNumber.title = What is the trustee’s telephone num
 trustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
 trustee.individual.telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
 trustee.individual.telephoneNumber.error.required = Enter trustee’s telephone number
-trustee.individual.telephoneNumber.error.invalidCharacters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+trustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 trustee.individual.telephoneNumber.hint = For international numbers include the country code
 
 trustee.individual.ninoYesNo.title = Do you know the trustee’s National Insurance number?
@@ -218,7 +217,7 @@ trustee.individual.nino.error.invalidFormat = Enter the trustee’s National Ins
 trustee.individual.addressYesNo.title = Do you know the trustee’s address?
 trustee.individual.addressYesNo.heading = Do you know {0}’s address?
 trustee.individual.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-trustee.individual.addressYesNo.checkYourAnswersLabel = Select yes if you know the trustee’s address
+trustee.individual.addressYesNo.error.required = Select yes if you know the trustee’s address
 
 trustee.individual.addressUkYesNo.title = Does the trustee live in the UK?
 trustee.individual.addressUkYesNo.heading = Does {0} live in the UK?
@@ -336,7 +335,7 @@ trustee.organisation.utr.link = find a lost UTR number (opens in a new window or
 trustee.organisation.addressYesNo.title = Do you know the trustee’s address?
 trustee.organisation.addressYesNo.heading = Do you know {0}’s address?
 trustee.organisation.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-trustee.organisation.addressYesNo.checkYourAnswersLabel = Select yes if you know the trustee’s address
+trustee.organisation.addressYesNo.error.required = Select yes if you know the trustee’s address
 
 trustee.organisation.addressUkYesNo.title = Is the trustee’s address in the UK?
 trustee.organisation.addressUkYesNo.heading = Is {0}’s address in the UK?
@@ -418,7 +417,7 @@ leadTrustee.organisation.telephoneNumber.title = What is the lead trustee’s te
 leadTrustee.organisation.telephoneNumber.heading = What is {0}’s telephone number?
 leadTrustee.organisation.telephoneNumber.hint = For international numbers include the country code
 leadTrustee.organisation.telephoneNumber.error.required = Enter the lead trustee’s telephone number
-leadTrustee.organisation.telephoneNumber.error.invalidCharacters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+leadTrustee.organisation.telephoneNumber.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
 leadTrustee.organisation.checkDetails.title = Check lead trustee details
 leadTrustee.organisation.checkDetails.heading = Check lead trustee details
@@ -514,7 +513,7 @@ leadTrustee.individual.telephoneNumber.title = What is the lead trustee’s tele
 leadTrustee.individual.telephoneNumber.heading = What is {0}’s telephone number?
 leadTrustee.individual.telephoneNumber.hint = For international numbers include the country code
 leadTrustee.individual.telephoneNumber.error.required = Enter the lead trustee’s telephone number
-leadTrustee.individual.telephoneNumber.error.invalidCharacters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+leadTrustee.individual.telephoneNumber.error.invalid.characters = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192r.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
 leadTrustee.individual.name.title = What is the lead trustee’s name?
 leadTrustee.individual.name.heading = What is the lead trustee’s name?
@@ -550,3 +549,4 @@ leadTrustee.individual.dateOfBirth.error.past = Date of birth must be after 31 D
 
 leadTrustee.individual.checkDetails.title = Check lead trustee details
 leadTrustee.individual.checkDetails.heading = Check lead trustee details
+

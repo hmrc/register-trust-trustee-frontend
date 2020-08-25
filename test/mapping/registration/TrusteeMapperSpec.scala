@@ -25,6 +25,7 @@ import models.UserAnswers
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalatest.{MustMatchers, OptionValues}
+import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import pages.register.trustees.individual._
 import pages.register.trustees.{organisation => org, _}
 

@@ -26,7 +26,7 @@ import utils.countryOptions.CountryOptions
 import views.behaviours.QuestionViewBehaviours
 import views.html.register.leadtrustee.individual.IDCardDetailsView
 
-class IdCardDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetails] {
+class IDCardDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetails] {
 
   val messageKeyPrefix = "leadTrustee.individual.iDCardDetails"
 
@@ -41,7 +41,7 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetai
     val view = viewFor[IDCardDetailsView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, "draftId", 0, name)(fakeRequest, messages)
+      view.apply(form, countryOptions, "draftId", 0, name.toString)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register
+package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig

@@ -17,13 +17,13 @@
 package utils.print
 
 import base.SpecBase
+import controllers.register.routes.TrusteeIndividualOrBusinessController
 import controllers.register.trustees.organisation.routes._
-import controllers.register.trustees.routes._
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Business
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.trustees.organisation._
-import pages.register.trustees.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

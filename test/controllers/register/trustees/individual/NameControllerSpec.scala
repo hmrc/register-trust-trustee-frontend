@@ -23,6 +23,7 @@ import forms.NameFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees._
 import pages.register.trustees.individual.NamePage
 import play.api.i18n.Messages
@@ -196,7 +197,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
     "for a GET" must {
 
       def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-        val route = controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+        val route = controllers.register.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
       }
@@ -213,7 +214,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
 
         val route =
-          controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+          controllers.register.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(POST, route)
           .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))

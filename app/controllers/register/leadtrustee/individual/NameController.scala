@@ -19,18 +19,14 @@ package controllers.register.leadtrustee.individual
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.filters.IndexActionFilterProvider
 import forms.NameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesNamePage
-import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.NameView
 
@@ -41,25 +37,19 @@ class NameController @Inject()(
                                 implicit val frontendAppConfig: FrontendAppConfig,
                                 registrationsRepository: RegistrationsRepository,
                                 @LeadTrusteeIndividual navigator: Navigator,
-                                identify: RegistrationIdentifierAction,
-                                getData: DraftIdRetrievalActionProvider,
-                                requireData: RegistrationDataRequiredAction,
-                                validateIndex: IndexActionFilterProvider,
+                                standardActionSets: StandardActionSets,
                                 formProvider: NameFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val form = formProvider("leadTrustee.individual.name")
 
   private def actions(index: Int, draftId: String) =
-    identify andThen getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees)
-
+    standardActionSets.indexValidated(draftId, index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val form = formProvider("leadTrustee.individual.name")
 
       val preparedForm = request.userAnswers.get(TrusteesNamePage(index)) match {
         case None => form
@@ -72,8 +62,6 @@ class NameController @Inject()(
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      val form = formProvider("leadTrustee.individual.name")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

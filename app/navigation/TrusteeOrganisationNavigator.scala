@@ -25,41 +25,19 @@ import play.api.mvc.Call
 
 class TrusteeOrganisationNavigator extends Navigator {
 
-  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
-                       (implicit config: FrontendAppConfig): Call = routes(draftId)(page)(userAnswers)
-
-  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case NamePage(index) => UtrYesNoController.onPageLoad(index, draftId)
-    case UtrPage(index) => CheckDetailsController.onPageLoad(index, draftId)
-    case UkAddressPage(index) => CheckDetailsController.onPageLoad(index, draftId)
-    case InternationalAddressPage(index) => CheckDetailsController.onPageLoad(index, draftId)
+  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case NamePage(index) => _ => UtrYesNoController.onPageLoad(index, draftId)
+    case UtrPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
+    case UkAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
+    case InternationalAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case UtrYesNoPage(index) => ua =>
-      yesNoNav(
-        ua,
-        UtrYesNoPage(index),
-        UtrController.onPageLoad(index, draftId),
-        AddressYesNoController.onPageLoad(index, draftId)
-      )
+      yesNoNav(ua, UtrYesNoPage(index), UtrController.onPageLoad(index, draftId), AddressYesNoController.onPageLoad(index, draftId))
     case AddressYesNoPage(index) => ua =>
-      yesNoNav(
-        ua,
-        AddressYesNoPage(index),
-        AddressUkYesNoController.onPageLoad(index, draftId),
-        CheckDetailsController.onPageLoad(index, draftId)
-      )
+      yesNoNav(ua, AddressYesNoPage(index), AddressUkYesNoController.onPageLoad(index, draftId), CheckDetailsController.onPageLoad(index, draftId))
     case AddressUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua,
-        AddressUkYesNoPage(index),
-        UkAddressController.onPageLoad(index, draftId),
-        InternationalAddressController.onPageLoad(index, draftId)
-      )
+      yesNoNav(ua, AddressUkYesNoPage(index), UkAddressController.onPageLoad(index, draftId), InternationalAddressController.onPageLoad(index, draftId))
   }
-
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      conditionalNavigation(draftId)
 }

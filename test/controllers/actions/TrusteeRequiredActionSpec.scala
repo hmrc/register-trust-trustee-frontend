@@ -26,7 +26,7 @@ import models.requests.RegistrationDataRequest
 import org.scalatest.concurrent.ScalaFutures
 import pages.entitystatus.TrusteeStatus
 import pages.register.trustees.organisation.{NamePage, UtrPage, UtrYesNoPage}
-import pages.register.trustees.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import play.api.mvc.Result
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
@@ -64,7 +64,7 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
         whenReady(futureResult) { r =>
           val result = Future.successful(r.left.get)
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.register.trustees.routes.AddATrusteeController.onPageLoad(fakeDraftId).url
+          redirectLocation(result).value mustEqual controllers.register.routes.AddATrusteeController.onPageLoad(fakeDraftId).url
         }
       }
     }

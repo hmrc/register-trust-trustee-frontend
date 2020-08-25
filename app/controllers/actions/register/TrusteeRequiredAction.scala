@@ -35,7 +35,7 @@ class TrusteeRequiredAction(index: Int, draftId: String)(implicit val executionC
           Right(RemoveIndexRequest(request, trustee))
         case _ =>
           Logger.info(s"[RemoveIndexController] Did not find trustee at index $index")
-          Left(Redirect(controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId)))
+          Left(Redirect(controllers.register.routes.AddATrusteeController.onPageLoad(draftId)))
       }
     )
   }

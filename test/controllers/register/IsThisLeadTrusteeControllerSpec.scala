@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees
+package controllers.register
 
 import base.SpecBase
-import controllers.register.IndexValidation
 import forms.YesNoFormProvider
-import navigation.Navigator
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.IsThisLeadTrusteeView
+import views.html.register.IsThisLeadTrusteeView
 
 class IsThisLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
 
@@ -68,8 +66,7 @@ class IsThisLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
           .set(IsThisLeadTrusteePage(1), false).success.value
 
         val application =
-          applicationBuilder(userAnswers = Some(answers), navigator = injector.instanceOf[Navigator])
-            .build()
+          applicationBuilder(userAnswers = Some(answers)).build()
 
         val request = FakeRequest(GET, routes.IsThisLeadTrusteeController.onPageLoad(1, fakeDraftId).url)
 
@@ -77,7 +74,7 @@ class IsThisLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual routes.TrusteeIndividualOrBusinessController.onPageLoad(1,fakeDraftId).url
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
       }
 
       "populate the view correctly on a GET when the question has previously been answered for the same trustee index" in {

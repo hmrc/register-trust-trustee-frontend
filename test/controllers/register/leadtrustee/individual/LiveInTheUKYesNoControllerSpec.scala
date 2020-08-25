@@ -21,15 +21,14 @@ import config.annotations.LeadTrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
+import pages.register.IsThisLeadTrusteePage
 import pages.register.leadtrustee.individual.{AddressUkYesNoPage, TrusteesNamePage}
-import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
 class LiveInTheUKYesNoControllerSpec extends SpecBase {
-
 
   val messagePrefix = "leadTrustee.individual.liveInTheUkYesNo"
   val formProvider = new YesNoFormProvider()
@@ -111,50 +110,6 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
       application.stop()
     }
-
-    "redirect to trusteeName must"  when{
-
-      "a GET when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(AddressUkYesNoPage(index), true).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, trusteeLiveInTheUKRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-      }
-      "a POST when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(AddressUkYesNoPage(index), true).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request =
-          FakeRequest(POST, trusteeLiveInTheUKRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-
-      }
-    }
-
 
     "return a Bad Request and errors when invalid data is submitted" in {
 

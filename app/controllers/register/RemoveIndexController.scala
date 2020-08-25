@@ -44,7 +44,7 @@ class RemoveIndexController @Inject()(
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen trusteeAction(index, draftId)
 
-  private def redirect(draftId: String): Result = Redirect(controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId))
+  private def redirect(draftId: String): Result = Redirect(controllers.register.routes.AddATrusteeController.onPageLoad(draftId))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
