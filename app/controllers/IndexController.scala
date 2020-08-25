@@ -53,9 +53,9 @@ class IndexController @Inject()(
 
     userAnswers.get(sections.Trustees).getOrElse(Nil) match {
       case Nil =>
-        Redirect(controllers.register.trustees.routes.TrusteesInfoController.onPageLoad(draftId))
+        Redirect(controllers.register.routes.TrusteesInfoController.onPageLoad(draftId))
       case _ :: _ =>
-        Redirect(controllers.register.trustees.routes.AddATrusteeController.onPageLoad(draftId))
+        Redirect(controllers.register.routes.AddATrusteeController.onPageLoad(draftId))
     }
   }
 }

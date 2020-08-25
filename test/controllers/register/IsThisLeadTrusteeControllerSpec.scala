@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees
+package controllers.register
 
 import base.SpecBase
-import controllers.register.IndexValidation
 import forms.YesNoFormProvider
-import navigation.Navigator
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
-import views.html.register.trustees.IsThisLeadTrusteeView
+import views.html.register.IsThisLeadTrusteeView
 
 class IsThisLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
 

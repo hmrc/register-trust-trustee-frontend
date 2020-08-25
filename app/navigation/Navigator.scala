@@ -17,12 +17,12 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.register.trustees.routes.{AddATrusteeController, IsThisLeadTrusteeController, TrusteeIndividualOrBusinessController}
+import controllers.register.routes._
 import models.ReadableUserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.registration.pages.AddATrustee
 import pages._
-import pages.register.trustees.{AddATrusteePage, AddATrusteeYesNoPage, IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage, TrusteesAnswerPage}
+import pages.register._
 import play.api.mvc.Call
 import sections.Trustees
 

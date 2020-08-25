@@ -18,15 +18,15 @@ package navigation
 
 import base.SpecBase
 import config.FrontendAppConfig
+import controllers.register.routes
 import controllers.register.trustees.individual.routes._
-import controllers.register.trustees.routes
 import generators.Generators
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.{Business, Individual}
 import models.registration.pages.AddATrustee
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.trustees._
+import pages.register._
 import play.api.mvc.Call
 import sections.Trustees
 
@@ -127,7 +127,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           userAnswers =>
 
             navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, userAnswers)
-              .mustBe(controllers.register.trustees.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
+              .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
         }
       }
 

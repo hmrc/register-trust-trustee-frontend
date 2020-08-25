@@ -10,7 +10,7 @@ GET        /this-service-has-been-reset                           controllers.Se
 
 GET        /unauthorised                                          controllers.UnauthorisedController.onPageLoad
 
-GET        /logout                                                controllers.register.LogoutController.logout()
+GET        /logout                                                controllers.LogoutController.logout()
 
 GET        /keep-alive                                            controllers.SessionTimeoutController.keepAlive
 GET        /timeout                                               controllers.SessionTimeoutController.timeout
@@ -23,17 +23,17 @@ GET        /feature-not-available                                 controllers.Fe
 ->         /lead-trustee/business                                 leadTrusteeOrganisation.Routes
 ->         /lead-trustee/individual                               leadTrusteeIndividual.Routes
 
-GET        /:draftId/information-you-need                         controllers.register.trustees.TrusteesInfoController.onPageLoad(draftId: String)
+GET        /:draftId/information-you-need                         controllers.register.TrusteesInfoController.onPageLoad(draftId: String)
 
-GET        /:draftId/:index/is-this-the-lead-trustee              controllers.register.trustees.IsThisLeadTrusteeController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/is-this-the-lead-trustee              controllers.register.trustees.IsThisLeadTrusteeController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/is-this-the-lead-trustee              controllers.register.IsThisLeadTrusteeController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/is-this-the-lead-trustee              controllers.register.IsThisLeadTrusteeController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/:index/individual-or-business                controllers.register.trustees.TrusteeIndividualOrBusinessController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/individual-or-business                controllers.register.trustees.TrusteeIndividualOrBusinessController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/individual-or-business                controllers.register.TrusteeIndividualOrBusinessController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/individual-or-business                controllers.register.TrusteeIndividualOrBusinessController.onSubmit(index : Int, draftId: String)
 
-GET        /:draftId/add                                          controllers.register.trustees.AddATrusteeController.onPageLoad(draftId: String)
-POST       /:draftId/add                                          controllers.register.trustees.AddATrusteeController.submitOne(draftId: String)
-POST       /:draftId/add-another                                  controllers.register.trustees.AddATrusteeController.submitAnother(draftId: String)
+GET        /:draftId/add                                          controllers.register.AddATrusteeController.onPageLoad(draftId: String)
+POST       /:draftId/add                                          controllers.register.AddATrusteeController.submitOne(draftId: String)
+POST       /:draftId/add-another                                  controllers.register.AddATrusteeController.submitAnother(draftId: String)
 
 GET        /:draftId/:index/remove                                controllers.register.RemoveIndexController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/remove                                controllers.register.RemoveIndexController.onSubmit(index: Int, draftId: String)

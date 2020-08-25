@@ -18,11 +18,11 @@ package utils.print
 
 import com.google.inject.Inject
 import controllers.register.leadtrustee.organisation.routes._
-import controllers.register.trustees.routes._
+import controllers.register.routes.TrusteeIndividualOrBusinessController
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
+import pages.register.TrusteeIndividualOrBusinessPage
 import pages.register.leadtrustee.organisation._
-import pages.register.trustees.TrusteeIndividualOrBusinessPage
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}

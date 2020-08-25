@@ -19,12 +19,10 @@ package navigation
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.register.trustees.individual.routes._
-import controllers.register.trustees.routes
 import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.trustees._
 import pages.register.trustees.individual._
 
 class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

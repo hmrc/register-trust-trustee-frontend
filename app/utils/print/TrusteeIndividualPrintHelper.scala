@@ -18,10 +18,10 @@ package utils.print
 
 import com.google.inject.Inject
 import controllers.register.trustees.individual.routes._
-import controllers.register.trustees.routes._
+import controllers.register.routes.TrusteeIndividualOrBusinessController
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
-import pages.register.trustees.TrusteeIndividualOrBusinessPage
+import pages.register.TrusteeIndividualOrBusinessPage
 import pages.register.trustees.individual._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions

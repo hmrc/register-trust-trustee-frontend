@@ -25,8 +25,9 @@ import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
 import models.registration.pages.AddATrustee
 import models.{RegistrationSubmission, Status, UserAnswers}
 import pages.entitystatus.TrusteeStatus
+import pages.register.{AddATrusteePage, IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import pages.register.leadtrustee.{individual => ltind}
-import pages.register.trustees.{AddATrusteePage, IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage, organisation => torg}
+import pages.register.trustees.{organisation => torg}
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
 class SubmissionSetFactorySpec extends SpecBase {

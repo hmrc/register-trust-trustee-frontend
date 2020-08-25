@@ -14,39 +14,49 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees
+package controllers.register
 
 import base.SpecBase
+import controllers.register.routes.RemoveIndexController
+import controllers.register.trustees.individual.routes.CheckDetailsController
 import forms.{AddATrusteeFormProvider, YesNoFormProvider}
 import models.Status.Completed
+import models.UserAnswers
 import models.core.pages.{FullName, IndividualOrBusiness}
 import models.registration.pages.AddATrustee
 import pages.entitystatus.TrusteeStatus
-import pages.register.trustees.TrusteeIndividualOrBusinessPage
+import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import pages.register.trustees.individual.NamePage
+import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.AddRow
-import views.html.register.trustees.{AddATrusteeView, AddATrusteeYesNoView}
+import views.html.register.{AddATrusteeView, AddATrusteeYesNoView}
 
 class AddATrusteeControllerSpec extends SpecBase {
 
-  lazy val getRoute : String = routes.AddATrusteeController.onPageLoad(fakeDraftId).url
-  lazy val submitAnotherRoute : String = routes.AddATrusteeController.submitAnother(fakeDraftId).url
-  lazy val submitYesNoRoute : String = routes.AddATrusteeController.submitOne(fakeDraftId).url
+  private lazy val getRoute : String = routes.AddATrusteeController.onPageLoad(fakeDraftId).url
+  private lazy val submitAnotherRoute : String = routes.AddATrusteeController.submitAnother(fakeDraftId).url
+  private lazy val submitYesNoRoute : String = routes.AddATrusteeController.submitOne(fakeDraftId).url
 
-  val addTrusteeForm = new AddATrusteeFormProvider()()
-  val yesNoForm = new YesNoFormProvider().withPrefix("addATrusteeYesNo")
+  private def changeLink(index: Int): String = CheckDetailsController.onPageLoad(index, fakeDraftId).url
+  private def removeLink(index: Int): String = RemoveIndexController.onPageLoad(index, fakeDraftId).url
 
-  val trustee = List(
-    AddRow("First 0 Last 0", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/0/remove"),
-    AddRow("First 1 Last 1", typeLabel = "Trustee Individual", "/trusts-registration/trustees/feature-not-available", "/trusts-registration/trustees/draftId/1/remove")
+  private val addTrusteeForm = new AddATrusteeFormProvider()()
+  private val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addATrusteeYesNo")
+
+  private lazy val trustee = List(
+    AddRow("First 0 Last 0", typeLabel = "Trustee Individual", changeLink(0), removeLink(0)),
+    AddRow("First 1 Last 1", typeLabel = "Trustee Individual", changeLink(1), removeLink(1))
   )
 
-  val userAnswersWithTrusteesComplete = emptyUserAnswers
+  private val userAnswersWithTrusteesComplete: UserAnswers = emptyUserAnswers
+    .set(IsThisLeadTrusteePage(0), false).success.value
     .set(TrusteeIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
     .set(NamePage(0), FullName("First 0", None, "Last 0")).success.value
     .set(TrusteeStatus(0), Completed).success.value
+
+    .set(IsThisLeadTrusteePage(1), false).success.value
     .set(TrusteeIndividualOrBusinessPage(1), IndividualOrBusiness.Individual).success.value
     .set(NamePage(1), FullName("First 1", None, "Last 1")).success.value
     .set(TrusteeStatus(1), Completed).success.value
@@ -161,7 +171,7 @@ class AddATrusteeControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddATrusteeView]
 
         status(result) mustEqual OK
-
+        
         contentAsString(result) mustEqual
           view(addTrusteeForm, fakeDraftId, Nil, trustee, isLeadTrusteeDefined = false, heading = "You have added 2 trustees")(fakeRequest, messages).toString
 

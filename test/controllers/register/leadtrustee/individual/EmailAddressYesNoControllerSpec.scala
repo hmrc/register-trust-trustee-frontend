@@ -23,18 +23,16 @@ import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.leadtrustee.individual.{EmailAddressYesNoPage, AddressUkYesNoPage, TrusteesNamePage}
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
+import pages.register.leadtrustee.individual.{AddressUkYesNoPage, EmailAddressYesNoPage, TrusteesNamePage}
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.leadtrustee.individual.EmailAddressYesNoView
 
 
 class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
-
-  def onwardRoute = Call("GET", "/foo")
 
   val messagePrefix = "leadTrustee.individual.emailAddressYesNo"
   val formProvider = new YesNoFormProvider()

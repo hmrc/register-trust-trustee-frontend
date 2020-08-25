@@ -17,11 +17,11 @@
 package utils.print
 
 import controllers.register.trustees.organisation.routes._
-import controllers.register.trustees.routes._
+import controllers.register.routes.TrusteeIndividualOrBusinessController
 import com.google.inject.Inject
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
-import pages.register.trustees.TrusteeIndividualOrBusinessPage
+import pages.register.TrusteeIndividualOrBusinessPage
 import pages.register.trustees.organisation._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions

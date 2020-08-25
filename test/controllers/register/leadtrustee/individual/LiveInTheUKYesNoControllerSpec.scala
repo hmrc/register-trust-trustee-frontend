@@ -21,15 +21,14 @@ import config.annotations.LeadTrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
+import pages.register.IsThisLeadTrusteePage
 import pages.register.leadtrustee.individual.{AddressUkYesNoPage, TrusteesNamePage}
-import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
 class LiveInTheUKYesNoControllerSpec extends SpecBase {
-
 
   val messagePrefix = "leadTrustee.individual.liveInTheUkYesNo"
   val formProvider = new YesNoFormProvider()

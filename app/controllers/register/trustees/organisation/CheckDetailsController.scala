@@ -23,7 +23,7 @@ import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrusteeStatus
-import pages.register.trustees.TrusteesAnswerPage
+import pages.register.TrusteesAnswerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository

@@ -20,14 +20,14 @@ import java.time.LocalDate
 
 import base.SpecBase
 import controllers.register.leadtrustee.individual.routes._
-import controllers.register.trustees.routes.TrusteeIndividualOrBusinessController
+import controllers.register.routes.TrusteeIndividualOrBusinessController
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import models.registration.pages.PassportOrIdCardDetails
+import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import pages.register.leadtrustee.individual.{TrusteesNamePage, _}
-import pages.register.trustees.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

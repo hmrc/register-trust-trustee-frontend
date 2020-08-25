@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees
+package controllers.register
 
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.TrusteesInfoView
+import views.html.register.TrusteesInfoView
 
 class TrusteesInfoControllerSpec extends SpecBase {
 
