@@ -17,27 +17,29 @@
 package pages.register
 
 import models.UserAnswers
+import models.core.pages.TrusteeOrLeadTrustee
+import models.core.pages.TrusteeOrLeadTrustee._
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
 import scala.util.Try
 
-final case class IsThisLeadTrusteePage(index: Int) extends QuestionPage[Boolean] with Cleanup {
+final case class TrusteeOrLeadTrusteePage(index: Int) extends QuestionPage[TrusteeOrLeadTrustee] with Cleanup {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "isThisLeadTrustee"
+  override def toString: String = "trusteeOrLeadTrustee"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[TrusteeOrLeadTrustee], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
-      case Some(true) =>
+      case Some(LeadTrustee) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
           .flatMap(ua => removeTrusteeIndividual(ua, index))
           .flatMap(ua => removeTrusteeBusiness(ua, index))
 
-      case Some(false) =>
+      case Some(Trustee) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
           .flatMap(ua => removeLeadTrusteeIndividual(ua, index))

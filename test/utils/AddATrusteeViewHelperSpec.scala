@@ -21,16 +21,17 @@ import java.time.LocalDate
 import base.SpecBase
 import controllers.register.leadtrustee.individual.{routes => ltiRts}
 import controllers.register.leadtrustee.organisation.{routes => ltoRts}
-import controllers.register.routes.IsThisLeadTrusteeController
+import controllers.register.routes.TrusteeOrLeadTrusteeController
 import controllers.register.trustees.individual.{routes => tiRts}
 import controllers.register.trustees.organisation.{routes => toRts}
 import models.Status._
 import models.core.pages.IndividualOrBusiness._
+import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, UKAddress}
 import pages.entitystatus.TrusteeStatus
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.trustees.{individual => tind, organisation => torg}
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import viewmodels.{AddRow, AddToRows}
 
 class AddATrusteeViewHelperSpec extends SpecBase {
@@ -50,7 +51,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
           .set(TrusteeStatus(0), InProgress).success.value
-          .set(IsThisLeadTrusteePage(0), true).success.value
+          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
 
         val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -59,7 +60,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             AddRow(
               name = defaultName,
               typeLabel = "Lead Trustee",
-              changeUrl = IsThisLeadTrusteeController.onPageLoad(0, fakeDraftId).url,
+              changeUrl = TrusteeOrLeadTrusteeController.onPageLoad(0, fakeDraftId).url,
               removeUrl = removeRoute(0)
             )
           ),
@@ -71,7 +72,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
           .set(TrusteeStatus(0), InProgress).success.value
-          .set(IsThisLeadTrusteePage(0), false).success.value
+          .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
 
         val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -80,7 +81,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             AddRow(
               name = defaultName,
               typeLabel = "Trustee",
-              changeUrl = IsThisLeadTrusteeController.onPageLoad(0, fakeDraftId).url,
+              changeUrl = TrusteeOrLeadTrusteeController.onPageLoad(0, fakeDraftId).url,
               removeUrl = removeRoute(0)
             )
           ),
@@ -99,7 +100,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
             val userAnswers = emptyUserAnswers
               .set(TrusteeStatus(0), InProgress).success.value
-              .set(IsThisLeadTrusteePage(0), true).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
               .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
               .set(ltorg.NamePage(0), name).success.value
@@ -123,7 +124,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
             val userAnswers = emptyUserAnswers
               .set(TrusteeStatus(0), InProgress).success.value
-              .set(IsThisLeadTrusteePage(0), true).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
               .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
 
@@ -147,7 +148,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), Completed).success.value
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
             .set(ltorg.NamePage(0), name).success.value
@@ -181,7 +182,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), InProgress).success.value
-            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(torg.NamePage(0), name).success.value
 
@@ -204,7 +205,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), Completed).success.value
-            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(torg.NamePage(0), name).success.value
             .set(torg.UtrYesNoPage(0), true).success.value
@@ -229,12 +230,12 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), InProgress).success.value
-            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(torg.NamePage(0), name).success.value
 
             .set(TrusteeStatus(1), Completed).success.value
-            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(1), Business).success.value
             .set(torg.NamePage(1), name).success.value
             .set(torg.UtrYesNoPage(1), true).success.value
@@ -274,7 +275,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
             val userAnswers = emptyUserAnswers
               .set(TrusteeStatus(0), InProgress).success.value
-              .set(IsThisLeadTrusteePage(0), true).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
               .set(ltind.TrusteesNamePage(0), name).success.value
 
@@ -297,7 +298,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
             val userAnswers = emptyUserAnswers
               .set(TrusteeStatus(0), InProgress).success.value
-              .set(IsThisLeadTrusteePage(0), true).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
@@ -320,7 +321,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), Completed).success.value
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(ltind.TrusteesNamePage(0), name).success.value
             .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
@@ -356,7 +357,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), InProgress).success.value
-            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(tind.NamePage(0), name).success.value
 
@@ -379,7 +380,7 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), Completed).success.value
-            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(tind.NamePage(0), name).success.value
             .set(tind.DateOfBirthYesNoPage(0), false).success.value
@@ -405,12 +406,12 @@ class AddATrusteeViewHelperSpec extends SpecBase {
 
           val userAnswers = emptyUserAnswers
             .set(TrusteeStatus(0), InProgress).success.value
-            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(tind.NamePage(0), name).success.value
 
             .set(TrusteeStatus(1), Completed).success.value
-            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(1), Individual).success.value
             .set(tind.NamePage(1), name).success.value
             .set(tind.DateOfBirthYesNoPage(1), false).success.value

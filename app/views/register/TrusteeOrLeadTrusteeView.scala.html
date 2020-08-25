@@ -15,6 +15,7 @@
  *@
 
 @import controllers.register.routes._
+@import models.core.pages.TrusteeOrLeadTrustee
 
 @this(
     main_template: MainTemplate,
@@ -24,21 +25,23 @@
 @(form: Form[_], draftId:String, index : Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("isThisLeadTrustee.title")}"
-    ) {
+    title = s"${errorPrefix(form)} ${messages("trusteeOrLeadTrustee.title")}"
+) {
 
-    @formHelper(action = IsThisLeadTrusteeController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = TrusteeOrLeadTrusteeController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
+        @components.input_radio(
             field = form("value"),
-            label = messages("isThisLeadTrustee.heading"),
+            legend = messages("trusteeOrLeadTrustee.heading"),
             legendClass = Some("heading-large"),
+            fieldSetClass = Some("inline"),
+            inputs = TrusteeOrLeadTrustee.options.toSeq,
             legendAsHeading = true,
-            hint = Some(messages(s"isThisLeadTrustee.hint"))
+            hint = Some(messages("trusteeOrLeadTrustee.hint"))
         )
 
         @components.submit_button()

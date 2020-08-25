@@ -21,7 +21,6 @@ import config.annotations.TrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, PassportDetailsYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -45,7 +44,6 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -67,7 +65,6 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(PassportDetailsYesNoPage(index), true).success.value
 
@@ -90,7 +87,6 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(PassportDetailsYesNoPage(index), true).success.value
 
@@ -118,7 +114,6 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

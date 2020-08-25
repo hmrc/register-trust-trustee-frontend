@@ -23,7 +23,6 @@ import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
@@ -49,7 +48,6 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -71,7 +69,6 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(NinoPage(index), validAnswer).success.value
 
@@ -94,7 +91,6 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
@@ -120,7 +116,6 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

@@ -63,6 +63,11 @@ trait ModelGenerators {
       Gen.oneOf(IndividualOrBusiness.values.toSeq)
     }
 
+  implicit lazy val arbitraryTrusteeOrLeadTrustee: Arbitrary[TrusteeOrLeadTrustee] =
+    Arbitrary {
+      Gen.oneOf(TrusteeOrLeadTrustee.values.toSeq)
+    }
+
   implicit lazy val arbitraryLocalDate : Arbitrary[LocalDate] =
     Arbitrary {
       Gen.const(LocalDate.of(2010, 10, 10))

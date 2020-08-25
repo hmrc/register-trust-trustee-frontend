@@ -23,10 +23,7 @@ import forms.NameFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.IsThisLeadTrusteePage
-import pages.register.trustees._
 import pages.register.trustees.individual.NamePage
-import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -49,10 +46,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         val messageKeyPrefix = "trustee.individual.name"
 
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         val request = FakeRequest(GET, trusteesNameRoute)
 
@@ -78,10 +72,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         val messageKeyPrefix = "trustee.individual.name"
 
-        val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         val request =
           FakeRequest(POST, trusteesNameRoute)
@@ -112,7 +103,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       val name = FullName("first name", Some("middle name"), "last name")
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -138,7 +128,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       val name = FullName("first name", Some("middle name"), "last name")
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), name).success.value
 
       val application =

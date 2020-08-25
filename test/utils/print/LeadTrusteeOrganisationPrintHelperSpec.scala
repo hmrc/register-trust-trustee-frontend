@@ -21,9 +21,10 @@ import controllers.register.leadtrustee.organisation.routes._
 import controllers.register.routes.TrusteeIndividualOrBusinessController
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Business
+import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.leadtrustee.organisation._
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -42,7 +43,7 @@ class LeadTrusteeOrganisationPrintHelperSpec extends SpecBase {
     val helper = injector.instanceOf[LeadTrusteeOrganisationPrintHelper]
 
     val baseAnswers = emptyUserAnswers
-      .set(IsThisLeadTrusteePage(index), true).success.value
+      .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
       .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
       .set(NamePage(index), name).success.value
       .set(TelephoneNumberPage(index), tel).success.value

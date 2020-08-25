@@ -18,13 +18,14 @@ package pages.behaviours
 
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness._
-import models.core.pages.{InternationalAddress, UKAddress}
+import models.core.pages.TrusteeOrLeadTrustee._
+import models.core.pages.{InternationalAddress, TrusteeOrLeadTrustee, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.{organisation => ltorg}
 import pages.register.trustees.{organisation => torg}
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 
-class IsThisLeadTrusteePageSpec extends PageBehaviours {
+class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
 
   private val index: Int = 0
   private val name: String = "Name"
@@ -36,11 +37,11 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
 
   "IsThisLeadTrustee Page" must {
 
-    beRetrievable[Boolean](IsThisLeadTrusteePage(index))
+    beRetrievable[TrusteeOrLeadTrustee](TrusteeOrLeadTrusteePage(index))
 
-    beSettable[Boolean](IsThisLeadTrusteePage(index))
+    beSettable[TrusteeOrLeadTrustee](TrusteeOrLeadTrusteePage(index))
 
-    beRemovable[Boolean](IsThisLeadTrusteePage(index))
+    beRemovable[TrusteeOrLeadTrustee](TrusteeOrLeadTrusteePage(index))
 
     "implement cleanup logic" when {
 
@@ -49,7 +50,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val initial: UserAnswers = userAnswers
-              .set(IsThisLeadTrusteePage(index), false).success.value
+              .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
@@ -60,7 +61,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
               .set(torg.InternationalAddressPage(index), internationalAddress).success.value
 
             val result: UserAnswers = initial
-              .set(IsThisLeadTrusteePage(index), true).success.value
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) mustNot be(defined)
             result.get(torg.NamePage(index)) mustNot be(defined)
@@ -78,7 +79,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val initial: UserAnswers = userAnswers
-              .set(IsThisLeadTrusteePage(index), true).success.value
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
@@ -91,7 +92,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
               .set(ltorg.TelephoneNumberPage(index), tel).success.value
 
             val result: UserAnswers = initial
-              .set(IsThisLeadTrusteePage(index), false).success.value
+              .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) mustNot be(defined)
             result.get(ltorg.UkRegisteredYesNoPage(index)) mustNot be(defined)
@@ -114,7 +115,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val initial: UserAnswers = userAnswers
-              .set(IsThisLeadTrusteePage(index), true).success.value
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
@@ -127,7 +128,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
               .set(ltorg.TelephoneNumberPage(index), tel).success.value
 
             val result: UserAnswers = initial
-              .set(IsThisLeadTrusteePage(index), true).success.value
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) must be(defined)
             result.get(ltorg.UkRegisteredYesNoPage(index)) must be(defined)
@@ -147,7 +148,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val initial: UserAnswers = userAnswers
-              .set(IsThisLeadTrusteePage(index), false).success.value
+              .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
@@ -158,7 +159,7 @@ class IsThisLeadTrusteePageSpec extends PageBehaviours {
               .set(torg.InternationalAddressPage(index), internationalAddress).success.value
 
             val result: UserAnswers = initial
-              .set(IsThisLeadTrusteePage(index), false).success.value
+              .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) must be(defined)
             result.get(torg.NamePage(index)) must be(defined)

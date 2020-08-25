@@ -22,10 +22,11 @@ import controllers.register.trustees.individual.routes.CheckDetailsController
 import forms.{AddATrusteeFormProvider, YesNoFormProvider}
 import models.Status.Completed
 import models.UserAnswers
+import models.core.pages.TrusteeOrLeadTrustee.Trustee
 import models.core.pages.{FullName, IndividualOrBusiness}
 import models.registration.pages.AddATrustee
 import pages.entitystatus.TrusteeStatus
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import pages.register.trustees.individual.NamePage
 import play.api.data.Form
 import play.api.test.FakeRequest
@@ -51,12 +52,12 @@ class AddATrusteeControllerSpec extends SpecBase {
   )
 
   private val userAnswersWithTrusteesComplete: UserAnswers = emptyUserAnswers
-    .set(IsThisLeadTrusteePage(0), false).success.value
+    .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
     .set(TrusteeIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
     .set(NamePage(0), FullName("First 0", None, "Last 0")).success.value
     .set(TrusteeStatus(0), Completed).success.value
 
-    .set(IsThisLeadTrusteePage(1), false).success.value
+    .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
     .set(TrusteeIndividualOrBusinessPage(1), IndividualOrBusiness.Individual).success.value
     .set(NamePage(1), FullName("First 1", None, "Last 1")).success.value
     .set(TrusteeStatus(1), Completed).success.value

@@ -19,8 +19,9 @@ package controllers.register
 import base.SpecBase
 import forms.IndividualOrBusinessFormProvider
 import models.core.pages.IndividualOrBusiness
+import models.core.pages.TrusteeOrLeadTrustee._
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.i18n.Messages
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -46,7 +47,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         val leadHeading = Messages(s"$messageKeyPrefix.heading")
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
 
         val application = applicationBuilder(Some(userAnswers)).build()
 
@@ -74,7 +75,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         val heading = Messages(s"$messageKeyPrefix.heading")
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -103,7 +104,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         val messageKeyPrefix = "leadTrusteeIndividualOrBusiness"
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.values.head).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -132,7 +133,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         val messageKeyPrefix = "trusteeIndividualOrBusiness"
 
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.values.head).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -166,7 +167,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -174,7 +175,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
     "redirect to the next page when valid data is submitted (lead trustee)" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
+        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -195,7 +196,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
     "redirect to the next page when valid data is submitted (trustee)" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -220,7 +221,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       val heading = Messages(s"$messageKeyPrefix.heading")
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

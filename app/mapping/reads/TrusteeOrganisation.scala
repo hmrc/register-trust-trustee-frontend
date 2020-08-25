@@ -24,24 +24,19 @@ final case class TrusteeOrganisation(override val isLead : Boolean,
                                      utr: Option[String],
                                      address: Option[Address]) extends Trustee
 
-object TrusteeOrganisation {
+object TrusteeOrganisation extends TrusteeReads {
 
   import play.api.libs.functional.syntax._
 
   implicit lazy val reads: Reads[TrusteeOrganisation] = {
 
-    val addressReads: Reads[Option[Address]] =
-      (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
-        (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
-        Reads(_ => JsSuccess(None))
-
     val trusteeReads: Reads[TrusteeOrganisation] = (
       (__ \ "name").read[String] and
         (__ \ "utr").readNullable[String] and
-        addressReads
+        optionalAddressReads
       )((name, utr, address) => TrusteeOrganisation(isLead = false, name, utr, address))
 
-    ((__ \ "isThisLeadTrustee").read[Boolean] and
+    (isLeadReads and
       (__ \ "individualOrBusiness").read[IndividualOrBusiness]) ((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
       case (isLead, individualOrBusiness) =>
         if (individualOrBusiness == IndividualOrBusiness.Business && !isLead) {

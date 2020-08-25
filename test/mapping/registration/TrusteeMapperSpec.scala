@@ -22,10 +22,11 @@ import base.SpecBase
 import generators.Generators
 import mapping.Mapping
 import models.UserAnswers
+import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import pages.register.trustees.individual._
 import pages.register.trustees.{organisation => org, _}
 
@@ -51,7 +52,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           val index = 0
           val userAnswers =
             emptyUserAnswers
-              .set(IsThisLeadTrusteePage(index), false).success.value
+              .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
               .set(NamePage(index), FullName("first name", None, "last name")).success.value
 
@@ -69,7 +70,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         "full data" in {
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(index), false).success.value
+            .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
             .set(DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
@@ -104,7 +105,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           val index = 0
           val userAnswers =
             emptyUserAnswers
-              .set(IsThisLeadTrusteePage(index), false).success.value
+              .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
               .set(org.NamePage(index), "Org Name").success.value
 
@@ -122,7 +123,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         "full data" in {
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(index), false).success.value
+            .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(org.NamePage(index), "Org Name").success.value
             .set(org.UtrYesNoPage(index), true).success.value
@@ -155,11 +156,11 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
 
         val userAnswers =
           emptyUserAnswers
-            .set(IsThisLeadTrusteePage(index0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(index0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Individual).success.value
             .set(NamePage(index0), FullName("first name", None, "last name")).success.value
 
-            .set(IsThisLeadTrusteePage(index1), false).success.value
+            .set(TrusteeOrLeadTrusteePage(index1), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Individual).success.value
             .set(NamePage(index1), FullName("second name", None, "second name")).success.value
 
@@ -189,11 +190,11 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
 
         val userAnswers =
           emptyUserAnswers
-            .set(IsThisLeadTrusteePage(index0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(index0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Business).success.value
             .set(org.NamePage(index0), "Org Name1").success.value
 
-            .set(IsThisLeadTrusteePage(index1), false).success.value
+            .set(TrusteeOrLeadTrusteePage(index1), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Business).success.value
             .set(org.NamePage(index1), "Org Name2").success.value
 
@@ -227,7 +228,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
       "be able to create a Trustee Individual with full data" in {
         val index = 0
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
           .set(DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
@@ -260,7 +261,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         val name: String = "Org Name"
 
         val baseAnswers: UserAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
           .set(org.NamePage(index), name).success.value
 
@@ -366,7 +367,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
       "not be able to create a Trustee Individual when there is only a LeadTrustee" in {
         val index = 0
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
           .set(NamePage(index), FullName("first name", Some("middle name"), "Last Name")).success.value
           .set(DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
@@ -382,7 +383,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
       "not be able to create a Trustee Organisation when there is only a LeadTrustee" in {
         val index = 0
         val userAnswers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
           .set(org.NamePage(index), "Org Name").success.value
           .set(org.UtrYesNoPage(index), true).success.value

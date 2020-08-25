@@ -20,17 +20,16 @@ import java.time.LocalDate
 
 import base.SpecBase
 import config.annotations.TrusteeIndividual
-import forms.{PassportOrIdCardFormProvider, YesNoFormProvider}
+import forms.PassportOrIdCardFormProvider
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import navigation.{FakeNavigator, Navigator}
-import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, PassportDetailsPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
-import utils.countryOptions.{CountryOptions, CountryOptionsNonUK}
+import utils.countryOptions.CountryOptions
 import views.html.register.trustees.individual.PassportDetailsView
 
 class PassportDetailsControllerSpec extends SpecBase {
@@ -54,7 +53,6 @@ class PassportDetailsControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), trusteeName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -76,7 +74,6 @@ class PassportDetailsControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(NamePage(index), trusteeName).success.value
         .set(PassportDetailsPage(index), passportDetails).success.value
 
@@ -99,7 +96,6 @@ class PassportDetailsControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), trusteeName).success.value
         .set(PassportDetailsPage(index), passportDetails).success.value
 
@@ -133,7 +129,6 @@ class PassportDetailsControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), trusteeName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

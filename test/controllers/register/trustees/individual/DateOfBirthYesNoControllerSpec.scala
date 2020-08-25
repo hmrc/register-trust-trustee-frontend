@@ -21,7 +21,7 @@ import config.annotations.TrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import pages.register.IsThisLeadTrusteePage
+import pages.register.TrusteeOrLeadTrusteePage
 import pages.register.trustees.individual.{DateOfBirthYesNoPage, NamePage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -45,7 +45,6 @@ class DateOfBirthYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -67,7 +66,6 @@ class DateOfBirthYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), true).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(DateOfBirthYesNoPage(index), true).success.value
 
@@ -90,7 +88,6 @@ class DateOfBirthYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
@@ -117,7 +114,6 @@ class DateOfBirthYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
