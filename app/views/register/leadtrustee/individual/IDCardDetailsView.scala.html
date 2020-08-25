@@ -16,14 +16,13 @@
 
 @import controllers.register.leadtrustee.individual.routes._
 @import utils.InputOption
-@import models.core.pages.FullName
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("leadTrustee.individual.iDCardDetails.title")}"
@@ -35,7 +34,7 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("leadTrustee.individual.iDCardDetails.heading", Some(name.toString))
+        @components.heading("leadTrustee.individual.iDCardDetails.heading", Some(name))
 
         @components.select(field = form("country"),
             label = messages("leadTrustee.individual.iDCardDetails.country"),

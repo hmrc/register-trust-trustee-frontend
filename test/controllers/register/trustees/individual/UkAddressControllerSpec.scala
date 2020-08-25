@@ -23,7 +23,7 @@ import forms.UKAddressFormProvider
 import models.core.pages.{FullName, UKAddress}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, UkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind

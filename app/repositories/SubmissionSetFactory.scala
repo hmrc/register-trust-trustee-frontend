@@ -21,7 +21,7 @@ import mapping.registration.{CorrespondenceMapper, LeadTrusteeMapper, TrusteeMap
 import models.Status.{Completed, InProgress}
 import models._
 import models.registration.pages.AddATrustee
-import pages.register.trustees.AddATrusteePage
+import pages.register.AddATrusteePage
 import play.api.Logger
 import play.api.i18n.Messages
 import play.api.libs.json.Json

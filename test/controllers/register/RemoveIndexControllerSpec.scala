@@ -26,8 +26,9 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import pages.entitystatus.TrusteeStatus
+import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
-import pages.register.trustees.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage, individual => tind, organisation => torg}
+import pages.register.trustees.{individual => tind, organisation => torg}
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -300,7 +301,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to add to page" when {
 
-      lazy val addToPageRoute: String = controllers.register.trustees.routes.AddATrusteeController.onPageLoad(fakeDraftId).url
+      lazy val addToPageRoute: String = routes.AddATrusteeController.onPageLoad(fakeDraftId).url
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(TrusteeStatus(index), Completed).success.value

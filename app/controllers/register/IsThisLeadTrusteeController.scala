@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees
+package controllers.register
 
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
@@ -22,7 +22,7 @@ import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,7 +30,7 @@ import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewmodels.addAnother.TrusteeViewModel
-import views.html.register.trustees.IsThisLeadTrusteeView
+import views.html.register.IsThisLeadTrusteeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,7 +46,7 @@ class IsThisLeadTrusteeController @Inject()(
                                              YesNoFormProvider: YesNoFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
                                              view: IsThisLeadTrusteeView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = YesNoFormProvider.withPrefix("isThisLeadTrustee")
 
@@ -93,8 +93,7 @@ class IsThisLeadTrusteeController @Inject()(
       }
   }
 
-
-  def onSubmit(index : Int, draftId: String) = actions(index, draftId).async {
+  def onSubmit(index : Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(

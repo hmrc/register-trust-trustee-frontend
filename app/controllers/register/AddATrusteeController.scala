@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees
+package controllers.register
 
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
@@ -22,7 +22,7 @@ import forms.{AddATrusteeFormProvider, YesNoFormProvider}
 import javax.inject.Inject
 import models.Enumerable
 import navigation.Navigator
-import pages.register.trustees.{AddATrusteePage, AddATrusteeYesNoPage}
+import pages.register.{AddATrusteePage, AddATrusteeYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,7 +30,7 @@ import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddATrusteeViewHelper
-import views.html.register.trustees.{AddATrusteeView, AddATrusteeYesNoView}
+import views.html.register.{AddATrusteeView, AddATrusteeYesNoView}
 
 import scala.concurrent.{ExecutionContext, Future}
 

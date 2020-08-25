@@ -26,7 +26,7 @@ import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{DateOfBirthPage, NamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}

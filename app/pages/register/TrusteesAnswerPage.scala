@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package pages.register.trustees
+package pages.register
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import pages.Page
 
-case object AddATrusteeYesNoPage extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "addATrusteeYesNo"
-}
+case object TrusteesAnswerPage extends Page

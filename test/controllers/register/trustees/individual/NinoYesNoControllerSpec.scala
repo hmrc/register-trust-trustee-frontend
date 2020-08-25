@@ -23,7 +23,7 @@ import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, NinoYesNoPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}

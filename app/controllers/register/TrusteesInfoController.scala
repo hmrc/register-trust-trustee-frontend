@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees
+package controllers.register
 
 import controllers.actions.register.RegistrationIdentifierAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.TrusteesInfoView
+import views.html.register.TrusteesInfoView
 
 import scala.concurrent.ExecutionContext
 
@@ -30,7 +30,7 @@ class TrusteesInfoController @Inject()(
                                         identify: RegistrationIdentifierAction,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: TrusteesInfoView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify {
     implicit request =>

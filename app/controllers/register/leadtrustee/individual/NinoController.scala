@@ -19,49 +19,37 @@ package controllers.register.leadtrustee.individual
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.filters.IndexActionFilterProvider
+import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.NinoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.{TrusteesNamePage, TrusteesNinoPage}
-import pages.register.trustees.IsThisLeadTrusteePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.NinoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class NinoController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        implicit val frontendAppConfig: FrontendAppConfig,
-                                        registrationsRepository: RegistrationsRepository,
-                                        @LeadTrusteeIndividual navigator: Navigator,
-                                        identify: RegistrationIdentifierAction,
-                                        getData: DraftIdRetrievalActionProvider,
-                                        requireData: RegistrationDataRequiredAction,
-                                        validateIndex : IndexActionFilterProvider,
-                                        requiredAnswer: RequiredAnswerActionProvider,
-                                        formProvider: NinoFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: NinoView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                override val messagesApi: MessagesApi,
+                                implicit val frontendAppConfig: FrontendAppConfig,
+                                registrationsRepository: RegistrationsRepository,
+                                @LeadTrusteeIndividual navigator: Navigator,
+                                standardActionSets: StandardActionSets,
+                                nameAction: NameRequiredActionImpl,
+                                formProvider: NinoFormProvider,
+                                val controllerComponents: MessagesControllerComponents,
+                                view: NinoView
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index : Int, draftId: String) =
-      identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(TrusteesNamePage(index), routes.NameController.onPageLoad(index, draftId)))
+  private def actions(index: Int, draftId: String) =
+    standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
 
       val form = formProvider("leadTrustee.individual.nino")
 
@@ -70,19 +58,17 @@ class NinoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, name))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
-      val name = request.userAnswers.get(TrusteesNamePage(index)).get.toString
-
       val form = formProvider("leadTrustee.individual.nino")
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
           for {

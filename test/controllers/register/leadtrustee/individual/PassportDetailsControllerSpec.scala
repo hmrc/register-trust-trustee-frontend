@@ -124,50 +124,6 @@ class PassportDetailsControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to trusteeName must"  when{
-
-      "a GET when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(PassportDetailsPage(index), passportDetails).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, passportDetailsRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-      }
-
-      "a POST when no name is found" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(PassportDetailsPage(index), passportDetails).success.value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request =
-          FakeRequest(POST, passportDetailsRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-
-      }
-    }
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers

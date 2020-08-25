@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package pages.behaviours.trustees
+package pages.behaviours
 
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.{IndividualOrBusiness, InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.behaviours.PageBehaviours
+import pages.register.TrusteeIndividualOrBusinessPage
 import pages.register.leadtrustee.{organisation => ltorg}
-import pages.register.trustees.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage, organisation => torg}
+import pages.register.trustees.{organisation => torg}
 
 class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
 

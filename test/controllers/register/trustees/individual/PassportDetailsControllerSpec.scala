@@ -24,7 +24,7 @@ import forms.{PassportOrIdCardFormProvider, YesNoFormProvider}
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.IsThisLeadTrusteePage
+import pages.register.IsThisLeadTrusteePage
 import pages.register.trustees.individual.{NamePage, PassportDetailsPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
