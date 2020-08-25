@@ -123,7 +123,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
-      "go to IndividualOrBusinessPage from IsThisLeadTrusteePage page when YES selected" in {
+      "go to IndividualOrBusinessPage from TrusteeOrLeadTrusteePage page when YES selected" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 

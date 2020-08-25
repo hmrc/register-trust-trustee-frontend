@@ -35,7 +35,7 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
   private val email: String = "email"
   private val tel: String = "tel"
 
-  "IsThisLeadTrustee Page" must {
+  "TrusteeOrLeadTrustee Page" must {
 
     beRetrievable[TrusteeOrLeadTrustee](TrusteeOrLeadTrusteePage(index))
 

@@ -35,7 +35,7 @@ class TrusteeOrLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
 
   lazy val trusteeOrLeadTrusteeRoute: String = routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId).url
 
-  "IsThisLeadTrustee Controller" must {
+  "TrusteeOrLeadTrustee Controller" must {
 
     "when there is no lead trustee" must {
 

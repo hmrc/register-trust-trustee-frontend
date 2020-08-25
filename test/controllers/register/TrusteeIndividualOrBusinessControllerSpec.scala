@@ -157,7 +157,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       }
     }
 
-    "redirect to IsThisLeadTrustee when IsThisLeadTrustee is not answered" in {
+    "redirect to TrusteeOrLeadTrustee when TrusteeOrLeadTrustee is not answered" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
