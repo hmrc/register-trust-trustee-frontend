@@ -20,10 +20,10 @@ import forms.EmailAddressFormProvider
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.QuestionViewBehaviours
+import views.behaviours.{QuestionViewBehaviours, StringViewBehaviours}
 import views.html.register.leadtrustee.individual.EmailAddressView
 
-class EmailAddressViewSpec extends QuestionViewBehaviours[String] {
+class EmailAddressViewSpec extends StringViewBehaviours {
 
   val prefix = "leadTrustee.individual.email"
   val name = FullName("FirstName", None, "LastName")
@@ -38,12 +38,14 @@ class EmailAddressViewSpec extends QuestionViewBehaviours[String] {
 
   "EmailAddress View" must {
 
-    behave like dynamicTitlePage(applyView(form), prefix, name.toString)
-
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithTextFields(form, applyView,
-      prefix, Some(name.toString))
+    behave like stringPageWithDynamicTitle(
+      form,
+      applyView,
+      prefix,
+      name.toString
+    )
 
     behave like pageWithASubmitButton(applyView(form))
 
