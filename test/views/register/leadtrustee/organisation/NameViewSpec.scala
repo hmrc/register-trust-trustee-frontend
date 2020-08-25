@@ -41,7 +41,7 @@ class NameViewSpec extends StringViewBehaviours {
 
       behave like stringPage(form, applyView, prefix)
 
-      behave like pageWithHint(form, applyView, prefix)
+      behave like pageWithHint(form, applyView, s"$prefix.hint")
 
       behave like pageWithASubmitButton(applyView(form))
     }

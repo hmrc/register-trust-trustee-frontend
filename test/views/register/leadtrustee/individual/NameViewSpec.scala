@@ -43,8 +43,7 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] {
       form,
       applyView,
       prefix,
-      None,
-      "firstName", "middleName", "lastName"
+      Seq(("firstName", None), ("middleName", None), ("lastName", None))
     )
 
     behave like pageWithASubmitButton(applyView(form))

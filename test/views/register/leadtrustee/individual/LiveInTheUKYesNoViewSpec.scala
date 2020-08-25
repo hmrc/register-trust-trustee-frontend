@@ -41,7 +41,7 @@ class LiveInTheUKYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, prefix, Seq(fakeName))
+    behave like yesNoPage(form, applyView, prefix, None, Seq(fakeName))
 
     behave like pageWithASubmitButton(applyView(form))
   }
