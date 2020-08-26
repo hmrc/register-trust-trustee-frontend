@@ -22,12 +22,11 @@ import base.SpecBase
 import generators.Generators
 import models.RegistrationSubmission
 import models.core.pages.IndividualOrBusiness._
+import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
-import pages.register.trustees._
-import pages.register.trustees.individual._
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
 class CorrespondenceMapperSpec extends SpecBase with MustMatchers
@@ -53,7 +52,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
 
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(ltind.TrusteesNamePage(0), FullName("First", None, "Last")).success.value
             .set(ltind.UkAddressPage(0), address).success.value
@@ -66,7 +65,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
 
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(ltind.TrusteesNamePage(0), FullName("First", None, "Last")).success.value
             .set(ltind.TrusteesDateOfBirthPage(0), LocalDate.of(2010, 10, 10)).success.value
@@ -91,7 +90,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
 
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(ltorg.NamePage(0), "Org Name").success.value
             .set(ltorg.UkAddressPage(0), address).success.value
@@ -104,7 +103,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
 
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(0), true).success.value
             .set(ltorg.NamePage(0), "Org Name").success.value
@@ -128,7 +127,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val address = InternationalAddress("First line", "Second line", None, "DE")
 
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(ltorg.NamePage(0), "Org Name").success.value
             .set(ltorg.InternationalAddressPage(0), address).success.value
@@ -141,7 +140,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val address = InternationalAddress("First line", "Second line", None, "DE")
 
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(0), true).success.value
             .set(ltorg.NamePage(0), "Org Name").success.value

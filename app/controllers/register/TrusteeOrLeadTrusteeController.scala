@@ -19,10 +19,11 @@ package controllers.register
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import forms.YesNoFormProvider
+import forms.TrusteeOrLeadTrusteeFormProvider
 import javax.inject.Inject
+import models.core.pages.TrusteeOrLeadTrustee.Trustee
 import navigation.Navigator
-import pages.register.IsThisLeadTrusteePage
+import pages.register.TrusteeOrLeadTrusteePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,25 +31,25 @@ import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewmodels.addAnother.TrusteeViewModel
-import views.html.register.IsThisLeadTrusteeView
+import views.html.register.TrusteeOrLeadTrusteeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IsThisLeadTrusteeController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             implicit val frontendAppConfig: FrontendAppConfig,
-                                             registrationsRepository: RegistrationsRepository,
-                                             navigator: Navigator,
-                                             identify: RegistrationIdentifierAction,
-                                             getData: DraftIdRetrievalActionProvider,
-                                             requireData: RegistrationDataRequiredAction,
-                                             validateIndex : IndexActionFilterProvider,
-                                             YesNoFormProvider: YesNoFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: IsThisLeadTrusteeView
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class TrusteeOrLeadTrusteeController @Inject()(
+                                                override val messagesApi: MessagesApi,
+                                                implicit val frontendAppConfig: FrontendAppConfig,
+                                                registrationsRepository: RegistrationsRepository,
+                                                navigator: Navigator,
+                                                identify: RegistrationIdentifierAction,
+                                                getData: DraftIdRetrievalActionProvider,
+                                                requireData: RegistrationDataRequiredAction,
+                                                validateIndex : IndexActionFilterProvider,
+                                                formProvider: TrusteeOrLeadTrusteeFormProvider,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: TrusteeOrLeadTrusteeView
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = YesNoFormProvider.withPrefix("isThisLeadTrustee")
+  private val form = formProvider()
 
   private def actions(index : Int, draftId: String) =
     identify andThen
@@ -60,7 +61,7 @@ class IsThisLeadTrusteeController @Inject()(
     implicit request =>
 
       def renderView = {
-        val preparedForm = request.userAnswers.get(IsThisLeadTrusteePage(index)) match {
+        val preparedForm = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)) match {
           case None => form
           case Some(value) => form.fill(value)
         }
@@ -82,9 +83,9 @@ class IsThisLeadTrusteeController @Inject()(
           // answer the question on behalf of the user and redirect to next page
           if (currentIndexIsNotTheLeadTrustee) {
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(IsThisLeadTrusteePage(index), false))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrLeadTrusteePage(index), Trustee))
               _              <- registrationsRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(IsThisLeadTrusteePage(index), draftId, updatedAnswers))
+            } yield Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
           } else {
             renderView
           }
@@ -102,9 +103,9 @@ class IsThisLeadTrusteeController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IsThisLeadTrusteePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrLeadTrusteePage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IsThisLeadTrusteePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
         }
       )
   }

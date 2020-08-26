@@ -21,7 +21,7 @@ import config.annotations.LeadTrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import pages.register.IsThisLeadTrusteePage
+import pages.register.TrusteeOrLeadTrusteePage
 import pages.register.leadtrustee.individual.{AddressUkYesNoPage, TrusteesNamePage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -45,7 +45,6 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

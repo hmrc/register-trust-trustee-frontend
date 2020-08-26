@@ -23,10 +23,11 @@ import controllers.register.leadtrustee.individual.routes._
 import controllers.register.routes.TrusteeIndividualOrBusinessController
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Individual
+import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import models.registration.pages.PassportOrIdCardDetails
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import pages.register.leadtrustee.individual.{TrusteesNamePage, _}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
@@ -48,7 +49,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
     val helper = injector.instanceOf[LeadTrusteeIndividualPrintHelper]
 
     val baseAnswers = emptyUserAnswers
-      .set(IsThisLeadTrusteePage(index), true).success.value
+      .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
       .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
       .set(TrusteesNamePage(index), name).success.value
 

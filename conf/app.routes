@@ -25,8 +25,8 @@ GET        /feature-not-available                                 controllers.Fe
 
 GET        /:draftId/information-you-need                         controllers.register.TrusteesInfoController.onPageLoad(draftId: String)
 
-GET        /:draftId/:index/is-this-the-lead-trustee              controllers.register.IsThisLeadTrusteeController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/is-this-the-lead-trustee              controllers.register.IsThisLeadTrusteeController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/trustee-or-lead-trustee               controllers.register.TrusteeOrLeadTrusteeController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/trustee-or-lead-trustee               controllers.register.TrusteeOrLeadTrusteeController.onSubmit(index : Int, draftId: String)
 
 GET        /:draftId/:index/individual-or-business                controllers.register.TrusteeIndividualOrBusinessController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/individual-or-business                controllers.register.TrusteeIndividualOrBusinessController.onSubmit(index : Int, draftId: String)

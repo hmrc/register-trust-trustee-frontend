@@ -21,11 +21,12 @@ import java.time.LocalDate
 import base.SpecBase
 import generators.Generators
 import mapping.Mapping
+import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 
 class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
@@ -51,7 +52,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(index), true).success.value
+            .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
@@ -78,7 +79,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
@@ -110,7 +111,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
@@ -141,7 +142,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         "not create LeadTrusteeType for not lead trustee" in {
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), false).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), Trustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(pages.register.trustees.individual.NamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(pages.register.trustees.individual.DateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
@@ -153,7 +154,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
             .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
@@ -174,7 +175,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
@@ -199,7 +200,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
             .set(ltorg.UtrPage(index), "1234567890").success.value
@@ -224,7 +225,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
@@ -258,7 +259,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
@@ -289,7 +290,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
@@ -319,7 +320,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
         "not be able to create LeadTrusteeType with only trustee organisation which is not lead." in {
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), false).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), Trustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
 
@@ -330,7 +331,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
 
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(register.IsThisLeadTrusteePage(index), true).success.value
+            .set(register.TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value

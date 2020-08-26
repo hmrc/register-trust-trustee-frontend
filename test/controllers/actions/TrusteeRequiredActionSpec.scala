@@ -22,11 +22,12 @@ import controllers.actions.register.{RemoveIndexRequest, TrusteeRequiredAction}
 import models.Status.Completed
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Business
+import models.core.pages.TrusteeOrLeadTrustee.Trustee
 import models.requests.RegistrationDataRequest
 import org.scalatest.concurrent.ScalaFutures
 import pages.entitystatus.TrusteeStatus
 import pages.register.trustees.organisation.{NamePage, UtrPage, UtrYesNoPage}
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.mvc.Result
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
@@ -77,7 +78,7 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
 
         val userAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), Completed).success.value
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
           .set(NamePage(index), name).success.value
           .set(UtrYesNoPage(index), true).success.value

@@ -34,30 +34,25 @@ final case class TrusteeIndividual(override val isLead : Boolean,
 
 }
 
-object TrusteeIndividual {
+object TrusteeIndividual extends TrusteeReads {
 
   import play.api.libs.functional.syntax._
 
   implicit lazy val reads: Reads[TrusteeIndividual] = {
-
-    val addressReads: Reads[Option[Address]] =
-      (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
-        (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
-        Reads(_ => JsSuccess(None))
 
     val trusteeReads: Reads[TrusteeIndividual] = {
       (
         (__ \ "name").read[FullName] and
           (__ \ "dateOfBirth").readNullable[LocalDate] and
           (__ \ "nino").readNullable[String] and
-          addressReads and
+          optionalAddressReads and
           (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
           (__ \ "idCard").readNullable[PassportOrIdCardDetails]
         )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
         TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))
     }
 
-    ((__ \ "isThisLeadTrustee").read[Boolean] and
+    (isLeadReads and
       (__ \ "individualOrBusiness").read[IndividualOrBusiness]) ((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
       case (isLead, individualOrBusiness) =>
         if (individualOrBusiness == IndividualOrBusiness.Individual && !isLead) {

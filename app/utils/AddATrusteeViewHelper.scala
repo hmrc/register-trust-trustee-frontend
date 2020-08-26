@@ -18,7 +18,7 @@ package utils
 
 import controllers.register.leadtrustee.individual.{routes => ltiRts}
 import controllers.register.leadtrustee.organisation.{routes => ltoRts}
-import controllers.register.routes.{IsThisLeadTrusteeController, RemoveIndexController}
+import controllers.register.routes.{RemoveIndexController, TrusteeOrLeadTrusteeController}
 import controllers.register.trustees.individual.{routes => tiRts}
 import controllers.register.trustees.organisation.{routes => toRts}
 import models.Status.{Completed, InProgress}
@@ -73,7 +73,7 @@ class AddATrusteeViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         case TrusteeViewModel(true, _, Some(Business), Completed) =>
           ltoRts.CheckDetailsController.onPageLoad(index, draftId)
         case _ =>
-          IsThisLeadTrusteeController.onPageLoad(index, draftId)
+          TrusteeOrLeadTrusteeController.onPageLoad(index, draftId)
       }
     }
 

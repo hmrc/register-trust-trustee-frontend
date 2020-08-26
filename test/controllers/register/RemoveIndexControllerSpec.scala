@@ -20,15 +20,15 @@ import base.SpecBase
 import forms.YesNoFormProvider
 import models.Status._
 import models.UserAnswers
-import models.core.pages.FullName
 import models.core.pages.IndividualOrBusiness._
+import models.core.pages.{FullName, TrusteeOrLeadTrustee}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import pages.entitystatus.TrusteeStatus
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.trustees.{individual => tind, organisation => torg}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -60,7 +60,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         val userAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.Trustee).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -84,7 +84,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         val userAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.LeadTrustee).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -108,7 +108,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
         "has no name" in {
@@ -157,7 +157,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
-          .set(IsThisLeadTrusteePage(index), false).success.value
+          .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
         "has no name" in {
@@ -206,7 +206,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.LeadTrustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
         "has no name" in {
@@ -255,7 +255,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.LeadTrustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
         "has no name" in {
@@ -305,7 +305,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(TrusteeStatus(index), Completed).success.value
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.Trustee).success.value
         .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
         .set(torg.NamePage(index), fakeName).success.value
         .set(torg.UtrYesNoPage(index), true).success.value
@@ -367,7 +367,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(TrusteeStatus(index), InProgress).success.value
-        .set(IsThisLeadTrusteePage(index), false).success.value
+        .set(TrusteeOrLeadTrusteePage(index), TrusteeOrLeadTrustee.Trustee).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

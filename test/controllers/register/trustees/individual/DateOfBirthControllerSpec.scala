@@ -26,7 +26,7 @@ import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.IsThisLeadTrusteePage
+import pages.register.TrusteeOrLeadTrusteePage
 import pages.register.trustees.individual.{DateOfBirthPage, NamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
@@ -53,7 +53,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -75,7 +74,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(DateOfBirthPage(index), validAnswer).success.value
 
@@ -98,7 +96,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application =
@@ -129,7 +126,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IsThisLeadTrusteePage(index), false).success.value
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

@@ -19,9 +19,10 @@ package mapping.reads
 import java.time.LocalDate
 
 import models.core.pages.IndividualOrBusiness.Individual
-import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
+import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
+import models.core.pages.{Address, FullName, InternationalAddress, TrusteeOrLeadTrustee, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
-import play.api.libs.json.{JsError, JsSuccess, Reads, __}
+import play.api.libs.json.{JsBoolean, JsError, JsSuccess, Reads, __}
 
 final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
                                        name: FullName,
@@ -39,18 +40,14 @@ final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
 
 }
 
-object LeadTrusteeIndividual {
+object LeadTrusteeIndividual extends TrusteeReads {
 
   import play.api.libs.functional.syntax._
 
   implicit lazy val reads: Reads[LeadTrusteeIndividual] = {
 
-    val addressReads: Reads[Address] =
-      (__ \ 'ukAddress).read[UKAddress].widen[Address] or
-        (__ \ 'internationalAddress).read[InternationalAddress].widen[Address]
-
     val leadTrusteeReads: Reads[LeadTrusteeIndividual] = (
-      (__ \ "isThisLeadTrustee").read[Boolean] and
+      isLeadReads and
         (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").read[LocalDate] and
         (__ \ "nino").readNullable[String] and
@@ -62,7 +59,7 @@ object LeadTrusteeIndividual {
         (__ \ "email").readNullable[String]
       )(LeadTrusteeIndividual.apply _)
 
-    ((__ \ "isThisLeadTrustee").read[Boolean] and
+    (isLeadReads and
       (__ \ "individualOrBusiness").read[String]) ((_, _)).flatMap[(Boolean, String)] {
       case (isLead, individualOrBusiness) =>
         if (individualOrBusiness == Individual.toString && isLead) {

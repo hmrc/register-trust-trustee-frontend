@@ -21,13 +21,14 @@ import java.time.LocalDate
 import base.SpecBase
 import models.RegistrationSubmission.{AnswerRow, AnswerSection}
 import models.Status.{Completed, InProgress}
+import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
 import models.registration.pages.AddATrustee
 import models.{RegistrationSubmission, Status, UserAnswers}
 import pages.entitystatus.TrusteeStatus
-import pages.register.{AddATrusteePage, IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
 import pages.register.leadtrustee.{individual => ltind}
 import pages.register.trustees.{organisation => torg}
+import pages.register.{AddATrusteePage, TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
 class SubmissionSetFactorySpec extends SpecBase {
@@ -65,13 +66,13 @@ class SubmissionSetFactorySpec extends SpecBase {
   private def addTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
     userAnswers
       .set(TrusteeStatus(index), Status.Completed).success.value
-      .set(IsThisLeadTrusteePage(index), false).success.value
+      .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
       .set(torg.NamePage(index), "Org Name1").success.value
   }
 
   private def addLeadTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
-    userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
+    userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
       .set(TrusteeStatus(index), Status.Completed).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
       .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
@@ -104,8 +105,8 @@ class SubmissionSetFactorySpec extends SpecBase {
       "there are trustees that are incomplete" must {
         "return InProgress status" in {
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
-            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
+            .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
             .set(TrusteeStatus(1), Status.Completed).success.value
 
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
@@ -120,9 +121,9 @@ class SubmissionSetFactorySpec extends SpecBase {
       "there are trustees that are complete, but section flagged not complete" must {
         "return InProgress status" in {
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), true).success.value
+            .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeStatus(0), Status.Completed).success.value
-            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
             .set(TrusteeStatus(1), Status.Completed).success.value
             .set(AddATrusteePage, AddATrustee.YesLater).success.value
 
@@ -138,9 +139,9 @@ class SubmissionSetFactorySpec extends SpecBase {
       "there are completed trustees, the section is flagged as completed, but there is no lead trustee" must {
         "return InProgress status" in {
           val userAnswers = emptyUserAnswers
-            .set(IsThisLeadTrusteePage(0), false).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
             .set(TrusteeStatus(0), Status.Completed).success.value
-            .set(IsThisLeadTrusteePage(1), false).success.value
+            .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
             .set(TrusteeStatus(1), Status.Completed).success.value
             .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 

@@ -16,9 +16,10 @@
 
 package viewmodels.addAnother
 
-import models.core.pages.{FullName, IndividualOrBusiness}
+import models.core.pages.{FullName, IndividualOrBusiness, TrusteeOrLeadTrustee}
 import models.Status
 import models.Status.InProgress
+import models.core.pages.TrusteeOrLeadTrustee._
 
 final case class TrusteeViewModel(isLead : Boolean,
                                   name : Option[String],
@@ -40,8 +41,14 @@ object TrusteeViewModel {
     (__ \ "name").read[FullName].map(_.toString.toOption) orElse
       (__ \ "name").readNullable[String]
 
+  val isLeadReads: Reads[Boolean] =
+    (__ \ "trusteeOrLeadTrustee").readWithDefault[TrusteeOrLeadTrustee](Trustee).map[Boolean] {
+      case LeadTrustee => true
+      case _ => false
+    }
+
   implicit lazy val reads : Reads[TrusteeViewModel] = (
-    (__ \ "isThisLeadTrustee").readWithDefault[Boolean](false) and
+    isLeadReads and
       (__ \ "individualOrBusiness").readNullable[IndividualOrBusiness] and
       nameReads and
       (__ \ "status").readWithDefault[Status](InProgress)

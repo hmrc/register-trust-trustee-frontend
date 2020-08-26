@@ -23,6 +23,7 @@ import controllers.register.trustees.individual.routes._
 import generators.Generators
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.{Business, Individual}
+import models.core.pages.TrusteeOrLeadTrustee._
 import models.registration.pages.AddATrustee
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -54,7 +55,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
               .remove(Trustees).success.value
 
             navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
-              .mustBe(routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId))
+              .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -66,7 +67,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
               .remove(Trustees).success.value
 
             navigator.nextPage(AddATrusteeYesNoPage, fakeDraftId, answers)
-              .mustBe(routes.IsThisLeadTrusteeController.onPageLoad(index, fakeDraftId))
+              .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -89,11 +90,11 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
       "go to the next trustee from AddATrusteePage when selected add them now" in {
 
         val answers = emptyUserAnswers
-          .set(IsThisLeadTrusteePage(index), true).success.value
+          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
           .set(AddATrusteePage, AddATrustee.YesNow).success.value
 
         navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
-          .mustBe(routes.IsThisLeadTrusteeController.onPageLoad(1, fakeDraftId))
+          .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(1, fakeDraftId))
       }
 
       "go to RegistrationProgress from AddATrusteePage " when {
@@ -101,7 +102,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              val answers = userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
+              val answers = userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
                 .set(AddATrusteePage, AddATrustee.YesLater).success.value
 
               navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
@@ -113,7 +114,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              val answers = userAnswers.set(IsThisLeadTrusteePage(index), true).success.value
+              val answers = userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
                 .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 
               navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
@@ -122,11 +123,11 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
-      "go to IndividualOrBusinessPage from IsThisLeadTrusteePage page when YES selected" in {
+      "go to IndividualOrBusinessPage from TrusteeOrLeadTrusteePage page when YES selected" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            navigator.nextPage(IsThisLeadTrusteePage(index), fakeDraftId, userAnswers)
+            navigator.nextPage(TrusteeOrLeadTrusteePage(index), fakeDraftId, userAnswers)
               .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -136,7 +137,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
               val answers = userAnswers
-                .set(IsThisLeadTrusteePage(index), true).success.value
+                .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
                 .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
               navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
@@ -148,7 +149,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
               val answers = userAnswers
-                .set(IsThisLeadTrusteePage(index), false).success.value
+                .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
                 .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
               navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
@@ -160,7 +161,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
               val answers = userAnswers
-                .set(IsThisLeadTrusteePage(index), false).success.value
+                .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
                 .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
               navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
@@ -173,7 +174,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
               val answers = userAnswers
-                .set(IsThisLeadTrusteePage(index), true).success.value
+                .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
                 .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
               navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
