@@ -63,11 +63,11 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
           assertRenderedById(doc, "error-summary-heading")
         }
 
-        "show an error associated to the value field" in {
+        "show an error in the value field's label" in {
 
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe (messages("error.browser.title.prefix") + " " + messages(errorMessage))
+            errorSpan.text mustBe s"""${messages(errorPrefix)} ${messages(errorMessage)}"""
         }
 
         "show an error prefix in the browser title" in {
@@ -79,11 +79,12 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
     }
   }
 
+
   def stringPageWithDynamicTitle(form: Form[String],
-                                 createView: Form[String] => HtmlFormat.Appendable,
-                                 messageKeyPrefix: String,
-                                 messageKeyParam: String,
-                                 expectedHintKey: Option[String] = None) = {
+                 createView: Form[String] => HtmlFormat.Appendable,
+                 messageKeyPrefix: String,
+                 messageKeyParam: String,
+                 expectedHintKey: Option[String] = None) = {
 
     "behave like a page with a string value field with a dynamic title" when {
 
@@ -135,4 +136,6 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       }
     }
   }
+
+
 }

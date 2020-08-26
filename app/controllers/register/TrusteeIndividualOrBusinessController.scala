@@ -23,8 +23,9 @@ import controllers.filters.IndexActionFilterProvider
 import forms.IndividualOrBusinessFormProvider
 import javax.inject.Inject
 import models.Enumerable
+import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import navigation.Navigator
-import pages.register.{IsThisLeadTrusteePage, TrusteeIndividualOrBusinessPage}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -56,12 +57,12 @@ class TrusteeIndividualOrBusinessController @Inject()(
     identify andThen getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
-      requiredAnswer(RequiredAnswer(IsThisLeadTrusteePage(index), routes.IsThisLeadTrusteeController.onPageLoad(index, draftId)))
+      requiredAnswer(RequiredAnswer(TrusteeOrLeadTrusteePage(index), routes.TrusteeOrLeadTrusteeController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
+      val isLead = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)).get == LeadTrustee
 
       val messagePrefix = if (isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
 
@@ -80,7 +81,7 @@ class TrusteeIndividualOrBusinessController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val isLead = request.userAnswers.get(IsThisLeadTrusteePage(index)).get
+      val isLead = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)).get == LeadTrustee
 
       val messagePrefix = if (isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
 

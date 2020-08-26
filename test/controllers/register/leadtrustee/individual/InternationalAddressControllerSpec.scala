@@ -22,7 +22,7 @@ import forms.InternationalAddressFormProvider
 import models.core.pages.{FullName, InternationalAddress}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.IsThisLeadTrusteePage
+import pages.register.TrusteeOrLeadTrusteePage
 import pages.register.leadtrustee.individual.{InternationalAddressPage, TrusteesNamePage}
 import play.api.inject.bind
 import play.api.test.FakeRequest

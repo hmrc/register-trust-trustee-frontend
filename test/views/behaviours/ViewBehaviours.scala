@@ -35,6 +35,7 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           val nav = doc.getElementById("proposition-menu")
           val span = nav.children.first
+          span.text mustBe messages("site.service_name")
         }
 
         "display the correct browser title" in {
@@ -55,11 +56,12 @@ trait ViewBehaviours extends ViewSpecBase {
           for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
         }
 
-        "don't display language toggles" in {
+        "display language toggles" in {
 
           val doc = asDocument(view)
           assertNotRenderedById(doc, "cymraeg-switch")
         }
+
       }
     }
   }
@@ -109,14 +111,42 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithHint[A](form: Form[A],
-                      createView: Form[A] => HtmlFormat.Appendable,
-                      expectedHintKey: String): Unit = {
+  def confirmationPage(view: HtmlFormat.Appendable,
+                       messageKeyPrefix: String,
+                       messageKeyParam: String,
+                       accessibleKeyParam: String): Unit = {
 
-    "behave like a page with hint text" in {
+    "behave like a confirmation page" when {
 
-      val doc = asDocument(createView(form))
-      assertContainsHint(doc, "value", Some(messages(s"$expectedHintKey.hint")))
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(view)
+          val nav = doc.getElementById("proposition-menu")
+          val span = nav.children.first
+          span.text mustBe messages("site.service_name")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(view)
+          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title", accessibleKeyParam)
+        }
+
+        "display the correct page title" in {
+
+          val doc = asDocument(view)
+          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading", messageKeyParam + " " + accessibleKeyParam)
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(view)
+          assertNotRenderedById(doc, "cymraeg-switch")
+        }
+
+      }
     }
   }
 
@@ -132,6 +162,21 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithLink(view: HtmlFormat.Appendable, id: String, url : String): Unit = {
+
+    "behave like a page with a link" must {
+
+      "have a link" in {
+
+        val doc = asDocument(view)
+        val element = doc.getElementById(id)
+
+        assertRenderedById(doc, id)
+        assertAttributeValueForElement(element, "href", url)
+      }
+    }
+  }
+
   def pageWithASubmitButton(view: HtmlFormat.Appendable): Unit = {
 
     "behave like a page with a submit button" must {
@@ -141,4 +186,33 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithContinueButton(view: HtmlFormat.Appendable, url : String): Unit = {
+
+    "behave like a page with a Continue button" must {
+      "have a continue button" in {
+        val doc = asDocument(view)
+        assertContainsTextForId(doc,"button", "Continue")
+        assertAttributeValueForElement(
+          doc.getElementById("button"),
+          "href",
+          url
+        )
+      }
+    }
+  }
+
+  def pageWithHint[A](form: Form[A],
+                      createView: Form[A] => HtmlFormat.Appendable,
+                      expectedHintKey: String): Unit = {
+
+    "behave like a page with hint text" in {
+
+      val doc = asDocument(createView(form))
+      assertContainsHint(doc, "value", Some(messages(expectedHintKey)))
+    }
+  }
+
 }
+
+

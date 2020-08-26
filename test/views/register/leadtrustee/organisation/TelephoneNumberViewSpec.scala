@@ -37,11 +37,14 @@ class TelephoneNumberViewSpec extends StringViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, fakeName, "hint")
+    behave like pageWithHint(form, applyView, s"$messageKeyPrefix.hint")
 
-    behave like pageWithHint(form, applyView, messageKeyPrefix)
-
-    behave like pageWithTextFields(form, applyView, messageKeyPrefix, Some(fakeName), "value")
+    behave like stringPageWithDynamicTitle(
+      form,
+      applyView,
+      messageKeyPrefix,
+      fakeName
+    )
 
     behave like pageWithBackLink(applyView(form))
   }

@@ -17,48 +17,54 @@
 package controllers
 
 import base.SpecBase
+import models.UserAnswers
+import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
+import pages.register.TrusteeOrLeadTrusteePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 class IndexControllerSpec extends SpecBase {
 
-  "Index Controller" must {
+  "Index Controller" when {
 
-    "return OK and the correct view for a GET" in {
+    "there are no trustees" must {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      "redirect to TrusteesInfoController" in {
 
-      val request = FakeRequest(GET, routes.IndexController.onPageLoad("DRAFTID").url)
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val result = route(application, request).value
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
-      status(result) mustEqual SEE_OTHER
+        val result = route(application, request).value
 
-      application.stop()
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.register.routes.TrusteesInfoController.onPageLoad(fakeDraftId).url
+
+        application.stop()
+      }
     }
 
-//    "for trustee task" when {
-//
-//      "there are no trustees" must {
-//
-//        "go to TrusteeInfoPage" in {
-//          navigator.trusteesJourney(emptyUserAnswers, fakeDraftId) mustBe controllers.register.trustees.routes.TrusteesInfoController.onPageLoad(fakeDraftId)
-//        }
-//
-//      }
-//
-//      "there are trustees" must {
-//
-//        "go to AddATrustee" in {
-//          val answers = emptyUserAnswers
-//            .set(IsThisLeadTrusteePage(0), false).success.value
-//
-//          navigator.trusteesJourney(answers, fakeDraftId) mustBe controllers.register.trustees.routes.AddATrusteeController.onPageLoad(fakeDraftId)
-//        }
-//
-//      }
-//
-//    }
+    "there are trustees" must {
+
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
+
+      "redirect to AddATrusteeController" in {
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.register.routes.TrusteesInfoController.onPageLoad(fakeDraftId).url
+
+        application.stop()
+      }
+    }
 
   }
 }
