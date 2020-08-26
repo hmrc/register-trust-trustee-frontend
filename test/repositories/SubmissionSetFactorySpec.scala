@@ -158,7 +158,7 @@ class SubmissionSetFactorySpec extends SpecBase {
         "return Completed with mapped data" in {
           val leadTrusteeOnlySections = List(
             AnswerSection(
-              Some("answerPage.section.trustee.subheading 1"),
+              Some("Trustee 1"),
               List(
                 AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
@@ -170,7 +170,7 @@ class SubmissionSetFactorySpec extends SpecBase {
                 AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
-              Some("answerPage.section.trustees.heading")
+              Some("Trustees")
             )
           )
           val userAnswers = addLeadTrustee(0, emptyUserAnswers)
@@ -195,7 +195,7 @@ class SubmissionSetFactorySpec extends SpecBase {
         "return Completed with mapped data" in {
           val answerSections = List(
             AnswerSection(
-              Some("answerPage.section.trustee.subheading 1"),
+              Some("Trustee 1"),
               List(
                 AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
@@ -207,10 +207,10 @@ class SubmissionSetFactorySpec extends SpecBase {
                 AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
-              Some("answerPage.section.trustees.heading")
+              Some("Trustees")
             ),
             AnswerSection(
-              Some("answerPage.section.trustee.subheading 2"),
+              Some("Trustee 2"),
               List(
                 AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", "Business", "Org Name1"),
                 AnswerRow("trustee.organisation.name.checkYourAnswersLabel", "Org Name1", "Org Name1")),

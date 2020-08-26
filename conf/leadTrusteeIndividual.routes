@@ -10,8 +10,8 @@ POST       /:draftId/:index/name                       controllers.register.lead
 GET        /:draftId/:index/nino                       controllers.register.leadtrustee.individual.NinoController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/nino                       controllers.register.leadtrustee.individual.NinoController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/is-a-uk-citizen            controllers.register.leadtrustee.individual.NinoYesNoController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/:index/is-a-uk-citizen            controllers.register.leadtrustee.individual.NinoYesNoController.onSubmit(index : Int, draftId: String)
+GET        /:draftId/:index/nino-yes-no            controllers.register.leadtrustee.individual.NinoYesNoController.onPageLoad(index : Int, draftId: String)
+POST       /:draftId/:index/nino-yes-no            controllers.register.leadtrustee.individual.NinoYesNoController.onSubmit(index : Int, draftId: String)
 
 GET        /:draftId/:index/telephone-number           controllers.register.leadtrustee.individual.TelephoneNumberController.onPageLoad(index : Int, draftId: String)
 POST       /:draftId/:index/telephone-number           controllers.register.leadtrustee.individual.TelephoneNumberController.onSubmit(index : Int, draftId: String)
