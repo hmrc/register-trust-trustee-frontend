@@ -50,7 +50,7 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
       IdentificationType(nino = leadTrustee.nino, passport = None, address = None)
     } else {
       IdentificationType(nino = None,
-        passport = passportOrIdCardMapper.build(leadTrustee.passportOrId),
+        passport = passportOrIdCardMapper.build(leadTrustee.passportOrIdCard),
         address = addressMapper.buildOptional(leadTrustee.address)
       )
     }

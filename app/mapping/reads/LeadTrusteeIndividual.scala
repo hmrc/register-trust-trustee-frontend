@@ -28,13 +28,10 @@ final case class LeadTrusteeIndividual(override val isLead: Boolean = true,
                                        name: FullName,
                                        dateOfBirth: LocalDate,
                                        nino: Option[String],
-                                       passport: Option[PassportOrIdCardDetails],
-                                       idCard: Option[PassportOrIdCardDetails],
+                                       passportOrIdCard: Option[PassportOrIdCardDetails],
                                        address: Address,
                                        telephoneNumber: String,
                                        email: Option[String]) extends Trustee {
-
-  def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
 
   def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
 
@@ -46,14 +43,16 @@ object LeadTrusteeIndividual extends TrusteeReads {
 
   implicit lazy val reads: Reads[LeadTrusteeIndividual] = {
 
-    def passportOrIdCardReads(path: String, `type`: DetailsChoice): Reads[Option[PassportOrIdCardDetails]] =
+    val passportOrIdCardReads: Reads[Option[PassportOrIdCardDetails]] =
       ((__ \ "ninoYesNo").read[Boolean] and
         (__ \ "trusteeDetailsChoice").readNullable[DetailsChoice] and
-        (__ \ path).readNullable[PassportOrIdCardDetails]) ((_, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
-        case (false, Some(x), passportOrIdCard @ Some(_)) if x == `type` => Reads(_ => JsSuccess(passportOrIdCard))
-        case (false, Some(x), None) if x != `type` => Reads(_ => JsSuccess(None))
-        case (true, None, None) => Reads(_ => JsSuccess(None))
-        case _  => Reads(_ => JsError("individual lead trustee Passport answers are in an invalid state"))
+        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
+        (__ \ "idCard").readNullable[PassportOrIdCardDetails]
+        ) ((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
+        case (false, Some(Passport), passport @ Some(_), None) => Reads(_ => JsSuccess(passport))
+        case (false, Some(IdCard), None, idCard @ Some(_)) => Reads(_ => JsSuccess(idCard))
+        case (true, None, None, None) => Reads(_ => JsSuccess(None))
+        case _  => Reads(_ => JsError("individual lead trustee passport / ID card answers are in an invalid state"))
       }
 
     val leadTrusteeReads: Reads[LeadTrusteeIndividual] = (
@@ -61,8 +60,7 @@ object LeadTrusteeIndividual extends TrusteeReads {
         (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").read[LocalDate] and
         yesNoReads[String]("ninoYesNo", "nino") and
-        passportOrIdCardReads("passportDetails", Passport) and
-        passportOrIdCardReads("idCard", IdCard) and
+        passportOrIdCardReads and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
         yesNoReads[String]("emailAddressYesNo", "email")

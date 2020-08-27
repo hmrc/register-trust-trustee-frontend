@@ -20,7 +20,6 @@ import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.{Trustee, TrusteeIndividual, TrusteeOrganisation, Trustees}
 import models.UserAnswers
-import models.registration.pages.PassportOrIdCardDetails
 
 class TrusteeMapper @Inject()(nameMapper: NameMapper,
                               addressMapper: AddressMapper,
@@ -74,7 +73,7 @@ class TrusteeMapper @Inject()(nameMapper: NameMapper,
   private def identificationMap(trustee: TrusteeIndividual): Option[IdentificationType] = {
     val identificationType = IdentificationType(
       trustee.nino,
-      passportOrIdCardMapper.build(trustee.passportOrId),
+      passportOrIdCardMapper.build(trustee.passportOrIdCard),
       addressMapper.build(trustee.address)
     )
 
