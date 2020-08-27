@@ -18,7 +18,7 @@ package mapping.reads
 
 import java.time.LocalDate
 
-import models.core.pages.{Address, FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
+import models.core.pages.{Address, FullName, IndividualOrBusiness}
 import models.registration.pages.PassportOrIdCardDetails
 import play.api.libs.json._
 
@@ -40,14 +40,23 @@ object TrusteeIndividual extends TrusteeReads {
 
   implicit lazy val reads: Reads[TrusteeIndividual] = {
 
+    val idCardDetailsReads: Reads[Option[PassportOrIdCardDetails]] =
+      ((__ \ "passportDetailsYesNo").readNullable[Boolean] and
+        (__ \ "idCardDetailsYesNo").readNullable[Boolean] and
+        (__ \ "idCard").readNullable[PassportOrIdCardDetails]) ((_, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
+        case (Some(false), Some(true), idCardDetails @ Some(_)) => Reads(_ => JsSuccess(idCardDetails))
+        case (Some(true), None, None) | (Some(false), Some(false), None) | (None, None, None) => Reads(_ => JsSuccess(None))
+        case _ => Reads(_ => JsError("ID card answers are in an invalid state"))
+      }
+
     val trusteeReads: Reads[TrusteeIndividual] = {
       (
         (__ \ "name").read[FullName] and
-          (__ \ "dateOfBirth").readNullable[LocalDate] and
-          (__ \ "nino").readNullable[String] and
-          optionalAddressReads and
-          (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
-          (__ \ "idCard").readNullable[PassportOrIdCardDetails]
+          yesNoReads[LocalDate]("dateOfBirthYesNo", "dateOfBirth") and
+          yesNoReads[String]("ninoYesNo", "nino") and
+          optionalAddressReads("ninoYesNo") and
+          optionalYesNoReads[PassportOrIdCardDetails]("passportDetailsYesNo", "passportDetails") and
+          idCardDetailsReads
         )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
         TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))
     }

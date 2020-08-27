@@ -16,7 +16,7 @@
 
 package mapping.reads
 
-import models.core.pages.{Address, InternationalAddress, UKAddress}
+import models.core.pages.Address
 import models.core.pages.IndividualOrBusiness.Business
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
@@ -40,11 +40,11 @@ object LeadTrusteeOrganisation extends TrusteeReads {
       isLeadReads and
         (__ \ "name").read[String] and
         (__ \ "isUKBusiness").read[Boolean] and
-        (__ \ "utr").readNullable[String] and
+        yesNoReads[String]("isUKBusiness", "utr") and
         (__ \ "addressUKYesNo").read[Boolean] and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
-        (__ \ "email").readNullable[String]
+        yesNoReads[String]("emailYesNo", "email")
       )(LeadTrusteeOrganisation.apply _)
 
     (isLeadReads and

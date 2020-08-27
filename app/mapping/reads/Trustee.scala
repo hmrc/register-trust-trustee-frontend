@@ -16,7 +16,7 @@
 
 package mapping.reads
 
-import play.api.libs.json.Reads
+import play.api.libs.json.{JsSuccess, Reads}
 
 import scala.language.implicitConversions
 
@@ -42,6 +42,10 @@ object Trustee {
       LeadTrusteeIndividual.reads or
       TrusteeOrganisation.reads or
       LeadTrusteeOrganisation.reads
+  }
+
+  implicit lazy val optionalReads: Reads[Option[Trustee]] = {
+    reads.map(Some(_)) or Reads(_ => JsSuccess(None))
   }
 
 }

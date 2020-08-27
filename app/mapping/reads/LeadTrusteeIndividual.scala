@@ -19,10 +19,10 @@ package mapping.reads
 import java.time.LocalDate
 
 import models.core.pages.IndividualOrBusiness.Individual
-import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
-import models.core.pages.{Address, FullName, InternationalAddress, TrusteeOrLeadTrustee, UKAddress}
-import models.registration.pages.PassportOrIdCardDetails
-import play.api.libs.json.{JsBoolean, JsError, JsSuccess, Reads, __}
+import models.core.pages.{Address, FullName}
+import models.registration.pages.DetailsChoice._
+import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
+import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
 final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
                                        name: FullName,
@@ -46,17 +46,27 @@ object LeadTrusteeIndividual extends TrusteeReads {
 
   implicit lazy val reads: Reads[LeadTrusteeIndividual] = {
 
+    def passportOrIdCardReads(path: String, `type`: DetailsChoice): Reads[Option[PassportOrIdCardDetails]] =
+      ((__ \ "ninoYesNo").read[Boolean] and
+        (__ \ "trusteeDetailsChoice").readNullable[DetailsChoice] and
+        (__ \ path).readNullable[PassportOrIdCardDetails]) ((_, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
+        case (false, Some(x), passportOrIdCard @ Some(_)) if x == `type` => Reads(_ => JsSuccess(passportOrIdCard))
+        case (false, Some(x), None) if x != `type` => Reads(_ => JsSuccess(None))
+        case (true, None, None) => Reads(_ => JsSuccess(None))
+        case _  => Reads(_ => JsError("individual lead trustee Passport answers are in an invalid state"))
+      }
+
     val leadTrusteeReads: Reads[LeadTrusteeIndividual] = (
       isLeadReads and
         (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").read[LocalDate] and
-        (__ \ "nino").readNullable[String] and
-        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
-        (__ \ "idCard").readNullable[PassportOrIdCardDetails] and
+        yesNoReads[String]("ninoYesNo", "nino") and
+        passportOrIdCardReads("passportDetails", Passport) and
+        passportOrIdCardReads("idCard", IdCard) and
         (__ \ "addressUKYesNo").read[Boolean] and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
-        (__ \ "email").readNullable[String]
+        yesNoReads[String]("emailAddressYesNo", "email")
       )(LeadTrusteeIndividual.apply _)
 
     (isLeadReads and
