@@ -16,10 +16,12 @@
 
 package pages.behaviours
 
+import models.Status.Completed
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.{IndividualOrBusiness, InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.entitystatus.TrusteeStatus
 import pages.register.TrusteeIndividualOrBusinessPage
 import pages.register.leadtrustee.{organisation => ltorg}
 import pages.register.trustees.{organisation => torg}
@@ -69,6 +71,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
               .set(ltorg.EmailAddressPage(index), email).success.value
               .set(ltorg.TelephoneNumberPage(index), tel).success.value
 
+              .set(TrusteeStatus(index), Completed).success.value
+
             val result: UserAnswers = initial
               .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
 
@@ -89,6 +93,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
             result.get(ltorg.EmailAddressYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.EmailAddressPage(index)) mustNot be(defined)
             result.get(ltorg.TelephoneNumberPage(index)) mustNot be(defined)
+
+            result.get(TrusteeStatus(index)) mustNot be(defined)
         }
       }
     }
@@ -120,6 +126,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
               .set(ltorg.EmailAddressPage(index), email).success.value
               .set(ltorg.TelephoneNumberPage(index), tel).success.value
 
+              .set(TrusteeStatus(index), Completed).success.value
+
             val result: UserAnswers = initial
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
 
@@ -140,6 +148,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
             result.get(ltorg.EmailAddressYesNoPage(index)) must be(defined)
             result.get(ltorg.EmailAddressPage(index)) must be(defined)
             result.get(ltorg.TelephoneNumberPage(index)) must be(defined)
+
+            result.get(TrusteeStatus(index)) must be(defined)
         }
       }
     }

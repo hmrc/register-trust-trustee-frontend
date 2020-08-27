@@ -65,15 +65,14 @@ class SubmissionSetFactorySpec extends SpecBase {
 
   private def addTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
     userAnswers
-      .set(TrusteeStatus(index), Status.Completed).success.value
       .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
       .set(torg.NamePage(index), "Org Name1").success.value
+      .set(TrusteeStatus(index), Status.Completed).success.value
   }
 
   private def addLeadTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
     userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-      .set(TrusteeStatus(index), Status.Completed).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
       .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
       .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
@@ -83,6 +82,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       .set(ltind.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
       .set(ltind.EmailAddressYesNoPage(index), false).success.value
       .set(ltind.TelephoneNumberPage(index), "0191 1111111").success.value
+      .set(TrusteeStatus(index), Status.Completed).success.value
   }
 
   "Submission set factory" must {
