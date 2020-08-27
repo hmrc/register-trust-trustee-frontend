@@ -19,23 +19,24 @@ package mapping.reads
 import java.time.LocalDate
 
 import models.core.pages.IndividualOrBusiness.Individual
-import models.core.pages.{Address, FullName}
+import models.core.pages.{Address, FullName, UKAddress}
 import models.registration.pages.DetailsChoice._
 import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
-final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
+final case class LeadTrusteeIndividual(override val isLead: Boolean = true,
                                        name: FullName,
                                        dateOfBirth: LocalDate,
-                                       nino : Option[String],
+                                       nino: Option[String],
                                        passport: Option[PassportOrIdCardDetails],
                                        idCard: Option[PassportOrIdCardDetails],
-                                       addressUk: Boolean,
-                                       address : Address,
-                                       telephoneNumber : String,
+                                       address: Address,
+                                       telephoneNumber: String,
                                        email: Option[String]) extends Trustee {
 
   def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
+
+  def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
 
 }
 
@@ -62,7 +63,6 @@ object LeadTrusteeIndividual extends TrusteeReads {
         yesNoReads[String]("ninoYesNo", "nino") and
         passportOrIdCardReads("passportDetails", Passport) and
         passportOrIdCardReads("idCard", IdCard) and
-        (__ \ "addressUKYesNo").read[Boolean] and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
         yesNoReads[String]("emailAddressYesNo", "email")

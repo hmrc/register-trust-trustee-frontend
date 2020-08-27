@@ -22,7 +22,7 @@ import models.core.pages.{Address, FullName, IndividualOrBusiness}
 import models.registration.pages.PassportOrIdCardDetails
 import play.api.libs.json._
 
-final case class TrusteeIndividual(override val isLead : Boolean,
+final case class TrusteeIndividual(override val isLead: Boolean,
                                    name: FullName,
                                    dateOfBirth: Option[LocalDate],
                                    nino: Option[String],

@@ -19,7 +19,7 @@ package mapping.reads
 import models.core.pages.{Address, IndividualOrBusiness}
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
-final case class TrusteeOrganisation(override val isLead : Boolean,
+final case class TrusteeOrganisation(override val isLead: Boolean,
                                      name: String,
                                      utr: Option[String],
                                      address: Option[Address]) extends Trustee

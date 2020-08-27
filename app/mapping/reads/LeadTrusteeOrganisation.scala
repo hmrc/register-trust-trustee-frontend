@@ -16,17 +16,19 @@
 
 package mapping.reads
 
-import models.core.pages.Address
 import models.core.pages.IndividualOrBusiness.Business
+import models.core.pages.{Address, UKAddress}
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
-final case class LeadTrusteeOrganisation(override val isLead : Boolean = true,
+final case class LeadTrusteeOrganisation(override val isLead: Boolean = true,
                                          name: String,
-                                         utr : Option[String],
-                                         liveInUK: Boolean,
-                                         address : Address,
-                                         telephoneNumber : String,
-                                         email: Option[String]) extends Trustee
+                                         utr: Option[String],
+                                         address: Address,
+                                         telephoneNumber: String,
+                                         email: Option[String]) extends Trustee {
+
+  def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
+}
 
 object LeadTrusteeOrganisation extends TrusteeReads {
 
@@ -38,7 +40,6 @@ object LeadTrusteeOrganisation extends TrusteeReads {
       isLeadReads and
         (__ \ "name").read[String] and
         yesNoReads[String]("isUKBusiness", "utr") and
-        (__ \ "addressUKYesNo").read[Boolean] and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
         yesNoReads[String]("emailYesNo", "email")

@@ -55,8 +55,6 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
             .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(ltind.TrusteesNamePage(0), FullName("First", None, "Last")).success.value
-            .set(ltind.UkAddressPage(0), address).success.value
-            .set(ltind.TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe List.empty
         }
@@ -94,9 +92,8 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
+            .set(ltorg.UkRegisteredYesNoPage(0), true).success.value
             .set(ltorg.NamePage(0), "Org Name").success.value
-            .set(ltorg.UkAddressPage(0), address).success.value
-            .set(ltorg.TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe List.empty
         }
@@ -112,6 +109,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
             .set(ltorg.UtrPage(0), "1234567890").success.value
             .set(ltorg.AddressUkYesNoPage(0), true).success.value
             .set(ltorg.UkAddressPage(0), address).success.value
+            .set(ltorg.EmailAddressYesNoPage(0), false).success.value
             .set(ltorg.TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe
@@ -131,9 +129,8 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
+            .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
             .set(ltorg.NamePage(0), "Org Name").success.value
-            .set(ltorg.InternationalAddressPage(0), address).success.value
-            .set(ltorg.TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe List.empty
         }
@@ -149,6 +146,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
             .set(ltorg.UtrPage(0), "1234567890").success.value
             .set(ltorg.AddressUkYesNoPage(0), false).success.value
             .set(ltorg.InternationalAddressPage(0), address).success.value
+            .set(ltorg.EmailAddressYesNoPage(0), false).success.value
             .set(ltorg.TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe
