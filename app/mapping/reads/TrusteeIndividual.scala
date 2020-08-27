@@ -48,7 +48,7 @@ object TrusteeIndividual extends TrusteeReads {
         case (Some(false), None, Some(false), None) | (None, None, None, None) =>
           Reads(_ => JsSuccess(None))
         case _ =>
-          Reads(_ => JsError("ID card answers are in an invalid state"))
+          Reads(_ => JsError("individual trustee passport / ID card answers are in an invalid state"))
       }
 
     val trusteeReads: Reads[TrusteeIndividual] = {

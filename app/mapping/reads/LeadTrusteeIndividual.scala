@@ -49,10 +49,14 @@ object LeadTrusteeIndividual extends TrusteeReads {
         (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
         (__ \ "idCard").readNullable[PassportOrIdCardDetails]
         ) ((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
-        case (false, Some(Passport), passport @ Some(_), None) => Reads(_ => JsSuccess(passport))
-        case (false, Some(IdCard), None, idCard @ Some(_)) => Reads(_ => JsSuccess(idCard))
-        case (true, None, None, None) => Reads(_ => JsSuccess(None))
-        case _  => Reads(_ => JsError("individual lead trustee passport / ID card answers are in an invalid state"))
+        case (false, Some(Passport), passport @ Some(_), None) =>
+          Reads(_ => JsSuccess(passport))
+        case (false, Some(IdCard), None, idCard @ Some(_)) =>
+          Reads(_ => JsSuccess(idCard))
+        case (true, None, None, None) =>
+          Reads(_ => JsSuccess(None))
+        case _  =>
+          Reads(_ => JsError("individual lead trustee passport / ID card answers are in an invalid state"))
       }
 
     val leadTrusteeReads: Reads[LeadTrusteeIndividual] = (
@@ -77,5 +81,4 @@ object LeadTrusteeIndividual extends TrusteeReads {
     }.andKeep(leadTrusteeReads)
 
   }
-
 }

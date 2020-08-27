@@ -42,18 +42,26 @@ trait TrusteeReads {
     ((__ \ yesNoPath).readNullable[Boolean] and
       (__ \ 'addressYesNo).readNullable[Boolean] and
       (__ \ 'addressUKYesNo).readNullable[Boolean] and
-      ukOrInternationalAddressReads) ((_, _, _, _)).flatMap[Option[Address]] {
-      case (Some(false), Some(true), Some(_), address @ Some(_)) => Reads(_ => JsSuccess(address))
-      case (Some(false), Some(false), None, None) | (Some(true), None, None, None) | (None, None, None, None) => Reads(_ => JsSuccess(None))
-      case _ => Reads(_ => JsError("trustee address answers in invalid state"))
+      ukOrInternationalAddressReads
+      ) ((_, _, _, _)).flatMap[Option[Address]] {
+      case (Some(false), Some(true), Some(_), address @ Some(_)) =>
+        Reads(_ => JsSuccess(address))
+      case (Some(false), Some(false), None, None) | (Some(true), None, None, None) | (None, None, None, None) =>
+        Reads(_ => JsSuccess(None))
+      case _ =>
+        Reads(_ => JsError("trustee address answers in invalid state"))
     }
 
   def yesNoReads[T](yesNoPath: String, valuePath: String)(implicit reads: Reads[T]): Reads[Option[T]] =
     ((__ \ yesNoPath).readNullable[Boolean] and
-      (__ \ valuePath).readNullable[T]) ((_, _)).flatMap[Option[T]] {
-      case (Some(true), x @ Some(_)) => Reads(_ => JsSuccess(x))
-      case (Some(false), None) | (None, None) => Reads(_ => JsSuccess(None))
-      case _ => Reads(_ => JsError(s"answers at $yesNoPath and $valuePath are in an invalid state"))
+      (__ \ valuePath).readNullable[T]
+      ) ((_, _)).flatMap[Option[T]] {
+      case (Some(true), x @ Some(_)) =>
+        Reads(_ => JsSuccess(x))
+      case (Some(false), None) | (None, None) =>
+        Reads(_ => JsSuccess(None))
+      case _ =>
+        Reads(_ => JsError(s"answers at $yesNoPath and $valuePath are in an invalid state"))
     }
 
 }

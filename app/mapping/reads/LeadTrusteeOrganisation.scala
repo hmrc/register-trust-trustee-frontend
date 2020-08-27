@@ -56,5 +56,4 @@ object LeadTrusteeOrganisation extends TrusteeReads {
     }.andKeep(leadTrusteeReads)
 
   }
-
 }
