@@ -33,8 +33,7 @@ final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
                                        addressUk: Boolean,
                                        address : Address,
                                        telephoneNumber : String,
-                                       email: Option[String]
-                                      ) extends Trustee {
+                                       email: Option[String]) extends Trustee {
 
   def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
 
