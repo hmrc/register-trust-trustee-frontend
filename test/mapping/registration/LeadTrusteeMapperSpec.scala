@@ -116,7 +116,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
             .set(ltind.TrusteeNinoYesNoPage(index), false).success.value
-            .set(ltind.TrusteeDetailsChoicePage(index), DetailsChoice.IdCard).success.value
+            .set(ltind.TrusteeDetailsChoicePage(index), DetailsChoice.Passport).success.value
             .set(ltind.PassportDetailsPage(index), PassportOrIdCardDetails("DE", "number", LocalDate.of(1500,10,10))).success.value
             .set(ltind.AddressUkYesNoPage(index), false).success.value
             .set(ltind.InternationalAddressPage(index), InternationalAddress("line1", "line2" , Some("line3"), "DE")).success.value

@@ -48,7 +48,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
 
       "for a UK lead trustee individual" must {
 
-        "must not be able to create correspondence pieces when do not have all answers" in {
+        "not be able to create correspondence pieces when do not have all answers" in {
           val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
 
           val userAnswers = emptyUserAnswers
@@ -61,7 +61,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           correspondenceMapper.build(userAnswers) mustBe List.empty
         }
 
-        "must be able to create a correspondence when have all required answers" in {
+        "be able to create a correspondence when have all required answers" in {
           val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
 
           val userAnswers = emptyUserAnswers
@@ -69,9 +69,11 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
             .set(ltind.TrusteesNamePage(0), FullName("First", None, "Last")).success.value
             .set(ltind.TrusteesDateOfBirthPage(0), LocalDate.of(2010, 10, 10)).success.value
-            .set(ltind.TrusteeNinoYesNoPage(0), false).success.value
+            .set(ltind.TrusteeNinoYesNoPage(0), true).success.value
+            .set(ltind.TrusteesNinoPage(0), "nino").success.value
             .set(ltind.AddressUkYesNoPage(0), true).success.value
             .set(ltind.UkAddressPage(0), address).success.value
+            .set(ltind.EmailAddressYesNoPage(0), false).success.value
             .set(ltind.TelephoneNumberPage(0), "0191 222222").success.value
 
           correspondenceMapper.build(userAnswers) mustBe

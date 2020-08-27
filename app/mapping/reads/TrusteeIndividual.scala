@@ -55,7 +55,7 @@ object TrusteeIndividual extends TrusteeReads {
           yesNoReads[LocalDate]("dateOfBirthYesNo", "dateOfBirth") and
           yesNoReads[String]("ninoYesNo", "nino") and
           optionalAddressReads("ninoYesNo") and
-          optionalYesNoReads[PassportOrIdCardDetails]("passportDetailsYesNo", "passportDetails") and
+          yesNoReads[PassportOrIdCardDetails]("passportDetailsYesNo", "passportDetails") and
           idCardDetailsReads
         )((name, dateOfBirth, nino, address, passportDetails, idCardDetails) =>
         TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportDetails, idCardDetails))

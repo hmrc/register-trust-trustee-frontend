@@ -26,9 +26,9 @@ import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import pages.register.trustees.individual._
-import pages.register.trustees.{organisation => org, _}
+import pages.register.trustees.{individual => ind, organisation => org}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 
 class TrusteeMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -54,16 +54,16 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             emptyUserAnswers
               .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-              .set(NamePage(index), FullName("first name", None, "last name")).success.value
+              .set(ind.NamePage(index), FullName("first name", None, "last name")).success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
               name = NameType("first name", None, "last name"),
               dateOfBirth = None,
               phoneNumber = None,
-              identification = None)
-            ),
-            None
+              identification = None
+            )),
+            trusteeOrg = None
           )
         }
 
@@ -72,14 +72,11 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           val userAnswers = emptyUserAnswers
             .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
-            .set(DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
-            .set(NinoYesNoPage(index), true).success.value
-            .set(AddressUkYesNoPage(index), true).success.value
-            .set(PassportDetailsYesNoPage(index), true).success.value
-            .set(NinoPage(index), "AB123456C").success.value
-            .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
-            .set(PassportDetailsPage(index), PassportOrIdCardDetails("GB", "3453", LocalDate.of(1999, 1, 1))).success.value
+            .set(ind.NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
+            .set(ind.DateOfBirthYesNoPage(index), true).success.value
+            .set(ind.DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
+            .set(ind.NinoYesNoPage(index), true).success.value
+            .set(ind.NinoPage(index), "AB123456C").success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
@@ -88,14 +85,13 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               phoneNumber = None,
               identification = Some(
                 IdentificationType(
-                  Some("AB123456C"),
-                  Some(PassportType("3453", LocalDate.of(1999, 1, 1), "GB")),
-                  Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
+                  nino = Some("AB123456C"),
+                  passport = None,
+                  address = None
                 )
               )
-            )
-            ),
-            None
+            )),
+            trusteeOrg = None
           )
         }
       }
@@ -128,20 +124,17 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             .set(org.NamePage(index), "Org Name").success.value
             .set(org.UtrYesNoPage(index), true).success.value
             .set(org.UtrPage(index), "1234567890").success.value
-            .set(AddressYesNoPage(index), true).success.value
-            .set(AddressUkYesNoPage(index), true).success.value
-            .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
-            None,
+            trusteeInd = None,
             trusteeOrg = Some(
               TrusteeOrgType(
                 name = "Org Name",
                 phoneNumber = None,
                 email = None,
                 identification = IdentificationOrgType(
-                  Some("1234567890"),
-                  Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
+                  utr = Some("1234567890"),
+                  address = None
                 )
               )
             )
@@ -158,30 +151,32 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           emptyUserAnswers
             .set(TrusteeOrLeadTrusteePage(index0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Individual).success.value
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(ind.NamePage(index0), FullName("first name", None, "last name")).success.value
 
             .set(TrusteeOrLeadTrusteePage(index1), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Individual).success.value
-            .set(NamePage(index1), FullName("second name", None, "second name")).success.value
+            .set(ind.NamePage(index1), FullName("second name", None, "second name")).success.value
 
-        trusteeMapper.build(userAnswers).value mustBe List(TrusteeType(
-          trusteeInd = Some(TrusteeIndividualType(
-            name = NameType("first name", None, "last name"),
-            dateOfBirth = None,
-            phoneNumber = None,
-            identification = None)
+        trusteeMapper.build(userAnswers).value mustBe List(
+          TrusteeType(
+            trusteeInd = Some(TrusteeIndividualType(
+              name = NameType("first name", None, "last name"),
+              dateOfBirth = None,
+              phoneNumber = None,
+              identification = None
+            )),
+            trusteeOrg = None
           ),
-          None
-        ),
           TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
               name = NameType("second name", None, "second name"),
               dateOfBirth = None,
               phoneNumber = None,
-              identification = None)
-            ),
-            None
-          ))
+              identification = None
+            )),
+            trusteeOrg = None
+          )
+        )
       }
 
       "be able to create a list of Trustee Organisations with minimum data" in {
@@ -201,26 +196,28 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         trusteeMapper.build(userAnswers).value mustBe
           List(
             TrusteeType(
-              None,
-              trusteeOrg = Some(
-                  TrusteeOrgType(
-                  name = "Org Name1",
-                  phoneNumber = None,
-                  email = None,
-                  identification = IdentificationOrgType(None, None)
+              trusteeInd = None,
+              trusteeOrg = Some(TrusteeOrgType(
+                name = "Org Name1",
+                phoneNumber = None,
+                email = None,
+                identification = IdentificationOrgType(
+                  utr = None,
+                  address = None
                 )
-              )
+              ))
             ),
             TrusteeType(
-              None,
-              trusteeOrg = Some(
-                TrusteeOrgType(
-                  name = "Org Name2",
-                  phoneNumber = None,
-                  email = None,
-                  identification = IdentificationOrgType(None, None)
+              trusteeInd = None,
+              trusteeOrg = Some(TrusteeOrgType(
+                name = "Org Name2",
+                phoneNumber = None,
+                email = None,
+                identification = IdentificationOrgType(
+                  utr = None,
+                  address = None
                 )
-              )
+              ))
             )
           )
       }
@@ -230,12 +227,15 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         val userAnswers = emptyUserAnswers
           .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-          .set(NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
-          .set(DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
-          .set(NinoYesNoPage(index), true).success.value
-          .set(AddressUkYesNoPage(index), true).success.value
-          .set(NinoPage(index), "AB123456C").success.value
-          .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+          .set(ind.NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
+          .set(ind.DateOfBirthYesNoPage(index), true).success.value
+          .set(ind.DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
+          .set(ind.NinoYesNoPage(index), false).success.value
+          .set(ind.AddressYesNoPage(index), true).success.value
+          .set(ind.AddressUkYesNoPage(index), true).success.value
+          .set(ind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
+          .set(ind.PassportDetailsYesNoPage(index), false).success.value
+          .set(ind.IDCardDetailsYesNoPage(index), false).success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
@@ -244,14 +244,13 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             phoneNumber = None,
             identification = Some(
               IdentificationType(
-                Some("AB123456C"),
-                None,
-                Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
+                nino = None,
+                passport = None,
+                address = Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
               )
             )
-          )
-          ),
-          None
+          )),
+          trusteeOrg = None
         )
       }
 
