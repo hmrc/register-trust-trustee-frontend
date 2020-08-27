@@ -16,11 +16,13 @@
 
 package pages.behaviours
 
+import models.Status.Completed
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{InternationalAddress, TrusteeOrLeadTrustee, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.entitystatus.TrusteeStatus
 import pages.register.leadtrustee.{organisation => ltorg}
 import pages.register.trustees.{organisation => torg}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
@@ -52,6 +54,7 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             val initial: UserAnswers = userAnswers
               .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
               .set(torg.UtrPage(index), utr).success.value
@@ -60,10 +63,13 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(torg.UkAddressPage(index), ukAddress).success.value
               .set(torg.InternationalAddressPage(index), internationalAddress).success.value
 
+              .set(TrusteeStatus(index), Completed).success.value
+
             val result: UserAnswers = initial
               .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) mustNot be(defined)
+
             result.get(torg.NamePage(index)) mustNot be(defined)
             result.get(torg.UtrYesNoPage(index)) mustNot be(defined)
             result.get(torg.UtrPage(index)) mustNot be(defined)
@@ -71,6 +77,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(torg.AddressUkYesNoPage(index)) mustNot be(defined)
             result.get(torg.UkAddressPage(index)) mustNot be(defined)
             result.get(torg.InternationalAddressPage(index)) mustNot be(defined)
+
+            result.get(TrusteeStatus(index)) mustNot be(defined)
         }
       }
 
@@ -81,6 +89,7 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             val initial: UserAnswers = userAnswers
               .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
               .set(ltorg.UtrPage(index), utr).success.value
@@ -91,10 +100,13 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(ltorg.EmailAddressPage(index), email).success.value
               .set(ltorg.TelephoneNumberPage(index), tel).success.value
 
+              .set(TrusteeStatus(index), Completed).success.value
+
             val result: UserAnswers = initial
               .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) mustNot be(defined)
+
             result.get(ltorg.UkRegisteredYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.NamePage(index)) mustNot be(defined)
             result.get(ltorg.UtrPage(index)) mustNot be(defined)
@@ -104,6 +116,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(ltorg.EmailAddressYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.EmailAddressPage(index)) mustNot be(defined)
             result.get(ltorg.TelephoneNumberPage(index)) mustNot be(defined)
+
+            result.get(TrusteeStatus(index)) mustNot be(defined)
         }
       }
     }
@@ -117,6 +131,7 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             val initial: UserAnswers = userAnswers
               .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
               .set(ltorg.UtrPage(index), utr).success.value
@@ -127,10 +142,13 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(ltorg.EmailAddressPage(index), email).success.value
               .set(ltorg.TelephoneNumberPage(index), tel).success.value
 
+              .set(TrusteeStatus(index), Completed).success.value
+
             val result: UserAnswers = initial
               .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) must be(defined)
+
             result.get(ltorg.UkRegisteredYesNoPage(index)) must be(defined)
             result.get(ltorg.NamePage(index)) must be(defined)
             result.get(ltorg.UtrPage(index)) must be(defined)
@@ -140,6 +158,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(ltorg.EmailAddressYesNoPage(index)) must be(defined)
             result.get(ltorg.EmailAddressPage(index)) must be(defined)
             result.get(ltorg.TelephoneNumberPage(index)) must be(defined)
+
+            result.get(TrusteeStatus(index)) must be(defined)
         }
       }
 
@@ -150,6 +170,7 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             val initial: UserAnswers = userAnswers
               .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
               .set(torg.UtrPage(index), utr).success.value
@@ -158,10 +179,13 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(torg.UkAddressPage(index), ukAddress).success.value
               .set(torg.InternationalAddressPage(index), internationalAddress).success.value
 
+              .set(TrusteeStatus(index), Completed).success.value
+
             val result: UserAnswers = initial
               .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
 
             result.get(TrusteeIndividualOrBusinessPage(index)) must be(defined)
+
             result.get(torg.NamePage(index)) must be(defined)
             result.get(torg.UtrYesNoPage(index)) must be(defined)
             result.get(torg.UtrPage(index)) must be(defined)
@@ -169,6 +193,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(torg.AddressUkYesNoPage(index)) must be(defined)
             result.get(torg.UkAddressPage(index)) must be(defined)
             result.get(torg.InternationalAddressPage(index)) must be(defined)
+
+            result.get(TrusteeStatus(index)) must be(defined)
         }
       }
     }

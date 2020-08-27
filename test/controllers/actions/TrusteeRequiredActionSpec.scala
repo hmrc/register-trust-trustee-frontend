@@ -77,12 +77,12 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
         val action = new Harness(index)
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeStatus(index), Completed).success.value
           .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
           .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
           .set(NamePage(index), name).success.value
           .set(UtrYesNoPage(index), true).success.value
           .set(UtrPage(index), "utr").success.value
+          .set(TrusteeStatus(index), Completed).success.value
 
         val futureResult = action.callRefine(request(userAnswers))
 

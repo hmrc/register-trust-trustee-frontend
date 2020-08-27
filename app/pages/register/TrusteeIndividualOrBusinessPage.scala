@@ -20,6 +20,7 @@ import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness.{Business, Individual}
 import pages.QuestionPage
+import pages.entitystatus.TrusteeStatus
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -34,11 +35,13 @@ final case class TrusteeIndividualOrBusinessPage(index: Int) extends QuestionPag
   override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
       case Some(Business) =>
-        removeLeadTrusteeIndividual(userAnswers, index)
+        userAnswers.remove(TrusteeStatus(index))
+          .flatMap(ua => removeLeadTrusteeIndividual(ua, index))
           .flatMap(ua => removeTrusteeIndividual(ua, index))
 
       case Some(Individual) =>
-        removeLeadTrusteeBusiness(userAnswers, index)
+        userAnswers.remove(TrusteeStatus(index))
+          .flatMap(ua => removeLeadTrusteeBusiness(ua, index))
           .flatMap(ua => removeTrusteeBusiness(ua, index))
 
       case _ => super.cleanup(value, userAnswers)

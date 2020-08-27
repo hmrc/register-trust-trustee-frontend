@@ -20,6 +20,7 @@ import models.UserAnswers
 import models.core.pages.TrusteeOrLeadTrustee
 import models.core.pages.TrusteeOrLeadTrustee._
 import pages.QuestionPage
+import pages.entitystatus.TrusteeStatus
 import play.api.libs.json.JsPath
 import sections.Trustees
 
@@ -36,12 +37,14 @@ final case class TrusteeOrLeadTrusteePage(index: Int) extends QuestionPage[Trust
       case Some(LeadTrustee) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
+          .flatMap(_.remove(TrusteeStatus(index)))
           .flatMap(ua => removeTrusteeIndividual(ua, index))
           .flatMap(ua => removeTrusteeBusiness(ua, index))
 
       case Some(Trustee) =>
         userAnswers
           .remove(TrusteeIndividualOrBusinessPage(index))
+          .flatMap(_.remove(TrusteeStatus(index)))
           .flatMap(ua => removeLeadTrusteeIndividual(ua, index))
           .flatMap(ua => removeLeadTrusteeBusiness(ua, index))
 
