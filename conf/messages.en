@@ -172,6 +172,9 @@ addATrustee.business = Trustee Company
 addATrustee.error.required = Select yes if you want to add another trustee
 addATrustee.lead-trustee.required = You need to add or nominate a lead trustee.
 
+addATrustee.maxedOut.p1 = You cannot add another trustee as you have entered a maximum of 25.
+addATrustee.maxedOut.p2 = You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees.
+
 removeTrustee.title = Are you sure you want to remove the trustee?
 removeTrustee.heading = Are you sure you want to remove {0}?
 removeTrustee.error.required = Select yes if you want to remove the trustee
