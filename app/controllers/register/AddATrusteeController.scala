@@ -21,8 +21,10 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import forms.{AddATrusteeFormProvider, YesNoFormProvider}
 import javax.inject.Inject
 import models.Enumerable
+import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
+import models.registration.pages.AddATrustee.{NoComplete, YesNow}
 import navigation.Navigator
-import pages.register.{AddATrusteePage, AddATrusteeYesNoPage}
+import pages.register.{AddATrusteePage, AddATrusteeYesNoPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,7 +32,7 @@ import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddATrusteeViewHelper
-import views.html.register.{AddATrusteeView, AddATrusteeYesNoView}
+import views.html.register.{AddATrusteeView, AddATrusteeYesNoView, MaxedOutView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,7 +48,8 @@ class AddATrusteeController @Inject()(
                                        yesNoFormProvider: YesNoFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        addAnotherView: AddATrusteeView,
-                                       yesNoView: AddATrusteeYesNoView
+                                       yesNoView: AddATrusteeYesNoView,
+                                       maxedOutView: MaxedOutView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   private val addAnotherForm = addAnotherFormProvider()
@@ -73,8 +76,26 @@ class AddATrusteeController @Inject()(
       trustees.count match {
         case 0 =>
           Ok(yesNoView(yesNoForm, draftId))
+        case x @ 24 if !isLeadTrusteeDefined =>
+          Ok(addAnotherView(
+            addAnotherForm,
+            routes.AddATrusteeController.submitLead(draftId),
+            trustees.inProgress,
+            trustees.complete,
+            isLeadTrusteeDefined,
+            heading(x)
+          ))
+        case x @ 25 =>
+          Ok(maxedOutView(draftId, trustees.inProgress, trustees.complete, heading(x)))
         case count =>
-          Ok(addAnotherView(addAnotherForm, draftId, trustees.inProgress, trustees.complete, isLeadTrusteeDefined, heading(count)))
+          Ok(addAnotherView(
+            addAnotherForm,
+            routes.AddATrusteeController.submitAnother(draftId),
+            trustees.inProgress,
+            trustees.complete,
+            isLeadTrusteeDefined,
+            heading(count)
+          ))
       }
   }
 
@@ -107,7 +128,7 @@ class AddATrusteeController @Inject()(
           Future.successful(BadRequest(
             addAnotherView(
               formWithErrors,
-              draftId,
+              routes.AddATrusteeController.submitAnother(draftId),
               trustees.inProgress,
               trustees.complete,
               isLeadTrusteeDefined,
@@ -122,5 +143,53 @@ class AddATrusteeController @Inject()(
           } yield Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
         }
       )
+  }
+
+  def submitLead(draftId: String): Action[AnyContent] = actions(draftId).async {
+    implicit request =>
+
+      val index: Int = 24
+
+      addAnotherForm.bindFromRequest().fold(
+        (formWithErrors: Form[_]) => {
+
+          val trustees = new AddATrusteeViewHelper(request.userAnswers, draftId).rows
+
+          Future.successful(BadRequest(
+            addAnotherView(
+              formWithErrors,
+              routes.AddATrusteeController.submitLead(draftId),
+              trustees.inProgress,
+              trustees.complete,
+              isLeadTrusteeDefined = false,
+              heading(trustees.count)
+            )
+          ))
+        },
+        value => {
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers
+              .set(AddATrusteePage, value)
+              .flatMap(_.set(TrusteeOrLeadTrusteePage(index), LeadTrustee))
+            )
+            _ <- registrationsRepository.set(updatedAnswers)
+          } yield {
+            if (value == YesNow) {
+              Redirect(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId))
+            } else {
+              Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
+            }
+          }
+        }
+      )
+  }
+
+  def submitComplete(draftId: String): Action[AnyContent] = actions(draftId).async {
+    implicit request =>
+
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteePage, NoComplete))
+        _ <- registrationsRepository.set(updatedAnswers)
+      } yield Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
   }
 }

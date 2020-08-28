@@ -34,6 +34,8 @@ POST       /:draftId/:index/individual-or-business                controllers.re
 GET        /:draftId/add                                          controllers.register.AddATrusteeController.onPageLoad(draftId: String)
 POST       /:draftId/add                                          controllers.register.AddATrusteeController.submitOne(draftId: String)
 POST       /:draftId/add-another                                  controllers.register.AddATrusteeController.submitAnother(draftId: String)
+POST       /:draftId/add-lead                                     controllers.register.AddATrusteeController.submitLead(draftId: String)
+POST       /:draftId/complete                                     controllers.register.AddATrusteeController.submitComplete(draftId: String)
 
 GET        /:draftId/:index/remove                                controllers.register.RemoveIndexController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/remove                                controllers.register.RemoveIndexController.onSubmit(index: Int, draftId: String)

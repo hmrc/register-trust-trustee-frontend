@@ -15,7 +15,6 @@
  *@
 
 @import controllers.register.routes._
-@import models.registration.pages.AddATrustee
 @import viewmodels.AddRow
 
 @this(
@@ -24,22 +23,19 @@
 )
 
 @(
-    form: Form[_],
-    onSubmit: Call,
+    draftId: String,
     inProgressTrustees: Seq[AddRow],
     completeTrustees: Seq[AddRow],
-    isLeadTrusteeDefined: Boolean,
-    heading: String)(implicit request: Request[_], messages: Messages)
+    heading: String
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} $heading"
-    ) {
+    title = heading
+) {
 
-    @formHelper(action = onSubmit, 'autoComplete -> "off") {
+    @formHelper(action = AddATrusteeController.submitComplete(draftId), 'autoComplete -> "off") {
 
         @components.back_link()
-
-        @components.error_summary(form.errors)
 
         @components.heading(heading)
 
@@ -47,17 +43,10 @@
 
         @components.data_list(completeTrustees, "complete", "trustee")
 
-        @if(!isLeadTrusteeDefined) {
-            @components.inset_text("addATrustee.lead-trustee.required", "addATrustee")
-        }
-
-        @components.input_radio(
-            field = form("value"),
-            legend = messages("addATrustee.additional-content"),
-            legendClass = Some("heading-medium"),
-            inputs = AddATrustee.options,
-            legendAsH2Heading = true
-        )
+        <ul>
+            <li class="panel-indent"><p>@messages("addATrustee.maxedOut.p1")</p></li>
+            <li class="panel-indent"><p>@messages("addATrustee.maxedOut.p2")</p></li>
+        </ul>
 
         @components.submit_button()
     }
