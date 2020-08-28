@@ -198,7 +198,6 @@ class AddATrusteeControllerSpec extends SpecBase {
           view(
             form = addTrusteeForm,
             onSubmit = routes.AddATrusteeController.submitAnother(fakeDraftId),
-            draftId = fakeDraftId,
             inProgressTrustees = Nil,
             completeTrustees = trustee,
             isLeadTrusteeDefined = false,
@@ -246,7 +245,6 @@ class AddATrusteeControllerSpec extends SpecBase {
           view(
             form = boundForm,
             onSubmit = routes.AddATrusteeController.submitAnother(fakeDraftId),
-            draftId = fakeDraftId,
             inProgressTrustees = Nil,
             completeTrustees = trustee,
             isLeadTrusteeDefined = false,
@@ -282,7 +280,6 @@ class AddATrusteeControllerSpec extends SpecBase {
           view(
             form = addTrusteeForm,
             onSubmit = routes.AddATrusteeController.submitLead(fakeDraftId),
-            draftId = fakeDraftId,
             inProgressTrustees = trusteeRows.inProgress,
             completeTrustees = trusteeRows.complete,
             isLeadTrusteeDefined = false,
@@ -340,7 +337,6 @@ class AddATrusteeControllerSpec extends SpecBase {
           view(
             form = boundForm,
             onSubmit = routes.AddATrusteeController.submitLead(fakeDraftId),
-            draftId = fakeDraftId,
             inProgressTrustees = trusteeRows.inProgress,
             completeTrustees = trusteeRows.complete,
             isLeadTrusteeDefined = false,

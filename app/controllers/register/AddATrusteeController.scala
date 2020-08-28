@@ -80,7 +80,6 @@ class AddATrusteeController @Inject()(
           Ok(addAnotherView(
             addAnotherForm,
             routes.AddATrusteeController.submitLead(draftId),
-            draftId,
             trustees.inProgress,
             trustees.complete,
             isLeadTrusteeDefined,
@@ -92,7 +91,6 @@ class AddATrusteeController @Inject()(
           Ok(addAnotherView(
             addAnotherForm,
             routes.AddATrusteeController.submitAnother(draftId),
-            draftId,
             trustees.inProgress,
             trustees.complete,
             isLeadTrusteeDefined,
@@ -131,7 +129,6 @@ class AddATrusteeController @Inject()(
             addAnotherView(
               formWithErrors,
               routes.AddATrusteeController.submitAnother(draftId),
-              draftId,
               trustees.inProgress,
               trustees.complete,
               isLeadTrusteeDefined,
@@ -162,7 +159,6 @@ class AddATrusteeController @Inject()(
             addAnotherView(
               formWithErrors,
               routes.AddATrusteeController.submitLead(draftId),
-              draftId,
               trustees.inProgress,
               trustees.complete,
               isLeadTrusteeDefined = false,
