@@ -25,7 +25,7 @@
 @(form: Form[_], draftId: String, index : Int, heading: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(heading)}"
+    title = s"${errorPrefix(form)}${messages(heading)}"
     ) {
 
     @formHelper(action = TrusteeIndividualOrBusinessController.onSubmit(index, draftId), 'autoComplete -> "off") {
