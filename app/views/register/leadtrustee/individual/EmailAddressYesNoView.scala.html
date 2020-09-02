@@ -24,7 +24,7 @@ formHelper: FormWithCSRF
 @(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("leadTrustee.individual.emailAddressYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.emailAddressYesNo.title")}"
     ) {
 
 @formHelper(action = EmailAddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {

@@ -24,7 +24,7 @@
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("leadTrustee.individual.dateOfBirth.title", name)}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.dateOfBirth.title", name)}"
 ) {
 
     @formHelper(action = DateOfBirthController.onSubmit(index, draftId), 'autoComplete -> "off") {
