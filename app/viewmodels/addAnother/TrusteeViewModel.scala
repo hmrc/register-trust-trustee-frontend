@@ -16,10 +16,12 @@
 
 package viewmodels.addAnother
 
-import models.core.pages.{FullName, IndividualOrBusiness, TrusteeOrLeadTrustee}
+import mapping.reads._
 import models.Status
-import models.Status.InProgress
-import models.core.pages.TrusteeOrLeadTrustee._
+import models.Status.{Completed, InProgress}
+import models.core.pages.{FullName, IndividualOrBusiness, TrusteeOrLeadTrustee}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 final case class TrusteeViewModel(isLead : Boolean,
                                   name : Option[String],
@@ -28,13 +30,8 @@ final case class TrusteeViewModel(isLead : Boolean,
 
 object TrusteeViewModel {
 
-  import play.api.libs.functional.syntax._
-  import play.api.libs.json._
-
   implicit class OptionString(s : String) {
-
     def toOption : Option[String] = if(s.isEmpty) None else Some(s)
-
   }
 
   val nameReads : Reads[Option[String]] =
@@ -42,20 +39,32 @@ object TrusteeViewModel {
       (__ \ "name").readNullable[String]
 
   val isLeadReads: Reads[Boolean] =
-    (__ \ "trusteeOrLeadTrustee").readWithDefault[TrusteeOrLeadTrustee](Trustee).map[Boolean] {
-      case LeadTrustee => true
+    (__ \ "trusteeOrLeadTrustee").readWithDefault[TrusteeOrLeadTrustee](TrusteeOrLeadTrustee.Trustee).map[Boolean] {
+      case TrusteeOrLeadTrustee.LeadTrustee => true
       case _ => false
     }
 
-  implicit lazy val reads : Reads[TrusteeViewModel] = (
-    isLeadReads and
+  val statusReads: Reads[Status] =
+    ((__ \ "status").readWithDefault[Status](InProgress) and
+      Trustee.optionalReads
+      )(
+      (status, trustee) => {
+        (status, trustee) match {
+          case (Completed, Some(_)) => Completed
+          case _ => InProgress
+        }
+      }
+    )
+
+  implicit lazy val reads : Reads[TrusteeViewModel] =
+    (isLeadReads and
       (__ \ "individualOrBusiness").readNullable[IndividualOrBusiness] and
       nameReads and
-      (__ \ "status").readWithDefault[Status](InProgress)
-    )(
-    (isLead, individualOrBusiness, name, status) => {
-      TrusteeViewModel(isLead, name, individualOrBusiness, status)
-    }
-  )
+      statusReads
+      )(
+      (isLead, individualOrBusiness, name, status) => {
+        TrusteeViewModel(isLead, name, individualOrBusiness, status)
+      }
+    )
 
 }

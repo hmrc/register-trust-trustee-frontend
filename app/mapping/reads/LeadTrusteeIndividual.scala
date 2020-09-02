@@ -19,24 +19,21 @@ package mapping.reads
 import java.time.LocalDate
 
 import models.core.pages.IndividualOrBusiness.Individual
-import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
-import models.core.pages.{Address, FullName, InternationalAddress, TrusteeOrLeadTrustee, UKAddress}
-import models.registration.pages.PassportOrIdCardDetails
-import play.api.libs.json.{JsBoolean, JsError, JsSuccess, Reads, __}
+import models.core.pages.{Address, FullName, UKAddress}
+import models.registration.pages.DetailsChoice._
+import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
+import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
-final case class LeadTrusteeIndividual(override val isLead : Boolean = true,
+final case class LeadTrusteeIndividual(override val isLead: Boolean = true,
                                        name: FullName,
                                        dateOfBirth: LocalDate,
-                                       nino : Option[String],
-                                       passport: Option[PassportOrIdCardDetails],
-                                       idCard: Option[PassportOrIdCardDetails],
-                                       addressUk: Boolean,
-                                       address : Address,
-                                       telephoneNumber : String,
-                                       email: Option[String]
-                                      ) extends Trustee {
+                                       nino: Option[String],
+                                       passportOrIdCard: Option[PassportOrIdCardDetails],
+                                       address: Address,
+                                       telephoneNumber: String,
+                                       email: Option[String]) extends Trustee {
 
-  def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
+  def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
 
 }
 
@@ -46,17 +43,31 @@ object LeadTrusteeIndividual extends TrusteeReads {
 
   implicit lazy val reads: Reads[LeadTrusteeIndividual] = {
 
+    val passportOrIdCardReads: Reads[Option[PassportOrIdCardDetails]] =
+      ((__ \ "ninoYesNo").read[Boolean] and
+        (__ \ "trusteeDetailsChoice").readNullable[DetailsChoice] and
+        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
+        (__ \ "idCard").readNullable[PassportOrIdCardDetails]
+        ) ((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
+        case (false, Some(Passport), passport @ Some(_), None) =>
+          Reads(_ => JsSuccess(passport))
+        case (false, Some(IdCard), None, idCard @ Some(_)) =>
+          Reads(_ => JsSuccess(idCard))
+        case (true, None, None, None) =>
+          Reads(_ => JsSuccess(None))
+        case _  =>
+          Reads(_ => JsError("individual lead trustee passport / ID card answers are in an invalid state"))
+      }
+
     val leadTrusteeReads: Reads[LeadTrusteeIndividual] = (
       isLeadReads and
         (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").read[LocalDate] and
-        (__ \ "nino").readNullable[String] and
-        (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
-        (__ \ "idCard").readNullable[PassportOrIdCardDetails] and
-        (__ \ "addressUKYesNo").read[Boolean] and
+        yesNoReads[String]("ninoYesNo", "nino") and
+        passportOrIdCardReads and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
-        (__ \ "email").readNullable[String]
+        yesNoReads[String]("emailAddressYesNo", "email")
       )(LeadTrusteeIndividual.apply _)
 
     (isLeadReads and
@@ -70,5 +81,4 @@ object LeadTrusteeIndividual extends TrusteeReads {
     }.andKeep(leadTrusteeReads)
 
   }
-
 }

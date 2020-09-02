@@ -16,10 +16,10 @@
 
 package mapping.reads
 
-import models.core.pages.{Address, IndividualOrBusiness, InternationalAddress, UKAddress}
+import models.core.pages.{Address, IndividualOrBusiness}
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
-final case class TrusteeOrganisation(override val isLead : Boolean,
+final case class TrusteeOrganisation(override val isLead: Boolean,
                                      name: String,
                                      utr: Option[String],
                                      address: Option[Address]) extends Trustee
@@ -32,8 +32,8 @@ object TrusteeOrganisation extends TrusteeReads {
 
     val trusteeReads: Reads[TrusteeOrganisation] = (
       (__ \ "name").read[String] and
-        (__ \ "utr").readNullable[String] and
-        optionalAddressReads
+        yesNoReads[String]("utrYesNo", "utr") and
+        optionalAddressReads("utrYesNo")
       )((name, utr, address) => TrusteeOrganisation(isLead = false, name, utr, address))
 
     (isLeadReads and

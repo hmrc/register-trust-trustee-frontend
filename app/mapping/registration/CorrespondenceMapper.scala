@@ -17,11 +17,8 @@
 package mapping.registration
 
 import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustees}
 import models.{RegistrationSubmission, UserAnswers}
-import pages.register.trustees.individual._
-import pages.register.trustees.organisation._
 import play.api.Logger
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
@@ -35,14 +32,14 @@ class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) {
           case lti: LeadTrusteeIndividual =>
             val address = addressMapper.build(lti.address)
             List(
-              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lti.addressUk)),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lti.hasUkAddress)),
               RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(address)),
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lti.telephoneNumber))
             )
           case lto: LeadTrusteeOrganisation =>
             val address = addressMapper.build(lto.address)
             List(
-              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lto.liveInUK)),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lto.hasUkAddress)),
               RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(address)),
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lto.telephoneNumber))
             )

@@ -27,7 +27,7 @@ final case class UtrYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "isUKBusiness"
+  override def toString: String = "utrYesNo"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {

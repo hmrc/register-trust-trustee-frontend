@@ -16,19 +16,19 @@
 
 package mapping.reads
 
-import models.core.pages.{Address, InternationalAddress, UKAddress}
 import models.core.pages.IndividualOrBusiness.Business
+import models.core.pages.{Address, UKAddress}
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
-final case class LeadTrusteeOrganisation(override val isLead : Boolean = true,
+final case class LeadTrusteeOrganisation(override val isLead: Boolean = true,
                                          name: String,
-                                         isUKBusiness : Boolean,
-                                         utr : Option[String],
-                                         liveInUK: Boolean,
-                                         address : Address,
-                                         telephoneNumber : String,
-                                         email: Option[String]
-                                        ) extends Trustee
+                                         utr: Option[String],
+                                         address: Address,
+                                         telephoneNumber: String,
+                                         email: Option[String]) extends Trustee {
+
+  def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
+}
 
 object LeadTrusteeOrganisation extends TrusteeReads {
 
@@ -39,12 +39,10 @@ object LeadTrusteeOrganisation extends TrusteeReads {
     val leadTrusteeReads: Reads[LeadTrusteeOrganisation] = (
       isLeadReads and
         (__ \ "name").read[String] and
-        (__ \ "isUKBusiness").read[Boolean] and
-        (__ \ "utr").readNullable[String] and
-        (__ \ "addressUKYesNo").read[Boolean] and
+        yesNoReads[String]("isUKBusiness", "utr") and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
-        (__ \ "email").readNullable[String]
+        yesNoReads[String]("emailYesNo", "email")
       )(LeadTrusteeOrganisation.apply _)
 
     (isLeadReads and
@@ -58,5 +56,4 @@ object LeadTrusteeOrganisation extends TrusteeReads {
     }.andKeep(leadTrusteeReads)
 
   }
-
 }
