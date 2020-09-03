@@ -38,8 +38,7 @@
     hint: Option[String] = None,
     readerHint: Option[String] = None,
     labelClass: Option[String] = None,
-    optionalHtmlContent: Option[Html] = None,
-    inputMode: String = "numeric"
+    optionalHtmlContent: Option[Html] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -63,12 +62,11 @@
         <input
         class="form-control @inputClass @if(field.hasErrors){field-error}"
         type="tel"
+        autocomplete="tel"
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        @if(inputMode.nonEmpty) {
-            inputmode="@inputMode"
-        }
+        formnovalidate
         @if(hint.nonEmpty || field.hasErrors) {
             aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){@{field.id}_hint}"
         }
