@@ -66,7 +66,6 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        formnovalidate
         @if(hint.nonEmpty || field.hasErrors) {
             aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){@{field.id}_hint}"
         }
