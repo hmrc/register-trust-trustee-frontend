@@ -62,7 +62,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, leadHeading)(fakeRequest, messages).toString
+          view(form, fakeDraftId, index, leadHeading)(request, messages).toString
 
         application.stop()
       }
@@ -90,7 +90,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(form, fakeDraftId, index, heading)(request, messages).toString
 
         application.stop()
       }
@@ -122,7 +122,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading)(fakeRequest, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading)(request, messages).toString
 
         application.stop()
       }
@@ -151,7 +151,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading)(fakeRequest, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading)(request, messages).toString
 
         application.stop()
       }
@@ -241,7 +241,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, heading)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, heading)(request, messages).toString
 
       application.stop()
     }

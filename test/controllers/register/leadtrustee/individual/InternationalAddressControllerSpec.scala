@@ -84,7 +84,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("value 1", "value 2", None, "the country")), index,fakeDraftId, countryOptions.options, name.toString)(fakeRequest, messages).toString
+        view(form.fill(InternationalAddress("value 1", "value 2", None, "the country")), index,fakeDraftId, countryOptions.options, name.toString)(request, messages).toString
 
       application.stop()
     }
@@ -134,7 +134,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId, countryOptions.options, name.toString)(fakeRequest, messages).toString
+        view(boundForm, index, fakeDraftId, countryOptions.options, name.toString)(request, messages).toString
 
        application.stop()
     }

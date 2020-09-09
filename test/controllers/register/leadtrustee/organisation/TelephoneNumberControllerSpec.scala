@@ -79,7 +79,7 @@ class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, name)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -123,7 +123,7 @@ class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

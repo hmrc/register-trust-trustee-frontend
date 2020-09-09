@@ -86,7 +86,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, isUkRegistered)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, isUkRegistered)(request, messages).toString
 
       application.stop()
     }
@@ -109,7 +109,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, isUkRegistered)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, isUkRegistered)(request, messages).toString
 
       application.stop()
     }
@@ -155,7 +155,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, isUkRegistered)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, isUkRegistered)(request, messages).toString
 
       application.stop()
     }

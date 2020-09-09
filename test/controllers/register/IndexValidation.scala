@@ -98,7 +98,7 @@ trait IndexValidation extends SpecBase with ScalaCheckPropertyChecks with Mockit
           messages("global.error.pageNotFound404.title"),
           messages("global.error.pageNotFound404.heading"),
           messages("global.error.pageNotFound404.message")
-        )(fakeRequest, messages)
+        )(requestForIndex(index), messages)
         status(result) mustEqual NOT_FOUND
         contentAsString(result) mustEqual applyView.toString
     }

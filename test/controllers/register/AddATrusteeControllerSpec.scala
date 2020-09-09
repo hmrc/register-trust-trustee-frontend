@@ -134,7 +134,7 @@ class AddATrusteeControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(yesNoForm, fakeDraftId)(fakeRequest, messages).toString
+          view(yesNoForm, fakeDraftId)(request, messages).toString
 
         application.stop()
       }
@@ -174,7 +174,7 @@ class AddATrusteeControllerSpec extends SpecBase {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId)(request, messages).toString
 
         application.stop()
       }
@@ -202,7 +202,7 @@ class AddATrusteeControllerSpec extends SpecBase {
             completeTrustees = trustee,
             isLeadTrusteeDefined = false,
             heading = "You have added 2 trustees"
-          )(fakeRequest, messages).toString
+          )(request, messages).toString
 
         application.stop()
       }
@@ -249,7 +249,7 @@ class AddATrusteeControllerSpec extends SpecBase {
             completeTrustees = trustee,
             isLeadTrusteeDefined = false,
             heading = "You have added 2 trustees"
-          )(fakeRequest, messages).toString
+          )(request, messages).toString
 
         application.stop()
       }
@@ -284,7 +284,7 @@ class AddATrusteeControllerSpec extends SpecBase {
             completeTrustees = trusteeRows.complete,
             isLeadTrusteeDefined = false,
             heading = "You have added 24 trustees"
-          )(fakeRequest, messages).toString
+          )(request, messages).toString
 
         application.stop()
       }
@@ -341,7 +341,7 @@ class AddATrusteeControllerSpec extends SpecBase {
             completeTrustees = trusteeRows.complete,
             isLeadTrusteeDefined = false,
             heading = "You have added 24 trustees"
-          )(fakeRequest, messages).toString
+          )(request, messages).toString
 
         application.stop()
       }
@@ -382,7 +382,7 @@ class AddATrusteeControllerSpec extends SpecBase {
             inProgressTrustees = trusteeRows.inProgress,
             completeTrustees = trusteeRows.complete,
             heading = "You have added 25 trustees"
-          )(fakeRequest, messages).toString
+          )(request, messages).toString
 
         content must include("You cannot add another trustee as you have entered a maximum of 25.")
         content must include("You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees.")

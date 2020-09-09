@@ -64,7 +64,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, index, fakeDraftId, fakeName.toString)(fakeRequest, messages).toString
+        view(form, countryOptions, index, fakeDraftId, fakeName.toString)(request, messages).toString
 
       application.stop()
     }
@@ -87,7 +87,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), countryOptions, index, fakeDraftId, fakeName.toString)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), countryOptions, index, fakeDraftId, fakeName.toString)(request, messages).toString
 
       application.stop()
     }
@@ -139,7 +139,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, index, fakeDraftId, fakeName.toString)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, index, fakeDraftId, fakeName.toString)(request, messages).toString
 
       application.stop()
     }
