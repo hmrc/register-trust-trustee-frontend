@@ -73,7 +73,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(prefix), fakeDraftId, index, defaultTrusteeName, prefix)(fakeRequest, messages).toString
+          view(form(prefix), fakeDraftId, index, defaultTrusteeName, prefix)(request, messages).toString
 
         application.stop()
       }
@@ -97,7 +97,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form(prefix), fakeDraftId, index, defaultLeadTrusteeName, prefix)(fakeRequest, messages).toString
+          view(form(prefix), fakeDraftId, index, defaultLeadTrusteeName, prefix)(request, messages).toString
 
         application.stop()
       }
@@ -124,7 +124,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, defaultTrusteeName, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, defaultTrusteeName, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -145,7 +145,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, fakeFullName.toString, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, fakeFullName.toString, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -173,7 +173,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, defaultTrusteeName, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, defaultTrusteeName, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -194,7 +194,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, fakeName, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, fakeName, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -222,7 +222,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, defaultLeadTrusteeName, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, defaultLeadTrusteeName, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -243,7 +243,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, fakeFullName.toString, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, fakeFullName.toString, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -271,7 +271,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, defaultLeadTrusteeName, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, defaultLeadTrusteeName, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -292,7 +292,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form(prefix), fakeDraftId, index, fakeName, prefix)(fakeRequest, messages).toString
+            view(form(prefix), fakeDraftId, index, fakeName, prefix)(request, messages).toString
 
           application.stop()
         }
@@ -384,7 +384,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, defaultTrusteeName, prefix)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, defaultTrusteeName, prefix)(request, messages).toString
 
       application.stop()
     }

@@ -56,7 +56,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -77,7 +77,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -126,7 +126,7 @@ class EmailAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

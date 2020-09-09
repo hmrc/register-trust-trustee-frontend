@@ -61,7 +61,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, trusteeName)(request, messages).toString
 
       application.stop()
     }
@@ -83,7 +83,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, trusteeName)(request, messages).toString
 
       application.stop()
     }
@@ -133,7 +133,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName)(request, messages).toString
 
       application.stop()
     }

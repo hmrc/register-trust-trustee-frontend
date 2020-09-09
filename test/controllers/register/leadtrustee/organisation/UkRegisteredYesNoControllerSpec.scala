@@ -57,7 +57,7 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, fakeName)(request, messages).toString
 
       application.stop()
     }
@@ -78,7 +78,7 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, fakeName)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, index, fakeName)(request, messages).toString
 
       application.stop()
     }
@@ -121,7 +121,7 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, fakeName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, fakeName)(request, messages).toString
 
       application.stop()
     }
