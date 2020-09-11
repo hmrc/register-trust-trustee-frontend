@@ -30,7 +30,7 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
         text("internationalAddress.error.line1.required")
           .verifying(
             firstError(
-              isNotEmpty("line1", "internationalAddress.error.line1.required"),
+              nonEmptyString("line1", "internationalAddress.error.line1.required"),
               maxLength(35, "internationalAddress.error.line1.length"),
               regexp(Validation.addressLineRegex, "internationalAddress.error.line1.invalidCharacters")
             )),
@@ -38,7 +38,7 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
         text("internationalAddress.error.line2.required")
           .verifying(
             firstError(
-              isNotEmpty("line2", "internationalAddress.error.line2.required"),
+              nonEmptyString("line2", "internationalAddress.error.line2.required"),
               maxLength(35, "internationalAddress.error.line2.length"),
               regexp(Validation.addressLineRegex, "internationalAddress.error.line2.invalidCharacters")
             )),
@@ -54,7 +54,7 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
           .verifying(
             firstError(
               maxLength(35, "internationalAddress.error.country.length"),
-              isNotEmpty("country", "internationalAddress.error.country.required")
+              nonEmptyString("country", "internationalAddress.error.country.required")
             ))
     )(InternationalAddress.apply)(InternationalAddress.unapply)
   )

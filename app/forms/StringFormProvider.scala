@@ -27,7 +27,7 @@ class StringFormProvider @Inject() extends Mappings {
       "value" -> text(s"$prefix.error.required")
         .verifying(
           firstError(
-            isNotEmpty("value", s"$prefix.error.required"),
+            nonEmptyString("value", s"$prefix.error.required"),
             maxLength(length, s"$prefix.error.length"),
             regexp(Validation.nameRegex, s"$prefix.error.invalid")
           )

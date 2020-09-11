@@ -27,8 +27,9 @@ class TelephoneNumberFormProvider @Inject() extends Mappings {
       "value" -> text(s"$messagePrefix.error.required")
         .verifying(
           firstError(
-            isNotEmpty("value", s"$messagePrefix.error.required"),
-            regexp(Validation.telephoneRegex, s"$messagePrefix.error.invalidCharacters")
+            nonEmptyString("value", s"$messagePrefix.error.required"),
+            minLength(6, s"$messagePrefix.error.invalid.characters"),
+            regexp(Validation.telephoneRegex, s"$messagePrefix.error.invalid.characters")
           )
         )
     )
