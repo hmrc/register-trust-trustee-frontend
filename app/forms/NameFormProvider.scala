@@ -31,7 +31,7 @@ class NameFormProvider @Inject() extends Mappings {
         .verifying(
           firstError(
             maxLength(35, s"$messagePrefix.error.lengthfirstname"),
-            isNotEmpty("firstName", s"$messagePrefix.error.firstnamerequired"),
+            nonEmptyString("firstName", s"$messagePrefix.error.firstnamerequired"),
             regexp(Validation.nameRegex, s"$messagePrefix.error.invalidFirstNameCharacters")
           )
         ),
@@ -46,7 +46,7 @@ class NameFormProvider @Inject() extends Mappings {
         .verifying(
           firstError(
             maxLength(35, s"$messagePrefix.error.lengthlastname"),
-            isNotEmpty("lastName", s"$messagePrefix.error.lastnamerequired"),
+            nonEmptyString("lastName", s"$messagePrefix.error.lastnamerequired"),
             regexp(Validation.nameRegex, s"$messagePrefix.error.invalidLastNameCharacters")
           )
         )

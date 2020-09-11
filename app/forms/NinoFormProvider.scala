@@ -27,7 +27,7 @@ class NinoFormProvider @Inject() extends Mappings {
       "value" -> nino(s"$messagePrefix.error.required")
         .verifying(
           firstError(
-            isNotEmpty("value", s"$messagePrefix.error.required"),
+            nonEmptyString("value", s"$messagePrefix.error.required"),
             isNinoValid("value", s"$messagePrefix.error.invalidFormat")
           ))
     )

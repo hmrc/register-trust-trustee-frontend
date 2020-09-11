@@ -51,7 +51,7 @@ class PassportOrIdCardFormProvider @Inject()(appConfig: FrontendAppConfig) exten
         .verifying(
           firstError(
             maxLength(maxLengthCountryField, s"$prefix.country.error.length"),
-            isNotEmpty("country", s"$prefix.country.error.required")
+            nonEmptyString("country", s"$prefix.country.error.required")
           )
         ),
       "number" -> text(s"$prefix.number.error.required")
@@ -59,7 +59,7 @@ class PassportOrIdCardFormProvider @Inject()(appConfig: FrontendAppConfig) exten
           firstError(
             maxLength(maxLengthNumberField, s"$prefix.number.error.length"),
             regexp(Validation.passportOrIdCardNumberRegEx, s"$prefix.number.error.invalid"),
-            isNotEmpty("number", s"$prefix.number.error.required")
+            nonEmptyString("number", s"$prefix.number.error.required")
           )
         ),
       "expiryDate" -> localDate(
