@@ -139,4 +139,12 @@ trait Constraints {
       case _ =>  Invalid(errorKey)
     }
   }
+
+  protected def isTelephoneNumberValid(value: String, errorKey: String): Constraint[String] =
+    Constraint {
+      case str if TelephoneNumber.isValid(str)=>
+        Valid
+      case _ =>
+        Invalid(errorKey, value)
+    }
 }
