@@ -412,6 +412,7 @@ leadTrustee.organisation.email.title = What is the lead trustee’s email addres
 leadTrustee.organisation.email.heading = What is {0}’s email address?
 leadTrustee.organisation.email.error.required = Enter the lead trustee’s email address
 leadTrustee.organisation.email.error.invalid = Enter a valid email address with no spaces, like name@example.com
+leadTrustee.organisation.email.error.length = Email address must be 256 characters or less
 
 leadTrustee.organisation.telephoneNumber.checkYourAnswersLabel = What is {0}’s telephone number?
 leadTrustee.organisation.telephoneNumber.title = What is the lead trustee’s telephone number?
@@ -536,6 +537,7 @@ leadTrustee.individual.email.title = What is the lead trustee’s email address?
 leadTrustee.individual.email.heading = What is {0}’s email address?
 leadTrustee.individual.email.error.required = Enter the lead trustee’s email address
 leadTrustee.individual.email.error.invalid = Enter a valid email address with no spaces, like name@example.com
+leadTrustee.individual.email.error.length = Email address must be 256 characters or less
 
 leadTrustee.individual.dateOfBirth.title = What is the lead trustee’s date of birth?
 leadTrustee.individual.dateOfBirth.heading = What is {0}’s date of birth?

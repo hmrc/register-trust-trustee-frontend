@@ -27,7 +27,8 @@ class EmailAddressFormProvider @Inject() extends Mappings {
       "value" -> text(s"$prefix.error.required")
         .verifying(
           firstError(
-            regexp(Validation.emailRegex, s"$prefix.error.invalid")
+            maxLength(256, s"$prefix.error.length"),
+            isEmailValid("value", s"$prefix.error.invalid")
           )
         )
     )

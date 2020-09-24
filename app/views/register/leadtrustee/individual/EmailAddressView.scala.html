@@ -35,10 +35,9 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
+        @components.input_email(
             field = form("value"),
-            label = messages("leadTrustee.individual.email.heading", name),
-            labelAsHeading = true
+            label = messages("leadTrustee.individual.email.heading", name)
         )
 
         @components.submit_button()
