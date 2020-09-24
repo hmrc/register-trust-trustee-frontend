@@ -196,9 +196,21 @@ $error-colour: #d4351c;
     margin-top: .625em;
 }
 
+.indent {
+  border-left-color: $grey-3;
+  padding: 15px;
+}
+
+@media all and (min-width: 641px) {
+  .indent {
+    font-size: 19px;
+
+  }
+}
+
 #value__listbox, #country__listbox {
     @media (min-width: 641px) {
-      width: calc(75% - 4px;)
+      width: calc(75% - 4px)
     }
 }
 
