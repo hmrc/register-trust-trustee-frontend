@@ -21,17 +21,19 @@ import forms.mappings.TelephoneNumber
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
+import uk.gov.hmrc.emailaddress.EmailAddress
+import org.scalacheck.Arbitrary.arbitrary
 
 trait StringFieldBehaviours extends FieldBehaviours {
 
-  def fieldWithMinLength(form : Form[_],
-                         fieldName : String,
-                         minLength : Int,
-                         lengthError : FormError) : Unit = {
+  def fieldWithMinLength(form: Form[_],
+                         fieldName: String,
+                         minLength: Int,
+                         lengthError: FormError): Unit = {
 
     s"not bind strings shorter than $minLength characters" in {
 
-      val length = if (minLength > 0 && minLength < 2) minLength else minLength -1
+      val length = if (minLength > 0 && minLength < 2) minLength else minLength - 1
 
       forAll(stringsWithMaxLength(length) -> "shortString") {
         string =>
@@ -43,9 +45,9 @@ trait StringFieldBehaviours extends FieldBehaviours {
   }
 
   def fieldWithMaxLength(form: Form[_],
-                           fieldName: String,
-                           maxLength: Int,
-                           lengthError: FormError): Unit = {
+                         fieldName: String,
+                         maxLength: Int,
+                         lengthError: FormError): Unit = {
 
     s"not bind strings longer than $maxLength characters" in {
 
@@ -87,7 +89,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
 
   def telephoneNumberField(form: Form[_],
                            fieldName: String,
-                           requiredError: FormError): Unit = {
+                           invalidError: FormError): Unit = {
 
     "not bind strings which do not match valid telephone number format" in {
       val generator = RegexpGen.from(Validation.telephoneRegex)
@@ -95,7 +97,22 @@ trait StringFieldBehaviours extends FieldBehaviours {
         string =>
           whenever(!TelephoneNumber.isValid(string)) {
             val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors shouldEqual Seq(requiredError)
+            result.errors shouldEqual Seq(invalidError)
+          }
+      }
+    }
+  }
+
+  def emailAddressField(form: Form[_],
+                        fieldName: String,
+                        invalidError: FormError): Unit = {
+
+    s"not bind strings which do not match valid email address format " in {
+      forAll(nonEmptyString) {
+        string =>
+          whenever(!EmailAddress.isValid(string)) {
+            val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+            result.errors shouldEqual Seq(invalidError)
           }
       }
     }

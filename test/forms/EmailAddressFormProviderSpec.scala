@@ -18,15 +18,16 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.{Form, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
 
-class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
+class EmailAddressFormProviderSpec extends StringFieldBehaviours {
 
-  val prefix: String = "trustee.individual.telephoneNumber"
-  val requiredKey: String = s"$prefix.error.required"
-  val invalidKey: String = s"$prefix.error.invalid.characters"
+  val prefix = "leadtrustee.individual.emailAddress"
+  val requiredKey = s"$prefix.error.required"
+  val lengthKey = s"$prefix.error.length"
+  val invalidKey = s"$prefix.error.invalid"
+  val maxLength = 256
 
-  val form: Form[String] = new TelephoneNumberFormProvider()(prefix)
+  val form: Form[String] = new EmailAddressFormProvider().withPrefix(prefix)
 
   ".value" must {
 
@@ -35,7 +36,14 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      validDataGenerator = RegexpGen.from(Validation.telephoneRegex)
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
     behave like mandatoryField(
@@ -44,13 +52,7 @@ class TelephoneNumberFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like nonEmptyField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
-    )
-
-    behave like telephoneNumberField(
+    behave like emailAddressField(
       form,
       fieldName,
       invalidError = FormError(fieldName, invalidKey, Seq(fieldName))
