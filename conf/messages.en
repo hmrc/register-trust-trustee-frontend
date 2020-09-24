@@ -285,8 +285,10 @@ trustee.individual.idCardDetails.expiryDate.error.past = ID card expiry date mus
 trustee.individual.checkDetails.title = Check trustee details
 trustee.individual.checkDetails.heading = Check trustee details
 
-trusteesInfo.title = Trustee: information you’ll need to provide
-trusteesInfo.heading = Trustee: information you’ll need to provide
+trusteesInfo.caption = Trustees
+trusteesInfo.caption.hidden = This section is
+trusteesInfo.title = Information you’ll need to provide
+trusteesInfo.heading = Information you’ll need to provide
 trusteesInfo.subheading1 = Lead trustee
 trusteesInfo.paragraph1 = You must have a lead trustee. They are the main contact point for the trust. They will be sent all official documents like the trust’s Unique Taxpayer Reference (UTR) and notice to file tax returns.
 trusteesInfo.paragraph2 = If the lead trustee is a UK citizen, tell us their:
