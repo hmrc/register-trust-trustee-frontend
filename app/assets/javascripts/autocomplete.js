@@ -20,32 +20,13 @@ $(document).ready(function() {
      if(document.querySelectorAll('select[data-all-countries]').length > 0) {
        accessibleAutocomplete.enhanceSelectElement({
             selectElement: document.querySelector("select[data-all-countries]"),
-            minLength:2,
+            showAllValues: true,
             defaultValue: ''
         });
     }
 
-    // =====================================================
-    // Update autocomplete once loaded with fallback's aria attributes
-    // Ensures hint and error are read out before usage instructions
-    // =====================================================
-
-//    setTimeout(function(){
-//        if(originalSelect && originalSelect.getAttribute('aria-describedby') > ""){
-//            var parentForm = upTo(originalSelect, 'form');
-//            if(parentForm){
-//                var combo = parentForm.querySelector('[role="combobox"]');
-//                if(combo){
-//                    combo.setAttribute('aria-describedby', originalSelect.getAttribute('aria-describedby') + ' ' + combo.getAttribute('aria-describedby'));
-//                }
-//            }
-//
-//        }
-//    }, 2000)
-
     //======================================================
     // Assign aria-labelledBy to the dynamically created country input
-    // DO WE EVEN NEED THIS?
     //======================================================
 
     if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper #value").attr('aria-labelledby', 'error-message-input');
