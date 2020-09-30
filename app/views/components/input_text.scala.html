@@ -26,7 +26,8 @@
     optionalHtmlContent: Option[Html] = None,
     symbolText: Option[String] = None,
     inputMode: Option[String] = None,
-    autocomplete: Option[String] = None
+    autocomplete: Option[String] = None,
+    isBold: Boolean = true
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -37,7 +38,7 @@
         </label>
     </h1>
     } else {
-    <label class="form-label bold @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
+    <label class="form-label @if(isBold){bold} @if(labelClass.nonEmpty){@labelClass}" for="@{field.id}">
         @label
     </label>
     }

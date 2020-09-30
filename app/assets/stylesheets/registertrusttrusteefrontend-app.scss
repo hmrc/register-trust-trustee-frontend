@@ -24,6 +24,8 @@
 @import 'partials/_modal';
 @import 'patterns/check-your-answers';
 
+@import 'patterns/autocomplete';
+
 $error-colour: #d4351c;
 
 .push-text-top--3 {
@@ -207,20 +209,6 @@ $error-colour: #d4351c;
 
   }
 }
-
-#value__listbox, #country__listbox {
-    @media (min-width: 641px) {
-      width: calc(75% - 4px)
-    }
-}
-
-#country {
-    @media (min-width: 641px) {
-      width:75%;
-    }
-}
-
-.autocomplete__wrapper span {display:none;}
 
 .heading-confirmation {
   background-color: #00703c;

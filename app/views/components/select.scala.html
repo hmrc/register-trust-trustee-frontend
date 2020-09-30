@@ -44,7 +44,7 @@
             <span class="visually-hidden">@messages("site.error")</span> @messages(error.message, error.args:_*)
         </span>
     }
-    <select class='form-control @selectClasses.mkString(" ")' id="@field.id" name="@field.name" aria-labelledby="@field.id-label" @selectAttribute>
+    <select class='form-control @selectClasses.mkString(" ")' id="@field.id" name="@field.name" aria-labelledby="@field.id-label" @selectAttribute autocomplete="off">
         @placeholder.map{ ph =>
             <option value="">@messages(ph)</option>
         }
