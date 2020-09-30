@@ -540,7 +540,7 @@ leadTrustee.individual.email.checkYourAnswersLabel = What is {0}’s email addre
 leadTrustee.individual.email.title = What is the lead trustee’s email address?
 leadTrustee.individual.email.heading = What is {0}’s email address?
 leadTrustee.individual.email.error.required = Enter the lead trustee’s email address
-leadTrustee.individual.email.error.invalid = Enter a valid email address with ano spaces, like name@example.com
+leadTrustee.individual.email.error.invalid = Enter a valid email address with no spaces, like name@example.com
 leadTrustee.individual.email.error.length = Email address must be 256 characters or less
 
 leadTrustee.individual.dateOfBirth.title = What is the lead trustee’s date of birth?
