@@ -16,8 +16,8 @@
 
 package navigation
 
-import controllers.register.trustees.organisation.routes._
 import base.SpecBase
+import controllers.register.trustees.organisation.routes._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees.organisation._
 

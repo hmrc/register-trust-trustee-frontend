@@ -19,7 +19,7 @@ package views.register.leadtrustee.organisation
 import forms.EmailAddressFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.{QuestionViewBehaviours, StringViewBehaviours}
+import views.behaviours.StringViewBehaviours
 import views.html.register.leadtrustee.organisation.EmailAddressView
 
 class EmailAddressViewSpec extends StringViewBehaviours {

@@ -26,8 +26,8 @@ import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, 
 import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register
-import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 
 class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {

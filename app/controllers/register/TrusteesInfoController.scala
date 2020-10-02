@@ -23,14 +23,12 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.TrusteesInfoView
 
-import scala.concurrent.ExecutionContext
-
 class TrusteesInfoController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         identify: RegistrationIdentifierAction,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: TrusteesInfoView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify {
     implicit request =>

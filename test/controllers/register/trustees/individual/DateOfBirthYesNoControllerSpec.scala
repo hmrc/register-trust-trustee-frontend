@@ -21,7 +21,6 @@ import config.annotations.TrusteeIndividual
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import pages.register.TrusteeOrLeadTrusteePage
 import pages.register.trustees.individual.{DateOfBirthYesNoPage, NamePage}
 import play.api.inject.bind
 import play.api.test.FakeRequest

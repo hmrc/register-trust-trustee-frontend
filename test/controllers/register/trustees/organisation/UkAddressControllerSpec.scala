@@ -23,8 +23,7 @@ import forms.UKAddressFormProvider
 import models.UserAnswers
 import models.core.pages.UKAddress
 import navigation.{FakeNavigator, Navigator}
-import pages.register.trustees.organisation.UkAddressPage
-import pages.register.trustees.organisation.NamePage
+import pages.register.trustees.organisation.{NamePage, UkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest

@@ -23,7 +23,7 @@ import controllers.actions.register.leadtrustee.individual.NameRequiredActionImp
 import forms.EmailAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.leadtrustee.individual.{EmailAddressPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.EmailAddressPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

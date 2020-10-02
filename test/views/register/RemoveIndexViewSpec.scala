@@ -21,7 +21,6 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.RemoveIndexView
-import views.html.register.leadtrustee.organisation.AddressUkYesNoView
 
 class RemoveIndexViewSpec extends YesNoViewBehaviours {
 

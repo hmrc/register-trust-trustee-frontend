@@ -20,7 +20,7 @@ import forms.EmailAddressFormProvider
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.{QuestionViewBehaviours, StringViewBehaviours}
+import views.behaviours.StringViewBehaviours
 import views.html.register.leadtrustee.individual.EmailAddressView
 
 class EmailAddressViewSpec extends StringViewBehaviours {

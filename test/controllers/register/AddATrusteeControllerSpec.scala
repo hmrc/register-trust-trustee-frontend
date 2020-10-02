@@ -30,8 +30,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import pages.entitystatus.TrusteeStatus
-import pages.register.trustees.individual.NamePage
 import pages.register.leadtrustee.{individual => ltind}
+import pages.register.trustees.individual.NamePage
 import pages.register.{AddATrusteePage, TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
 import play.api.test.FakeRequest

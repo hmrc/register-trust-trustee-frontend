@@ -24,7 +24,7 @@ import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import models.core.pages.InternationalAddress
 import navigation.Navigator
-import pages.register.leadtrustee.individual.{InternationalAddressPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.InternationalAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
