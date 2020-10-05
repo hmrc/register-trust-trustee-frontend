@@ -49,8 +49,6 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
       "for a UK lead trustee individual" must {
 
         "not be able to create correspondence pieces when do not have all answers" in {
-          val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
-
           val userAnswers = emptyUserAnswers
             .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
@@ -87,8 +85,6 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
       "for a UK lead trustee organisation" must {
 
         "not be able to create a correspondence when do not have all answers" in {
-          val address = UKAddress("First line", "Second line", None, Some("Newcastle"), "NE981ZZ")
-
           val userAnswers = emptyUserAnswers
             .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
@@ -124,8 +120,6 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
       "for a Non-UK lead trustee organisation" must {
 
         "not be able to create pieces when do not have all answers" in {
-          val address = InternationalAddress("First line", "Second line", None, "DE")
-
           val userAnswers = emptyUserAnswers
             .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
             .set(TrusteeIndividualOrBusinessPage(0), Business).success.value

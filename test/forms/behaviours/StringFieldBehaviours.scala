@@ -20,9 +20,8 @@ import forms.Validation
 import forms.mappings.TelephoneNumber
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
-import wolfendale.scalacheck.regexp.RegexpGen
 import uk.gov.hmrc.emailaddress.EmailAddress
-import org.scalacheck.Arbitrary.arbitrary
+import wolfendale.scalacheck.regexp.RegexpGen
 
 trait StringFieldBehaviours extends FieldBehaviours {
 

@@ -23,7 +23,7 @@ import controllers.actions.register.leadtrustee.individual.NameRequiredActionImp
 import forms.TelephoneNumberFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.leadtrustee.individual.{TelephoneNumberPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.TelephoneNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

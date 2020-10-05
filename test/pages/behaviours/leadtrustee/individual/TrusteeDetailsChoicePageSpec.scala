@@ -19,7 +19,6 @@ package pages.behaviours.leadtrustee.individual
 import java.time.LocalDate
 
 import models.UserAnswers
-import models.core.pages.UKAddress
 import models.registration.pages.DetailsChoice._
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary

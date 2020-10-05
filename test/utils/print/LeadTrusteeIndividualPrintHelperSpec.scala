@@ -27,8 +27,8 @@ import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import models.registration.pages.PassportOrIdCardDetails
-import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import pages.register.leadtrustee.individual.{TrusteesNamePage, _}
+import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

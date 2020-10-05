@@ -19,9 +19,9 @@ package utils.print
 import java.time.LocalDate
 
 import com.google.inject.Inject
-import models.{Enumerable, UserAnswers}
+import models.UserAnswers
 import models.core.pages.{Address, FullName}
-import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
+import models.registration.pages.PassportOrIdCardDetails
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
@@ -117,7 +117,7 @@ class AnswerRowConverter @Inject()() {
     def addressQuestion[T <: Address](query: Gettable[T],
                                       labelKey: String,
                                       changeUrl: String)
-                                     (implicit messages:Messages, reads: Reads[T]): Option[AnswerRow] = {
+                                     (implicit reads: Reads[T]): Option[AnswerRow] = {
       userAnswers.get(query) map { x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",

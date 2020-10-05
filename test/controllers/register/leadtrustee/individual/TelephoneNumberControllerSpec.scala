@@ -23,8 +23,7 @@ import forms.TelephoneNumberFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.leadtrustee.individual.TrusteesNamePage
-import pages.register.leadtrustee.individual.TelephoneNumberPage
+import pages.register.leadtrustee.individual.{TelephoneNumberPage, TrusteesNamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
