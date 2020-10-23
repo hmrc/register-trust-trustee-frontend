@@ -36,6 +36,8 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      countryOptions: CountryOptions,
                                      printHelpers: PrintHelpers) {
 
+  private val logger: Logger = Logger(getClass)
+
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = trusteesStatus(userAnswers)
 
@@ -53,29 +55,29 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
     userAnswers.get(_root_.sections.Trustees) match {
       case Some(l) =>
         if (l.isEmpty) {
-          Logger.info(s"[SubmissionSetFactory] no trustees to determine a status")
+          logger.info(s"[trusteesStatus] no trustees to determine a status")
           None
         } else {
           val hasLeadTrustee = l.exists(_.isLead)
           val isComplete = !l.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
 
           if (isComplete) {
-            Logger.info(s"[SubmissionSetFactory] trustee status is completed")
+            logger.info(s"[trusteesStatus] trustee status is completed")
             Some(Completed)
           } else {
-            Logger.info(s"[SubmissionSetFactory] trustee status is in progress")
+            logger.info(s"[trusteesStatus] trustee status is in progress")
             Some(InProgress)
           }
         }
       case None =>
-        Logger.info(s"[SubmissionSetFactory] no trustees to determine a status")
+        logger.info(s"[trusteesStatus] no trustees to determine a status")
         None
     }
   }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
 
-    Logger.info(s"[SubmissionSetFactory] attempting to generate mapped data, status is $status")
+    logger.info(s"[mappedDataIfCompleted] attempting to generate mapped data, status is $status")
 
     if (status.contains(Status.Completed)) {
 
@@ -91,14 +93,14 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
               Some(List(leadTrusteesPiece))
           }
         case None =>
-          Logger.warn(s"[SubmissionSetFactory][mappedDataIfCompleted] unable to generate a lead trustee")
+          logger.warn(s"[mappedDataIfCompleted] unable to generate a lead trustee")
           None
       }
 
       result match {
         case Some(pieces) => pieces ++ correspondenceMapper.build(userAnswers)
         case None =>
-          Logger.warn(s"[SubmissionSetFactory][mappedDataIfCompleted] lead trustee status is complete, no data to map")
+          logger.warn(s"[mappedDataIfCompleted] lead trustee status is complete, no data to map")
           List.empty
       }
     } else {

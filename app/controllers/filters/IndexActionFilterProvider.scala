@@ -24,6 +24,9 @@ import play.api.http.Status
 import play.api.libs.json.Reads
 import play.api.mvc.{ActionFilter, Result}
 import queries.Gettable
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
+import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,16 +34,20 @@ class IndexActionFilter[T](index : Int, entity : Gettable[List[T]], errorHandler
                           (implicit val reads : Reads[T], val executionContext: ExecutionContext)
   extends ActionFilter[RegistrationDataRequest] {
 
+  private val logger: Logger = Logger(getClass)
+
   override protected def filter[A](request: RegistrationDataRequest[A]): Future[Option[Result]] = {
+
+    val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     lazy val entities = request.userAnswers.get(entity).getOrElse(List.empty)
 
-    Logger.info(s"[IndexActionFilter] Validating index on ${entity.path} for entities ${entities.size}")
+    logger.info(s"[Session ID: ${Session.id(hc)}] Validating index on ${entity.path} for entities ${entities.size}")
 
     if (index >= 0 && index <= entities.size) {
       Future.successful(None)
     } else {
-      Logger.info(s"[IndexActionFilter] Out of bounds index for entity ${entity.path} index $index")
+      logger.info(s"[Session ID: ${Session.id(hc)}] Out of bounds index for entity ${entity.path} index $index")
       errorHandler.onClientError(request, Status.NOT_FOUND).map(Some(_))
     }
 

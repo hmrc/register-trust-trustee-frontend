@@ -28,13 +28,15 @@ import scala.concurrent.{ExecutionContext, Future}
 class TrusteeRequiredAction(index: Int, draftId: String)(implicit val executionContext: ExecutionContext)
   extends ActionRefiner[RegistrationDataRequest, RemoveIndexRequest] {
 
+  private val logger: Logger = Logger(getClass)
+
   override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, RemoveIndexRequest[A]]] = {
     Future.successful(
       request.userAnswers.get(Trustee(index)) match {
         case Some(trustee) =>
           Right(RemoveIndexRequest(request, trustee))
         case _ =>
-          Logger.info(s"[RemoveIndexController] Did not find trustee at index $index")
+          logger.info(s"Unable to remove trustee. Did not find trustee at index $index")
           Left(Redirect(controllers.register.routes.AddATrusteeController.onPageLoad(draftId)))
       }
     )

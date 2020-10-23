@@ -24,6 +24,8 @@ import play.api.libs.json.{JsBoolean, JsString, Json}
 
 class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) {
 
+  private val logger: Logger = Logger(getClass)
+
   def build(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
     val result = userAnswers.get(Trustees).getOrElse(Nil) match {
       case Nil => None
@@ -44,7 +46,7 @@ class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) {
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lto.telephoneNumber))
             )
           case _ =>
-            Logger.info(s"[CorrespondenceMapper][build] unable to create correspondence due to unexpected lead trustee type")
+            logger.info(s"[build] unable to create correspondence due to unexpected lead trustee type")
             List.empty
         }
     }
