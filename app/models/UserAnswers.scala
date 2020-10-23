@@ -50,6 +50,8 @@ final case class UserAnswers(
                               internalAuthId :String
                             ) extends ReadableUserAnswers {
 
+  private val logger: Logger = Logger(getClass)
+
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A], reads: Reads[A]): Try[UserAnswers] = {
 
     val hasValueChanged: Boolean = !getAtPath(page.path).contains(value)
@@ -59,7 +61,7 @@ final case class UserAnswers(
         Success(jsValue)
       case JsError(errors) =>
         val errorPaths = errors.collectFirst{ case (path, e) => s"$path $e"}
-        Logger.warn(s"[UserAnswers] unable to set path ${page.path} due to errors $errorPaths")
+        logger.warn(s"Unable to set path ${page.path} due to errors $errorPaths")
         Failure(JsResultException(errors))
     }
 
