@@ -39,9 +39,9 @@
             field = form("value"),
             label = messages("leadTrustee.organisation.utr.heading", name),
             labelAsHeading = true,
-            hint = Some(messages("leadTrustee.organisation.utr.hint")),
-            readerHint = Some(messages("leadTrustee.organisation.utr.hint.reader")),
-            inputMode = Some("numeric")
+            inputMode = Some("numeric"),
+            hint = Some(messages("leadTrustee.organisation.utr.hint"))
+
         )
 
         <p>@messages("leadTrustee.organisation.utr.p1") <a target="_blank" href="@appConfig.findLostUtrUrl">@messages("leadTrustee.organisation.utr.link")</a>.</p>
