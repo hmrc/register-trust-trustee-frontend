@@ -211,7 +211,6 @@ trustee.individual.nino.title = What is the trustee’s National Insurance numbe
 trustee.individual.nino.heading = What is {0}’s National Insurance number?
 trustee.individual.nino.checkYourAnswersLabel = What is {0}’s National Insurance number?
 trustee.individual.nino.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
-trustee.individual.nino.hint.reader = It is on their National Insurance card, benefit letter, payslip or P60. For example, Q Q 1 2 3 4 5 6 C.
 trustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 trustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 
@@ -331,7 +330,6 @@ trustee.organisation.utr.error.required = Enter the trustee’s Unique Taxpayer 
 trustee.organisation.utr.error.length = Unique Taxpayer Reference must be a 10 digit number
 trustee.organisation.utr.error.invalidCharacters = Enter the trust’s Unique Taxpayer Reference in the correct format
 trustee.organisation.utr.hint = This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
-trustee.organisation.utr.hint.reader = This is 10 numbers, for example 1 2 3 4 5 6 7 8 9 0. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 trustee.organisation.utr.p1 = You can
 trustee.organisation.utr.link = find a lost UTR number (opens in a new window or tab)
 
@@ -387,7 +385,6 @@ leadTrustee.organisation.utr.error.required = Enter the lead trustee’s Unique 
 leadTrustee.organisation.utr.error.length = Unique Taxpayer Reference must be a 10 digit number
 leadTrustee.organisation.utr.error.invalidCharacters = Enter the trust’s Unique Taxpayer Reference in the correct format
 leadTrustee.organisation.utr.hint = This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
-leadTrustee.organisation.utr.hint.reader = This is 10 numbers, for example 1 2 3 4 5 6 7 8 9 0. It will be on tax returns and other letters about Self Assessment. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 leadTrustee.organisation.utr.p1 = You can
 leadTrustee.organisation.utr.link = find a lost UTR number (opens in a new window or tab)
 
