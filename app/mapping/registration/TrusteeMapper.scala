@@ -21,8 +21,7 @@ import mapping.Mapping
 import mapping.reads.{Trustee, TrusteeIndividual, TrusteeOrganisation, Trustees}
 import models.UserAnswers
 
-class TrusteeMapper @Inject()(nameMapper: NameMapper,
-                              addressMapper: AddressMapper,
+class TrusteeMapper @Inject()(addressMapper: AddressMapper,
                               passportOrIdCardMapper: PassportOrIdCardMapper) extends Mapping[List[TrusteeType]] {
 
   override def build(userAnswers: UserAnswers): Option[List[TrusteeType]] = {
@@ -43,7 +42,7 @@ class TrusteeMapper @Inject()(nameMapper: NameMapper,
         TrusteeType(
           trusteeInd = Some(
             TrusteeIndividualType(
-              name = nameMapper.build(indTrustee.name),
+              name = indTrustee.name,
               dateOfBirth = indTrustee.dateOfBirth,
               phoneNumber = None,
               identification = identificationMap(indTrustee)
