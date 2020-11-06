@@ -66,7 +66,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
             leadTrusteeInd = Some(
               LeadTrusteeIndType(
-                NameType("first name", Some("middle name"), "Last Name"),
+                FullName("first name", Some("middle name"), "Last Name"),
                 dateOfBirth = LocalDate.of(1500,10,10),
                 phoneNumber = "0191 1111111",
                 email = None,
@@ -95,7 +95,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
             leadTrusteeInd = Some(
               LeadTrusteeIndType(
-                NameType("first name", Some("middle name"), "Last Name"),
+                FullName("first name", Some("middle name"), "Last Name"),
                 dateOfBirth = LocalDate.of(1500,10,10),
                 phoneNumber = "0191 1111111",
                 email = Some("adam@test.com"),
@@ -127,7 +127,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
           leadTrusteeMapper.build(userAnswers).value mustBe LeadTrusteeType(
             leadTrusteeInd = Some(
               LeadTrusteeIndType(
-                NameType("first name", Some("middle name"), "Last Name"),
+                FullName("first name", Some("middle name"), "Last Name"),
                 dateOfBirth = LocalDate.of(1500,10,10),
                 phoneNumber = "0191 1111111",
                 email = Some("adam@test.com"),

@@ -57,7 +57,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
-              name = NameType("first name", None, "last name"),
+              name = FullName("first name", None, "last name"),
               dateOfBirth = None,
               phoneNumber = None,
               identification = None
@@ -79,7 +79,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
-              name = NameType("first name", Some("middle name"), "last name"),
+              name = FullName("first name", Some("middle name"), "last name"),
               dateOfBirth = Some(LocalDate.of(1500, 10, 10)),
               phoneNumber = None,
               identification = Some(
@@ -159,7 +159,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
         trusteeMapper.build(userAnswers).value mustBe List(
           TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
-              name = NameType("first name", None, "last name"),
+              name = FullName("first name", None, "last name"),
               dateOfBirth = None,
               phoneNumber = None,
               identification = None
@@ -168,7 +168,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           ),
           TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
-              name = NameType("second name", None, "second name"),
+              name = FullName("second name", None, "second name"),
               dateOfBirth = None,
               phoneNumber = None,
               identification = None
@@ -238,7 +238,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
-            name = NameType("first name", Some("middle name"), "last name"),
+            name = FullName("first name", Some("middle name"), "last name"),
             dateOfBirth = Some(LocalDate.of(1500, 10, 10)),
             phoneNumber = None,
             identification = Some(

@@ -21,8 +21,7 @@ import mapping.Mapping
 import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustee, Trustees}
 import models.UserAnswers
 
-class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
-                                  addressMapper: AddressMapper,
+class LeadTrusteeMapper @Inject()(addressMapper: AddressMapper,
                                   passportOrIdCardMapper: PassportOrIdCardMapper
                                  ) extends Mapping[LeadTrusteeType] {
 
@@ -58,7 +57,7 @@ class LeadTrusteeMapper @Inject()(nameMapper: NameMapper,
     LeadTrusteeType(
       leadTrusteeInd = Some(
         LeadTrusteeIndType(
-          name = nameMapper.build(leadTrustee.name),
+          name = leadTrustee.name,
           dateOfBirth = leadTrustee.dateOfBirth,
           phoneNumber = leadTrustee.telephoneNumber,
           email = leadTrustee.email,
