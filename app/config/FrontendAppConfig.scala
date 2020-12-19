@@ -57,7 +57,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
   lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
 
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
-  lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
+  lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
 
   lazy val findLostUtrUrl: String = "https://www.gov.uk/find-lost-utr-number"
 
