@@ -19,8 +19,10 @@ package mapping.registration
 import models.UserAnswers
 import models.core.pages.{Address, InternationalAddress, UKAddress}
 import pages.QuestionPage
+import config.FrontendAppConfig
+import javax.inject.Inject
 
-class AddressMapper  {
+class AddressMapper @Inject()(implicit val config: FrontendAppConfig)  {
 
   def build(userAnswers           : UserAnswers,
             isUk                  : QuestionPage[Boolean],
@@ -51,7 +53,7 @@ class AddressMapper  {
       address.line3,
       address.line4,
       Some(address.postcode),
-      "GB"
+      config.UK_COUNTRY_CODE
     )
   }
 
