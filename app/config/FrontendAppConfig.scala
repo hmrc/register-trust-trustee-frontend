@@ -27,6 +27,9 @@ import play.api.mvc.{Call, Request}
 @Singleton
 class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
+  final val ENGLISH = "en"
+  final val WELSH = "cy"
+
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "trusts"
 
@@ -65,8 +68,8 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
   lazy val timeoutLength: String = configuration.get[String]("timeout.length")
 
   def languageMap: Map[String, Lang] = Map(
-    "english" -> Lang("en"),
-    "cymraeg" -> Lang("cy")
+    "english" -> Lang(ENGLISH),
+    "cymraeg" -> Lang(WELSH)
   )
 
   def routeToSwitchLanguage: String => Call =
