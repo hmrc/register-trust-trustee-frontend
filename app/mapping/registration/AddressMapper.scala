@@ -53,7 +53,7 @@ class AddressMapper @Inject()(implicit val config: FrontendAppConfig)  {
       address.line3,
       address.line4,
       Some(address.postcode),
-      config.GB
+      config.UK_COUNTRY_CODE
     )
   }
 
