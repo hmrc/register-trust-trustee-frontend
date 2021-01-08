@@ -388,6 +388,19 @@ leadTrustee.organisation.utr.hint = This is 10 numbers, for example 1234567890. 
 leadTrustee.organisation.utr.p1 = You can
 leadTrustee.organisation.utr.link = find a lost UTR number (opens in a new window or tab)
 
+leadTrustee.organisation.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does the business have UK residency?
+leadTrustee.organisation.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+leadTrustee.organisation.nonTaxable.countryOfResidenceInTheUkYesNo.hint = The business has UK residency if it is registered with Companies House.
+leadTrustee.organisation.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+leadTrustee.organisation.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the business has UK residency
+
+leadTrustee.organisation.nonTaxable.countryOfResidence.title = What is the business’s country of residence?
+leadTrustee.organisation.nonTaxable.countryOfResidence.heading = What is {0}’s country of residence?
+leadTrustee.organisation.nonTaxable.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+leadTrustee.organisation.nonTaxable.countryOfResidence.error.required = Enter a country
+leadTrustee.organisation.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
+leadTrustee.organisation.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 leadTrustee.organisation.addressUkYesNo.title = Is the lead trustee’s address in the UK?
 leadTrustee.organisation.addressUkYesNo.heading = Is {0}’s address in the UK?
 leadTrustee.organisation.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?

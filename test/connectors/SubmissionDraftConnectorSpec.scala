@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package connectors
 
-import java.time.LocalDateTime
-
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.Status.InProgress
@@ -28,14 +26,13 @@ import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers.CONTENT_TYPE
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper
 
+import java.time.LocalDateTime
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with OptionValues with WireMockHelper {
-  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(Seq(

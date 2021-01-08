@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -180,6 +180,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
             .set(ltorg.UtrPage(index), "1234567890").success.value
+            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(ltorg.AddressUkYesNoPage(index), true).success.value
             .set(ltorg.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
@@ -191,7 +192,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
               identification = IdentificationOrgType(
                 utr = Some("1234567890"),
                 None
-              )
+              ),
+              countryOfResidence = Some("GB")
             ))
           )
         }
@@ -204,6 +206,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
             .set(ltorg.UtrPage(index), "1234567890").success.value
+            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
             .set(ltorg.AddressUkYesNoPage(index), false).success.value
             .set(ltorg.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
@@ -216,7 +219,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
               identification = IdentificationOrgType(
                 utr = Some("1234567890"),
                 address = None
-              )
+              ),
+              countryOfResidence = Some("GB")
             ))
           )
         }
@@ -229,6 +233,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
+            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(ltorg.AddressUkYesNoPage(index), true).success.value
             .set(ltorg.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
@@ -250,7 +255,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
                   postCode = Some("NE65QA"),
                   country = "GB"
                 ))
-              )
+              ),
+              countryOfResidence = Some("GB")
             ))
           )
         }
@@ -263,6 +269,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
+            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+            .set(ltorg.nonTaxable.CountryOfResidencePage(index), "FR").success.value
             .set(ltorg.AddressUkYesNoPage(index), false).success.value
             .set(ltorg.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
@@ -281,7 +289,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
                   postCode = None,
                   country = "FR"
                 ))
-              )
+              ),
+              countryOfResidence = Some("FR")
             ))
           )
         }
@@ -294,6 +303,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
+            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+            .set(ltorg.nonTaxable.CountryOfResidencePage(index), "FR").success.value
             .set(ltorg.AddressUkYesNoPage(index), false).success.value
             .set(ltorg.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
@@ -312,7 +323,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
                   postCode = None,
                   country = "FR"
                 ))
-              )
+              ),
+              countryOfResidence = Some("FR")
             ))
           )
         }
