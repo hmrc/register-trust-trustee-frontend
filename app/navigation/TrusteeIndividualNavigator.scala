@@ -25,7 +25,7 @@ import play.api.mvc.Call
 
 class TrusteeIndividualNavigator extends Navigator {
 
-  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
@@ -35,7 +35,8 @@ class TrusteeIndividualNavigator extends Navigator {
     case IDCardDetailsPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean)
+                                    (implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DateOfBirthYesNoPage(index) => ua =>
       yesNoNav(ua, DateOfBirthYesNoPage(index), DateOfBirthController.onPageLoad(index, draftId), NinoYesNoController.onPageLoad(index, draftId))
     case NinoYesNoPage(index) => ua =>

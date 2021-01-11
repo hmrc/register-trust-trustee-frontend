@@ -21,6 +21,7 @@ import config.annotations.LeadTrusteeOrganisation
 import controllers.actions._
 import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
 import forms.UtrFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.organisation.UtrPage
@@ -28,6 +29,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.leadtrustee.organisation.UtrView
 
@@ -41,6 +43,7 @@ class UtrController @Inject()(
                                standardActionSets: StandardActionSets,
                                nameAction: NameRequiredActionImpl,
                                formProvider: UtrFormProvider,
+                               featureFlagService: FeatureFlagService,
                                val controllerComponents: MessagesControllerComponents,
                                view: UtrView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -71,8 +74,9 @@ class UtrController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UtrPage(index), value))
+            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UtrPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UtrPage(index), draftId, is5mld, updatedAnswers))
         }
       )
   }
