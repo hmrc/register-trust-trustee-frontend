@@ -123,16 +123,16 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
   private def redirectToNextPageWhenValidDataSubmitted(baseAnswers: UserAnswers): Unit = {
     "redirect to the next page when valid data is submitted" in {
 
-      val featureFlagService = mock[FeatureFlagService]
+      val mockFeatureFlagService = mock[FeatureFlagService]
+
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
-            bind[FeatureFlagService].toInstance(featureFlagService),
+            bind[FeatureFlagService].toInstance(mockFeatureFlagService),
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
-
-      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val request =
         FakeRequest(POST, nameRoute)

@@ -101,7 +101,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
           ).build()
 
       when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
-      
+
       val request =
         FakeRequest(POST, utrRoute)
           .withFormUrlEncodedBody(("value", validAnswer))
