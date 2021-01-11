@@ -17,9 +17,11 @@
 package navigation
 
 import base.SpecBase
-import controllers.register.leadtrustee.organisation.routes._
+import controllers.register.leadtrustee.organisation.{routes => rts}
+import controllers.register.leadtrustee.organisation.nonTaxable.{routes => mld5Rts}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.leadtrustee.organisation._
+import pages.register.leadtrustee.organisation.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 
 class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -28,14 +30,16 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
 
   implicit val config = frontendAppConfig
 
-  "LeadTrusteeOrganisation Navigator" must {
+  "LeadTrusteeOrganisation Navigator" when {
+
+    "a 4mld trust" must {
 
     "UK registered yes no page -> YES -> Name page" in {
       val answers = emptyUserAnswers
         .set(UkRegisteredYesNoPage(index), true).success.value
 
       navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
-        .mustBe(NameController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
     }
 
     "UK registered yes no page -> NO -> Name page" in {
@@ -43,7 +47,7 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(UkRegisteredYesNoPage(index), false).success.value
 
       navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
-        .mustBe(NameController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
     }
 
     "Name page" when {
@@ -54,7 +58,7 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
             .set(UkRegisteredYesNoPage(index), true).success.value
 
           navigator.nextPage(NamePage(index), fakeDraftId, answers)
-            .mustBe(UtrController.onPageLoad(index, fakeDraftId))
+            .mustBe(rts.UtrController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -64,17 +68,22 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
             .set(UkRegisteredYesNoPage(index), false).success.value
 
           navigator.nextPage(NamePage(index), fakeDraftId, answers)
-            .mustBe(AddressUkYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
     }
+
+      "UTR page -> Is address in UK page" in {
+        navigator.nextPage(UtrPage(index), fakeDraftId, emptyUserAnswers)
+          .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
+      }
 
     "Is address in UK page -> YES -> UK address page" in {
       val answers = emptyUserAnswers
         .set(AddressUkYesNoPage(index), true).success.value
 
       navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
-        .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
     }
 
     "Is address in UK page -> NO -> International address page" in {
@@ -82,17 +91,17 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(AddressUkYesNoPage(index), false).success.value
 
       navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
-        .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.InternationalAddressController.onPageLoad(index, fakeDraftId))
     }
 
     "UK address page -> Email address yes no page" in {
       navigator.nextPage(UkAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "International address page -> Email address yes no page" in {
       navigator.nextPage(InternationalAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "Email address yes no page -> YES -> Email address page" in {
@@ -100,7 +109,7 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(EmailAddressYesNoPage(index), true).success.value
 
       navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
-        .mustBe(EmailAddressController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.EmailAddressController.onPageLoad(index, fakeDraftId))
     }
 
     "Email address yes no page -> NO -> Telephone number page" in {
@@ -108,17 +117,60 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(EmailAddressYesNoPage(index), false).success.value
 
       navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
-        .mustBe(TelephoneNumberController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.TelephoneNumberController.onPageLoad(index, fakeDraftId))
     }
 
     "Email address page -> Telephone number page" in {
       navigator.nextPage(EmailAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(TelephoneNumberController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.TelephoneNumberController.onPageLoad(index, fakeDraftId))
     }
 
     "Telephone number page -> Check your answers page" in {
       navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+        .mustBe(rts.CheckDetailsController.onPageLoad(index, fakeDraftId))
+    }
+    }
+
+    "a 5mld trust" must {
+
+      "Name page" when {
+
+        "Not UK registered" must {
+          "-> Address UK yes no page" in {
+            val answers = emptyUserAnswers
+              .set(UkRegisteredYesNoPage(index), false).success.value
+
+            navigator.nextPage(NamePage(index), fakeDraftId, fiveMldEnabled = true, answers)
+              .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
+      "UTR page -> Country Of Residence UK yes no page" in {
+        navigator.nextPage(UtrPage(index), fakeDraftId, fiveMldEnabled = true, emptyUserAnswers)
+          .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence UK yes no page -> No -> Country of Residence page" in {
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, fiveMldEnabled = true, answers)
+          .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence UK yes no page -> Yes -> UK Address page" in {
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, fiveMldEnabled = true, answers)
+          .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence page -> International Address page" in {
+        navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, fiveMldEnabled = true, emptyUserAnswers)
+          .mustBe(rts.InternationalAddressController.onPageLoad(index, fakeDraftId))
+      }
     }
   }
 

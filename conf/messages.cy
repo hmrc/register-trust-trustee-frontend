@@ -10,7 +10,7 @@ error.summary.title=Mae problem wedi codi
 #leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.title =
 leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.heading = A yw {0} yn breswyl yn y DU?
 #leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.hint =
-leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  A yw {0} yn breswyl yn y DU?
+leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = A yw {0} yn breswyl yn y DU?
 #leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.error.required =
 
 #leadTrustee.organisation.5mld.countryOfResidence.title =

@@ -22,12 +22,17 @@ import controllers.register.IndexValidation
 import forms.StringFormProvider
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.register.leadtrustee.organisation.{NamePage, UkRegisteredYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
+import services.FeatureFlagService
 import views.html.register.leadtrustee.organisation.NameView
+
+import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase  with IndexValidation {
 
@@ -118,9 +123,14 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
   private def redirectToNextPageWhenValidDataSubmitted(baseAnswers: UserAnswers): Unit = {
     "redirect to the next page when valid data is submitted" in {
 
+      val mockFeatureFlagService = mock[FeatureFlagService]
+
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
+            bind[FeatureFlagService].toInstance(mockFeatureFlagService),
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
 

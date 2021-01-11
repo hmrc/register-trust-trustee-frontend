@@ -13,7 +13,6 @@ POST       /:draftId/:index/uk-residence                 controllers.register.le
 GET        /:draftId/:index/country-of-residence         controllers.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/country-of-residence         controllers.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceController.onSubmit(index: Int, draftId: String)
 
-
 GET        /:draftId/:index/has-uk-address               controllers.register.leadtrustee.organisation.AddressUkYesNoController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/has-uk-address               controllers.register.leadtrustee.organisation.AddressUkYesNoController.onSubmit(index: Int, draftId: String)
 

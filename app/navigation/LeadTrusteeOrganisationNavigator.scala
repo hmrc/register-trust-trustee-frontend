@@ -17,46 +17,66 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.register.leadtrustee.organisation.routes._
+import controllers.register.leadtrustee.organisation.{routes => rts}
+import controllers.register.leadtrustee.organisation.nonTaxable.{routes => mld5Rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.leadtrustee.organisation._
+import pages.register.leadtrustee.organisation.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 import play.api.mvc.Call
 
 class LeadTrusteeOrganisationNavigator extends Navigator {
 
-  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case UkRegisteredYesNoPage(index) => _ => NameController.onPageLoad(index, draftId)
-    case NamePage(index) => ua => nameRoute(ua, index, draftId)
-    case UtrPage(index) => _ => AddressUkYesNoController.onPageLoad(index, draftId)
-    case UkAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
-    case InternationalAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
-    case EmailAddressPage(index) => _ => TelephoneNumberController.onPageLoad(index, draftId)
-    case TelephoneNumberPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
+  override def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case UkRegisteredYesNoPage(index) => _ => rts.NameController.onPageLoad(index, draftId)
+    case NamePage(index) => ua => nameRoute(ua, index, draftId, fiveMldEnabled)
+    case UtrPage(index) => _ => fiveMldYesNo(draftId, index, fiveMldEnabled)
+    case CountryOfResidencePage(index) => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
+    case UkAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
+    case InternationalAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
+    case EmailAddressPage(index) => _ => rts.TelephoneNumberController.onPageLoad(index, draftId)
+    case TelephoneNumberPage(index) => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean)
+                                    (implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case AddressUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressUkYesNoPage(index),
-        UkAddressController.onPageLoad(index, draftId),
-        InternationalAddressController.onPageLoad(index, draftId)
+        rts.UkAddressController.onPageLoad(index, draftId),
+        rts.InternationalAddressController.onPageLoad(index, draftId)
       )
     case EmailAddressYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         EmailAddressYesNoPage(index),
-        EmailAddressController.onPageLoad(index, draftId),
-        TelephoneNumberController.onPageLoad(index, draftId)
+        rts.EmailAddressController.onPageLoad(index, draftId),
+        rts.TelephoneNumberController.onPageLoad(index, draftId)
+      )
+    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        CountryOfResidenceInTheUkYesNoPage(index),
+        rts.UkAddressController.onPageLoad(index, draftId),
+        mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
 
-  private def nameRoute(ua: ReadableUserAnswers, index: Int, draftId: String): Call = {
+  private def nameRoute(ua: ReadableUserAnswers, index: Int, draftId: String, fiveMldEnabled: Boolean): Call = {
     ua.get(UkRegisteredYesNoPage(index)) match {
-      case Some(true) => UtrController.onPageLoad(index, draftId)
-      case Some(false) => AddressUkYesNoController.onPageLoad(index, draftId)
+      case Some(true) => rts.UtrController.onPageLoad(index, draftId)
+      case Some(false) => fiveMldYesNo(draftId, index, fiveMldEnabled)
       case None => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
+
+  private def fiveMldYesNo(draftId: String, index: Int, fiveMld: Boolean): Call = {
+    if (fiveMld) {
+      mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    } else {
+      rts.AddressUkYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
 }

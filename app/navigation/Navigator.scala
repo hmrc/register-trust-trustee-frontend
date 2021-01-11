@@ -30,18 +30,22 @@ import sections.Trustees
 class Navigator {
 
   def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
-              (implicit config: FrontendAppConfig): Call = routes(draftId)(config)(page)(userAnswers)
+              (implicit config: FrontendAppConfig): Call = nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
 
-  private def routes(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) orElse
-      conditionalNavigation(draftId)
+  def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers)
+              (implicit config: FrontendAppConfig): Call = routes(draftId, fiveMldEnabled)(config)(page)(userAnswers)
 
-  def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def routes(draftId: String, fiveMldEnabled: Boolean)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId, fiveMldEnabled) orElse
+      conditionalNavigation(draftId, fiveMldEnabled)
+
+  def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeOrLeadTrusteePage(index) => _ => TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
     case TrusteesAnswerPage => _ => AddATrusteeController.onPageLoad(draftId)
   }
 
-  def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean)
+                           (implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeIndividualOrBusinessPage(index) => ua =>
       trusteeTypeJourney(ua, index, draftId)
 
