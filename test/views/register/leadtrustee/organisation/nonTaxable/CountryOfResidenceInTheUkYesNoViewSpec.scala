@@ -24,7 +24,7 @@ import views.html.register.leadtrustee.organisation.nonTaxable.CountryOfResidenc
 
 class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "leadTrustee.organisation.nonTaxable.countryOfResidenceInTheUkYesNo"
+  val prefix = "leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo"
   val index = 0
   val trustName = "Test"
 

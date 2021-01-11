@@ -23,24 +23,24 @@
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trusteesInfo.nonTaxable.title")
+    title = messages("trusteesInfo.5mld.title")
     ) {
 
     @components.back_link()
 
-    @components.heading_with_caption("trusteesInfo.nonTaxable")
+    @components.heading_with_caption("trusteesInfo.5mld")
 
-    <h2>@messages("trusteesInfo.nonTaxable.subheading1")</h2>
+    <h2>@messages("trusteesInfo.5mld.subheading1")</h2>
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph1")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph1")</p>
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph2")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph2")</p>
 
-    <h2>@messages("trusteesInfo.nonTaxable.subheading2")</h2>
+    <h2>@messages("trusteesInfo.5mld.subheading2")</h2>
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph3")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph3")</p>
 
-    @components.bullet_list("trusteesInfo.nonTaxable",
+    @components.bullet_list("trusteesInfo.5mld",
         List(
             "bulletpoint1",
             "bulletpoint2",
@@ -53,17 +53,17 @@
         )
     )
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph4")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph4")</p>
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph5")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph5")</p>
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph6")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph6")</p>
 
-    <h2>@messages("trusteesInfo.nonTaxable.subheading3")</h2>
+    <h2>@messages("trusteesInfo.5mld.subheading3")</h2>
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph7")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph7")</p>
 
-    @components.bullet_list("trusteesInfo.nonTaxable",
+    @components.bullet_list("trusteesInfo.5mld",
         List(
             "bulletpoint9",
             "bulletpoint10",
@@ -74,23 +74,23 @@
         )
     )
 
-    <p>@messages("trusteesInfo.nonTaxable.paragraph8")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph8")</p>
 
     <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">
-          @messages("trusteesInfo.nonTaxable.details")
+          @messages("trusteesInfo.5mld.details")
         </span>
         </summary>
         <div class="govuk-details__text">
-            <h4>@messages("trusteesInfo.nonTaxable.details.subheading1")</h4>
-            @messages("trusteesInfo.nonTaxable.details.paragraph1")
-            <h4>@messages("trusteesInfo.nonTaxable.details.subheading2")</h4>
-            @messages("trusteesInfo.nonTaxable.details.paragraph2")
+            <h3>@messages("trusteesInfo.5mld.details.subheading1")</h3>
+            <p>@messages("trusteesInfo.5mld.details.paragraph1")</p>
+            <h3>@messages("trusteesInfo.5mld.details.subheading2")</h3>
+            <p>@messages("trusteesInfo.5mld.details.paragraph2")</p>
         </div>
     </details>
 
-    @components.warning("trusteesInfo.nonTaxable")
+    @components.warning("trusteesInfo.5mld")
 
     @components.button_link(messages("site.onlyContinue"), TrusteeOrLeadTrusteeController.onPageLoad(0, draftId).url)
 

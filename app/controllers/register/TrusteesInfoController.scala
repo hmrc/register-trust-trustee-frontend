@@ -23,7 +23,8 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register._
+import views.html.register.TrusteesInfoView
+import views.html.register.nonTaxable.TrusteesInfo5MLDView
 
 import scala.concurrent.ExecutionContext
 
@@ -33,14 +34,14 @@ class TrusteesInfoController @Inject()(
                                         featureFlagService: FeatureFlagService,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: TrusteesInfoView,
-                                        viewNonTaxable: nonTaxable.TrusteesInfoView
+                                        view5mld: TrusteesInfo5MLDView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async {
     implicit request =>
       featureFlagService.is5mldEnabled().map {
         case true =>
-          Ok(viewNonTaxable(draftId))
+          Ok(view5mld(draftId))
         case _ =>
           Ok(view(draftId))
       }

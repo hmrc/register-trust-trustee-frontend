@@ -18,17 +18,17 @@ package views.register.nonTaxable
 
 import controllers.register.routes
 import views.behaviours.ViewBehaviours
-import views.html.register.nonTaxable.TrusteesInfoView
+import views.html.register.nonTaxable.TrusteesInfo5MLDView
 
-class TrusteeInfoViewSpec extends ViewBehaviours {
+class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
 
-  "TrusteeInfo NonTaxable view" must {
+  "TrusteesInfo 5MLD view" must {
 
-    val view = viewFor[TrusteesInfoView](Some(emptyUserAnswers))
+    val view = viewFor[TrusteesInfo5MLDView](Some(emptyUserAnswers))
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "trusteesInfo.nonTaxable",
+    behave like normalPage(applyView, "trusteesInfo.5mld",
       "caption",
       "subheading1",
       "paragraph1",

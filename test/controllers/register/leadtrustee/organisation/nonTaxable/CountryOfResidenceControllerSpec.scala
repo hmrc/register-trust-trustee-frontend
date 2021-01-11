@@ -34,7 +34,7 @@ import views.html.register.leadtrustee.organisation.nonTaxable.CountryOfResidenc
 class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new CountryFormProvider()
-  val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.nonTaxable.countryOfResidence")
+  val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.5mld.countryOfResidence")
   val index: Int = 0
   val trustName = "Test"
 

@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.FeatureFlagService
 import views.html.register.TrusteesInfoView
-import views.html.register.nonTaxable.{TrusteesInfoView => NonTaxableInfoView}
+import views.html.register.nonTaxable.TrusteesInfo5MLDView
 
 import scala.concurrent.Future
 
@@ -72,7 +72,7 @@ class TrusteesInfoControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[NonTaxableInfoView]
+      val view = application.injector.instanceOf[TrusteesInfo5MLDView]
 
       status(result) mustEqual OK
 
