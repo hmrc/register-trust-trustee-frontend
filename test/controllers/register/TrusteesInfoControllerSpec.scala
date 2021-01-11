@@ -17,23 +17,62 @@
 package controllers.register
 
 import base.SpecBase
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.register.TrusteesInfoView
+import views.html.register.nonTaxable.{TrusteesInfoView => NonTaxableInfoView}
+
+import scala.concurrent.Future
 
 class TrusteesInfoControllerSpec extends SpecBase {
 
+  lazy val mockFeatureFlagService: FeatureFlagService = mock[FeatureFlagService]
+
   "TrusteesInfo Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET with 5mld disabled" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(false))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+        ).build()
 
       val request = FakeRequest(GET, routes.TrusteesInfoController.onPageLoad(fakeDraftId).url)
 
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[TrusteesInfoView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(fakeDraftId)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for a GET with 5mld enabled" in {
+
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(true))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+        ).build()
+
+      val request = FakeRequest(GET, routes.TrusteesInfoController.onPageLoad(fakeDraftId).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[NonTaxableInfoView]
 
       status(result) mustEqual OK
 

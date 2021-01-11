@@ -307,6 +307,44 @@ trusteesInfo.paragraph6 = If the trustee is a business, tell us their registered
 trusteesInfo.warning = All trustees have the same legal responsibilities.
 trusteesInfo.continue = Continue
 
+trusteesInfo.nonTaxable.title = Information you need to register a trustee
+trusteesInfo.nonTaxable.heading = Information you need to register a trustee
+trusteesInfo.nonTaxable.caption = Trustees
+trusteesInfo.nonTaxable.caption.hidden = This section is
+trusteesInfo.nonTaxable.subheading1 = Lead trustee
+trusteesInfo.nonTaxable.paragraph1 = You need to give us details of a lead trustee. This is the person or business we will contact if we need to discuss the trust and send all official documents to. The lead trustee is responsible for keeping the trust’s details up to date on the register.
+trusteesInfo.nonTaxable.paragraph2 = If the lead trustee is an individual, make sure you enter their name, date of birth and National Insurance number correctly, as these details need to match what we have on our records.
+trusteesInfo.nonTaxable.subheading2 = Trustees that are an Individual
+trusteesInfo.nonTaxable.paragraph3 = If the lead trustee is an individual with a National Insurance number, tell us their:
+trusteesInfo.nonTaxable.bulletpoint1 = name
+trusteesInfo.nonTaxable.bulletpoint2 = date of birth
+trusteesInfo.nonTaxable.bulletpoint3 = country of nationality
+trusteesInfo.nonTaxable.bulletpoint4 = National Insurance number
+trusteesInfo.nonTaxable.bulletpoint5 = country of residence
+trusteesInfo.nonTaxable.bulletpoint6 = address
+trusteesInfo.nonTaxable.bulletpoint7 = email address
+trusteesInfo.nonTaxable.bulletpoint8 = phone number
+trusteesInfo.nonTaxable.paragraph4 = If the lead trustee does not have a National Insurance number, you need to tell us their passport or ID card details and address.
+trusteesInfo.nonTaxable.paragraph5 = For all other trustees that are individuals, tell us their names. If you know more details tell us their date of birth, country of residence and country of nationality
+trusteesInfo.nonTaxable.paragraph6 = You also need to tell us if any of the trustees are legally incapable at the time of registration. This is when the individual does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
+trusteesInfo.nonTaxable.subheading3 = Trustees that are a business
+trusteesInfo.nonTaxable.paragraph7 = If the lead trustee is a business, tell us their:
+trusteesInfo.nonTaxable.bulletpoint9 = business name
+trusteesInfo.nonTaxable.bulletpoint10 = Unique Taxpayer Reference (if they are a UK registered business)
+trusteesInfo.nonTaxable.bulletpoint11 = registered address
+trusteesInfo.nonTaxable.bulletpoint12 = country of residence
+trusteesInfo.nonTaxable.bulletpoint13 = email address
+trusteesInfo.nonTaxable.bulletpoint14 = phone number
+trusteesInfo.nonTaxable.paragraph8 = For all other trustees that are businesses, tell us their names. Also, tell us their country of residence if you know it.
+
+trusteesInfo.nonTaxable.details = What we mean by country of residence
+trusteesInfo.nonTaxable.details.subheading1 = Individual
+trusteesInfo.nonTaxable.details.paragraph1 = This is usually the country where the trustee lives and works most of the time during the tax year. You can check the status of their residency through the Statutory Residence Test (SRT).
+trusteesInfo.nonTaxable.details.subheading2 = Business
+trusteesInfo.nonTaxable.details.paragraph2 = This is usually where the business is registered (incorporated). The business has UK residency if it is registered with Companies House.
+
+trusteesInfo.nonTaxable.warning = All trustees have the same legal responsibilities.
+
 addATrusteeYesNo.title = Do you want to add a trustee?
 addATrusteeYesNo.heading = Do you want to add a trustee?
 addATrusteeYesNo.error.required = Select yes if you want to add a trustee
