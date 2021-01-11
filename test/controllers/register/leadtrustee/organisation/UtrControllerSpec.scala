@@ -22,12 +22,17 @@ import controllers.register.IndexValidation
 import forms.UtrFormProvider
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.register.leadtrustee.organisation.{NamePage, UtrPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
+import services.FeatureFlagService
 import views.html.register.leadtrustee.organisation.UtrView
+
+import scala.concurrent.Future
 
 class UtrControllerSpec extends SpecBase with IndexValidation {
 
@@ -86,12 +91,17 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to the next page when valid data is submitted" in {
 
+      val featureFlagService = mock[FeatureFlagService]
+
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
+            bind[FeatureFlagService].toInstance(featureFlagService),
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
           ).build()
 
+      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+      
       val request =
         FakeRequest(POST, utrRoute)
           .withFormUrlEncodedBody(("value", validAnswer))
