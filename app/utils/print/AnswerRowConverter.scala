@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,23 @@ class AnswerRowConverter @Inject()() {
           Some(changeUrl),
           name
         )
+      }
+    }
+
+    def countryQuestion(ukResidentQuery: Gettable[Boolean],
+                        query: Gettable[String],
+                       labelKey: String,
+                       changeUrl: String): Option[AnswerRow] = {
+      userAnswers.get(ukResidentQuery) flatMap {
+        case false => userAnswers.get(query) map { x =>
+          AnswerRow(
+            s"$labelKey.checkYourAnswersLabel",
+            HtmlFormat.escape(country(x, countryOptions)),
+            Some(changeUrl),
+            name
+          )
+        }
+        case _ => None
       }
     }
 

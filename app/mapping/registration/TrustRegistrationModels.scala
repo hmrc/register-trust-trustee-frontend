@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -209,7 +209,8 @@ case class LeadTrusteeOrgType(
                                name: String,
                                phoneNumber: String,
                                email: Option[String] = None,
-                               identification: IdentificationOrgType
+                               identification: IdentificationOrgType,
+                               countryOfResidence: Option[String]
                              )
 
 object LeadTrusteeOrgType {

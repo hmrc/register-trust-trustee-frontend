@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import play.api.libs.json.Json
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.auth.core.AffinityGroup.Organisation
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
+import uk.gov.hmrc.http.HeaderCarrier
 
 trait SpecBase extends PlaySpec
   with GuiceOneAppPerSuite
@@ -47,6 +48,8 @@ trait SpecBase extends PlaySpec
   lazy val fakeDraftId: String = draftId
 
   def emptyUserAnswers: UserAnswers = UserAnswers(draftId, Json.obj(), internalAuthId = userInternalId)
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   lazy val fakeNavigator: FakeNavigator = new FakeNavigator()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@ final case class LeadTrusteeOrganisation(override val isLead: Boolean = true,
                                          utr: Option[String],
                                          address: Address,
                                          telephoneNumber: String,
-                                         email: Option[String]) extends Trustee {
+                                         email: Option[String],
+                                         countryOfResidence: Option[String]) extends Trustee {
 
   def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
 }
@@ -42,7 +43,8 @@ object LeadTrusteeOrganisation extends TrusteeReads {
         yesNoReads[String]("isUKBusiness", "utr") and
         addressReads and
         (__ \ "telephoneNumber").read[String] and
-        yesNoReads[String]("emailYesNo", "email")
+        yesNoReads[String]("emailYesNo", "email") and
+        (__ \ "countryOfResidence").readNullable[String]
       )(LeadTrusteeOrganisation.apply _)
 
     (isLeadReads and

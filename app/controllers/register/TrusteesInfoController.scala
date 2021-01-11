@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,34 @@
 package controllers.register
 
 import controllers.actions.register.RegistrationIdentifierAction
+
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.TrusteesInfoView
+import views.html.register.nonTaxable.TrusteesInfo5MLDView
+
+import scala.concurrent.ExecutionContext
 
 class TrusteesInfoController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         identify: RegistrationIdentifierAction,
+                                        featureFlagService: FeatureFlagService,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: TrusteesInfoView
-                                      ) extends FrontendBaseController with I18nSupport {
+                                        view: TrusteesInfoView,
+                                        view5mld: TrusteesInfo5MLDView
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(draftId: String): Action[AnyContent] = identify {
+  def onPageLoad(draftId: String): Action[AnyContent] = identify.async {
     implicit request =>
-      Ok(view(draftId))
+      featureFlagService.is5mldEnabled().map {
+        case true =>
+          Ok(view5mld(draftId))
+        case _ =>
+          Ok(view(draftId))
+      }
   }
 
 }
