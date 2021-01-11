@@ -18,9 +18,6 @@ package mapping.reads
 
 import models.core.pages.IndividualOrBusiness.Business
 import models.core.pages.{Address, UKAddress}
-import pages.register.TrusteeIndividualOrBusinessPage
-import pages.register.leadtrustee.organisation.{EmailAddressPage, EmailAddressYesNoPage, NamePage, TelephoneNumberPage, UkRegisteredYesNoPage, UtrPage}
-import pages.register.leadtrustee.organisation.nonTaxable.CountryOfResidencePage
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
 final case class LeadTrusteeOrganisation(override val isLead: Boolean = true,
@@ -42,16 +39,16 @@ object LeadTrusteeOrganisation extends TrusteeReads {
 
     val leadTrusteeReads: Reads[LeadTrusteeOrganisation] = (
       isLeadReads and
-        (__ \ NamePage.toString).read[String] and
-        yesNoReads[String](UkRegisteredYesNoPage.toString, UtrPage.toString) and
+        (__ \ "name").read[String] and
+        yesNoReads[String]("isUKBusiness", "utr") and
         addressReads and
-        (__ \ TelephoneNumberPage.toString).read[String] and
-        yesNoReads[String](EmailAddressYesNoPage.toString, EmailAddressPage.toString) and
-        (__ \ CountryOfResidencePage.toString).readNullable[String]
+        (__ \ "telephoneNumber").read[String] and
+        yesNoReads[String]("emailYesNo", "email") and
+        (__ \ "countryOfResidence").readNullable[String]
       )(LeadTrusteeOrganisation.apply _)
 
     (isLeadReads and
-      (__ \ TrusteeIndividualOrBusinessPage.toString).read[String]) ((_, _)).flatMap[(Boolean, String)] {
+      (__ \ "individualOrBusiness").read[String]) ((_, _)).flatMap[(Boolean, String)] {
       case (isLead, individualOrBusiness) =>
         if (individualOrBusiness == Business.toString && isLead) {
           Reads(_ => JsSuccess((isLead, individualOrBusiness)))
