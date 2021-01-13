@@ -56,8 +56,6 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
               .set(torg.UtrPage(index), utr).success.value
-              .set(torg.UtrPage(index), utr).success.value
-              .set(torg.UtrPage(index), utr).success.value
               .set(torg.AddressYesNoPage(index), true).success.value
               .set(torg.AddressUkYesNoPage(index), true).success.value
               .set(torg.UkAddressPage(index), ukAddress).success.value
