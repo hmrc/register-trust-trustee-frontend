@@ -91,7 +91,6 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
             result.get(ltorg.UkRegisteredYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.NamePage(index)) mustNot be(defined)
             result.get(ltorg.UtrPage(index)) mustNot be(defined)
-            result.get(ltorg.UtrPage(index)) mustNot be(defined)
             result.get(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.nonTaxable.CountryOfResidencePage(index)) mustNot be(defined)
             result.get(ltorg.UkAddressPage(index)) mustNot be(defined)
