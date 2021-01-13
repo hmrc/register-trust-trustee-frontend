@@ -56,6 +56,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
               .set(torg.UtrPage(index), utr).success.value
+              .set(torg.UtrPage(index), utr).success.value
+              .set(torg.UtrPage(index), utr).success.value
               .set(torg.AddressYesNoPage(index), true).success.value
               .set(torg.AddressUkYesNoPage(index), true).success.value
               .set(torg.UkAddressPage(index), ukAddress).success.value
@@ -64,6 +66,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
               .set(ltorg.UtrPage(index), utr).success.value
+              .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(ltorg.nonTaxable.CountryOfResidencePage(index), "FR").success.value
               .set(ltorg.AddressUkYesNoPage(index), true).success.value
               .set(ltorg.UkAddressPage(index), ukAddress).success.value
               .set(ltorg.InternationalAddressPage(index), internationalAddress).success.value
@@ -87,7 +91,9 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
             result.get(ltorg.UkRegisteredYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.NamePage(index)) mustNot be(defined)
             result.get(ltorg.UtrPage(index)) mustNot be(defined)
-            result.get(ltorg.AddressUkYesNoPage(index)) mustNot be(defined)
+            result.get(ltorg.UtrPage(index)) mustNot be(defined)
+            result.get(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index)) mustNot be(defined)
+            result.get(ltorg.nonTaxable.CountryOfResidencePage(index)) mustNot be(defined)
             result.get(ltorg.UkAddressPage(index)) mustNot be(defined)
             result.get(ltorg.InternationalAddressPage(index)) mustNot be(defined)
             result.get(ltorg.EmailAddressYesNoPage(index)) mustNot be(defined)
@@ -119,6 +125,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
               .set(ltorg.UtrPage(index), utr).success.value
+              .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(ltorg.nonTaxable.CountryOfResidencePage(index), "FR").success.value
               .set(ltorg.AddressUkYesNoPage(index), true).success.value
               .set(ltorg.UkAddressPage(index), ukAddress).success.value
               .set(ltorg.InternationalAddressPage(index), internationalAddress).success.value
@@ -142,6 +150,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
             result.get(ltorg.UkRegisteredYesNoPage(index)) must be(defined)
             result.get(ltorg.NamePage(index)) must be(defined)
             result.get(ltorg.UtrPage(index)) must be(defined)
+            result.get(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index)) must be(defined)
+            result.get(ltorg.nonTaxable.CountryOfResidencePage(index)) must be(defined)
             result.get(ltorg.AddressUkYesNoPage(index)) must be(defined)
             result.get(ltorg.UkAddressPage(index)) must be(defined)
             result.get(ltorg.InternationalAddressPage(index)) must be(defined)
