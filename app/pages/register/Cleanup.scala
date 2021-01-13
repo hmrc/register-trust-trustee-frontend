@@ -17,6 +17,7 @@
 package pages.register
 
 import models.UserAnswers
+import pages.register.leadtrustee.organisation.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 
 import scala.util.Try
 
@@ -70,6 +71,8 @@ trait Cleanup {
     userAnswers.remove(UkRegisteredYesNoPage(index))
       .flatMap(_.remove(NamePage(index)))
       .flatMap(_.remove(UtrPage(index)))
+      .flatMap(_.remove(CountryOfResidenceInTheUkYesNoPage(index)))
+      .flatMap(_.remove(CountryOfResidencePage(index)))
       .flatMap(_.remove(AddressUkYesNoPage(index)))
       .flatMap(_.remove(UkAddressPage(index)))
       .flatMap(_.remove(InternationalAddressPage(index)))
