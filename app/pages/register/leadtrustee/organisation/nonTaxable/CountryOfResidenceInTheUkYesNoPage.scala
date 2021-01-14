@@ -18,7 +18,7 @@ package pages.register.leadtrustee.organisation.nonTaxable
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.leadtrustee.organisation.{AddressUkYesNoPage, InternationalAddressPage, UkAddressPage}
+import pages.register.leadtrustee.organisation.{InternationalAddressPage, UkAddressPage}
 import play.api.libs.json.JsPath
 import sections.Trustees
 
