@@ -21,6 +21,7 @@ import pages.QuestionPage
 import pages.register.leadtrustee.organisation.{InternationalAddressPage, UkAddressPage}
 import play.api.libs.json.JsPath
 import sections.Trustees
+import utils.Constants.GB
 
 import scala.util.Try
 
@@ -33,7 +34,7 @@ final case class CountryOfResidenceInTheUkYesNoPage(index: Int) extends Question
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(true) =>
-        userAnswers.set(CountryOfResidencePage(index), "GB").flatMap(
+        userAnswers.set(CountryOfResidencePage(index), GB).flatMap(
           _.remove(InternationalAddressPage(index))
         )
       case Some(false) =>
