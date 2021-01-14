@@ -20,6 +20,8 @@ import models.UserAnswers
 import models.core.pages.{Address, InternationalAddress, UKAddress}
 import pages.QuestionPage
 import config.FrontendAppConfig
+import utils.Constants.GB
+
 import javax.inject.Inject
 
 class AddressMapper @Inject()(implicit val config: FrontendAppConfig)  {
@@ -53,7 +55,7 @@ class AddressMapper @Inject()(implicit val config: FrontendAppConfig)  {
       address.line3,
       address.line4,
       Some(address.postcode),
-      config.UK_COUNTRY_CODE
+      GB
     )
   }
 

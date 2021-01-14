@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,27 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.FrontendAppConfig
+package utils
 
-@this(
-    main_template: MainTemplate,
-    config: FrontendAppConfig
-)
+object Constants {
 
-@()(implicit request: Request[_], messages: Messages)
-
-@main_template(
-    title = messages("featureNotAvailable.title")
-) {
-
-    @components.back_link()
-
-    @components.heading("featureNotAvailable.heading")
-
-    <p>@messages("featureNotAvailable.p1") <a href="@config.helplineUrl" target="_blank">@messages("featureNotAvailable.link")</a></p>
-
-    <p>@messages("featureNotAvailable.p2")</p>
-
+  final val GB = "GB"
 }
