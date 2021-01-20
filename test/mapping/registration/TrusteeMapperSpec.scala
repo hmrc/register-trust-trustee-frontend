@@ -16,8 +16,6 @@
 
 package mapping.registration
 
-import java.time.LocalDate
-
 import base.SpecBase
 import generators.Generators
 import mapping.Mapping
@@ -28,6 +26,8 @@ import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.trustees.individual._
 import pages.register.trustees.{individual => ind, organisation => org}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
+
+import java.time.LocalDate
 
 class TrusteeMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -110,7 +110,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               name = "Org Name",
               phoneNumber = None,
               email = None,
-              identification = IdentificationOrgType(None, None)
+              identification = None
             ))
           )
         }
@@ -131,10 +131,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = "Org Name",
                 phoneNumber = None,
                 email = None,
-                identification = IdentificationOrgType(
+                identification = Some(IdentificationOrgType(
                   utr = Some("1234567890"),
                   address = None
-                )
+                ))
               )
             )
           )
@@ -200,10 +200,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = "Org Name1",
                 phoneNumber = None,
                 email = None,
-                identification = IdentificationOrgType(
-                  utr = None,
-                  address = None
-                )
+                identification = None
               ))
             ),
             TrusteeType(
@@ -212,10 +209,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = "Org Name2",
                 phoneNumber = None,
                 email = None,
-                identification = IdentificationOrgType(
-                  utr = None,
-                  address = None
-                )
+                identification = None
               ))
             )
           )
@@ -276,10 +270,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
-                identification = IdentificationOrgType(
-                  utr = None,
-                  address = None
-                )
+                identification = None
               )
             )
           )
@@ -300,10 +291,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
-                identification = IdentificationOrgType(
+                identification = Some(IdentificationOrgType(
                   utr = Some(utr),
                   address = None
-                )
+                ))
               )
             )
           )
@@ -326,10 +317,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
-                identification = IdentificationOrgType(
+                identification = Some(IdentificationOrgType(
                   utr = None,
                   address = Some(AddressType(address.line1, address.line2, address.line3, address.line4, Some(address.postcode), "GB"))
-                )
+                ))
               )
             )
           )
@@ -352,10 +343,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
-                identification = IdentificationOrgType(
+                identification = Some(IdentificationOrgType(
                   utr = None,
                   address = Some(AddressType(address.line1, address.line2, address.line3, None, None, address.country))
-                )
+                ))
               )
             )
           )
