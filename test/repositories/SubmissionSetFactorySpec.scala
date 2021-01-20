@@ -38,8 +38,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       |[
       | {
       |   "trusteeOrg":{
-      |     "name":"Org Name1",
-      |     "identification":{}
+      |     "name":"Org Name1"
       |   }
       | }
       |]

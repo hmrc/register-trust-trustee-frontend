@@ -58,10 +58,7 @@ class TrusteeMapper @Inject()(addressMapper: AddressMapper,
               name = orgTrustee.name,
               phoneNumber = None,
               email = None,
-              identification = IdentificationOrgType(
-                utr = orgTrustee.utr,
-                address = addressMapper.build(orgTrustee.address)
-              )
+              identification = identificationMap(orgTrustee)
             )
           )
         )
@@ -79,6 +76,13 @@ class TrusteeMapper @Inject()(addressMapper: AddressMapper,
     identificationType match {
       case IdentificationType(None, None, None) => None
       case _ => Some(identificationType)
+    }
+  }
+
+  private def identificationMap(trustee: TrusteeOrganisation): Option[IdentificationOrgType] = {
+    (trustee.utr, addressMapper.build(trustee.address)) match {
+      case (None, None) => None
+      case (utr, address) => Some(IdentificationOrgType(utr, address))
     }
   }
 }
