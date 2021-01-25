@@ -39,8 +39,15 @@ class IndexControllerSpec extends SpecBase {
     "pre-existing user answers" must {
 
       "redirect to TrusteesInfoController when there are no trustees" in {
+        
+        val userAnswers = emptyUserAnswers
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
+        
+        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -58,7 +65,12 @@ class IndexControllerSpec extends SpecBase {
         val userAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
+        
+        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
