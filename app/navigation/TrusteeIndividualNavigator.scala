@@ -25,7 +25,7 @@ import play.api.mvc.Call
 
 class TrusteeIndividualNavigator extends Navigator {
 
-  override def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
@@ -35,19 +35,48 @@ class TrusteeIndividualNavigator extends Navigator {
     case IDCardDetailsPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  override def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean)
-                                    (implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case DateOfBirthYesNoPage(index) => ua =>
-      yesNoNav(ua, DateOfBirthYesNoPage(index), DateOfBirthController.onPageLoad(index, draftId), NinoYesNoController.onPageLoad(index, draftId))
-    case NinoYesNoPage(index) => ua =>
-      yesNoNav(ua, NinoYesNoPage(index), NinoController.onPageLoad(index, draftId), AddressYesNoController.onPageLoad(index, draftId))
-    case AddressYesNoPage(index) => ua =>
-      yesNoNav(ua, AddressYesNoPage(index), AddressUkYesNoController.onPageLoad(index, draftId), CheckDetailsController.onPageLoad(index, draftId))
-    case AddressUkYesNoPage(index) => ua =>
-      yesNoNav(ua, AddressUkYesNoPage(index), UkAddressController.onPageLoad(index, draftId), InternationalAddressController.onPageLoad(index, draftId))
-    case PassportDetailsYesNoPage(index) => ua =>
-      yesNoNav(ua, PassportDetailsYesNoPage(index), PassportDetailsController.onPageLoad(index, draftId), IDCardDetailsYesNoController.onPageLoad(index, draftId))
-    case IDCardDetailsYesNoPage(index) => ua =>
-      yesNoNav(ua, IDCardDetailsYesNoPage(index), IDCardDetailsController.onPageLoad(index, draftId), CheckDetailsController.onPageLoad(index, draftId))
+  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case page @ DateOfBirthYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = DateOfBirthController.onPageLoad(index, draftId),
+        noCall = NinoYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ NinoYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = NinoController.onPageLoad(index, draftId),
+        noCall = AddressYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ AddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = AddressUkYesNoController.onPageLoad(index, draftId),
+        noCall = CheckDetailsController.onPageLoad(index, draftId)
+      )
+    case page @ AddressUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = UkAddressController.onPageLoad(index, draftId),
+        noCall = InternationalAddressController.onPageLoad(index, draftId)
+      )
+    case page @ PassportDetailsYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = PassportDetailsController.onPageLoad(index, draftId),
+        noCall = IDCardDetailsYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ IDCardDetailsYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = IDCardDetailsController.onPageLoad(index, draftId),
+        noCall = CheckDetailsController.onPageLoad(index, draftId)
+      )
   }
 }

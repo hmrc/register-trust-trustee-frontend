@@ -29,7 +29,6 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.leadtrustee.organisation.NameView
 
@@ -43,12 +42,11 @@ class NameController @Inject()(
                                 standardActionSets: StandardActionSets,
                                 ukRegisteredAction: UkRegisteredRequiredActionImpl,
                                 formProvider: StringFormProvider,
-                                featureFlagService: FeatureFlagService,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withConfig("leadTrustee.organisation.name", 56)
+  private val form: Form[String] = formProvider.withConfig("leadTrustee.organisation.name", 56)
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen ukRegisteredAction(index)
@@ -74,9 +72,8 @@ class NameController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
-            is5mld <- featureFlagService.is5mldEnabled()
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), draftId, is5mld, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
         }
       )
   }

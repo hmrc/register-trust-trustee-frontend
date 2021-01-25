@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package views.register.nonTaxable
+package views.register
 
 import controllers.register.routes
 import views.behaviours.ViewBehaviours
-import views.html.register.nonTaxable.TrusteesInfo5MLDView
+import views.html.register.TrusteesInfo5MLDView
 
 class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
 

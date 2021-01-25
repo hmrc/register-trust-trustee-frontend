@@ -26,26 +26,23 @@ import pages._
 import pages.register._
 import play.api.mvc.Call
 import sections.Trustees
+import uk.gov.hmrc.http.HttpVerbs.GET
 
 class Navigator {
 
   def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
-              (implicit config: FrontendAppConfig): Call = nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
+              (implicit config: FrontendAppConfig): Call = routes(draftId)(config)(page)(userAnswers)
 
-  def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers)
-              (implicit config: FrontendAppConfig): Call = routes(draftId, fiveMldEnabled)(config)(page)(userAnswers)
+  private def routes(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId) orElse
+      conditionalNavigation(draftId)
 
-  private def routes(draftId: String, fiveMldEnabled: Boolean)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId, fiveMldEnabled) orElse
-      conditionalNavigation(draftId, fiveMldEnabled)
-
-  def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeOrLeadTrusteePage(index) => _ => TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
     case TrusteesAnswerPage => _ => AddATrusteeController.onPageLoad(draftId)
   }
 
-  def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean)
-                           (implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeIndividualOrBusinessPage(index) => ua =>
       trusteeTypeJourney(ua, index, draftId)
 
@@ -72,7 +69,7 @@ class Navigator {
   }
 
   private def registrationTaskList(draftId: String)(implicit config: FrontendAppConfig): Call = {
-    Call("GET", config.registrationProgressUrl(draftId))
+    Call(GET, config.registrationProgressUrl(draftId))
   }
 
   private def trusteeTypeJourney(userAnswers: ReadableUserAnswers, index: Int, draftId: String): Call = {

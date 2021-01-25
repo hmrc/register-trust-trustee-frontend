@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.FeatureFlagService
 import views.html.register.TrusteesInfoView
-import views.html.register.nonTaxable.TrusteesInfo5MLDView
+import views.html.register.TrusteesInfo5MLDView
 
 import scala.concurrent.Future
 

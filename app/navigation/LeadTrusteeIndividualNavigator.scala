@@ -26,7 +26,7 @@ import play.api.mvc.Call
 
 class LeadTrusteeIndividualNavigator extends Navigator {
 
-  override def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteesNamePage(index) => _ => DateOfBirthController.onPageLoad(index, draftId)
     case TrusteesDateOfBirthPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
     case TrusteesNinoPage(index) => _ => LiveInTheUKYesNoController.onPageLoad(index, draftId)
@@ -38,21 +38,37 @@ class LeadTrusteeIndividualNavigator extends Navigator {
     case TelephoneNumberPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  override def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean)
-                                    (implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case TrusteeNinoYesNoPage(index) => ua =>
-      yesNoNav(ua, TrusteeNinoYesNoPage(index), NinoController.onPageLoad(index, draftId), TrusteeDetailsChoiceController.onPageLoad(index, draftId))
-    case AddressUkYesNoPage(index) => ua =>
-      yesNoNav(ua, AddressUkYesNoPage(index), UkAddressController.onPageLoad(index, draftId), InternationalAddressController.onPageLoad(index, draftId))
+  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case page @ TrusteeNinoYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = NinoController.onPageLoad(index, draftId),
+        noCall = TrusteeDetailsChoiceController.onPageLoad(index, draftId)
+      )
+    case page @ AddressUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = UkAddressController.onPageLoad(index, draftId),
+        noCall = InternationalAddressController.onPageLoad(index, draftId)
+      )
     case TrusteeDetailsChoicePage(index) => ua =>
       detailsRoutes(ua, index, draftId)
-    case EmailAddressYesNoPage(index) => ua =>
-      yesNoNav(ua, EmailAddressYesNoPage(index), EmailAddressController.onPageLoad(index, draftId), TelephoneNumberController.onPageLoad(index, draftId))
+    case page @ EmailAddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = EmailAddressController.onPageLoad(index, draftId),
+        noCall = TelephoneNumberController.onPageLoad(index, draftId)
+      )
   }
 
-  private def detailsRoutes(answers: ReadableUserAnswers, index: Int, draftId: String): Call = answers.get(TrusteeDetailsChoicePage(index)) match {
-    case Some(IdCard) => IDCardDetailsController.onPageLoad(index, draftId)
-    case Some(Passport) => PassportDetailsController.onPageLoad(index, draftId)
-    case None => controllers.routes.SessionExpiredController.onPageLoad()
+  private def detailsRoutes(answers: ReadableUserAnswers, index: Int, draftId: String): Call = {
+    answers.get(TrusteeDetailsChoicePage(index)) match {
+      case Some(IdCard) => IDCardDetailsController.onPageLoad(index, draftId)
+      case Some(Passport) => PassportDetailsController.onPageLoad(index, draftId)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
   }
 }

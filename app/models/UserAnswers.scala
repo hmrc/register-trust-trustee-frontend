@@ -26,6 +26,8 @@ trait ReadableUserAnswers {
 
   val data: JsObject
 
+  val is5mldEnabled: Boolean = false
+
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     getAtPath(page.path)
   }
@@ -47,7 +49,7 @@ object ReadOnlyUserAnswers {
 final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
                              internalAuthId :String,
-                             is5mldEnabled: Boolean = false) extends ReadableUserAnswers {
+                             override val is5mldEnabled: Boolean = false) extends ReadableUserAnswers {
 
   private val logger: Logger = Logger(getClass)
 

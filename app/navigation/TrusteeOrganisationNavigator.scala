@@ -25,20 +25,34 @@ import play.api.mvc.Call
 
 class TrusteeOrganisationNavigator extends Navigator {
 
-  override def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => UtrYesNoController.onPageLoad(index, draftId)
     case UtrPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  override def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean)
-                                    (implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case UtrYesNoPage(index) => ua =>
-      yesNoNav(ua, UtrYesNoPage(index), UtrController.onPageLoad(index, draftId), AddressYesNoController.onPageLoad(index, draftId))
-    case AddressYesNoPage(index) => ua =>
-      yesNoNav(ua, AddressYesNoPage(index), AddressUkYesNoController.onPageLoad(index, draftId), CheckDetailsController.onPageLoad(index, draftId))
-    case AddressUkYesNoPage(index) => ua =>
-      yesNoNav(ua, AddressUkYesNoPage(index), UkAddressController.onPageLoad(index, draftId), InternationalAddressController.onPageLoad(index, draftId))
+  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case page @ UtrYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = UtrController.onPageLoad(index, draftId),
+        noCall = AddressYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ AddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = AddressUkYesNoController.onPageLoad(index, draftId),
+        noCall = CheckDetailsController.onPageLoad(index, draftId)
+      )
+    case page @ AddressUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = UkAddressController.onPageLoad(index, draftId),
+        noCall = InternationalAddressController.onPageLoad(index, draftId)
+      )
   }
 }

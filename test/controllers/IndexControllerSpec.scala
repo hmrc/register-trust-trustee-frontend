@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import connectors.SubmissionDraftConnector
 import models.UserAnswers
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import org.mockito.ArgumentCaptor
