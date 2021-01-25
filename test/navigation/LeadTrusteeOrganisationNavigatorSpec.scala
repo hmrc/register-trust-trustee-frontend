@@ -34,141 +34,145 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
 
     "a 4mld trust" must {
 
-    "UK registered yes no page -> YES -> Name page" in {
-      val answers = emptyUserAnswers
-        .set(UkRegisteredYesNoPage(index), true).success.value
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
 
-      navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
-        .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
-    }
+      "UK registered yes no page -> YES -> Name page" in {
+        val answers = baseAnswers
+          .set(UkRegisteredYesNoPage(index), true).success.value
 
-    "UK registered yes no page -> NO -> Name page" in {
-      val answers = emptyUserAnswers
-        .set(UkRegisteredYesNoPage(index), false).success.value
+        navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
+          .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
+      }
 
-      navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
-        .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
-    }
+      "UK registered yes no page -> NO -> Name page" in {
+        val answers = baseAnswers
+          .set(UkRegisteredYesNoPage(index), false).success.value
 
-    "Name page" when {
+        navigator.nextPage(UkRegisteredYesNoPage(index), fakeDraftId, answers)
+          .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
+      }
 
-      "UK registered" must {
-        "-> UTR page" in {
-          val answers = emptyUserAnswers
-            .set(UkRegisteredYesNoPage(index), true).success.value
+      "Name page" when {
 
-          navigator.nextPage(NamePage(index), fakeDraftId, answers)
-            .mustBe(rts.UtrController.onPageLoad(index, fakeDraftId))
+        "UK registered" must {
+          "-> UTR page" in {
+            val answers = baseAnswers
+              .set(UkRegisteredYesNoPage(index), true).success.value
+
+            navigator.nextPage(NamePage(index), fakeDraftId, answers)
+              .mustBe(rts.UtrController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "Not UK registered" must {
+          "-> Address UK yes no page" in {
+            val answers = baseAnswers
+              .set(UkRegisteredYesNoPage(index), false).success.value
+
+            navigator.nextPage(NamePage(index), fakeDraftId, answers)
+              .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
+          }
         }
       }
 
-      "Not UK registered" must {
-        "-> Address UK yes no page" in {
-          val answers = emptyUserAnswers
-            .set(UkRegisteredYesNoPage(index), false).success.value
-
-          navigator.nextPage(NamePage(index), fakeDraftId, answers)
+        "UTR page -> Is address in UK page" in {
+          navigator.nextPage(UtrPage(index), fakeDraftId, baseAnswers)
             .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
         }
+
+      "Is address in UK page -> YES -> UK address page" in {
+        val answers = baseAnswers
+          .set(AddressUkYesNoPage(index), true).success.value
+
+        navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
+          .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
       }
-    }
 
-      "UTR page -> Is address in UK page" in {
-        navigator.nextPage(UtrPage(index), fakeDraftId, emptyUserAnswers)
-          .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
+      "Is address in UK page -> NO -> International address page" in {
+        val answers = baseAnswers
+          .set(AddressUkYesNoPage(index), false).success.value
+
+        navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
+          .mustBe(rts.InternationalAddressController.onPageLoad(index, fakeDraftId))
       }
 
-    "Is address in UK page -> YES -> UK address page" in {
-      val answers = emptyUserAnswers
-        .set(AddressUkYesNoPage(index), true).success.value
+      "UK address page -> Email address yes no page" in {
+        navigator.nextPage(UkAddressPage(index), fakeDraftId, baseAnswers)
+          .mustBe(rts.EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
+      }
 
-      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
-        .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
-    }
+      "International address page -> Email address yes no page" in {
+        navigator.nextPage(InternationalAddressPage(index), fakeDraftId, baseAnswers)
+          .mustBe(rts.EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
+      }
 
-    "Is address in UK page -> NO -> International address page" in {
-      val answers = emptyUserAnswers
-        .set(AddressUkYesNoPage(index), false).success.value
+      "Email address yes no page -> YES -> Email address page" in {
+        val answers = baseAnswers
+          .set(EmailAddressYesNoPage(index), true).success.value
 
-      navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
-        .mustBe(rts.InternationalAddressController.onPageLoad(index, fakeDraftId))
-    }
+        navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
+          .mustBe(rts.EmailAddressController.onPageLoad(index, fakeDraftId))
+      }
 
-    "UK address page -> Email address yes no page" in {
-      navigator.nextPage(UkAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(rts.EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
-    }
+      "Email address yes no page -> NO -> Telephone number page" in {
+        val answers = baseAnswers
+          .set(EmailAddressYesNoPage(index), false).success.value
 
-    "International address page -> Email address yes no page" in {
-      navigator.nextPage(InternationalAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(rts.EmailAddressYesNoController.onPageLoad(index, fakeDraftId))
-    }
+        navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
+          .mustBe(rts.TelephoneNumberController.onPageLoad(index, fakeDraftId))
+      }
 
-    "Email address yes no page -> YES -> Email address page" in {
-      val answers = emptyUserAnswers
-        .set(EmailAddressYesNoPage(index), true).success.value
+      "Email address page -> Telephone number page" in {
+        navigator.nextPage(EmailAddressPage(index), fakeDraftId, baseAnswers)
+          .mustBe(rts.TelephoneNumberController.onPageLoad(index, fakeDraftId))
+      }
 
-      navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
-        .mustBe(rts.EmailAddressController.onPageLoad(index, fakeDraftId))
-    }
-
-    "Email address yes no page -> NO -> Telephone number page" in {
-      val answers = emptyUserAnswers
-        .set(EmailAddressYesNoPage(index), false).success.value
-
-      navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
-        .mustBe(rts.TelephoneNumberController.onPageLoad(index, fakeDraftId))
-    }
-
-    "Email address page -> Telephone number page" in {
-      navigator.nextPage(EmailAddressPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(rts.TelephoneNumberController.onPageLoad(index, fakeDraftId))
-    }
-
-    "Telephone number page -> Check your answers page" in {
-      navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(rts.CheckDetailsController.onPageLoad(index, fakeDraftId))
-    }
+      "Telephone number page -> Check your answers page" in {
+        navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, baseAnswers)
+          .mustBe(rts.CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
     }
 
     "a 5mld trust" must {
+
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
 
       "Name page" when {
 
         "Not UK registered" must {
           "-> Address UK yes no page" in {
-            val answers = emptyUserAnswers
+            val answers = baseAnswers
               .set(UkRegisteredYesNoPage(index), false).success.value
 
-            navigator.nextPage(NamePage(index), fakeDraftId, fiveMldEnabled = true, answers)
+            navigator.nextPage(NamePage(index), fakeDraftId, answers)
               .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
       }
 
       "UTR page -> Country Of Residence UK yes no page" in {
-        navigator.nextPage(UtrPage(index), fakeDraftId, fiveMldEnabled = true, emptyUserAnswers)
+        navigator.nextPage(UtrPage(index), fakeDraftId, baseAnswers)
           .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
       }
 
       "Country Of Residence UK yes no page -> No -> Country of Residence page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, fiveMldEnabled = true, answers)
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
           .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId))
       }
 
       "Country Of Residence UK yes no page -> Yes -> UK Address page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, fiveMldEnabled = true, answers)
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
           .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
       }
 
       "Country Of Residence page -> International Address page" in {
-        navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, fiveMldEnabled = true, emptyUserAnswers)
+        navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, baseAnswers)
           .mustBe(rts.InternationalAddressController.onPageLoad(index, fakeDraftId))
       }
     }

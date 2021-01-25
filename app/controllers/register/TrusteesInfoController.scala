@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.TrusteesInfoView
-import views.html.register.nonTaxable.TrusteesInfo5MLDView
+import views.html.register.TrusteesInfo5MLDView
 
 import scala.concurrent.ExecutionContext
 
