@@ -554,7 +554,7 @@ leadTrustee.individual.nino.hint = It is on their National Insurance card, benef
 leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 
-leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Is the lead trustee UK resident?
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Is the lead trustee a UK resident?
 leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} a UK resident?
 leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.hint = Nationality is usually where the lead trustee was born and where their passport is registered.
 leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} a UK resident?
