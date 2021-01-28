@@ -7,11 +7,11 @@ POST       /:draftId/:index/name                         controllers.register.le
 GET        /:draftId/:index/utr                          controllers.register.leadtrustee.organisation.UtrController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/utr                          controllers.register.leadtrustee.organisation.UtrController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/uk-residence                 controllers.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/uk-residence                 controllers.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceInTheUkYesNoController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/uk-residence                 controllers.register.leadtrustee.organisation.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/uk-residence                 controllers.register.leadtrustee.organisation.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/country-of-residence         controllers.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/country-of-residence         controllers.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/country-of-residence         controllers.register.leadtrustee.organisation.mld5.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/country-of-residence         controllers.register.leadtrustee.organisation.mld5.CountryOfResidenceController.onSubmit(index: Int, draftId: String)
 
 GET        /:draftId/:index/has-uk-address               controllers.register.leadtrustee.organisation.AddressUkYesNoController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/has-uk-address               controllers.register.leadtrustee.organisation.AddressUkYesNoController.onSubmit(index: Int, draftId: String)

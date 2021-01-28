@@ -18,10 +18,10 @@ package navigation
 
 import base.SpecBase
 import controllers.register.leadtrustee.organisation.{routes => rts}
-import controllers.register.leadtrustee.organisation.nonTaxable.{routes => mld5Rts}
+import controllers.register.leadtrustee.organisation.mld5.{routes => mld5Rts}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.leadtrustee.organisation._
-import pages.register.leadtrustee.organisation.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
+import pages.register.leadtrustee.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 
 class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 

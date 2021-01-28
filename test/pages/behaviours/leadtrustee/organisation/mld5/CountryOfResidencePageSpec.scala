@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package pages.behaviours.leadtrustee.organisation.nonTaxable
+package pages.behaviours.leadtrustee.organisation.mld5
 
 import pages.behaviours.PageBehaviours
-import pages.register.leadtrustee.organisation.nonTaxable.CountryOfResidencePage
+import pages.register.leadtrustee.organisation.mld5.CountryOfResidencePage
 
 class CountryOfResidencePageSpec extends PageBehaviours {
 

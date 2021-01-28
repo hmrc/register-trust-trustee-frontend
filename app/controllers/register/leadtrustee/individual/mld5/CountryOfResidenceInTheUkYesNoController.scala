@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package controllers.register.leadtrustee.organisation.nonTaxable
+package controllers.register.leadtrustee.individual.mld5
 
 import config.FrontendAppConfig
-import config.annotations.LeadTrusteeOrganisation
+import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
+import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.YesNoFormProvider
 import navigation.Navigator
-import pages.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceInTheUkYesNoPage
+import pages.register.leadtrustee.individual.mld5.CountryOfResidenceInTheUkYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceInTheUkYesNoView
+import views.html.register.leadtrustee.individual.mld5.CountryOfResidenceInTheUkYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                val controllerComponents: MessagesControllerComponents,
-                                               @LeadTrusteeOrganisation navigator: Navigator,
+                                               @LeadTrusteeIndividual navigator: Navigator,
                                                standardActionSets: StandardActionSets,
                                                formProvider: YesNoFormProvider,
                                                view: CountryOfResidenceInTheUkYesNoView,
@@ -43,7 +43,7 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                nameAction: NameRequiredActionImpl
                                              )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {

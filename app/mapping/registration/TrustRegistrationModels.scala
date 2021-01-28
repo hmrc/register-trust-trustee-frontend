@@ -195,7 +195,8 @@ case class LeadTrusteeIndType (
                                 dateOfBirth: LocalDate ,
                                 phoneNumber: String,
                                 email: Option[String] = None,
-                                identification: IdentificationType
+                                identification: IdentificationType,
+                                countryOfResidence: Option[String]
                               )
 
 object LeadTrusteeIndType {

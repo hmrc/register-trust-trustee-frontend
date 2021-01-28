@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package controllers.register.leadtrustee.organisation.nonTaxable
+package controllers.register.leadtrustee.individual.mld5
 
 import config.FrontendAppConfig
-import config.annotations.LeadTrusteeOrganisation
+import config.annotations.LeadTrusteeIndividual
 import controllers.actions.StandardActionSets
-import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
+import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.CountryFormProvider
 import navigation.Navigator
-import pages.register.leadtrustee.organisation.nonTaxable.CountryOfResidencePage
+import pages.register.leadtrustee.individual.mld5.CountryOfResidencePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceView
+import views.html.register.leadtrustee.individual.mld5.CountryOfResidenceView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CountryOfResidenceController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               registrationsRepository: RegistrationsRepository,
-                                              @LeadTrusteeOrganisation navigator: Navigator,
+                                              @LeadTrusteeIndividual navigator: Navigator,
                                               standardActionSets: StandardActionSets,
                                               nameAction: NameRequiredActionImpl,
                                               formProvider: CountryFormProvider,
@@ -46,7 +46,7 @@ class CountryOfResidenceController @Inject()(
                                               val countryOptions: CountryOptionsNonUK
                                             )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.5mld.countryOfResidence")
+  private val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.5mld.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {

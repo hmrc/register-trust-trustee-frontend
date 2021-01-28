@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.register.leadtrustee.organisation.nonTaxable.routes._
+@import controllers.register.leadtrustee.organisation.mld5.routes._
 @import utils.InputOption
 
 @this(
@@ -22,7 +22,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, trustName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.organisation.5mld.countryOfResidence.title")}"
@@ -35,7 +35,7 @@
         @components.error_summary(form.errors)
 
         @components.select(field = form("value"),
-            label = messages("leadTrustee.organisation.5mld.countryOfResidence.heading", trustName),
+            label = messages("leadTrustee.organisation.5mld.countryOfResidence.heading", name),
             labelClasses = Set("heading-large"),
             labelAsHeading = true,
             options = countryOptions,
