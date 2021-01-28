@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package views.register.leadtrustee.organisation.nonTaxable
+package views.register.leadtrustee.organisation.mld5
 
 import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceInTheUkYesNoView
+import views.html.register.leadtrustee.organisation.mld5.CountryOfResidenceInTheUkYesNoView
 
 class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
   val prefix = "leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo"
   val index = 0
-  val trustName = "Test"
+  val name = "Test"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
@@ -35,13 +35,13 @@ class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[CountryOfResidenceInTheUkYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, trustName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), prefix, trustName)
+    behave like dynamicTitlePage(applyView(form), prefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, prefix, None, Seq(trustName))
+    behave like yesNoPage(form, applyView, prefix, None, Seq(name))
 
     behave like pageWithASubmitButton(applyView(form))
   }

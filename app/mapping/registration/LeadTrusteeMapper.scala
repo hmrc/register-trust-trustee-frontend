@@ -61,7 +61,8 @@ class LeadTrusteeMapper @Inject()(addressMapper: AddressMapper,
           dateOfBirth = leadTrustee.dateOfBirth,
           phoneNumber = leadTrustee.telephoneNumber,
           email = leadTrustee.email,
-          identification = identification
+          identification = identification,
+          countryOfResidence = leadTrustee.countryOfResidence
         )
       ),
       leadTrusteeOrg = None

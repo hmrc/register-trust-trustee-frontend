@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.register.leadtrustee.organisation.nonTaxable
+package pages.register.leadtrustee.individual.mld5
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath

@@ -70,7 +70,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
                 dateOfBirth = LocalDate.of(1500,10,10),
                 phoneNumber = "0191 1111111",
                 email = None,
-                identification = IdentificationType(nino = Some("AB123456C"), None, None)
+                identification = IdentificationType(nino = Some("AB123456C"), None, None),
+                countryOfResidence = None
               ))
           )
         }
@@ -84,6 +85,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
             .set(ltind.TrusteeNinoYesNoPage(index), false).success.value
+            .set(ltind.mld5.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(ltind.TrusteeDetailsChoicePage(index), DetailsChoice.Passport).success.value
             .set(ltind.PassportDetailsPage(index), PassportOrIdCardDetails("FR", "number", LocalDate.of(1500,10,10))).success.value
             .set(ltind.AddressUkYesNoPage(index), true).success.value
@@ -102,7 +104,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
                 identification = IdentificationType(
                   nino = None,
                   passport = Some(PassportType("number", LocalDate.of(1500,10,10), "FR")),
-                  address = Some(AddressType(line1 = "line1", line2 = "line2", line3 = None, line4 = None, postCode = Some("NE65QA"), country = "GB")))
+                  address = Some(AddressType(line1 = "line1", line2 = "line2", line3 = None, line4 = None, postCode = Some("NE65QA"), country = "GB"))),
+                countryOfResidence = Some("GB")
               ))
           )
         }
@@ -116,6 +119,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
             .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
             .set(ltind.TrusteeNinoYesNoPage(index), false).success.value
+            .set(ltind.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+            .set(ltind.mld5.CountryOfResidencePage(index), "DE").success.value
             .set(ltind.TrusteeDetailsChoicePage(index), DetailsChoice.Passport).success.value
             .set(ltind.PassportDetailsPage(index), PassportOrIdCardDetails("DE", "number", LocalDate.of(1500,10,10))).success.value
             .set(ltind.AddressUkYesNoPage(index), false).success.value
@@ -134,7 +139,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
                 identification = IdentificationType(
                   nino = None,
                   passport = Some(PassportType("number", LocalDate.of(1500,10,10), "DE")),
-                  address = Some(AddressType(line1 = "line1", line2 = "line2", line3 = Some("line3"), line4 = None, postCode = None, country = "DE")))
+                  address = Some(AddressType(line1 = "line1", line2 = "line2", line3 = Some("line3"), line4 = None, postCode = None, country = "DE"))),
+                countryOfResidence = Some("DE")
               ))
           )
         }
@@ -180,7 +186,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
             .set(ltorg.UtrPage(index), "1234567890").success.value
-            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+            .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(ltorg.AddressUkYesNoPage(index), true).success.value
             .set(ltorg.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
@@ -206,7 +212,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
             .set(ltorg.UtrPage(index), "1234567890").success.value
-            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+            .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
             .set(ltorg.AddressUkYesNoPage(index), false).success.value
             .set(ltorg.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
@@ -233,7 +239,7 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
-            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+            .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(ltorg.AddressUkYesNoPage(index), true).success.value
             .set(ltorg.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
@@ -269,8 +275,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
-            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-            .set(ltorg.nonTaxable.CountryOfResidencePage(index), "FR").success.value
+            .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+            .set(ltorg.mld5.CountryOfResidencePage(index), "FR").success.value
             .set(ltorg.AddressUkYesNoPage(index), false).success.value
             .set(ltorg.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
@@ -303,8 +309,8 @@ class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
             .set(register.TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
             .set(ltorg.UkRegisteredYesNoPage(index), false).success.value
             .set(ltorg.NamePage(index), "Org Name").success.value
-            .set(ltorg.nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-            .set(ltorg.nonTaxable.CountryOfResidencePage(index), "FR").success.value
+            .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+            .set(ltorg.mld5.CountryOfResidencePage(index), "FR").success.value
             .set(ltorg.AddressUkYesNoPage(index), false).success.value
             .set(ltorg.InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
             .set(ltorg.TelephoneNumberPage(index), "0191 1111111").success.value
