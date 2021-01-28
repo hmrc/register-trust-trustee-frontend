@@ -41,7 +41,7 @@ import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.leadtrustee.individual._
-import pages.register.leadtrustee.individual.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
+import pages.register.leadtrustee.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 
 class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -195,6 +195,32 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
 
       val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
 
+      "Date Of Birth page -> Country Of Nationality UK yes no page" in {
+        navigator.nextPage(TrusteesDateOfBirthPage(index), fakeDraftId, baseAnswers)
+          .mustBe(mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Nationality UK yes no page -> No -> Country of Nationality page" in {
+        val answers = baseAnswers
+          .set(CountryOfNationalityInTheUkYesNoPage(index), false).success.value
+
+        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), fakeDraftId, answers)
+          .mustBe(mld5Rts.CountryOfNationalityController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Nationality UK yes no page -> Yes -> Do You Know NINO page" in {
+        val answers = baseAnswers
+          .set(CountryOfNationalityInTheUkYesNoPage(index), true).success.value
+
+        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), fakeDraftId, answers)
+          .mustBe(rts.NinoYesNoController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Nationality page -> Do You Know NINO page" in {
+        navigator.nextPage(CountryOfNationalityPage(index), fakeDraftId, baseAnswers)
+          .mustBe(rts.NinoYesNoController.onPageLoad(index, fakeDraftId))
+      }
+      
       "NINO page -> Country Of Residence UK yes no page" in {
         navigator.nextPage(TrusteesNinoPage(index), fakeDraftId, baseAnswers)
           .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))

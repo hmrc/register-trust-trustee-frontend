@@ -554,9 +554,22 @@ leadTrustee.individual.nino.hint = It is on their National Insurance card, benef
 leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 
+leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.title = Does the lead trustee have UK nationality?
+leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.heading = Does {0} have UK nationality?
+leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.hint = Nationality is usually where the lead trustee was born and where their passport is registered.
+leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK nationality?
+leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.error.required = Select yes if the lead trustee has UK nationality
+
+leadTrustee.individual.5mld.countryOfNationality.title = What is the lead trustee’s country of nationality?
+leadTrustee.individual.5mld.countryOfNationality.heading = What is {0}’s country of nationality?
+leadTrustee.individual.5mld.countryOfNationality.checkYourAnswersLabel = What is {0}’s country of nationality?
+leadTrustee.individual.5mld.countryOfNationality.error.required = Enter a country
+leadTrustee.individual.5mld.countryOfNationality.error.length = The country of nationality must be 100 characters or less
+leadTrustee.individual.5mld.countryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Is the lead trustee a UK resident?
 leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} a UK resident?
-leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.hint = Nationality is usually where the lead trustee was born and where their passport is registered.
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.hint = The lead trustee is a UK resident if they live and work in the UK most of the time during the tax year.
 leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} a UK resident?
 leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the lead trustee has UK residency
 
