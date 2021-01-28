@@ -111,11 +111,11 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "go to CountryOfNationalityYesNoPage" when {
-        "from DateOfBirth page" in {
+        "from DateOfBirth page if this is 5MLD" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, userAnswers)
+              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = true))
                 .mustBe(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -170,6 +170,15 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "go to TrusteesNinoYesNoPage" when {
+        "from DateOfBirth page if this is 4MLD" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = false))
+                .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
         "from CountryOfNationalityPage page" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>

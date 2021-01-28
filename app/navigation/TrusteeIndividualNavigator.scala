@@ -29,7 +29,11 @@ class TrusteeIndividualNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
-    case DateOfBirthPage(index) => _ => CountryOfNationalityYesNoController.onPageLoad(index, draftId)
+    case DateOfBirthPage(index) => ua =>
+      if (ua.is5mldEnabled)
+        CountryOfNationalityYesNoController.onPageLoad(index, draftId)
+      else
+        NinoYesNoController.onPageLoad(index, draftId)
     case CountryOfNationalityPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
