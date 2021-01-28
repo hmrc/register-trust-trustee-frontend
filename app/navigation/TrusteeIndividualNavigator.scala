@@ -18,7 +18,7 @@ package navigation
 
 import config.FrontendAppConfig
 import controllers.register.trustees.individual.routes._
-import controllers.register.trustees.individual.mld5.routes._
+import controllers.register.trustees.individual.mld5.{routes => mld5Rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.trustees.individual._
@@ -29,11 +29,7 @@ class TrusteeIndividualNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
-    case DateOfBirthPage(index) => ua =>
-      if (ua.is5mldEnabled)
-        CountryOfNationalityYesNoController.onPageLoad(index, draftId)
-      else
-        NinoYesNoController.onPageLoad(index, draftId)
+    case DateOfBirthPage(index) => ua => navigateAwayFromDateOfBirthPages(index, draftId, ua.is5mldEnabled)
     case CountryOfNationalityPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
@@ -48,13 +44,13 @@ class TrusteeIndividualNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = DateOfBirthController.onPageLoad(index, draftId),
-        noCall = CountryOfNationalityYesNoController.onPageLoad(index, draftId)
+        noCall = mld5Rts.CountryOfNationalityYesNoController.onPageLoad(index, draftId)
       )
     case page @ CountryOfNationalityYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId),
+        yesCall = mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = NinoYesNoController.onPageLoad(index, draftId)
       )
     case page @ CountryOfNationalityInTheUkYesNoPage(index) => ua =>
@@ -62,7 +58,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = NinoYesNoController.onPageLoad(index, draftId),
-        noCall = CountryOfNationalityController.onPageLoad(index, draftId)
+        noCall = mld5Rts.CountryOfNationalityController.onPageLoad(index, draftId)
       )
     case page @ NinoYesNoPage(index) => ua =>
       yesNoNav(
@@ -99,5 +95,13 @@ class TrusteeIndividualNavigator extends Navigator {
         yesCall = IDCardDetailsController.onPageLoad(index, draftId),
         noCall = CheckDetailsController.onPageLoad(index, draftId)
       )
+  }
+
+  private def navigateAwayFromDateOfBirthPages(index: Int, draftId: String, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      mld5Rts.CountryOfNationalityYesNoController.onPageLoad(index, draftId)
+    } else {
+      NinoYesNoController.onPageLoad(index, draftId)
+    }
   }
 }
