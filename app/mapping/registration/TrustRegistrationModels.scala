@@ -157,7 +157,8 @@ object TrusteeOrgType {
 case class TrusteeIndividualType(name: FullName,
                        dateOfBirth: Option[LocalDate],
                        phoneNumber: Option[String],
-                       identification: Option[IdentificationType])
+                       identification: Option[IdentificationType],
+                       countryOfNationality: Option[String])
 
 object TrusteeIndividualType {
 
