@@ -39,3 +39,14 @@ POST       /:draftId/:index/passport-yes-no            controllers.register.trus
 
 GET        /:draftId/:index/check-details              controllers.register.trustees.individual.CheckDetailsController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/check-details              controllers.register.trustees.individual.CheckDetailsController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/has-country-of-nationality controllers.register.trustees.individual.mld5.CountryOfNationalityYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/has-country-of-nationality controllers.register.trustees.individual.mld5.CountryOfNationalityYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/uk-nationality             controllers.register.trustees.individual.mld5.CountryOfNationalityInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/uk-nationality             controllers.register.trustees.individual.mld5.CountryOfNationalityInTheUkYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/country-of-nationality     controllers.register.trustees.individual.mld5.CountryOfNationalityController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/country-of-nationality     controllers.register.trustees.individual.mld5.CountryOfNationalityController.onSubmit(index: Int, draftId: String)
+
+

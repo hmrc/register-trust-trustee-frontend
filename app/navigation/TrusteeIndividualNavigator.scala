@@ -18,16 +18,19 @@ package navigation
 
 import config.FrontendAppConfig
 import controllers.register.trustees.individual.routes._
+import controllers.register.trustees.individual.mld5.routes._
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.trustees.individual._
+import pages.register.trustees.individual.mld5._
 import play.api.mvc.Call
 
 class TrusteeIndividualNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
-    case DateOfBirthPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
+    case DateOfBirthPage(index) => _ => CountryOfNationalityYesNoController.onPageLoad(index, draftId)
+    case CountryOfNationalityPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
     case NinoPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
@@ -41,7 +44,21 @@ class TrusteeIndividualNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = DateOfBirthController.onPageLoad(index, draftId),
+        noCall = CountryOfNationalityYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ CountryOfNationalityYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = NinoYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ CountryOfNationalityInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = NinoYesNoController.onPageLoad(index, draftId),
+        noCall = CountryOfNationalityController.onPageLoad(index, draftId)
       )
     case page @ NinoYesNoPage(index) => ua =>
       yesNoNav(

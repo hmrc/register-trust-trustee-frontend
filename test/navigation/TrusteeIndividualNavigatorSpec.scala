@@ -19,11 +19,13 @@ package navigation
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.register.trustees.individual.routes._
+import controllers.register.trustees.individual.mld5.routes._
 import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees.individual._
+import pages.register.trustees.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
 
 class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -108,13 +110,13 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "go to TrusteesNinoYesNoPage" when {
-        "from TrusteesDateOfBirthPage page" in {
+      "go to CountryOfNationalityYesNoPage" when {
+        "from DateOfBirth page" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
               navigator.nextPage(DateOfBirthPage(index), fakeDraftId, userAnswers)
-                .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+                .mustBe(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -124,7 +126,77 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
               val answers = userAnswers.set(DateOfBirthYesNoPage(index), value = false).success.value
 
-              navigator.nextPage(DateOfBirthPage(index), fakeDraftId, answers)
+              navigator.nextPage(DateOfBirthYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfNationalityInTheUkYesNoPage page when user answers yes" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value = true).success.value
+
+              navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
+      "go to CountryOfNationalityInTheUkYesNoPage" when {
+        "from CountryOfNationalityYesNoPage page when user answers yes" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(CountryOfNationalityYesNoPage(index), value = true).success.value
+
+              navigator.nextPage(CountryOfNationalityYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
+      "go to CountryOfNationalityPage" when {
+        "from CountryOfNationalityInTheUkYesNoPage page when user answers no" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfNationalityController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
+      "go to TrusteesNinoYesNoPage" when {
+        "from CountryOfNationalityPage page" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(CountryOfNationalityPage(index), fakeDraftId, userAnswers)
+                .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfNationalityYesNoPage page when user answers no" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(CountryOfNationalityYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfNationalityYesNoPage(index), fakeDraftId, answers)
+                .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfNationalityInTheUkYesNoPage page when user answers yes" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value = true).success.value
+
+              navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), fakeDraftId, answers)
                 .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
           }
         }

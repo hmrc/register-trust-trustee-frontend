@@ -37,5 +37,5 @@ POST       /:draftId/add-another                                  controllers.re
 POST       /:draftId/add-lead                                     controllers.register.AddATrusteeController.submitLead(draftId: String)
 POST       /:draftId/complete                                     controllers.register.AddATrusteeController.submitComplete(draftId: String)
 
-GET        /:draftId/:index/remove                                controllers.register.RemoveIndexController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/remove                                controllers.register.RemoveIndexController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/trustee/individual/:index/remove             controllers.register.RemoveIndexController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/trustee/individual/:index/remove             controllers.register.RemoveIndexController.onSubmit(index: Int, draftId: String)
