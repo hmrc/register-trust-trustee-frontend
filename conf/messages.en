@@ -574,6 +574,19 @@ leadTrustee.individual.nino.hint = It is on their National Insurance card, benef
 leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Is the lead trustee a UK resident?
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} a UK resident?
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.hint = Nationality is usually where the lead trustee was born and where their passport is registered.
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} a UK resident?
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the lead trustee has UK residency
+
+leadTrustee.individual.5mld.countryOfResidence.title = What is the lead trustee’s country of residence?
+leadTrustee.individual.5mld.countryOfResidence.heading = What is {0}’s country of residence?
+leadTrustee.individual.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+leadTrustee.individual.5mld.countryOfResidence.error.required = Enter a country
+leadTrustee.individual.5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+leadTrustee.individual.5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 leadTrustee.individual.liveInTheUkYesNo.title = Does the lead trustee live in the UK?
 leadTrustee.individual.liveInTheUkYesNo.heading = Does {0} live in the UK?
 leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?

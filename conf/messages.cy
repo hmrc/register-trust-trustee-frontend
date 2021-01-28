@@ -19,3 +19,16 @@ leadTrustee.organisation.5mld.countryOfResidence.checkYourAnswersLabel = Beth yw
 leadTrustee.organisation.5mld.countryOfResidence.error.required = Nodwch wlad
 #leadTrustee.organisation.5mld.countryOfResidence.error.length =
 #leadTrustee.organisation.5mld.countryOfResidence.error.invalidCharacters =
+
+#leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.title =
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = A yw {0} yn breswylydd yn y DU?
+#leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.hint =
+leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = A yw {0} yn breswylydd yn y DU?
+#leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required =
+
+#leadTrustee.individual.5mld.countryOfResidence.title =
+leadTrustee.individual.5mld.countryOfResidence.heading = Beth yw gwlad breswyl {0}?
+leadTrustee.individual.5mld.countryOfResidence.checkYourAnswersLabel = Beth yw gwlad breswyl {0}?
+leadTrustee.individual.5mld.countryOfResidence.error.required = Nodwch wlad
+#leadTrustee.individual.5mld.countryOfResidence.error.length =
+#leadTrustee.individual.5mld.countryOfResidence.error.invalidCharacters =

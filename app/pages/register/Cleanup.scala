@@ -17,7 +17,6 @@
 package pages.register
 
 import models.UserAnswers
-import pages.register.leadtrustee.organisation.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 
 import scala.util.Try
 
@@ -49,11 +48,14 @@ trait Cleanup {
 
   def removeLeadTrusteeIndividual(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
     import pages.register.leadtrustee.individual._
+    import pages.register.leadtrustee.individual.mld5._
 
     userAnswers.remove(TrusteesNamePage(index))
       .flatMap(_.remove(TrusteesDateOfBirthPage(index)))
       .flatMap(_.remove(TrusteeNinoYesNoPage(index)))
       .flatMap(_.remove(TrusteesNinoPage(index)))
+      .flatMap(_.remove(CountryOfResidenceInTheUkYesNoPage(index)))
+      .flatMap(_.remove(CountryOfResidencePage(index)))
       .flatMap(_.remove(TrusteeDetailsChoicePage(index)))
       .flatMap(_.remove(PassportDetailsPage(index)))
       .flatMap(_.remove(IDCardDetailsPage(index)))
@@ -67,6 +69,7 @@ trait Cleanup {
 
   def removeLeadTrusteeBusiness(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
     import pages.register.leadtrustee.organisation._
+    import pages.register.leadtrustee.organisation.mld5._
 
     userAnswers.remove(UkRegisteredYesNoPage(index))
       .flatMap(_.remove(NamePage(index)))

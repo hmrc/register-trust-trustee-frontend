@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.register.leadtrustee.organisation.nonTaxable
+package views.register.leadtrustee.organisation.mld5
 
 import forms.CountryFormProvider
 import play.api.data.Form
@@ -22,13 +22,13 @@ import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.behaviours.SelectCountryViewBehaviours
-import views.html.register.leadtrustee.organisation.nonTaxable.CountryOfResidenceView
+import views.html.register.leadtrustee.organisation.mld5.CountryOfResidenceView
 
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
   val prefix = "leadTrustee.organisation.5mld.countryOfResidence"
   val index = 0
-  val trustName = "Test"
+  val name = "Test"
 
   val form = new CountryFormProvider().withPrefix(prefix)
 
@@ -39,13 +39,13 @@ class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, fakeDraftId, index, trustName)(fakeRequest, messages)
+      view.apply(form, countryOptions, fakeDraftId, index, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), prefix, trustName)
+    behave like dynamicTitlePage(applyView(form), prefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like selectCountryPage(form, applyView, prefix, trustName)
+    behave like selectCountryPage(form, applyView, prefix, name)
 
     behave like pageWithASubmitButton(applyView(form))
   }

@@ -14,14 +14,14 @@
  * limitations under the License.
  *@
 
-@import controllers.register.leadtrustee.organisation.nonTaxable.routes._
+@import controllers.register.leadtrustee.organisation.mld5.routes._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, trustName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.title")}"
@@ -35,7 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.heading", trustName),
+            label = messages("leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.heading", name),
             legendClass = Some("heading-large"),
             legendAsHeading = true,
             hint = Some(messages("leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.hint"))

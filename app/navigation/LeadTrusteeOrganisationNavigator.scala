@@ -18,11 +18,11 @@ package navigation
 
 import config.FrontendAppConfig
 import controllers.register.leadtrustee.organisation.{routes => rts}
-import controllers.register.leadtrustee.organisation.nonTaxable.{routes => mld5Rts}
+import controllers.register.leadtrustee.organisation.mld5.{routes => mld5Rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.leadtrustee.organisation._
-import pages.register.leadtrustee.organisation.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
+import pages.register.leadtrustee.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 import play.api.mvc.Call
 
 class LeadTrusteeOrganisationNavigator extends Navigator {

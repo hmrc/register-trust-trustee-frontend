@@ -17,25 +17,28 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.register.leadtrustee.individual.routes._
+import controllers.register.leadtrustee.individual.{routes => rts}
+import controllers.register.leadtrustee.individual.mld5.{routes => mld5Rts}
 import models.ReadableUserAnswers
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import pages.Page
 import pages.register.leadtrustee.individual._
+import pages.register.leadtrustee.individual.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 import play.api.mvc.Call
 
 class LeadTrusteeIndividualNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case TrusteesNamePage(index) => _ => DateOfBirthController.onPageLoad(index, draftId)
-    case TrusteesDateOfBirthPage(index) => _ => NinoYesNoController.onPageLoad(index, draftId)
-    case TrusteesNinoPage(index) => _ => LiveInTheUKYesNoController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => _ => LiveInTheUKYesNoController.onPageLoad(index, draftId)
-    case IDCardDetailsPage(index) => _ => LiveInTheUKYesNoController.onPageLoad(index, draftId)
-    case InternationalAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
-    case UkAddressPage(index) => _ => EmailAddressYesNoController.onPageLoad(index, draftId)
-    case EmailAddressPage(index) => _ => TelephoneNumberController.onPageLoad(index, draftId)
-    case TelephoneNumberPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
+    case TrusteesNamePage(index) => _ => rts.DateOfBirthController.onPageLoad(index, draftId)
+    case TrusteesDateOfBirthPage(index) => _ => rts.NinoYesNoController.onPageLoad(index, draftId)
+    case TrusteesNinoPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
+    case CountryOfResidencePage(index) => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
+    case PassportDetailsPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
+    case IDCardDetailsPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
+    case InternationalAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
+    case UkAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
+    case EmailAddressPage(index) => _ => rts.TelephoneNumberController.onPageLoad(index, draftId)
+    case TelephoneNumberPage(index) => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
   }
 
   override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -43,15 +46,15 @@ class LeadTrusteeIndividualNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = NinoController.onPageLoad(index, draftId),
-        noCall = TrusteeDetailsChoiceController.onPageLoad(index, draftId)
+        yesCall = rts.NinoController.onPageLoad(index, draftId),
+        noCall = rts.TrusteeDetailsChoiceController.onPageLoad(index, draftId)
       )
     case page @ AddressUkYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = UkAddressController.onPageLoad(index, draftId),
-        noCall = InternationalAddressController.onPageLoad(index, draftId)
+        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+        noCall = rts.InternationalAddressController.onPageLoad(index, draftId)
       )
     case TrusteeDetailsChoicePage(index) => ua =>
       detailsRoutes(ua, index, draftId)
@@ -59,16 +62,31 @@ class LeadTrusteeIndividualNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = EmailAddressController.onPageLoad(index, draftId),
-        noCall = TelephoneNumberController.onPageLoad(index, draftId)
+        yesCall = rts.EmailAddressController.onPageLoad(index, draftId),
+        noCall = rts.TelephoneNumberController.onPageLoad(index, draftId)
+      )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+        noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
 
   private def detailsRoutes(answers: ReadableUserAnswers, index: Int, draftId: String): Call = {
     answers.get(TrusteeDetailsChoicePage(index)) match {
-      case Some(IdCard) => IDCardDetailsController.onPageLoad(index, draftId)
-      case Some(Passport) => PassportDetailsController.onPageLoad(index, draftId)
+      case Some(IdCard) => rts.IDCardDetailsController.onPageLoad(index, draftId)
+      case Some(Passport) => rts.PassportDetailsController.onPageLoad(index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  private def navigateAwayFromNinoOrIdPages(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    } else {
+      rts.LiveInTheUKYesNoController.onPageLoad(index, draftId)
     }
   }
 }

@@ -14,43 +14,42 @@
  * limitations under the License.
  */
 
-package controllers.register.trustees.individual.mld5
+package controllers.register.leadtrustee.organisation.mld5
 
 import config.FrontendAppConfig
-import config.annotations.TrusteeIndividual
+import config.annotations.LeadTrusteeOrganisation
 import controllers.actions._
-import controllers.actions.register.trustees.individual.NameRequiredActionImpl
+import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
 import forms.YesNoFormProvider
-import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.individual.mld5.CountryOfNationalityInTheUkYesNoPage
+import pages.register.leadtrustee.organisation.mld5.CountryOfResidenceInTheUkYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.mld5.CountryOfNationalityInTheUkYesNoView
+import views.html.register.leadtrustee.organisation.mld5.CountryOfResidenceInTheUkYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfNationalityInTheUkYesNoController @Inject()(
+class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                val controllerComponents: MessagesControllerComponents,
-                                               implicit val frontendAppConfig: FrontendAppConfig,
-                                               @TrusteeIndividual navigator: Navigator,
+                                               @LeadTrusteeOrganisation navigator: Navigator,
                                                standardActionSets: StandardActionSets,
                                                formProvider: YesNoFormProvider,
-                                               view: CountryOfNationalityInTheUkYesNoView,
+                                               view: CountryOfResidenceInTheUkYesNoView,
                                                repository: RegistrationsRepository,
                                                nameAction: NameRequiredActionImpl
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfNationalityInTheUkYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(CountryOfNationalityInTheUkYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -68,9 +67,9 @@ class CountryOfNationalityInTheUkYesNoController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
       )
   }
 }

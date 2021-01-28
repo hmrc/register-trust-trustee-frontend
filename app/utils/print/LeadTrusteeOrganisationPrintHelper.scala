@@ -19,7 +19,7 @@ package utils.print
 import com.google.inject.Inject
 import controllers.register.{routes => regRts}
 import controllers.register.leadtrustee.organisation.{routes => rts}
-import controllers.register.leadtrustee.organisation.nonTaxable.{routes => ntRts}
+import controllers.register.leadtrustee.organisation.mld5.{routes => mld5Rts}
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import pages.register.TrusteeIndividualOrBusinessPage
@@ -54,8 +54,8 @@ class LeadTrusteeOrganisationPrintHelper @Inject()(answerRowConverter: AnswerRow
       bound.yesNoQuestion(UkRegisteredYesNoPage(index), s"$prefix.ukRegisteredYesNo", rts.UkRegisteredYesNoController.onPageLoad(index, draftId).url),
       bound.stringQuestion(NamePage(index), s"$prefix.name", rts.NameController.onPageLoad(index, draftId).url),
       bound.stringQuestion(UtrPage(index), s"$prefix.utr", rts.UtrController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), s"$prefix.5mld.countryOfResidenceInTheUkYesNo", ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-      bound.countryQuestion(nonTaxable.CountryOfResidenceInTheUkYesNoPage(index), nonTaxable.CountryOfResidencePage(index), s"$prefix.5mld.countryOfResidence", ntRts.CountryOfResidenceController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(mld5.CountryOfResidenceInTheUkYesNoPage(index), s"$prefix.5mld.countryOfResidenceInTheUkYesNo", mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
+      bound.countryQuestion(mld5.CountryOfResidenceInTheUkYesNoPage(index), mld5.CountryOfResidencePage(index), s"$prefix.5mld.countryOfResidence", mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUkYesNoPage(index), s"$prefix.addressUkYesNo", rts.AddressUkYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(UkAddressPage(index), s"$prefix.ukAddress", rts.UkAddressController.onPageLoad(index, draftId).url),
       bound.addressQuestion(InternationalAddressPage(index), s"$prefix.internationalAddress", rts.InternationalAddressController.onPageLoad(index, draftId).url),

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.behaviours.leadtrustee.organisation.nonTaxable
+package pages.behaviours.leadtrustee.organisation.mld5
 
 import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.leadtrustee.organisation.{InternationalAddressPage, UkAddressPage}
-import pages.register.leadtrustee.organisation.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
+import pages.register.leadtrustee.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
 
 class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
 
