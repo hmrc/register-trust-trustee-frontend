@@ -34,7 +34,7 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase with Mocki
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfNationalityInTheUkYesNo")
   val index: Int = 0
-  val trusteeName = "Name"
+  val trusteeName = "the trustee"
 
   lazy val countryOfNationalityInTheUkYesNo: String = routes.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId).url
 
