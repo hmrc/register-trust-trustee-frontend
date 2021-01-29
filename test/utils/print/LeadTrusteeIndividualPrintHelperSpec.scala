@@ -121,10 +121,11 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
       }
 
       "in 5mld mode" when {
-        "lead trustee is Uk Resident and uk address" in {
+        "lead trustee is UK Nationality, UK Resident and UK address" in {
           val userAnswers: UserAnswers = baseAnswers
             .set(TrusteesNamePage(index), name).success.value
             .set(TrusteesDateOfBirthPage(index), dob).success.value
+            .set(mld5.CountryOfNationalityInTheUkYesNoPage(index), true).success.value
             .set(TrusteeNinoYesNoPage(index), false).success.value
             .set(mld5.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
             .set(TrusteeDetailsChoicePage(index), Passport).success.value
@@ -142,6 +143,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
               AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url)),
               AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(rts.DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
+              AnswerRow("leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("Yes"), Some(mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(rts.NinoYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("Yes"), Some(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel", Html("Passport"), Some(rts.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url), name.toString),
@@ -154,10 +156,12 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           )
         }
 
-        "lead trustee is not UK resident with international address and an email" in {
+        "lead trustee is not UK nationality or UK resident with international address and an email" in {
           val userAnswers: UserAnswers = baseAnswers
             .set(TrusteesNamePage(index), name).success.value
             .set(TrusteesDateOfBirthPage(index), dob).success.value
+            .set(mld5.CountryOfNationalityInTheUkYesNoPage(index), false).success.value
+            .set(mld5.CountryOfNationalityPage(index), "DE").success.value
             .set(TrusteeNinoYesNoPage(index), false).success.value
             .set(mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
             .set(mld5.CountryOfResidencePage(index), "DE").success.value
@@ -177,6 +181,8 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
               AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url)),
               AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(rts.DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
+              AnswerRow("leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
+              AnswerRow("leadTrustee.individual.5mld.countryOfNationality.checkYourAnswersLabel", Html("Germany"), Some(mld5Rts.CountryOfNationalityController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(rts.NinoYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.5mld.countryOfResidence.checkYourAnswersLabel", Html("Germany"), Some(mld5Rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), name.toString),
