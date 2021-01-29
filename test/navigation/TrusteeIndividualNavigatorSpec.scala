@@ -25,7 +25,7 @@ import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees.individual._
-import pages.register.trustees.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
+import pages.register.trustees.individual.mld5._
 
 class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -120,25 +120,14 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           }
         }
 
-        "from DateOfBirthYesNoPage page when user answers no" in {
+        "from DateOfBirthYesNoPage page when user answers no if this is 5MLD" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              val answers = userAnswers.set(DateOfBirthYesNoPage(index), value = false).success.value
+              val answers = userAnswers.copy(is5mldEnabled = true).set(DateOfBirthYesNoPage(index), value = false).success.value
 
               navigator.nextPage(DateOfBirthYesNoPage(index), fakeDraftId, answers)
                 .mustBe(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId))
-          }
-        }
-
-        "from CountryOfNationalityInTheUkYesNoPage page when user answers yes" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-
-              val answers = userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value = true).success.value
-
-              navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), fakeDraftId, answers)
-                .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
       }
@@ -169,12 +158,62 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
+      "go to CountryOfResidencyYesNoPage" when {
+        "from NinoYesNoPage page when user answers no if this is 5MLD" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.copy(is5mldEnabled = true).set(NinoYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
+      "go to CountryOfResidencyInTheUkYesNoPage" when {
+        "from CountryOfResidencyYesNoPage page when user answers yes" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(CountryOfResidencyYesNoPage(index), value = true).success.value
+
+              navigator.nextPage(CountryOfResidencyYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfResidencyInTheUkYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
+      "go to CountryOfResidencyPage" when {
+        "from CountryOfResidencyInTheUkYesNoPage page when user answers no" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.set(CountryOfResidencyInTheUkYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfResidencyInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfResidencyController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
       "go to TrusteesNinoYesNoPage" when {
         "from DateOfBirth page if this is 4MLD" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
               navigator.nextPage(DateOfBirthPage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = false))
+                .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from DateOfBirthYesNoPage page when user answers no if this is not 5MLD" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.copy(is5mldEnabled = false).set(DateOfBirthYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(DateOfBirthYesNoPage(index), fakeDraftId, answers)
                 .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -223,11 +262,11 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "go to AddressYesNo" when {
-        "from NinoYesNo when user answers No" in {
+        "from NinoYesNo when user answers No if this is not 5MLD" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              val answers = userAnswers.set(NinoYesNoPage(index), value = false).success.value
+              val answers = userAnswers.copy(is5mldEnabled = false).set(NinoYesNoPage(index), value = false).success.value
 
               navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
                 .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))

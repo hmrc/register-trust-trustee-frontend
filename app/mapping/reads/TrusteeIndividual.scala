@@ -28,8 +28,8 @@ final case class TrusteeIndividual(override val isLead: Boolean,
                                    nino: Option[String],
                                    address: Option[Address],
                                    passportOrIdCard: Option[PassportOrIdCardDetails],
-                                   countryOfNationality: Option[String]
-                                  ) extends Trustee
+                                   countryOfNationality: Option[String],
+                                   countryOfResidency: Option[String]) extends Trustee
 
 object TrusteeIndividual extends TrusteeReads {
 
@@ -60,9 +60,10 @@ object TrusteeIndividual extends TrusteeReads {
           yesNoReads[String]("ninoYesNo", "nino") and
           optionalAddressReads("ninoYesNo") and
           passportOrIdCardReads and
-          (__ \ "countryOfNationality").readNullable[String]
-        )((name, dateOfBirth, nino, address, passportOrIdCardDetails, countryOfNationality) =>
-        TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportOrIdCardDetails, countryOfNationality))
+          (__ \ "countryOfNationality").readNullable[String] and
+          (__ \ "countryOfResidency").readNullable[String]
+        )((name, dateOfBirth, nino, address, passportOrIdCardDetails, countryOfNationality, countryOfResidency) =>
+        TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportOrIdCardDetails, countryOfNationality, countryOfResidency))
     }
 
     (isLeadReads and
