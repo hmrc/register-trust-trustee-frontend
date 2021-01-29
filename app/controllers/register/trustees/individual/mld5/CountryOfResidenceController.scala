@@ -23,18 +23,18 @@ import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import forms.CountryFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.individual.mld5.CountryOfResidencyPage
+import pages.register.trustees.individual.mld5.CountryOfResidencePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.trustees.individual.mld5.CountryOfResidencyView
+import views.html.register.trustees.individual.mld5.CountryOfResidenceView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfResidencyController @Inject()(
+class CountryOfResidenceController @Inject()(
                                                      override val messagesApi: MessagesApi,
                                                      implicit val frontendAppConfig: FrontendAppConfig,
                                                      registrationsRepository: RegistrationsRepository,
@@ -44,17 +44,17 @@ class CountryOfResidencyController @Inject()(
                                                      formProvider: CountryFormProvider,
                                                      standardActions: StandardActionSets,
                                                      val controllerComponents: MessagesControllerComponents,
-                                                     view: CountryOfResidencyView,
+                                                     view: CountryOfResidenceView,
                                                      val countryOptions: CountryOptionsNonUK
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidency")
+  private val form: Form[String] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(CountryOfResidencyPage(index)) match {
+      val preparedForm = request.userAnswers.get(CountryOfResidencePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -72,9 +72,9 @@ class CountryOfResidencyController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencyPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidencyPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
         }
       )
   }

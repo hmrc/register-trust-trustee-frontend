@@ -47,7 +47,7 @@ class TrusteeMapper @Inject()(addressMapper: AddressMapper,
               phoneNumber = None,
               identification = identificationMap(indTrustee),
               countryOfNationality = indTrustee.countryOfNationality,
-              countryOfResidency = indTrustee.countryOfResidency
+              countryOfResidence = indTrustee.countryOfResidence
             )
           ),
           trusteeOrg = None

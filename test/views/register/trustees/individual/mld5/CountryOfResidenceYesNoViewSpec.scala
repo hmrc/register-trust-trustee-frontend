@@ -20,19 +20,19 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.register.trustees.individual.mld5.CountryOfResidencyInTheUkYesNoView
+import views.html.register.trustees.individual.mld5.CountryOfResidenceYesNoView
 
-class CountryOfResidencyInTheUkYesNoViewSpec extends YesNoViewBehaviours {
+class CountryOfResidenceYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "trustee.individual.5mld.countryOfResidencyInTheUkYesNo"
+  val prefix = "trustee.individual.5mld.countryOfResidenceYesNo"
   val index = 0
   val trusteeName = "Test"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
-  "countryOfResidencyInTheUkYesNo view" must {
+  "countryOfResidenceYesNo view" must {
 
-    val view = viewFor[CountryOfResidencyInTheUkYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[CountryOfResidenceYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, trusteeName)(fakeRequest, messages)
@@ -41,7 +41,7 @@ class CountryOfResidencyInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, prefix, None, Seq(trusteeName))
+    behave like yesNoPage(form, applyView, prefix, Some(prefix), Seq(trusteeName))
 
     behave like pageWithASubmitButton(applyView(form))
   }

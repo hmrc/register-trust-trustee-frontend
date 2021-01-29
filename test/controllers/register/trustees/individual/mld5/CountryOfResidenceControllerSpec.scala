@@ -18,27 +18,29 @@ package controllers.register.trustees.individual.mld5
 
 import base.SpecBase
 import config.annotations.TrusteeIndividual
-import forms.YesNoFormProvider
+import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.trustees.individual.mld5.CountryOfResidencyYesNoPage
+import pages.register.trustees.individual.mld5.CountryOfResidencePage
 import pages.register.trustees.organisation.NamePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.mld5.CountryOfResidencyYesNoView
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.register.trustees.individual.mld5.CountryOfResidenceView
 
-class CountryOfResidencyYesNoControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidencyYesNo")
+  val formProvider = new CountryFormProvider()
+  val form: Form[String] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidence")
   val index: Int = 0
   val trusteeName = "the trustee"
 
-  lazy val countryOfResidencyYesNo: String = routes.CountryOfResidencyYesNoController.onPageLoad(index, draftId).url
+  lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
-  "CountryOfResidencyYesNo Controller" must {
+  "CountryOfResidence Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -47,16 +49,18 @@ class CountryOfResidencyYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, countryOfResidencyYesNo)
+      val request = FakeRequest(GET, countryOfResidence)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CountryOfResidencyYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceView]
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId, index, trusteeName)(request, messages).toString
+        view(form, countryOptions, draftId, index, trusteeName)(request, messages).toString
 
       application.stop()
     }
@@ -64,21 +68,22 @@ class CountryOfResidencyYesNoControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index), trusteeName).success.value
-        .set(CountryOfResidencyYesNoPage(index), true).success.value
-
+        .set(CountryOfResidencePage(index), "Spain").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, countryOfResidencyYesNo)
+      val request = FakeRequest(GET, countryOfResidence)
 
-      val view = application.injector.instanceOf[CountryOfResidencyYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceView]
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), draftId, index, trusteeName)(request, messages).toString
+        view(form.fill("Spain"), countryOptions, draftId, index, trusteeName)(request, messages).toString
 
       application.stop()
     }
@@ -94,8 +99,8 @@ class CountryOfResidencyYesNoControllerSpec extends SpecBase with MockitoSugar {
         ).build()
 
       val request =
-        FakeRequest(POST, countryOfResidencyYesNo)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, countryOfResidence)
+          .withFormUrlEncodedBody(("value", "ES"))
 
       val result = route(application, request).value
 
@@ -114,19 +119,21 @@ class CountryOfResidencyYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, countryOfResidencyYesNo)
+        FakeRequest(POST, countryOfResidence)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[CountryOfResidencyYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceView]
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId, index, trusteeName)(request, messages).toString
+        view(boundForm, countryOptions, draftId, index, trusteeName)(request, messages).toString
 
       application.stop()
     }
@@ -135,7 +142,7 @@ class CountryOfResidencyYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, countryOfResidencyYesNo)
+      val request = FakeRequest(GET, countryOfResidence)
 
       val result = route(application, request).value
 
@@ -151,8 +158,8 @@ class CountryOfResidencyYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, countryOfResidencyYesNo)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, countryOfResidence)
+          .withFormUrlEncodedBody(("value", "ES"))
 
       val result = route(application, request).value
 

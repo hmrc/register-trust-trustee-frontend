@@ -62,7 +62,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               phoneNumber = None,
               identification = None,
               countryOfNationality = None,
-              countryOfResidency = None
+              countryOfResidence = None
             )),
             trusteeOrg = None
           )
@@ -92,7 +92,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 )
               ),
               countryOfNationality = None,
-              countryOfResidency = None
+              countryOfResidence = None
             )),
             trusteeOrg = None
           )
@@ -168,7 +168,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               phoneNumber = None,
               identification = None,
               countryOfNationality = None,
-              countryOfResidency = None
+              countryOfResidence = None
             )),
             trusteeOrg = None
           ),
@@ -179,7 +179,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               phoneNumber = None,
               identification = None,
               countryOfNationality = None,
-              countryOfResidency = None
+              countryOfResidence = None
             )),
             trusteeOrg = None
           )
@@ -232,7 +232,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(ind.DateOfBirthYesNoPage(index), true).success.value
           .set(ind.DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
           .set(ind.mld5.CountryOfNationalityInTheUkYesNoPage(index), true).success.value
-          .set(ind.mld5.CountryOfResidencyInTheUkYesNoPage(index), true).success.value
+          .set(ind.mld5.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
           .set(ind.NinoYesNoPage(index), false).success.value
           .set(ind.AddressYesNoPage(index), true).success.value
           .set(ind.AddressUkYesNoPage(index), true).success.value
@@ -253,7 +253,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               )
             ),
             countryOfNationality = Some("GB"),
-            countryOfResidency = Some("GB")
+            countryOfResidence = Some("GB")
           )),
           trusteeOrg = None
         )

@@ -60,11 +60,95 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
       "go to TrusteeAnswersPage" when {
 
-        "from TrusteesNinoPage" in {
+        "from TrusteesNinoPage if this is not 5MLD or Taxable" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers)
+              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = false, isTaxable = false))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+
+        "from TrusteesNinoPage if this is not 5MLD and isTaxable" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = false, isTaxable = true))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from TrusteesNinoPage if this is 5MLD but not taxable" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(NinoPage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = true, isTaxable = false))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfResidenceYesNo when the answer is no if this is 5MLD and not taxable" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = false)
+                .set(CountryOfResidenceYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, answers)
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfResidenceYesNo when the answer is no if this is 5MLD and taxable but a nino has been entered" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = true)
+                .set(NinoYesNoPage(index), value = true).success.value
+                .set(CountryOfResidenceYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+
+          }
+        }
+
+        "from CountryOfResidenceInTheUkYesNo when the answer is yes if this is 5MLD and not taxable" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = false)
+                .set(CountryOfResidenceInTheUkYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfResidenceInTheUkYesNo when the answer is yes if this is 5MLD and taxable but a nino has been entered" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = true)
+                .set(NinoYesNoPage(index), value = true).success.value
+                .set(CountryOfResidenceInTheUkYesNoPage(index), value = true).success.value
+
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfResidence if this is 5MLD and not taxable" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = true, isTaxable = false))
+                .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfResidence if this is 5MLD and is taxable but a nino has been entered" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = true).set(NinoYesNoPage(index), value = true).success.value
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, answers)
                 .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -158,7 +242,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
         }
       }
 
-      "go to CountryOfResidencyYesNoPage" when {
+      "go to CountryOfResidenceYesNoPage" when {
         "from NinoYesNoPage page when user answers no if this is 5MLD" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
@@ -166,33 +250,44 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
               val answers = userAnswers.copy(is5mldEnabled = true).set(NinoYesNoPage(index), value = false).success.value
 
               navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
-                .mustBe(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId))
+                .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from TrusteesNinoPage page if this is 5MLD and isTaxable" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = true).set(NinoYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(NinoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
       }
 
-      "go to CountryOfResidencyInTheUkYesNoPage" when {
-        "from CountryOfResidencyYesNoPage page when user answers yes" in {
+      "go to CountryOfResidenceInTheUkYesNoPage" when {
+        "from CountryOfResidenceYesNoPage page when user answers yes" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              val answers = userAnswers.set(CountryOfResidencyYesNoPage(index), value = true).success.value
+              val answers = userAnswers.set(CountryOfResidenceYesNoPage(index), value = true).success.value
 
-              navigator.nextPage(CountryOfResidencyYesNoPage(index), fakeDraftId, answers)
-                .mustBe(CountryOfResidencyInTheUkYesNoController.onPageLoad(index, fakeDraftId))
+              navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
       }
 
-      "go to CountryOfResidencyPage" when {
-        "from CountryOfResidencyInTheUkYesNoPage page when user answers no" in {
+      "go to CountryOfResidencePage" when {
+        "from CountryOfResidenceInTheUkYesNoPage page when user answers no" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
 
-              val answers = userAnswers.set(CountryOfResidencyInTheUkYesNoPage(index), value = false).success.value
+              val answers = userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value = false).success.value
 
-              navigator.nextPage(CountryOfResidencyInTheUkYesNoPage(index), fakeDraftId, answers)
-                .mustBe(CountryOfResidencyController.onPageLoad(index, fakeDraftId))
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(CountryOfResidenceController.onPageLoad(index, fakeDraftId))
           }
         }
       }
@@ -271,6 +366,52 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
               navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
                 .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
           }
+        }
+
+        "from CountryOfResidenceYesNo when user answers No if this is 5MLD and taxable and we have no nino" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = true)
+                .set(NinoYesNoPage(index), value = false).success.value
+                .set(CountryOfResidenceYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
+                .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfResidenceInTheUkYesNo when user answers Yes if this is 5MLD and taxable and we have no nino" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = true)
+                .set(NinoYesNoPage(index), value = false).success.value
+                .set(CountryOfResidenceInTheUkYesNoPage(index), value = true).success.value
+
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+                .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "from CountryOfResidence if this is 5MLD and taxable and we have no nino" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers.copy(is5mldEnabled = true, isTaxable = true)
+                .set(NinoYesNoPage(index), value = false).success.value
+
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, answers)
+                .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+
+      "from CountryOfResidence if this is not 5MLD and is taxable" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+
+            navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, userAnswers.copy(is5mldEnabled = false, isTaxable = true))
+              .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 

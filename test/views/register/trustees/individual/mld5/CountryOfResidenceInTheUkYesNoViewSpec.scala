@@ -16,36 +16,32 @@
 
 package views.register.trustees.individual.mld5
 
-import forms.CountryFormProvider
+import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import utils.InputOption
-import utils.countryOptions.CountryOptionsNonUK
-import views.behaviours.SelectCountryViewBehaviours
-import views.html.register.trustees.individual.mld5.CountryOfResidencyView
+import views.behaviours.YesNoViewBehaviours
+import views.html.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoView
 
-class CountryOfResidencyViewSpec extends SelectCountryViewBehaviours {
+class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "trustee.individual.5mld.countryOfResidency"
+  val prefix = "trustee.individual.5mld.countryOfResidenceInTheUkYesNo"
   val index = 0
   val trusteeName = "Test"
 
-  val form = new CountryFormProvider().withPrefix(prefix)
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
-  "countryOfResidency view" must {
+  "countryOfResidenceInTheUkYesNo view" must {
 
-    val view = viewFor[CountryOfResidencyView](Some(emptyUserAnswers))
-
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val view = viewFor[CountryOfResidenceInTheUkYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, fakeDraftId, index, trusteeName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, trusteeName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, trusteeName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like selectCountryPage(form, applyView, prefix, trusteeName)
+    behave like yesNoPage(form, applyView, prefix, None, Seq(trusteeName))
 
     behave like pageWithASubmitButton(applyView(form))
   }

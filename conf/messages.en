@@ -367,23 +367,23 @@ trustee.individual.5mld.countryOfNationality.error.required = Enter a country
 trustee.individual.5mld.countryOfNationality.error.length = The country of nationality must be 100 characters or less
 trustee.individual.5mld.countryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
-trustee.individual.5mld.countryOfResidencyYesNo.title = Do you know the trustee’s country of residency?
-trustee.individual.5mld.countryOfResidencyYesNo.heading = Do you know {0}’s country of residency?
-trustee.individual.5mld.countryOfResidencyYesNo.checkYourAnswersLabel = Do you know {0}’s country of residency?
-trustee.individual.5mld.countryOfResidencyYesNo.error.required = Select yes if you know the trustee’s country of residency
-trustee.individual.5mld.countryOfResidencyYesNo.hint = The country of residency is usually the country where the trustee lives and works most of the time during the tax year.
+trustee.individual.5mld.countryOfResidenceYesNo.title = Do you know the trustee’s country of residence?
+trustee.individual.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+trustee.individual.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+trustee.individual.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the trustee’s country of residence
+trustee.individual.5mld.countryOfResidenceYesNo.hint = The country of residency is usually the country where the trustee lives and works most of the time during the tax year.
 
-trustee.individual.5mld.countryOfResidencyInTheUkYesNo.title = Does the trustee have UK residency?
-trustee.individual.5mld.countryOfResidencyInTheUkYesNo.heading = Does {0} have UK residency?
-trustee.individual.5mld.countryOfResidencyInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
-trustee.individual.5mld.countryOfResidencyInTheUkYesNo.error.required = Select yes if the trust has UK residency
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Does the trustee have UK residence?
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} UK resident?
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} UK resident?
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trust has UK residency
 
-trustee.individual.5mld.countryOfResidency.title = What is the trustee’s country of residency?
-trustee.individual.5mld.countryOfResidency.heading = What is {0}’s country of residency?
-trustee.individual.5mld.countryOfResidency.checkYourAnswersLabel = What is {0}’s country of residency?
-trustee.individual.5mld.countryOfResidency.error.required = Enter a country
-trustee.individual.5mld.countryOfResidency.error.length = The country of residency must be 100 characters or less
-trustee.individual.5mld.countryOfResidency.error.invalidCharacters = The country of residency must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+trustee.individual.5mld.countryOfResidence.title = What is the trustee’s country of residency?
+trustee.individual.5mld.countryOfResidence.heading = What is {0}’s country of residency?
+trustee.individual.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residency?
+trustee.individual.5mld.countryOfResidence.error.required = Enter a country
+trustee.individual.5mld.countryOfResidence.error.length = The country of residency must be 100 characters or less
+trustee.individual.5mld.countryOfResidence.error.invalidCharacters = The country of residency must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 addATrusteeYesNo.title = Do you want to add a trustee?
 addATrusteeYesNo.heading = Do you want to add a trustee?

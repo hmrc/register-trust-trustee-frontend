@@ -21,24 +21,24 @@ import config.annotations.TrusteeIndividual
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.trustees.individual.mld5.CountryOfResidencyInTheUkYesNoPage
+import pages.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoPage
 import pages.register.trustees.organisation.NamePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.trustees.individual.mld5.CountryOfResidencyInTheUkYesNoView
+import views.html.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoView
 
-class CountryOfResidencyInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidencyInTheUkYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidenceInTheUkYesNo")
   val index: Int = 0
   val trusteeName = "the trustee"
 
-  lazy val countryOfResidencyInTheUkYesNo: String = routes.CountryOfResidencyInTheUkYesNoController.onPageLoad(index, draftId).url
+  lazy val countryOfResidenceInTheUkYesNo: String = routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url
 
-  "CountryOfResidencyInTheUkYesNo Controller" must {
+  "CountryOfResidenceInTheUkYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -47,11 +47,11 @@ class CountryOfResidencyInTheUkYesNoControllerSpec extends SpecBase with Mockito
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, countryOfResidencyInTheUkYesNo)
+      val request = FakeRequest(GET, countryOfResidenceInTheUkYesNo)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CountryOfResidencyInTheUkYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceInTheUkYesNoView]
 
       status(result) mustEqual OK
 
@@ -64,14 +64,14 @@ class CountryOfResidencyInTheUkYesNoControllerSpec extends SpecBase with Mockito
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index), trusteeName).success.value
-        .set(CountryOfResidencyInTheUkYesNoPage(index), true).success.value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, countryOfResidencyInTheUkYesNo)
+      val request = FakeRequest(GET, countryOfResidenceInTheUkYesNo)
 
-      val view = application.injector.instanceOf[CountryOfResidencyInTheUkYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceInTheUkYesNoView]
 
       val result = route(application, request).value
 
@@ -94,7 +94,7 @@ class CountryOfResidencyInTheUkYesNoControllerSpec extends SpecBase with Mockito
         ).build()
 
       val request =
-        FakeRequest(POST, countryOfResidencyInTheUkYesNo)
+        FakeRequest(POST, countryOfResidenceInTheUkYesNo)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -114,12 +114,12 @@ class CountryOfResidencyInTheUkYesNoControllerSpec extends SpecBase with Mockito
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, countryOfResidencyInTheUkYesNo)
+        FakeRequest(POST, countryOfResidenceInTheUkYesNo)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[CountryOfResidencyInTheUkYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceInTheUkYesNoView]
 
       val result = route(application, request).value
 
@@ -135,7 +135,7 @@ class CountryOfResidencyInTheUkYesNoControllerSpec extends SpecBase with Mockito
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, countryOfResidencyInTheUkYesNo)
+      val request = FakeRequest(GET, countryOfResidenceInTheUkYesNo)
 
       val result = route(application, request).value
 
@@ -151,7 +151,7 @@ class CountryOfResidencyInTheUkYesNoControllerSpec extends SpecBase with Mockito
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, countryOfResidencyInTheUkYesNo)
+        FakeRequest(POST, countryOfResidenceInTheUkYesNo)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

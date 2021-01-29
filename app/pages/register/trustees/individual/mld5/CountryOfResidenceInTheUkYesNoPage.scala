@@ -23,15 +23,15 @@ import sections.Trustees
 
 import scala.util.Try
 
-final case class CountryOfResidencyInTheUkYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class CountryOfResidenceInTheUkYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "countryOfResidencyInTheUkYesNo"
+  override def toString: String = "countryOfResidenceInTheUkYesNo"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) => userAnswers.set(CountryOfResidencyPage(index), "GB")
+      case Some(true) => userAnswers.set(CountryOfResidencePage(index), "GB")
       case _ => super.cleanup(value, userAnswers)
     }
 }

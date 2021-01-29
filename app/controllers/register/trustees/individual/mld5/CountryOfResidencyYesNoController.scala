@@ -23,17 +23,17 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
-import pages.register.trustees.individual.mld5.CountryOfResidencyYesNoPage
+import pages.register.trustees.individual.mld5.CountryOfResidenceYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.mld5.CountryOfResidencyYesNoView
+import views.html.register.trustees.individual.mld5.CountryOfResidenceYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfResidencyYesNoController @Inject()(
+class CountryOfResidenceYesNoController @Inject()(
                                                      val controllerComponents: MessagesControllerComponents,
                                                      implicit val frontendAppConfig: FrontendAppConfig,
                                                      repository: RegistrationsRepository,
@@ -41,16 +41,16 @@ class CountryOfResidencyYesNoController @Inject()(
                                                      standardActionSets: StandardActionSets,
                                                      nameAction: NameRequiredActionImpl,
                                                      formProvider: YesNoFormProvider,
-                                                     view: CountryOfResidencyYesNoView
+                                                     view: CountryOfResidenceYesNoView
                                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidencyYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidenceYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
       implicit request =>
 
-        val preparedForm = request.userAnswers.get(CountryOfResidencyYesNoPage(index)) match {
+        val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
           case None => form
           case Some(value) => form.fill(value)
         }
@@ -68,9 +68,9 @@ class CountryOfResidencyYesNoController @Inject()(
 
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencyYesNoPage(index), value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value))
               _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidencyYesNoPage(index), draftId, updatedAnswers))
+            } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, updatedAnswers))
         )
     }
 }

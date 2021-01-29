@@ -23,34 +23,34 @@ import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.trustees.individual.mld5.CountryOfResidencyInTheUkYesNoPage
+import pages.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.mld5.CountryOfResidencyInTheUkYesNoView
+import views.html.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfResidencyInTheUkYesNoController @Inject()(
+class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                             val controllerComponents: MessagesControllerComponents,
                                                             implicit val frontendAppConfig: FrontendAppConfig,
                                                             @TrusteeIndividual navigator: Navigator,
                                                             standardActionSets: StandardActionSets,
                                                             formProvider: YesNoFormProvider,
-                                                            view: CountryOfResidencyInTheUkYesNoView,
+                                                            view: CountryOfResidenceInTheUkYesNoView,
                                                             repository: RegistrationsRepository,
                                                             nameAction: NameRequiredActionImpl
                                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidencyInTheUkYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
       implicit request =>
 
-        val preparedForm = request.userAnswers.get(CountryOfResidencyInTheUkYesNoPage(index)) match {
+        val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
           case None => form
           case Some(value) => form.fill(value)
         }
@@ -68,9 +68,9 @@ class CountryOfResidencyInTheUkYesNoController @Inject()(
 
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencyInTheUkYesNoPage(index), value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
               _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidencyInTheUkYesNoPage(index), draftId, updatedAnswers))
+            } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
         )
     }
 }

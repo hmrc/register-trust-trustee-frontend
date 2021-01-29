@@ -49,12 +49,12 @@ POST       /:draftId/:index/uk-nationality             controllers.register.trus
 GET        /:draftId/:index/country-of-nationality     controllers.register.trustees.individual.mld5.CountryOfNationalityController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/country-of-nationality     controllers.register.trustees.individual.mld5.CountryOfNationalityController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/has-country-of-residency   controllers.register.trustees.individual.mld5.CountryOfResidencyYesNoController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/has-country-of-residency   controllers.register.trustees.individual.mld5.CountryOfResidencyYesNoController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/has-country-of-residency   controllers.register.trustees.individual.mld5.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/has-country-of-residency   controllers.register.trustees.individual.mld5.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/uk-residency               controllers.register.trustees.individual.mld5.CountryOfResidencyInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/uk-residency               controllers.register.trustees.individual.mld5.CountryOfResidencyInTheUkYesNoController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/uk-residency               controllers.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/uk-residency               controllers.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/country-of-residency       controllers.register.trustees.individual.mld5.CountryOfResidencyController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/country-of-residency       controllers.register.trustees.individual.mld5.CountryOfResidencyController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/country-of-residency       controllers.register.trustees.individual.mld5.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/country-of-residency       controllers.register.trustees.individual.mld5.CountryOfResidenceController.onSubmit(index: Int, draftId: String)
 
