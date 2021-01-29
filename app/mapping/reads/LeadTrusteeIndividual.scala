@@ -32,7 +32,8 @@ final case class LeadTrusteeIndividual(override val isLead: Boolean = true,
                                        address: Address,
                                        telephoneNumber: String,
                                        email: Option[String],
-                                       countryOfResidence: Option[String]) extends Trustee {
+                                       countryOfResidence: Option[String],
+                                       nationality: Option[String]) extends Trustee {
 
   def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
 
@@ -69,7 +70,8 @@ object LeadTrusteeIndividual extends TrusteeReads {
         addressReads and
         (__ \ "telephoneNumber").read[String] and
         yesNoReads[String]("emailAddressYesNo", "email") and
-        (__ \ "countryOfResidence").readNullable[String]
+        (__ \ "countryOfResidence").readNullable[String] and
+        (__ \ "nationality").readNullable[String]
       )(LeadTrusteeIndividual.apply _)
 
     (isLeadReads and
