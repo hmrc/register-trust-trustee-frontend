@@ -19,10 +19,11 @@ package controllers.register.trustees.individual.mld5
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import forms.YesNoFormProvider
+import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoPage
-import pages.register.trustees.organisation.NamePage
+import pages.register.trustees.individual.NamePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -34,7 +35,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidenceInTheUkYesNo")
   val index: Int = 0
-  val trusteeName = "the trustee"
+  val trusteeName = FullName("FirstName", None, "LastName")
 
   lazy val countryOfResidenceInTheUkYesNo: String = routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url
 
@@ -56,7 +57,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId, index, trusteeName)(request, messages).toString
+        view(form, draftId, index, trusteeName.toString)(request, messages).toString
 
       application.stop()
     }
@@ -78,7 +79,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), draftId, index, trusteeName)(request, messages).toString
+        view(form.fill(true), draftId, index, trusteeName.toString)(request, messages).toString
 
       application.stop()
     }
@@ -126,7 +127,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId, index, trusteeName)(request, messages).toString
+        view(boundForm, draftId, index, trusteeName.toString)(request, messages).toString
 
       application.stop()
     }

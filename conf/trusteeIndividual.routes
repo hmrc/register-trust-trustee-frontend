@@ -58,3 +58,5 @@ POST       /:draftId/:index/uk-residency               controllers.register.trus
 GET        /:draftId/:index/country-of-residency       controllers.register.trustees.individual.mld5.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/country-of-residency       controllers.register.trustees.individual.mld5.CountryOfResidenceController.onSubmit(index: Int, draftId: String)
 
+GET        /:draftId/:index/legally-incapable          controllers.register.trustees.individual.mld5.LegallyIncapableYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/legally-incapable          controllers.register.trustees.individual.mld5.LegallyIncapableYesNoController.onSubmit(index: Int, draftId: String)

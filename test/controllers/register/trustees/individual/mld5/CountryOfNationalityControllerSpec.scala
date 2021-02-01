@@ -27,8 +27,9 @@ import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import config.annotations.TrusteeIndividual
+import models.core.pages.FullName
 import pages.register.trustees.individual.mld5.CountryOfNationalityPage
-import pages.register.trustees.organisation.NamePage
+import pages.register.trustees.individual.NamePage
 import views.html.register.trustees.individual.mld5.CountryOfNationalityView
 
 class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
@@ -36,7 +37,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("trustee.individual.5mld.countryOfNationality")
   val index: Int = 0
-  val trusteeName = "the trustee"
+  val trusteeName = FullName("FirstName", None, "LastName")
 
   lazy val countryOfNationality: String = routes.CountryOfNationalityController.onPageLoad(index, draftId).url
 
@@ -60,7 +61,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, draftId, index, trusteeName)(request, messages).toString
+        view(form, countryOptions, draftId, index, trusteeName.toString)(request, messages).toString
 
       application.stop()
     }
@@ -83,7 +84,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Spain"), countryOptions, draftId, index, trusteeName)(request, messages).toString
+        view(form.fill("Spain"), countryOptions, draftId, index, trusteeName.toString)(request, messages).toString
 
       application.stop()
     }
@@ -133,7 +134,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, draftId, index, trusteeName)(request, messages).toString
+        view(boundForm, countryOptions, draftId, index, trusteeName.toString)(request, messages).toString
 
       application.stop()
     }
