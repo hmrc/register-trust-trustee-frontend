@@ -61,7 +61,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               dateOfBirth = None,
               phoneNumber = None,
               identification = None,
-              countryOfNationality = None,
+              nationality = None,
               countryOfResidence = None
             )),
             trusteeOrg = None
@@ -91,7 +91,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                   address = None
                 )
               ),
-              countryOfNationality = None,
+              nationality = None,
               countryOfResidence = None
             )),
             trusteeOrg = None
@@ -167,7 +167,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               dateOfBirth = None,
               phoneNumber = None,
               identification = None,
-              countryOfNationality = None,
+              nationality = None,
               countryOfResidence = None
             )),
             trusteeOrg = None
@@ -178,7 +178,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               dateOfBirth = None,
               phoneNumber = None,
               identification = None,
-              countryOfNationality = None,
+              nationality = None,
               countryOfResidence = None
             )),
             trusteeOrg = None
@@ -231,8 +231,11 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(ind.NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
           .set(ind.DateOfBirthYesNoPage(index), true).success.value
           .set(ind.DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
+          .set(ind.mld5.CountryOfNationalityYesNoPage(index), true).success.value
           .set(ind.mld5.CountryOfNationalityInTheUkYesNoPage(index), true).success.value
-          .set(ind.mld5.CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+          .set(ind.mld5.CountryOfResidenceYesNoPage(index), true).success.value
+          .set(ind.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+          .set(ind.mld5.CountryOfResidencePage(index), "ES").success.value
           .set(ind.NinoYesNoPage(index), false).success.value
           .set(ind.AddressYesNoPage(index), true).success.value
           .set(ind.AddressUkYesNoPage(index), true).success.value
@@ -252,8 +255,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 address = Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
               )
             ),
-            countryOfNationality = Some("GB"),
-            countryOfResidence = Some("GB")
+            nationality = Some("GB"),
+            countryOfResidence = Some("ES")
           )),
           trusteeOrg = None
         )
