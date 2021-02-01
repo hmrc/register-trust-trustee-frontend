@@ -35,8 +35,8 @@ class TrusteeIndividualNavigator extends Navigator {
     case NinoPage(index) => ua => navigateAwayFromNinoPage(index, draftId, ua.is5mldEnabled, ua.isTaxable)
     case UkAddressPage(index) => _ =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ =>  PassportDetailsYesNoController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
-    case IDCardDetailsPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
+    case PassportDetailsPage(index) => ua => navigateToFinalPages(index, draftId, ua.is5mldEnabled)
+    case IDCardDetailsPage(index) => ua => navigateToFinalPages(index, draftId, ua.is5mldEnabled)
   }
 
   override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -87,7 +87,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = AddressUkYesNoController.onPageLoad(index, draftId),
-        noCall = CheckDetailsController.onPageLoad(index, draftId)
+        noCall = navigateToFinalPages(index, draftId, ua.is5mldEnabled)
       )
     case page @ AddressUkYesNoPage(index) => ua =>
       yesNoNav(
@@ -108,9 +108,17 @@ class TrusteeIndividualNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = IDCardDetailsController.onPageLoad(index, draftId),
+        noCall = navigateToFinalPages(index, draftId, ua.is5mldEnabled)
+      )
+    case page @ LegallyIncapableYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = CheckDetailsController.onPageLoad(index, draftId),
         noCall = CheckDetailsController.onPageLoad(index, draftId)
       )
   }
+
 
   private def navigateAwayFromDateOfBirthPages(index: Int, draftId: String, is5mldEnabled: Boolean): Call = {
     if (is5mldEnabled) {
@@ -132,7 +140,7 @@ class TrusteeIndividualNavigator extends Navigator {
     if (is5mldEnabled && isTaxable) {
       mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
-      CheckDetailsController.onPageLoad(index, draftId)
+      navigateToFinalPages(index, draftId, is5mldEnabled)
     }
   }
 
@@ -140,7 +148,15 @@ class TrusteeIndividualNavigator extends Navigator {
     (answers.is5mldEnabled, answers.isTaxable, answers.get(NinoYesNoPage(index))) match {
       case (false, _, _) => AddressYesNoController.onPageLoad(index, draftId)
       case (true, true, Some(false)) => AddressYesNoController.onPageLoad(index, draftId)
-      case _ => CheckDetailsController.onPageLoad(index, draftId)
+      case _ => navigateToFinalPages(index, draftId, answers.is5mldEnabled)
+    }
+  }
+
+  private def navigateToFinalPages(index: Int, draftId: String, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      mld5Rts.LegallyIncapableYesNoController.onPageLoad(index, draftId)
+    } else {
+      CheckDetailsController.onPageLoad(index, draftId)
     }
   }
 }
