@@ -352,13 +352,13 @@ trusteesInfo.5mld.warning = All trustees have the same legal responsibilities.
 trustee.individual.5mld.countryOfNationalityYesNo.title = Do you know the trustee’s country of nationality?
 trustee.individual.5mld.countryOfNationalityYesNo.heading = Do you know {0}’s country of nationality?
 trustee.individual.5mld.countryOfNationalityYesNo.checkYourAnswersLabel = Do you know {0}’s country of nationality?
-trustee.individual.5mld.countryOfNationalityYesNo.error.required = Select yes if you know the trustee’s country of nationality
+trustee.individual.5mld.countryOfNationalityYesNo.error.required = Enter yes if you know the trustee's country of nationality
 trustee.individual.5mld.countryOfNationalityYesNo.hint = The country of nationality is usually where the trustee was born and where their passport is registered.
 
 trustee.individual.5mld.countryOfNationalityInTheUkYesNo.title = Does the trustee have UK nationality?
 trustee.individual.5mld.countryOfNationalityInTheUkYesNo.heading = Does {0} have UK nationality?
 trustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK nationality?
-trustee.individual.5mld.countryOfNationalityInTheUkYesNo.error.required = Select yes if the trust has UK nationality
+trustee.individual.5mld.countryOfNationalityInTheUkYesNo.error.required = Enter yes if the trustee has UK nationality
 
 trustee.individual.5mld.countryOfNationality.title = What is the trustee’s country of nationality?
 trustee.individual.5mld.countryOfNationality.heading = What is {0}’s country of nationality?
@@ -373,10 +373,10 @@ trustee.individual.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you k
 trustee.individual.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the trustee’s country of residence
 trustee.individual.5mld.countryOfResidenceYesNo.hint = The country of residency is usually the country where the trustee lives and works most of the time during the tax year.
 
-trustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Does the trustee have UK residence?
-trustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} UK resident?
-trustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} UK resident?
-trustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trust has UK residency
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Is the trustee a UK residence?
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} a UK resident?
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} a UK resident?
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trustee has UK residency
 
 trustee.individual.5mld.countryOfResidence.title = What is the trustee’s country of residency?
 trustee.individual.5mld.countryOfResidence.heading = What is {0}’s country of residency?
@@ -385,12 +385,11 @@ trustee.individual.5mld.countryOfResidence.error.required = Enter a country
 trustee.individual.5mld.countryOfResidence.error.length = The country of residency must be 100 characters or less
 trustee.individual.5mld.countryOfResidence.error.invalidCharacters = The country of residency must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
-trustee.individual.5mld.legallyIncapableYesNo.title = Do you know if the trustee is legally incapable at the time of registration?
-trustee.individual.5mld.legallyIncapableYesNo.heading = Do you know if {0} is legally incapable at the time of registration?
-trustee.individual.5mld.legallyIncapableYesNo.checkYourAnswersLabel = Do you know if {0} is legally incapable at the time of registration?
-trustee.individual.5mld.legallyIncapableYesNo.error.required = Select yes if you know the trustee’s legal capacity
-trustee.individual.5mld.legallyIncapableYesNo.hint = A trustee is legally incapable if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
-
+trustee.individual.5mld.legallyIncapableYesNo.title = Does the trustee have mental capacity at the time of registration?
+trustee.individual.5mld.legallyIncapableYesNo.heading = Does {0} have mental capacity at the time of registration?
+trustee.individual.5mld.legallyIncapableYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
+trustee.individual.5mld.legallyIncapableYesNo.error.required = Select yes if you know that the trustee’s has mental capacity
+trustee.individual.5mld.legallyIncapableYesNo.hint = A trustee does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
 
 addATrusteeYesNo.title = Do you want to add a trustee?
 addATrusteeYesNo.heading = Do you want to add a trustee?
