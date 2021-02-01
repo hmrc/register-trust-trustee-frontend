@@ -62,7 +62,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               phoneNumber = None,
               identification = None,
               nationality = None,
-              countryOfResidence = None
+              countryOfResidence = None,
+              legallyIncapableYesNo = None
             )),
             trusteeOrg = None
           )
@@ -92,7 +93,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 )
               ),
               nationality = None,
-              countryOfResidence = None
+              countryOfResidence = None,
+              legallyIncapableYesNo = None
             )),
             trusteeOrg = None
           )
@@ -168,7 +170,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               phoneNumber = None,
               identification = None,
               nationality = None,
-              countryOfResidence = None
+              countryOfResidence = None,
+              legallyIncapableYesNo = None
             )),
             trusteeOrg = None
           ),
@@ -179,7 +182,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               phoneNumber = None,
               identification = None,
               nationality = None,
-              countryOfResidence = None
+              countryOfResidence = None,
+              legallyIncapableYesNo = None
             )),
             trusteeOrg = None
           )
@@ -242,6 +246,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(ind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
           .set(ind.PassportDetailsYesNoPage(index), false).success.value
           .set(ind.IDCardDetailsYesNoPage(index), false).success.value
+          .set(ind.mld5.LegallyIncapableYesNoPage(index), true).success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
@@ -256,7 +261,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               )
             ),
             nationality = Some("GB"),
-            countryOfResidence = Some("ES")
+            countryOfResidence = Some("ES"),
+            legallyIncapableYesNo = Some(true)
           )),
           trusteeOrg = None
         )
