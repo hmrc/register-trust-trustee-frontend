@@ -21,12 +21,14 @@ import java.time.LocalDate
 import base.SpecBase
 import controllers.register.routes.TrusteeIndividualOrBusinessController
 import controllers.register.trustees.individual.routes._
+import controllers.register.trustees.individual.mld5.routes._
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.TrusteeOrLeadTrustee.Trustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import pages.register.trustees.individual._
+import pages.register.trustees.individual.mld5._
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
@@ -120,6 +122,62 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
             AnswerRow("trustee.individual.ukAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />NE1 1NE"), Some(UkAddressController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.passportDetailsYesNo.checkYourAnswersLabel", Html("Yes"), Some(PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.passportDetails.checkYourAnswersLabel", Html("Germany<br />1234567890<br />3 February 1996"), Some(PassportDetailsController.onPageLoad(index, fakeDraftId).url), displayName)
+          )
+        )
+      }
+
+      "trustee has country of residence" in {
+        val userAnswers: UserAnswers = baseAnswers
+          .set(CountryOfResidenceYesNoPage(index), true).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+          .set(CountryOfResidencePage(index), "ES").success.value
+
+        val result = helper.checkDetailsSection(userAnswers, displayName, index, fakeDraftId)
+
+        result mustBe AnswerSection(
+          None,
+          Seq(
+            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
+            AnswerRow("trustee.individual.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.5mld.countryOfResidence.checkYourAnswersLabel", Html("Spain"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), displayName)
+          )
+        )
+      }
+
+      "trustee has country of nationality" in {
+        val userAnswers: UserAnswers = baseAnswers
+          .set(CountryOfNationalityYesNoPage(index), true).success.value
+          .set(CountryOfNationalityInTheUkYesNoPage(index), false).success.value
+          .set(CountryOfNationalityPage(index), "US").success.value
+
+        val result = helper.checkDetailsSection(userAnswers, displayName, index, fakeDraftId)
+
+        result mustBe AnswerSection(
+          None,
+          Seq(
+            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
+            AnswerRow("trustee.individual.5mld.countryOfNationalityYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.5mld.countryOfNationality.checkYourAnswersLabel", Html("United States of America"), Some(CountryOfNationalityController.onPageLoad(index, fakeDraftId).url), displayName)
+          )
+        )
+      }
+
+      "trustee has legallyIncapable" in {
+        val userAnswers: UserAnswers = baseAnswers
+          .set(LegallyIncapableYesNoPage(index), true).success.value
+
+        val result = helper.checkDetailsSection(userAnswers, displayName, index, fakeDraftId)
+
+        result mustBe AnswerSection(
+          None,
+          Seq(
+            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
+            AnswerRow("trustee.individual.5mld.legallyIncapableYesNo.checkYourAnswersLabel", Html("Yes"), Some(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId).url), displayName)
           )
         )
       }
