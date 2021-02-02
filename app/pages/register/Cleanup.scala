@@ -24,14 +24,22 @@ trait Cleanup {
 
   def removeTrusteeIndividual(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
     import pages.register.trustees.individual._
+    import pages.register.trustees.individual.mld5._
 
     userAnswers.remove(NamePage(index))
       .flatMap(_.remove(DateOfBirthPage(index)))
+      .flatMap(_.remove(CountryOfNationalityYesNoPage(index)))
+      .flatMap(_.remove(CountryOfNationalityInTheUkYesNoPage(index)))
+      .flatMap(_.remove(CountryOfNationalityPage(index)))
       .flatMap(_.remove(NinoYesNoPage(index)))
       .flatMap(_.remove(NinoPage(index)))
+      .flatMap(_.remove(CountryOfResidenceYesNoPage(index)))
+      .flatMap(_.remove(CountryOfResidenceInTheUkYesNoPage(index)))
+      .flatMap(_.remove(CountryOfResidencePage(index)))
       .flatMap(_.remove(AddressUkYesNoPage(index)))
       .flatMap(_.remove(UkAddressPage(index)))
       .flatMap(_.remove(InternationalAddressPage(index)))
+      .flatMap(_.remove(MentalCapacityYesNoPage(index)))
   }
 
   def removeTrusteeBusiness(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {

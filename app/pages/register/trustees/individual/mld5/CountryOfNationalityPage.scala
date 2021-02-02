@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.leadtrustee.individual.mld5
+package pages.register.trustees.individual.mld5
 
-import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
-import utils.Constants.GB
 
-import scala.util.Try
-
-final case class CountryOfNationalityInTheUkYesNoPage(index: Int) extends QuestionPage[Boolean] {
+final case class CountryOfNationalityPage(index : Int) extends QuestionPage[String] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "countryOfNationalityInTheUkYesNo"
+  override def toString: String = "nationality"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(true) =>
-        userAnswers.set(CountryOfNationalityPage(index), GB)
-      case _ => super.cleanup(value, userAnswers)
-    }
 }

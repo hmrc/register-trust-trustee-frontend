@@ -45,7 +45,10 @@ class TrusteeMapper @Inject()(addressMapper: AddressMapper,
               name = indTrustee.name,
               dateOfBirth = indTrustee.dateOfBirth,
               phoneNumber = None,
-              identification = identificationMap(indTrustee)
+              identification = identificationMap(indTrustee),
+              countryOfResidence = indTrustee.countryOfResidence,
+              nationality = indTrustee.nationality,
+              legallyIncapable = indTrustee.mentalCapacityYesNo.map(!_)
             )
           ),
           trusteeOrg = None

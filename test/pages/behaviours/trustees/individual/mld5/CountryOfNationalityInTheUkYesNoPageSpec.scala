@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package pages.behaviours.leadtrustee.individual.mld5
+package pages.behaviours.trustees.individual.mld5
 
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.leadtrustee.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage}
+import pages.register.trustees.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
+import utils.Constants._
 
 class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
 
@@ -31,15 +32,28 @@ class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](CountryOfNationalityInTheUkYesNoPage(0))
 
-    "Yes selected - set CountryOfNationalityPage to 'GB'" in {
+
+    "Yes selected - set CountryOfNationalityPage to 'GB' " in {
       forAll(arbitrary[UserAnswers]) {
         initial =>
-          val answers: UserAnswers = initial
+          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).success.value
             .set(CountryOfNationalityPage(0), "ES").success.value
 
           val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), true).success.value
 
-          result.get(CountryOfNationalityPage(0)).get mustBe "GB"
+          result.get(CountryOfNationalityPage(0)).get mustBe GB
+      }
+    }
+
+    "No selected" in {
+      forAll(arbitrary[UserAnswers]) {
+        initial =>
+          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).success.value
+            .set(CountryOfNationalityPage(0), "ES").success.value
+
+          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), false).success.value
+
+          result.get(CountryOfNationalityPage(0)).get mustBe "ES"
       }
     }
 

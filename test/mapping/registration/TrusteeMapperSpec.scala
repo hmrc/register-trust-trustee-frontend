@@ -60,7 +60,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               name = FullName("first name", None, "last name"),
               dateOfBirth = None,
               phoneNumber = None,
-              identification = None
+              identification = None,
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = None
             )),
             trusteeOrg = None
           )
@@ -88,7 +91,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                   passport = None,
                   address = None
                 )
-              )
+              ),
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = None
             )),
             trusteeOrg = None
           )
@@ -162,7 +168,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               name = FullName("first name", None, "last name"),
               dateOfBirth = None,
               phoneNumber = None,
-              identification = None
+              identification = None,
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = None
             )),
             trusteeOrg = None
           ),
@@ -171,7 +180,10 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               name = FullName("second name", None, "second name"),
               dateOfBirth = None,
               phoneNumber = None,
-              identification = None
+              identification = None,
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = None
             )),
             trusteeOrg = None
           )
@@ -223,12 +235,18 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(ind.NamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
           .set(ind.DateOfBirthYesNoPage(index), true).success.value
           .set(ind.DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
+          .set(ind.mld5.CountryOfNationalityYesNoPage(index), true).success.value
+          .set(ind.mld5.CountryOfNationalityInTheUkYesNoPage(index), true).success.value
+          .set(ind.mld5.CountryOfResidenceYesNoPage(index), true).success.value
+          .set(ind.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+          .set(ind.mld5.CountryOfResidencePage(index), "ES").success.value
           .set(ind.NinoYesNoPage(index), false).success.value
           .set(ind.AddressYesNoPage(index), true).success.value
           .set(ind.AddressUkYesNoPage(index), true).success.value
           .set(ind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
           .set(ind.PassportDetailsYesNoPage(index), false).success.value
           .set(ind.IDCardDetailsYesNoPage(index), false).success.value
+          .set(ind.mld5.MentalCapacityYesNoPage(index), true).success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
@@ -241,9 +259,55 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 passport = None,
                 address = Some(AddressType("line1", "line2", None, None, Some("NE65QA"), "GB"))
               )
-            )
+            ),
+            nationality = Some("GB"),
+            countryOfResidence = Some("ES"),
+            legallyIncapable = Some(false)
           )),
           trusteeOrg = None
+        )
+      }
+
+      "be able to create a Trustee Individual with Mental Capacity Set to true" in {
+        val index0 = 0
+        val index1 = 1
+        val userAnswers =
+          emptyUserAnswers
+            .set(TrusteeOrLeadTrusteePage(index0), Trustee).success.value
+            .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Individual).success.value
+            .set(ind.NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index0), true).success.value
+
+            .set(TrusteeOrLeadTrusteePage(index1), Trustee).success.value
+            .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Individual).success.value
+            .set(ind.NamePage(index1), FullName("second name", None, "second name")).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index1), false).success.value
+
+        trusteeMapper.build(userAnswers).value mustBe List(
+          TrusteeType(
+            trusteeInd = Some(TrusteeIndividualType(
+              name = FullName("first name", None, "last name"),
+              dateOfBirth = None,
+              phoneNumber = None,
+              identification = None,
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = Some(false)
+            )),
+            trusteeOrg = None
+          ),
+          TrusteeType(
+            trusteeInd = Some(TrusteeIndividualType(
+              name = FullName("second name", None, "second name"),
+              dateOfBirth = None,
+              phoneNumber = None,
+              identification = None,
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = Some(true)
+            )),
+            trusteeOrg = None
+          )
         )
       }
 
