@@ -373,10 +373,10 @@ trustee.individual.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you k
 trustee.individual.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the trustee’s country of residence
 trustee.individual.5mld.countryOfResidenceYesNo.hint = The country of residency is usually the country where the trustee lives and works most of the time during the tax year.
 
-trustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Is the trustee a UK residence?
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.title = Is the trustee a UK resident?
 trustee.individual.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} a UK resident?
 trustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} a UK resident?
-trustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trustee has UK residency
+trustee.individual.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trustee is a UK resident
 
 trustee.individual.5mld.countryOfResidence.title = What is the trustee’s country of residency?
 trustee.individual.5mld.countryOfResidence.heading = What is {0}’s country of residency?
