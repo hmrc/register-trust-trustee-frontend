@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 
@@ -51,9 +51,7 @@ final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
                              internalAuthId :String,
                              override val is5mldEnabled: Boolean = false,
-                             override val isTaxable: Boolean = true) extends ReadableUserAnswers {
-
-  private val logger: Logger = Logger(getClass)
+                             override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A], reads: Reads[A]): Try[UserAnswers] = {
 
