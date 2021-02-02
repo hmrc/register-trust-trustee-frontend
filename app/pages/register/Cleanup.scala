@@ -39,6 +39,7 @@ trait Cleanup {
       .flatMap(_.remove(AddressUkYesNoPage(index)))
       .flatMap(_.remove(UkAddressPage(index)))
       .flatMap(_.remove(InternationalAddressPage(index)))
+      .flatMap(_.remove(MentalCapacityYesNoPage(index)))
   }
 
   def removeTrusteeBusiness(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
