@@ -17,11 +17,9 @@
 package pages.behaviours.leadtrustee.individual.mld5
 
 import models.UserAnswers
-import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.leadtrustee.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage}
-import pages.register.leadtrustee.individual.{InternationalAddressPage, UkAddressPage}
 
 class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
 

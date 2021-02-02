@@ -110,7 +110,7 @@ class TrusteeIndividualNavigator extends Navigator {
         yesCall = IDCardDetailsController.onPageLoad(index, draftId),
         noCall = navigateToFinalPages(index, draftId, ua.is5mldEnabled)
       )
-    case page @ LegallyIncapableYesNoPage(index) => ua =>
+    case page @ MentalCapacityYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
@@ -154,7 +154,7 @@ class TrusteeIndividualNavigator extends Navigator {
 
   private def navigateToFinalPages(index: Int, draftId: String, is5mldEnabled: Boolean): Call = {
     if (is5mldEnabled) {
-      mld5Rts.LegallyIncapableYesNoController.onPageLoad(index, draftId)
+      mld5Rts.MentalCapacityYesNoController.onPageLoad(index, draftId)
     } else {
       CheckDetailsController.onPageLoad(index, draftId)
     }

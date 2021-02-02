@@ -63,7 +63,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               identification = None,
               nationality = None,
               countryOfResidence = None,
-              legallyIncapableYesNo = None
+              legallyIncapable = None
             )),
             trusteeOrg = None
           )
@@ -94,7 +94,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               ),
               nationality = None,
               countryOfResidence = None,
-              legallyIncapableYesNo = None
+              legallyIncapable = None
             )),
             trusteeOrg = None
           )
@@ -171,7 +171,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               identification = None,
               nationality = None,
               countryOfResidence = None,
-              legallyIncapableYesNo = None
+              legallyIncapable = None
             )),
             trusteeOrg = None
           ),
@@ -183,7 +183,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               identification = None,
               nationality = None,
               countryOfResidence = None,
-              legallyIncapableYesNo = None
+              legallyIncapable = None
             )),
             trusteeOrg = None
           )
@@ -246,7 +246,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(ind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
           .set(ind.PassportDetailsYesNoPage(index), false).success.value
           .set(ind.IDCardDetailsYesNoPage(index), false).success.value
-          .set(ind.mld5.LegallyIncapableYesNoPage(index), true).success.value
+          .set(ind.mld5.MentalCapacityYesNoPage(index), true).success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
@@ -262,9 +262,52 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             ),
             nationality = Some("GB"),
             countryOfResidence = Some("ES"),
-            legallyIncapableYesNo = Some(true)
+            legallyIncapable = Some(false)
           )),
           trusteeOrg = None
+        )
+      }
+
+      "be able to create a Trustee Individual with Mental Capacity Set to true" in {
+        val index0 = 0
+        val index1 = 1
+        val userAnswers =
+          emptyUserAnswers
+            .set(TrusteeOrLeadTrusteePage(index0), Trustee).success.value
+            .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Individual).success.value
+            .set(ind.NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index0), true).success.value
+
+            .set(TrusteeOrLeadTrusteePage(index1), Trustee).success.value
+            .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Individual).success.value
+            .set(ind.NamePage(index1), FullName("second name", None, "second name")).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index1), false).success.value
+
+        trusteeMapper.build(userAnswers).value mustBe List(
+          TrusteeType(
+            trusteeInd = Some(TrusteeIndividualType(
+              name = FullName("first name", None, "last name"),
+              dateOfBirth = None,
+              phoneNumber = None,
+              identification = None,
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = Some(false)
+            )),
+            trusteeOrg = None
+          ),
+          TrusteeType(
+            trusteeInd = Some(TrusteeIndividualType(
+              name = FullName("second name", None, "second name"),
+              dateOfBirth = None,
+              phoneNumber = None,
+              identification = None,
+              nationality = None,
+              countryOfResidence = None,
+              legallyIncapable = Some(true)
+            )),
+            trusteeOrg = None
+          )
         )
       }
 

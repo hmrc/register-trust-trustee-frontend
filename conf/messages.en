@@ -385,11 +385,11 @@ trustee.individual.5mld.countryOfResidence.error.required = Enter a country
 trustee.individual.5mld.countryOfResidence.error.length = The country of residency must be 100 characters or less
 trustee.individual.5mld.countryOfResidence.error.invalidCharacters = The country of residency must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
-trustee.individual.5mld.legallyIncapableYesNo.title = Does the trustee have mental capacity at the time of registration?
-trustee.individual.5mld.legallyIncapableYesNo.heading = Does {0} have mental capacity at the time of registration?
-trustee.individual.5mld.legallyIncapableYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
-trustee.individual.5mld.legallyIncapableYesNo.error.required = Select yes if you know that the trustee’s has mental capacity
-trustee.individual.5mld.legallyIncapableYesNo.hint = A trustee does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
+trustee.individual.5mld.mentalCapacityYesNo.title = Does the trustee have mental capacity at the time of registration?
+trustee.individual.5mld.mentalCapacityYesNo.heading = Does {0} have mental capacity at the time of registration?
+trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
+trustee.individual.5mld.mentalCapacityYesNo.error.required = Select yes if you know that the trustee’s has mental capacity
+trustee.individual.5mld.mentalCapacityYesNo.hint = A trustee does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
 
 addATrusteeYesNo.title = Do you want to add a trustee?
 addATrusteeYesNo.heading = Do you want to add a trustee?

@@ -70,7 +70,7 @@ class TrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowConver
       bound.passportDetailsQuestion(PassportDetailsPage(index), s"$prefix.passportDetails", PassportDetailsController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(IDCardDetailsYesNoPage(index), s"$prefix.idCardDetailsYesNo", IDCardDetailsYesNoController.onPageLoad(index, draftId).url),
       bound.passportDetailsQuestion(IDCardDetailsPage(index), s"$prefix.idCardDetails", IDCardDetailsController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(mld5.LegallyIncapableYesNoPage(index), s"$prefix.5mld.legallyIncapableYesNo", mld5Rts.LegallyIncapableYesNoController.onPageLoad(index, draftId).url)
+      bound.yesNoQuestion(mld5.MentalCapacityYesNoPage(index), s"$prefix.5mld.mentalCapacityYesNo", mld5Rts.MentalCapacityYesNoController.onPageLoad(index, draftId).url)
     ).flatten
 
   }

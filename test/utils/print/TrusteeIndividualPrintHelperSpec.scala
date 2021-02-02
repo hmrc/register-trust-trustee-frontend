@@ -166,9 +166,9 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         )
       }
 
-      "trustee has legallyIncapable" in {
+      "trustee has mentalCapacity" in {
         val userAnswers: UserAnswers = baseAnswers
-          .set(LegallyIncapableYesNoPage(index), true).success.value
+          .set(MentalCapacityYesNoPage(index), true).success.value
 
         val result = helper.checkDetailsSection(userAnswers, displayName, index, fakeDraftId)
 
@@ -177,7 +177,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
           Seq(
             AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow("trustee.individual.5mld.legallyIncapableYesNo.checkYourAnswersLabel", Html("Yes"), Some(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId).url), displayName)
+            AnswerRow("trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), displayName)
           )
         )
       }

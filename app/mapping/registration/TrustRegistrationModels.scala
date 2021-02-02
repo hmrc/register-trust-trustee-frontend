@@ -158,9 +158,9 @@ case class TrusteeIndividualType(name: FullName,
                                  dateOfBirth: Option[LocalDate],
                                  phoneNumber: Option[String],
                                  identification: Option[IdentificationType],
-                                 nationality: Option[String],
                                  countryOfResidence: Option[String],
-                                 legallyIncapableYesNo: Option[Boolean])
+                                 nationality: Option[String],
+                                 legallyIncapable: Option[Boolean])
 
 object TrusteeIndividualType {
 

@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual.mld5
+package pages.behaviours.trustees.individual.mld5
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.Trustees
+import pages.behaviours.PageBehaviours
+import pages.register.trustees.individual.mld5.MentalCapacityYesNoPage
 
-final case class LegallyIncapableYesNoPage(index : Int) extends QuestionPage[Boolean] {
+class MentalCapacityYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = Trustees.path \ index \ toString
+  "MentalCapacityYesNoPage" must {
 
-  override def toString: String = "legallyIncapableYesNo"
+    beRetrievable[Boolean](MentalCapacityYesNoPage(0))
+
+    beSettable[Boolean](MentalCapacityYesNoPage(0))
+
+    beRemovable[Boolean](MentalCapacityYesNoPage(0))
+  }
 
 }

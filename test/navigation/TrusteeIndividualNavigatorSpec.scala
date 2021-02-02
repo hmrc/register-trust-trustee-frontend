@@ -287,7 +287,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       "TrusteesNinoPage" when {
         "5MLD=Y, taxable=N -> LegallyIncapablePage" in {
           navigator.nextPage(NinoPage(index), fakeDraftId, noneTaxableAnswers5mld)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -300,11 +300,11 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
             .mustBe(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
         }
 
-        "5MLD=Y, taxable=N -> LegalyIncapablePage when user answers no" in {
+        "5MLD=Y, taxable=N -> MentalCapacityPage when user answers no" in {
           val answers = noneTaxableAnswers5mld.set(CountryOfResidenceYesNoPage(index), value = false).success.value
 
           navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -316,25 +316,25 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
             .mustBe(CountryOfResidenceController.onPageLoad(index, fakeDraftId))
         }
 
-        "5MLD=Y, taxable=N -> LegalyIncapablePage when user answers yes" in {
+        "5MLD=Y, taxable=N -> MentalCapacityPage when user answers yes" in {
           val answers = noneTaxableAnswers5mld.set(CountryOfResidenceInTheUkYesNoPage(index), value = true).success.value
 
           navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "CountryOfResidence" when {
-        "5MLD=Y, taxable=N -> LegalyIncapablePage" in {
+        "5MLD=Y, taxable=N -> MentalCapacityPage" in {
           navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, noneTaxableAnswers5mld)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "PassportDetailsPage" when {
-        "5MLD=Y, taxable=N -> LegalyIncapablePage" in {
+        "5MLD=Y, taxable=N -> MentalCapacityPage" in {
           navigator.nextPage(PassportDetailsPage(index), fakeDraftId, noneTaxableAnswers5mld)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -349,11 +349,11 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
       "AddressYesNoPage" when {
 
-        "5MLD=Y, taxable=N -> LegalyIncapablePage when user answers No" in {
+        "5MLD=Y, taxable=N -> MentalCapacityPage when user answers No" in {
           val answers = noneTaxableAnswers5mld.set(AddressYesNoPage(index), value = false).success.value
 
           navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=N -> AddressUkYesNo when user answers Yes" in {
@@ -417,34 +417,34 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
             .mustBe(IDCardDetailsController.onPageLoad(index, fakeDraftId))
         }
 
-        "5MLD=Y, taxable=N -> LegalyIncapablePage when user answers No" in {
+        "5MLD=Y, taxable=N -> MentalCapacityPage when user answers No" in {
           val answers = noneTaxableAnswers5mld.set(IDCardDetailsYesNoPage(index), value = false).success.value
 
           navigator.nextPage(IDCardDetailsYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "IdCardDetailsPage" when {
-        "5MLD=Y, taxable=N -> LegalyIncapablePage" in {
+        "5MLD=Y, taxable=N -> MentalCapacityPage" in {
           navigator.nextPage(IDCardDetailsPage(index), fakeDraftId, noneTaxableAnswers5mld)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "LegallyIncapablePage"  when {
 
         "5MLD=Y, taxable=N -> TrusteeAnswersPage when answer is yes" in {
-          val answers = noneTaxableAnswers5mld.set(LegallyIncapableYesNoPage(index), value = true).success.value
+          val answers = noneTaxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = true).success.value
 
-          navigator.nextPage(LegallyIncapableYesNoPage(index), fakeDraftId, answers)
+          navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=N -> TrusteeAnswersPage when answer is no" in {
-          val answers = noneTaxableAnswers5mld.set(LegallyIncapableYesNoPage(index), value = false).success.value
+          val answers = noneTaxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = false).success.value
 
-          navigator.nextPage(LegallyIncapableYesNoPage(index), fakeDraftId, answers)
+          navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -543,12 +543,12 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
 
       "CountryOfResidenceYesNoPage" when {
-        "5MLD=Y, taxable=Y -> LegalyIncapablePage when the answer is no" in {
+        "5MLD=Y, taxable=Y -> MentalCapacityPage when the answer is no" in {
           val answers = taxableAnswers5mld
             .set(CountryOfResidenceYesNoPage(index), value = false).success.value
 
           navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=Y with No Nino-> AddressYesNo when user answers No" in {
@@ -561,12 +561,12 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "CountryOfResidenceInTheUkYesNo" when {
-        "5MLD=Y, taxable=Y -> LegalyIncapablePage when the answer is yes" in {
+        "5MLD=Y, taxable=Y -> MentalCapacityPage when the answer is yes" in {
           val answers = taxableAnswers5mld
             .set(CountryOfResidenceInTheUkYesNoPage(index), value = true).success.value
 
           navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=Y with no Nino -> AddressYesNo when user answers Yes" in {
@@ -579,9 +579,9 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "CountryOfResidence" when {
-        "5MLD=Y, taxable=Y -> LegalyIncapablePage" in {
+        "5MLD=Y, taxable=Y -> MentalCapacityPage" in {
           navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, taxableAnswers5mld)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=Y with no Nino-> AddressYesNo" in {
@@ -591,9 +591,9 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       }
 
       "PassportDetailsPage" when {
-        "5MLD=Y, taxable=Y -> LegalyIncapablePage" in {
+        "5MLD=Y, taxable=Y -> MentalCapacityPage" in {
           navigator.nextPage(PassportDetailsPage(index), fakeDraftId, taxableAnswers5mld)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -608,11 +608,11 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
 
       "AddressYesNoPage" when {
 
-        "5MLD=Y, taxable=Y -> LegalyIncapablePage when user answers No" in {
+        "5MLD=Y, taxable=Y -> MentalCapacityPage when user answers No" in {
           val answers = taxableAnswers5mld.set(AddressYesNoPage(index), value = false).success.value
 
           navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=Y -> AddressUkYesNo when user answers Yes" in {
@@ -676,34 +676,34 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
             .mustBe(IDCardDetailsController.onPageLoad(index, fakeDraftId))
         }
 
-        "5MLD=Y, taxable=Y -> LegalyIncapablePage when user answers No" in {
+        "5MLD=Y, taxable=Y -> MentalCapacityPage when user answers No" in {
           val answers = taxableAnswers5mld.set(IDCardDetailsYesNoPage(index), value = false).success.value
 
           navigator.nextPage(IDCardDetailsYesNoPage(index), fakeDraftId, answers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "IdCardDetailsPage" when {
-        "5MLD=Y, taxable=Y -> LegalyIncapablePage" in {
+        "5MLD=Y, taxable=Y -> MentalCapacityPage" in {
           navigator.nextPage(IDCardDetailsPage(index), fakeDraftId, taxableAnswers5mld)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "LegallyIncapablePage"  when {
 
         "5MLD=Y, taxable=Y -> TrusteeAnswersPage when answer is yes" in {
-          val answers = taxableAnswers5mld.set(LegallyIncapableYesNoPage(index), value = true).success.value
+          val answers = taxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = true).success.value
 
-          navigator.nextPage(LegallyIncapableYesNoPage(index), fakeDraftId, answers)
+          navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=Y -> TrusteeAnswersPage when answer is no" in {
-          val answers = taxableAnswers5mld.set(LegallyIncapableYesNoPage(index), value = false).success.value
+          val answers = taxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = false).success.value
 
-          navigator.nextPage(LegallyIncapableYesNoPage(index), fakeDraftId, answers)
+          navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
         }
       }

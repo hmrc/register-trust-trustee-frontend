@@ -21,11 +21,11 @@ import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.register.trustees.individual.mld5.LegallyIncapableYesNoView
+import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
-class LegallyIncapableYesNoViewSpec extends YesNoViewBehaviours {
+class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "trustee.individual.5mld.legallyIncapableYesNo"
+  val prefix = "trustee.individual.5mld.mentalCapacityYesNo"
   val index = 0
   val name: String = FullName("FirstName", None, "LastName").toString
 
@@ -33,7 +33,7 @@ class LegallyIncapableYesNoViewSpec extends YesNoViewBehaviours {
 
   "legallyIncapableYesNoView view" must {
 
-    val view = viewFor[LegallyIncapableYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[MentalCapacityYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)

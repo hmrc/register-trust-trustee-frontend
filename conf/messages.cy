@@ -82,8 +82,8 @@ trustee.individual.5mld.countryOfResidence.error.required = Nodwch wlad
 #trustee.individual.5mld.countryOfResidence.error.length =
 #trustee.individual.5mld.countryOfResidence.error.invalidCharacters =
 
-#trustee.individual.5mld.legallyIncapableYesNo.title =
-#trustee.individual.5mld.legallyIncapableYesNo.heading =
-#trustee.individual.5mld.legallyIncapableYesNo.checkYourAnswersLabel =
-#trustee.individual.5mld.legallyIncapableYesNo.error.required =
-#trustee.individual.5mld.legallyIncapableYesNo.hint =
+#trustee.individual.5mld.mentalCapacityYesNo.title =
+#trustee.individual.5mld.mentalCapacityYesNo.heading =
+#trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel =
+#trustee.individual.5mld.mentalCapacityYesNo.error.required =
+#trustee.individual.5mld.mentalCapacityYesNo.hint =

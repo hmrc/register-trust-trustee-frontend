@@ -23,17 +23,17 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
-import pages.register.trustees.individual.mld5.LegallyIncapableYesNoPage
+import pages.register.trustees.individual.mld5.MentalCapacityYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.trustees.individual.mld5.LegallyIncapableYesNoView
+import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LegallyIncapableYesNoController @Inject()(
+class MentalCapacityYesNoController @Inject()(
                                                    val controllerComponents: MessagesControllerComponents,
                                                    implicit val frontendAppConfig: FrontendAppConfig,
                                                    repository: RegistrationsRepository,
@@ -41,16 +41,16 @@ class LegallyIncapableYesNoController @Inject()(
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredActionImpl,
                                                    formProvider: YesNoFormProvider,
-                                                   view: LegallyIncapableYesNoView
+                                                   view: MentalCapacityYesNoView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.legallyIncapableYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
       implicit request =>
 
-        val preparedForm = request.userAnswers.get(LegallyIncapableYesNoPage(index)) match {
+        val preparedForm = request.userAnswers.get(MentalCapacityYesNoPage(index)) match {
           case None => form
           case Some(value) => form.fill(value)
         }
@@ -68,9 +68,9 @@ class LegallyIncapableYesNoController @Inject()(
 
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(LegallyIncapableYesNoPage(index), value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(MentalCapacityYesNoPage(index), value))
               _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(LegallyIncapableYesNoPage(index), draftId, updatedAnswers))
+            } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), draftId, updatedAnswers))
         )
     }
 }

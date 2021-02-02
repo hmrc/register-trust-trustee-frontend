@@ -18,7 +18,6 @@ package pages.register.leadtrustee.individual.mld5
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.leadtrustee.individual.{InternationalAddressPage, UkAddressPage}
 import play.api.libs.json.JsPath
 import sections.Trustees
 import utils.Constants.GB

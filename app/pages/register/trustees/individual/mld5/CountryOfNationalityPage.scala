@@ -24,6 +24,6 @@ final case class CountryOfNationalityPage(index : Int) extends QuestionPage[Stri
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "countryOfNationality"
+  override def toString: String = "nationality"
 
 }
