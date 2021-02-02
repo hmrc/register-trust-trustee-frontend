@@ -66,7 +66,7 @@ class TrusteeIndividualNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = NinoController.onPageLoad(index, draftId),
-        noCall = navigateAwayFromNinoYesNoPage(index, draftId, ua.is5mldEnabled, ua.isTaxable)
+        noCall = navigateAwayFromNinoYesNoPage(index, draftId, ua.is5mldEnabled)
       )
     case page @ CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
@@ -128,7 +128,7 @@ class TrusteeIndividualNavigator extends Navigator {
     }
   }
 
-  private def navigateAwayFromNinoYesNoPage(index: Int, draftId: String, is5mldEnabled: Boolean, isTaxable: Boolean): Call = {
+  private def navigateAwayFromNinoYesNoPage(index: Int, draftId: String, is5mldEnabled: Boolean): Call = {
     if (is5mldEnabled) {
       mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
