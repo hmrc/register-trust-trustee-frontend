@@ -19,16 +19,14 @@ package controllers.actions.register
 import controllers.Assets.Redirect
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.{ActionRefiner, Result}
 import sections.Trustee
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrusteeRequiredAction(index: Int, draftId: String)(implicit val executionContext: ExecutionContext)
-  extends ActionRefiner[RegistrationDataRequest, RemoveIndexRequest] {
-
-  private val logger: Logger = Logger(getClass)
+  extends ActionRefiner[RegistrationDataRequest, RemoveIndexRequest] with Logging {
 
   override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, RemoveIndexRequest[A]]] = {
     Future.successful(
