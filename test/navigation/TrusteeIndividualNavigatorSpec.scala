@@ -239,7 +239,7 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           val answers = noneTaxableAnswers5mld.set(CountryOfNationalityYesNoPage(index), value = false).success.value
 
           navigator.nextPage(CountryOfNationalityYesNoPage(index), fakeDraftId, answers)
-            .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -255,42 +255,16 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           val answers = noneTaxableAnswers5mld.set(CountryOfNationalityInTheUkYesNoPage(index), value = true).success.value
 
           navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), fakeDraftId, answers)
-            .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
+            .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "CountryOfNationalityInTheUkYesNoPage" when {
         "5MLD=Y, taxable=N -> TrusteesNinoYesNo page" in {
           navigator.nextPage(CountryOfNationalityPage(index), fakeDraftId, noneTaxableAnswers5mld)
-            .mustBe(NinoYesNoController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "NinoYesNoPage" when {
-        "5MLD=Y, taxable=N -> TrusteesNinoPage when user answers Yes" in {
-          val answers = noneTaxableAnswers5mld.set(NinoYesNoPage(index), value = true).success.value
-
-          navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
-            .mustBe(NinoController.onPageLoad(index, fakeDraftId))
-        }
-
-        "5MLD=Y, taxable=N -> CountryOfResidenceYesNoPage when user answers no" in {
-          val answers = noneTaxableAnswers5mld.set(NinoYesNoPage(index), value = false).success.value
-
-          navigator.nextPage(NinoYesNoPage(index), fakeDraftId, answers)
             .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
         }
-
-
       }
-
-      "TrusteesNinoPage" when {
-        "5MLD=Y, taxable=N -> LegallyIncapablePage" in {
-          navigator.nextPage(NinoPage(index), fakeDraftId, noneTaxableAnswers5mld)
-            .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
 
       "CountryOfResidenceYesNoPage" when {
         "5MLD=Y, taxable=N -> CountryOfResidenceInTheUkYesNoPage when user answers yes" in {
