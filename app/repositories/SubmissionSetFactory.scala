@@ -22,7 +22,7 @@ import models.Status.{Completed, InProgress}
 import models._
 import models.registration.pages.AddATrustee
 import pages.register.AddATrusteePage
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.answers.CheckYourAnswersHelper
@@ -34,9 +34,7 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      leadTrusteeMapper: LeadTrusteeMapper,
                                      correspondenceMapper: CorrespondenceMapper,
                                      countryOptions: CountryOptions,
-                                     printHelpers: PrintHelpers) {
-
-  private val logger: Logger = Logger(getClass)
+                                     printHelpers: PrintHelpers) extends Logging {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = trusteesStatus(userAnswers)

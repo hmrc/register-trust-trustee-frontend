@@ -19,12 +19,10 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustees}
 import models.{RegistrationSubmission, UserAnswers}
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
-class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) {
-
-  private val logger: Logger = Logger(getClass)
+class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) extends Logging {
 
   def build(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
     val result = userAnswers.get(Trustees).getOrElse(Nil) match {
