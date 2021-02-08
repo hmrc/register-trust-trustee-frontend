@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package utils
+package pages.behaviours.trustees.organisation.mld5
 
-object Constants {
+import pages.behaviours.PageBehaviours
+import pages.register.trustees.organisation.mld5.CountryOfResidencePage
 
-  final val GB = "GB"
-  final val ES = "ES"
-  final val UNITED_KINGDOM = "United Kingdom"
-  final val SPAIN = "Spain"
+
+
+class CountryOfResidencePageSpec extends PageBehaviours {
+
+  "CountryOfResidencePage" must {
+
+    beRetrievable[String](CountryOfResidencePage(0))
+
+    beSettable[String](CountryOfResidencePage(0))
+
+    beRemovable[String](CountryOfResidencePage(0))
+  }
+
 }
