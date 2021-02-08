@@ -36,7 +36,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
   val formProvider = new IndividualOrBusinessFormProvider()
 
-  "trustee.individualOrBusiness Controller" must {
+  "TrusteeIndividualOrBusiness Controller" must {
 
     "return OK and the correct view for a GET" when {
 
