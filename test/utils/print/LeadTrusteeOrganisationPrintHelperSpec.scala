@@ -65,7 +65,7 @@ class LeadTrusteeOrganisationPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("leadTrustee.organisation.ukRegisteredYesNo.checkYourAnswersLabel", Html("Yes"), Some(rts.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("leadTrustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("leadTrustee.organisation.utr.checkYourAnswersLabel", Html("1234567890"), Some(rts.UtrController.onPageLoad(index, fakeDraftId).url), name),
@@ -90,7 +90,7 @@ class LeadTrusteeOrganisationPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("leadTrustee.organisation.ukRegisteredYesNo.checkYourAnswersLabel", Html("No"), Some(rts.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("leadTrustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("leadTrustee.organisation.addressUkYesNo.checkYourAnswersLabel", Html("No"), Some(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
@@ -117,7 +117,7 @@ class LeadTrusteeOrganisationPrintHelperSpec extends SpecBase {
           result mustBe AnswerSection(
             None,
             Seq(
-              AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
+              AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
               AnswerRow("leadTrustee.organisation.ukRegisteredYesNo.checkYourAnswersLabel", Html("Yes"), Some(rts.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId).url), name),
               AnswerRow("leadTrustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url), name),
               AnswerRow("leadTrustee.organisation.utr.checkYourAnswersLabel", Html("1234567890"), Some(rts.UtrController.onPageLoad(index, fakeDraftId).url), name),
@@ -145,7 +145,7 @@ class LeadTrusteeOrganisationPrintHelperSpec extends SpecBase {
           result mustBe AnswerSection(
             None,
             Seq(
-              AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
+              AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
               AnswerRow("leadTrustee.organisation.ukRegisteredYesNo.checkYourAnswersLabel", Html("No"), Some(rts.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId).url), name),
               AnswerRow("leadTrustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url), name),
               AnswerRow("leadTrustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name),

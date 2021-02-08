@@ -159,7 +159,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               Some("Trustee 1"),
               List(
-                AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
+                AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
                 AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
@@ -196,7 +196,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               Some("Trustee 1"),
               List(
-                AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
+                AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
                 AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
@@ -211,7 +211,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               Some("Trustee 2"),
               List(
-                AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", "Business", "Org Name1"),
+                AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", "Business", "Org Name1"),
                 AnswerRow("trustee.organisation.name.checkYourAnswersLabel", "Org Name1", "Org Name1")),
               None
             )

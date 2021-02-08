@@ -67,7 +67,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel", Html("No"), Some(DateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(NinoYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
@@ -88,7 +88,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel", Html("Yes"), Some(DateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.dateOfBirth.checkYourAnswersLabel", Html("3 February 1996"), Some(DateOfBirthController.onPageLoad(index, fakeDraftId).url), displayName),
@@ -113,7 +113,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel", Html("No"), Some(DateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(NinoYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
@@ -137,7 +137,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
@@ -157,7 +157,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.5mld.countryOfNationalityYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
@@ -175,7 +175,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), displayName)
           )
@@ -198,7 +198,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.dateOfBirthYesNo.checkYourAnswersLabel", Html("No"), Some(DateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(NinoYesNoController.onPageLoad(index, fakeDraftId).url), displayName),

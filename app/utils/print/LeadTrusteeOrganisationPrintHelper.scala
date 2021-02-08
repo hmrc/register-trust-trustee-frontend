@@ -47,7 +47,7 @@ class LeadTrusteeOrganisationPrintHelper @Inject()(answerRowConverter: AnswerRow
     Seq(
       bound.enumQuestion[IndividualOrBusiness](
         TrusteeIndividualOrBusinessPage(index),
-        "leadTrusteeIndividualOrBusiness",
+        "leadTrustee.individualOrBusiness",
         regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId).url,
         "individualOrBusiness"
       ),

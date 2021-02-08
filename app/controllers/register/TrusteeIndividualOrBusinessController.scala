@@ -21,19 +21,20 @@ import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.IndividualOrBusinessFormProvider
-import javax.inject.Inject
 import models.Enumerable
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.TrusteeIndividualOrBusinessView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrusteeIndividualOrBusinessController @Inject()(
@@ -53,7 +54,7 @@ class TrusteeIndividualOrBusinessController @Inject()(
   with I18nSupport
   with Enumerable.Implicits {
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen
       requireData andThen
       validateIndex(index, Trustees) andThen
@@ -62,36 +63,24 @@ class TrusteeIndividualOrBusinessController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val isLead = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)).get == LeadTrustee
-
-      val messagePrefix = if (isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
-
-      val heading = Messages(s"$messagePrefix.heading")
-
-      val form = formProvider(messagePrefix)
+      val form = formProvider(messagePrefix(index))
 
       val preparedForm = request.userAnswers.get(TrusteeIndividualOrBusinessPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, heading))
+      Ok(view(preparedForm, draftId, index, heading(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val isLead = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)).get == LeadTrustee
-
-      val messagePrefix = if (isLead) "leadTrusteeIndividualOrBusiness" else "trusteeIndividualOrBusiness"
-
-      val heading = Messages(s"$messagePrefix.heading")
-
-      val form = formProvider(messagePrefix)
+      val form = formProvider(messagePrefix(index))
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, heading))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, heading(index)))),
 
         value => {
           for {
@@ -101,4 +90,16 @@ class TrusteeIndividualOrBusinessController @Inject()(
         }
       )
   }
+
+  private def heading(index: Int)(implicit request: RegistrationDataRequest[AnyContent]): String = {
+    val prefix = messagePrefix(index)
+    Messages(s"$prefix.heading")
+  }
+
+  private def messagePrefix(index: Int)(implicit request: RegistrationDataRequest[AnyContent]): String = {
+    val isLead = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)).contains(LeadTrustee)
+    val prefix = if (isLead) "leadTrustee" else "trustee"
+    s"$prefix.individualOrBusiness"
+  }
+
 }
