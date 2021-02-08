@@ -17,19 +17,22 @@
 package navigation
 
 import config.FrontendAppConfig
+import controllers.register.trustees.organisation.mld5.{routes => mld5Rts}
 import controllers.register.trustees.organisation.routes._
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.trustees.organisation._
+import pages.register.trustees.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
 
 class TrusteeOrganisationNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => UtrYesNoController.onPageLoad(index, draftId)
-    case UtrPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
+    case UtrPage(index) => ua => navigateAwayFromUtrQuestions(draftId, index, ua.is5mldEnabled)
     case UkAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => _ => AddressYesNoController.onPageLoad(index,draftId)
   }
 
   override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -38,7 +41,7 @@ class TrusteeOrganisationNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = UtrController.onPageLoad(index, draftId),
-        noCall = AddressYesNoController.onPageLoad(index, draftId)
+        noCall = navigateAwayFromUtrYesNoQuestions(draftId, index, ua.is5mldEnabled)
       )
     case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
@@ -54,5 +57,37 @@ class TrusteeOrganisationNavigator extends Navigator {
         yesCall = UkAddressController.onPageLoad(index, draftId),
         noCall = InternationalAddressController.onPageLoad(index, draftId)
       )
+    case page @ CountryOfResidenceYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        noCall = CheckDetailsController.onPageLoad(index, draftId)
+      )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = UkAddressController.onPageLoad(index, draftId),
+        noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
+      )
+
   }
+
+  private def navigateAwayFromUtrYesNoQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    } else {
+      AddressYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateAwayFromUtrQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    } else {
+      CheckDetailsController.onPageLoad(index, draftId)
+    }
+  }
+
 }

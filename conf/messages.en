@@ -675,3 +675,24 @@ leadTrustee.individual.dateOfBirth.error.past = Date of birth must be after 31 D
 leadTrustee.individual.checkDetails.title = Check lead trustee details
 leadTrustee.individual.checkDetails.heading = Check lead trustee details
 
+trustee.organisation.5mld.countryOfResidence.title = What is the business’s country of residence?
+trustee.organisation.5mld.countryOfResidence.heading = What is {0}’s country of residency?
+trustee.organisation.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residency?
+trustee.organisation.5mld.countryOfResidence.error.required = Enter a country
+trustee.organisation.5mld.countryOfResidence.error.length = The country of residency must be 100 characters or less
+trustee.organisation.5mld.countryOfResidence.error.invalidCharacters = The country of residency must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.title = Does the business have UK residency?
+trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.hint = The business has UK residency if it is registered with Companies House.
+trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the business has UK residency
+
+trustee.organisation.5mld.countryOfResidenceYesNo.title = Do you know the business’s country of residence?
+trustee.organisation.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+trustee.organisation.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+trustee.organisation.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the business’s country of residence
+trustee.organisation.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the business is registered (incorporated). The business has UK residency if it is registered with Companies House.
+
+
+
