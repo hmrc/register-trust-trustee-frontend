@@ -42,7 +42,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
       "is lead trustee" in {
 
-        val messageKeyPrefix = "leadTrusteeIndividualOrBusiness"
+        val messageKeyPrefix = "leadTrustee.individualOrBusiness"
 
         val leadHeading = Messages(s"$messageKeyPrefix.heading")
 
@@ -70,7 +70,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
       "is trustee" in {
 
-        val messageKeyPrefix = "trusteeIndividualOrBusiness"
+        val messageKeyPrefix = "trustee.individualOrBusiness"
 
         val heading = Messages(s"$messageKeyPrefix.heading")
 
@@ -101,7 +101,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
       "is lead trustee" in {
 
-        val messageKeyPrefix = "leadTrusteeIndividualOrBusiness"
+        val messageKeyPrefix = "leadTrustee.individualOrBusiness"
 
         val userAnswers = emptyUserAnswers
           .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
@@ -130,7 +130,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
       "is not lead trustee" in {
 
-        val messageKeyPrefix = "trusteeIndividualOrBusiness"
+        val messageKeyPrefix = "trustee.individualOrBusiness"
 
         val userAnswers = emptyUserAnswers
           .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
@@ -216,7 +216,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val messageKeyPrefix = "trusteeIndividualOrBusiness"
+      val messageKeyPrefix = "trustee.individualOrBusiness"
 
       val heading = Messages(s"$messageKeyPrefix.heading")
 
