@@ -93,12 +93,13 @@ class TrusteeIndividualOrBusinessController @Inject()(
 
   private def heading(index: Int)(implicit request: RegistrationDataRequest[AnyContent]): String = {
     val prefix = messagePrefix(index)
-    Messages(s"$prefix.individualOrBusiness.heading")
+    Messages(s"$prefix.heading")
   }
 
   private def messagePrefix(index: Int)(implicit request: RegistrationDataRequest[AnyContent]): String = {
     val isLead = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)).contains(LeadTrustee)
-    if (isLead) "leadTrustee" else "trustee"
+    val prefix = if (isLead) "leadTrustee" else "trustee"
+    s"$prefix.individualOrBusiness"
   }
 
 }
