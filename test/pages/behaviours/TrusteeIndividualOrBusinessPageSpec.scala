@@ -36,7 +36,7 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
   private val email: String = "email"
   private val tel: String = "tel"
 
-  "TrusteeIndividualOrBusiness Page" must {
+  "trustee.individualOrBusiness Page" must {
 
     beRetrievable[IndividualOrBusiness](TrusteeIndividualOrBusinessPage(index))
 

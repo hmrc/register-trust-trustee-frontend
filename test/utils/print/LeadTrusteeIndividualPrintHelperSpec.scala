@@ -73,7 +73,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
+            AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(rts.DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(rts.NinoYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
@@ -105,7 +105,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
+            AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(rts.DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
             AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("No"), Some(rts.NinoYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
@@ -140,7 +140,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           result mustBe AnswerSection(
             None,
             Seq(
-              AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
+              AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url)),
               AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(rts.DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("Yes"), Some(mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
@@ -178,7 +178,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
           result mustBe AnswerSection(
             None,
             Seq(
-              AnswerRow("leadTrusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
+              AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", Html("First Last"), Some(rts.NameController.onPageLoad(index, fakeDraftId).url)),
               AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", Html("21 August 2020"), Some(rts.DateOfBirthController.onPageLoad(index, fakeDraftId).url), name.toString),
               AnswerRow("leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name.toString),
