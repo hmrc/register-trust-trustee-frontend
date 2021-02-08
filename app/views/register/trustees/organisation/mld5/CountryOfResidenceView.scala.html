@@ -22,10 +22,10 @@ main_template: MainTemplate,
 formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, businessName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-title = s"${errorPrefix(form)}${messages("trustee.organisation.5mld.countryOfResidence.title")}"
+title = s"${errorPrefix(form)}${messages("trustees.organisation.5mld.countryOfResidence.title")}"
 ) {
 
 @formHelper(action = CountryOfResidenceController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@ title = s"${errorPrefix(form)}${messages("trustee.organisation.5mld.countryOfRes
 @components.error_summary(form.errors)
 
 @components.select(field = form("value"),
-      label = messages("trustee.organisation.5mld.countryOfResidence.heading", businessName),
+      label = messages("trustees.organisation.5mld.countryOfResidence.heading", trusteeName),
       labelClasses = Set("heading-large"),
       labelAsHeading = true,
       options = countryOptions,
