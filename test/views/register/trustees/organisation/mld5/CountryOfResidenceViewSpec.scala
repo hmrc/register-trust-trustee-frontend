@@ -26,7 +26,7 @@ import views.html.register.trustees.organisation.mld5.CountryOfResidenceView
 
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
-  val prefix = "trustees.organisation.5mld.countryOfResidence"
+  val prefix = "trustee.organisation.5mld.countryOfResidence"
   val index = 0
   val trusteeName = "Test"
 

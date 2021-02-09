@@ -19,6 +19,7 @@ package utils.print
 import base.SpecBase
 import controllers.register.routes.TrusteeIndividualOrBusinessController
 import controllers.register.trustees.organisation.routes._
+import controllers.register.trustees.organisation.mld5.routes._
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Business
 import models.core.pages.TrusteeOrLeadTrustee.Trustee
@@ -120,6 +121,33 @@ class TrusteeOrganisationPrintHelperSpec extends SpecBase {
             AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.addressUkYesNo.checkYourAnswersLabel", Html("No"), Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.internationalAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Germany"), Some(InternationalAddressController.onPageLoad(index, fakeDraftId).url), name)
+          )
+        )
+      }
+
+      "5mld trustee has country of residence" in {
+        val userAnswers: UserAnswers = baseAnswers
+          .set(UtrYesNoPage(index), false).success.value
+          .set(mld5.CountryOfResidenceYesNoPage(index), true).success.value
+          .set(mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+          .set(mld5.CountryOfResidencePage(index), "DE").success.value
+          .set(AddressYesNoPage(index), true).success.value
+          .set(AddressUkYesNoPage(index), false).success.value
+          .set(InternationalAddressPage(index), internationalAddress).success.value
+
+        val result = helper.checkDetailsSection(userAnswers, name, index, fakeDraftId)
+
+        result mustBe AnswerSection(
+          None,
+          Seq(
+            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.5mld.countryOfResidence.checkYourAnswersLabel", Html("Germany"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.addressUkYesNo.checkYourAnswersLabel", Html("No"), Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.internationalAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Germany"), Some(InternationalAddressController.onPageLoad(index, fakeDraftId).url), name)
