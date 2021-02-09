@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import connectors.SubmissionDraftConnector
 import models.UserAnswers
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import org.mockito.ArgumentCaptor
@@ -33,7 +34,8 @@ import scala.concurrent.Future
 class IndexControllerSpec extends SpecBase {
 
   private val featureFlagService: FeatureFlagService = mock[FeatureFlagService]
-
+  private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
+  
   "Index Controller" when {
 
     "pre-existing user answers" must {
@@ -84,7 +86,7 @@ class IndexControllerSpec extends SpecBase {
       }
     }
 
-    "update value of is5mldEnabled in user answers" in {
+    "update value of is5mldEnabled and isTaxable in user answers" in {
 
       reset(registrationsRepository)
 
@@ -97,6 +99,7 @@ class IndexControllerSpec extends SpecBase {
       when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
       when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
       when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
+      when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -105,6 +108,7 @@ class IndexControllerSpec extends SpecBase {
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
         uaCaptor.getValue.is5mldEnabled mustBe true
+        uaCaptor.getValue.isTaxable mustBe true
 
         application.stop()
       }
