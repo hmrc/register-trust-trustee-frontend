@@ -61,7 +61,8 @@ class TrusteeMapper @Inject()(addressMapper: AddressMapper,
               name = orgTrustee.name,
               phoneNumber = None,
               email = None,
-              identification = identificationMap(orgTrustee)
+              identification = identificationMap(orgTrustee),
+              countryOfResidence = orgTrustee.countryOfResidence
             )
           )
         )
