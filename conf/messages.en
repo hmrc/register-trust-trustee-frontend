@@ -130,15 +130,10 @@ trusteeOrLeadTrustee.heading = Are you entering details for the lead trustee or 
 trusteeOrLeadTrustee.hint = The lead trustee is the main point of contact for the trust. Do not enter agent details unless they are legally the lead trustee or a trustee.
 trusteeOrLeadTrustee.error.required = Select Lead trustee if this is the trust’s lead trustee
 
-trusteeIndividualOrBusiness.title = Is the trustee an individual or a business?
-trusteeIndividualOrBusiness.heading = Is the trustee an individual or a business?
-trusteeIndividualOrBusiness.checkYourAnswersLabel = Is the trustee an individual or a business?
-trusteeIndividualOrBusiness.error.required = Select if the trustee is an individual or a business
-
-leadTrusteeIndividualOrBusiness.title = Is the lead trustee an individual or a business?
-leadTrusteeIndividualOrBusiness.heading = Is the lead trustee an individual or a business?
-leadTrusteeIndividualOrBusiness.checkYourAnswersLabel = Is the lead trustee an individual or a business?
-leadTrusteeIndividualOrBusiness.error.required = Select if the lead trustee is an individual or a business
+trustee.individualOrBusiness.title = Is the trustee an individual or a business?
+trustee.individualOrBusiness.heading = Is the trustee an individual or a business?
+trustee.individualOrBusiness.checkYourAnswersLabel = Is the trustee an individual or a business?
+trustee.individualOrBusiness.error.required = Select if the trustee is an individual or a business
 
 trustee.individual.name.title = What is the trustee’s name?
 trustee.individual.name.heading = What is the trustee’s name?
