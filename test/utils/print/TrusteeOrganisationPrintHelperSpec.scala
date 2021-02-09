@@ -143,7 +143,7 @@ class TrusteeOrganisationPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trusteeIndividualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
