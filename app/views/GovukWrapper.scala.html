@@ -76,8 +76,8 @@ navLinks = Some(headerNavLinks)
 
 @bodyEnd = {
 @footer(
-analyticsToken = None,
-analyticsHost = appConfig.analyticsHost,
+analyticsToken = Some(appConfig.analyticsToken),
+analyticsHost = "",
 ssoUrl = None,
 scriptElem = scriptElem,
 gaCalls = None)
