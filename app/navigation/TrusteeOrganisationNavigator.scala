@@ -32,7 +32,6 @@
 
 package navigation
 
-import java.lang.ModuleLayer.Controller
 
 import config.FrontendAppConfig
 import controllers.register.trustees.organisation.routes._
