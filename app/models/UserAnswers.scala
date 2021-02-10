@@ -51,7 +51,7 @@ final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
                              internalAuthId :String,
                              override val is5mldEnabled: Boolean = false,
-                             override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
+                             override val isTaxable: Boolean) extends ReadableUserAnswers with Logging {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A], reads: Reads[A]): Try[UserAnswers] = {
 
