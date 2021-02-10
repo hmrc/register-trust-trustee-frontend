@@ -680,7 +680,7 @@ trustee.organisation.5mld.countryOfResidence.error.invalidCharacters = The count
 trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.title = Does the business have UK residency?
 trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
 trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.hint = The business has UK residency if it is registered with Companies House.
-trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
 trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the business has UK residency
 
 trustee.organisation.5mld.countryOfResidenceYesNo.title = Do you know the business’s country of residence?
