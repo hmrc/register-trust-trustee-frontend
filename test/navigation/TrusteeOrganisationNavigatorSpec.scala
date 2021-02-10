@@ -63,7 +63,10 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
       }
 
       "UTR page -> Check your answers page" in {
-        navigator.nextPage(UtrPage(index), fakeDraftId, baseAnswers)
+        val answers = baseAnswers
+          .set(UtrYesNoPage(index), true).success.value
+
+        navigator.nextPage(UtrPage(index), fakeDraftId, answers)
           .mustBe(CheckDetailsController.onPageLoad(index, draftId))
       }
 
@@ -113,6 +116,33 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
     "A 5mld Trust" must {
 
       val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
+
+      "Name page -> UTR yes no page" in {
+        navigator.nextPage(NamePage(index), fakeDraftId, baseAnswers)
+          .mustBe(UtrYesNoController.onPageLoad(index, fakeDraftId))
+      }
+
+      "UTR yes no page -> YES -> UTR page" in {
+        val answers = baseAnswers
+          .set(UtrYesNoPage(index), true).success.value
+
+        navigator.nextPage(UtrYesNoPage(index), fakeDraftId, answers)
+          .mustBe(UtrController.onPageLoad(index, fakeDraftId))
+      }
+
+      "UTR yes no page -> NO -> Do you know country of residency" in {
+        val answers = baseAnswers
+          .set(UtrYesNoPage(index), false).success.value
+
+        navigator.nextPage(UtrYesNoPage(index), fakeDraftId, answers)
+          .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
+      }
+
+      "UTR page -> Do you know country of residency" in {
+        navigator.nextPage(UtrPage(index), fakeDraftId, baseAnswers)
+          .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+      }
+
 
       "Country Of Residence Yes No page -> Yes -> Country Of Residence UK yes no page" in {
         val answers = baseAnswers

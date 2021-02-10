@@ -32,7 +32,6 @@
 
 package navigation
 
-
 import config.FrontendAppConfig
 import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.{routes => mld5}
@@ -46,7 +45,7 @@ class TrusteeOrganisationNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => UtrYesNoController.onPageLoad(index, draftId)
-    case UtrPage(index) => ua => mld5NavUTRYesNo(draftId, index, ua.is5mldEnabled)
+    case UtrPage(index) => ua => navigateAwayFromUTRQuestions(draftId, index, ua)
     case UkAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua => addressOrCheckAnswersRoute(draftId, index, ua)
@@ -58,7 +57,7 @@ class TrusteeOrganisationNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = UtrController.onPageLoad(index, draftId),
-        noCall = navigateAwayFromIncomeQuestions(draftId, index, ua.is5mldEnabled)
+        noCall = navigateAwayFromUTRQuestions(draftId, index, ua)
       )
     case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
@@ -90,30 +89,20 @@ class TrusteeOrganisationNavigator extends Navigator {
       )
   }
 
-  private def mld5NavUTRYesNo(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
+  private def navigateAwayFromUTRQuestions(draftId: String, index: Int, userAnswers: ReadableUserAnswers): Call = {
+    if (userAnswers.is5mldEnabled) {
       mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
-      CheckDetailsController.onPageLoad(index, draftId)
-    }
-  }
-
-  private def navigateAwayFromIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      AddressYesNoController.onPageLoad(index, draftId)
+      addressOrCheckAnswersRoute(draftId, index, userAnswers)
     }
   }
 
   private def addressOrCheckAnswersRoute(draftId: String, index: Int, userAnswers: ReadableUserAnswers): Call = {
-    userAnswers.get(UtrYesNoPage(index)) match {
-      case Some(true) =>
-        CheckDetailsController.onPageLoad(index, draftId)
-      case Some(false) =>
-        AddressYesNoController.onPageLoad(index, draftId)
-      case None =>
-        controllers.routes.SessionExpiredController.onPageLoad()
-    }
+    yesNoNav(
+      ua = userAnswers,
+      fromPage = UtrYesNoPage(index),
+      yesCall = CheckDetailsController.onPageLoad(index, draftId),
+      noCall = AddressYesNoController.onPageLoad(index, draftId)
+    )
   }
 }
