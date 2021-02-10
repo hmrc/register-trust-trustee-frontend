@@ -146,6 +146,7 @@ class TrusteeOrganisationPrintHelperSpec extends SpecBase {
             AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
+            AnswerRow("trustee.organisation.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.5mld.countryOfResidence.checkYourAnswersLabel", Html("Germany"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), name),
             AnswerRow("trustee.organisation.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name),

@@ -47,7 +47,7 @@ trait SpecBase extends PlaySpec
   lazy val userInternalId: String = "internalId"
   lazy val fakeDraftId: String = draftId
 
-  def emptyUserAnswers: UserAnswers = UserAnswers(draftId, Json.obj(), internalAuthId = userInternalId, is5mldEnabled =false, isTaxable = true)
+  def emptyUserAnswers: UserAnswers = UserAnswers(draftId, Json.obj(), internalAuthId = userInternalId)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
