@@ -80,7 +80,7 @@ class TrusteeOrganisationNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = AddressYesNoController.onPageLoad(index, draftId)
+        noCall = CheckDetailsController.onPageLoad(index, draftId)
       )
     case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(

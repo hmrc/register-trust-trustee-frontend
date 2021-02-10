@@ -19,6 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.{routes => mld5Rts}
+import generators.Generators
 import models._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees.organisation.mld5.CountryOfResidencePage
@@ -27,7 +28,7 @@ import pages.register.trustees.organisation.mld5.CountryOfResidenceYesNoPage
 import pages.register.trustees.organisation._
 import org.scalacheck.Arbitrary.arbitrary
 
-class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
+class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   val navigator = new TrusteeOrganisationNavigator
   val index = 0
@@ -142,7 +143,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
           .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
-          .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
+          .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
       }
 
       "CountryOfResidencePage -> (with UTR) -> CheckDetailsPage" in {
