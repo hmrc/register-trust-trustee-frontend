@@ -28,7 +28,7 @@ import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.trustees.organisation.mld5.CountryOfResidenceYesNoView
+import views.html.register.trustees.organisation.mld5.CountryOfResidenceInTheUkYesNoView
 import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +41,7 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                    actions: StandardActionSets,
                                                    requireName: NameRequiredActionImpl,
                                                    formProvider: YesNoFormProvider,
-                                                   view: CountryOfResidenceYesNoView
+                                                   view: CountryOfResidenceInTheUkYesNoView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.5mld.countryOfResidenceInTheUkYesNo")

@@ -26,7 +26,7 @@ trait ReadableUserAnswers {
 
   val data: JsObject
 
-  val is5mldEnabled: Boolean = false
+  val is5mldEnabled: Boolean = true
   val isTaxable: Boolean = true
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {

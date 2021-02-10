@@ -19,11 +19,13 @@ package navigation
 import base.SpecBase
 import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.{routes => mld5Rts}
+import models._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees.organisation.mld5.CountryOfResidencePage
 import pages.register.trustees.organisation.mld5.CountryOfResidenceInTheUkYesNoPage
 import pages.register.trustees.organisation.mld5.CountryOfResidenceYesNoPage
 import pages.register.trustees.organisation._
+import org.scalacheck.Arbitrary.arbitrary
 
 class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -143,10 +145,30 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
           .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
       }
 
-      "Country Of Residence page -> Address Yes No page" in {
+      "CountryOfResidencePage -> (with UTR) -> CheckDetailsPage" in {
+        forAll(arbitrary[UserAnswers]) {
+          baseAnswers =>
 
-        navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, baseAnswers)
-          .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
+            val mld5Answers = baseAnswers.copy(is5mldEnabled = true, isTaxable = true)
+              .set(UtrYesNoPage(index), true).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+
+            navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, mld5Answers)
+              .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
+      "CountryOfResidencePage -> (without UTR) -> AddressYesNoPage" in {
+        forAll(arbitrary[UserAnswers]) {
+          baseAnswers =>
+
+            val mld5Answers = baseAnswers.copy(is5mldEnabled = true, isTaxable = true)
+              .set(UtrYesNoPage(index), false).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+
+            navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, mld5Answers)
+              .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
+        }
       }
 
       "Address Yes No page -> Yes -> Address Uk Yes no page" in {
