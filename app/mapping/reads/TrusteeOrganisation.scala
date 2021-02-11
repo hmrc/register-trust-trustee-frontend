@@ -22,7 +22,8 @@ import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 final case class TrusteeOrganisation(override val isLead: Boolean,
                                      name: String,
                                      utr: Option[String],
-                                     address: Option[Address]) extends Trustee
+                                     address: Option[Address],
+                                     countryOfResidence: Option[String]) extends Trustee
 
 object TrusteeOrganisation extends TrusteeReads {
 
@@ -33,8 +34,9 @@ object TrusteeOrganisation extends TrusteeReads {
     val trusteeReads: Reads[TrusteeOrganisation] = (
       (__ \ "name").read[String] and
         yesNoReads[String]("utrYesNo", "utr") and
-        optionalAddressReads("utrYesNo")
-      )((name, utr, address) => TrusteeOrganisation(isLead = false, name, utr, address))
+        optionalAddressReads("utrYesNo") and
+        (__ \ "countryOfResidence").readNullable[String]
+      )((name, utr, address,countryOfResidence) => TrusteeOrganisation(isLead = false, name, utr, address, countryOfResidence))
 
     (isLeadReads and
       (__ \ "individualOrBusiness").read[IndividualOrBusiness]) ((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {

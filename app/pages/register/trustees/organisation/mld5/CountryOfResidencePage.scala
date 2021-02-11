@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package utils
+package pages.register.trustees.organisation.mld5
 
-object Constants {
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.Trustees
 
-  final val GB = "GB"
-  final val ES = "ES"
+final case class CountryOfResidencePage(index : Int) extends QuestionPage[String] {
+
+  override def path: JsPath = Trustees.path \ index \ toString
+
+  override def toString: String = "countryOfResidence"
+
 }

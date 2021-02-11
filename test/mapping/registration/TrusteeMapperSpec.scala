@@ -116,7 +116,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               name = "Org Name",
               phoneNumber = None,
               email = None,
-              identification = None
+              identification = None,
+              countryOfResidence = None
             ))
           )
         }
@@ -137,6 +138,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = "Org Name",
                 phoneNumber = None,
                 email = None,
+                countryOfResidence = None,
                 identification = Some(IdentificationOrgType(
                   utr = Some("1234567890"),
                   address = None
@@ -212,7 +214,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = "Org Name1",
                 phoneNumber = None,
                 email = None,
-                identification = None
+                identification = None,
+                countryOfResidence = None
               ))
             ),
             TrusteeType(
@@ -221,7 +224,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = "Org Name2",
                 phoneNumber = None,
                 email = None,
-                identification = None
+                identification = None,
+                countryOfResidence = None
               ))
             )
           )
@@ -334,7 +338,8 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
-                identification = None
+                identification = None,
+                countryOfResidence = None
               )
             )
           )
@@ -355,6 +360,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
+                countryOfResidence = None,
                 identification = Some(IdentificationOrgType(
                   utr = Some(utr),
                   address = None
@@ -381,6 +387,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
+                countryOfResidence = None,
                 identification = Some(IdentificationOrgType(
                   utr = None,
                   address = Some(AddressType(address.line1, address.line2, address.line3, address.line4, Some(address.postcode), "GB"))
@@ -407,6 +414,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
                 name = name,
                 phoneNumber = None,
                 email = None,
+                countryOfResidence = None,
                 identification = Some(IdentificationOrgType(
                   utr = None,
                   address = Some(AddressType(address.line1, address.line2, address.line3, None, None, address.country))
@@ -449,6 +457,62 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
 
       }
     }
+
+    "be able to create a 5mld Trustee Organisation" when {
+      "minimum data" in {
+        val index = 0
+        val userAnswers =
+          emptyUserAnswers
+            .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
+            .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
+            .set(org.NamePage(index), "Org Name").success.value
+
+        trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
+          trusteeInd = None,
+          trusteeOrg = Some(TrusteeOrgType(
+            name = "Org Name",
+            phoneNumber = None,
+            email = None,
+            identification = None,
+            countryOfResidence = None
+          ))
+        )
+      }
+
+      "full data" in {
+        val index = 0
+        val userAnswers = emptyUserAnswers
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
+          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
+          .set(org.NamePage(index), "Org Name").success.value
+          .set(org.UtrYesNoPage(index), true).success.value
+          .set(org.UtrPage(index), "1234567890").success.value
+          .set(org.mld5.CountryOfResidenceYesNoPage(index), true).success.value
+          .set(org.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+          .set(org.mld5.CountryOfResidencePage(index), "ES").success.value
+
+        trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
+          trusteeInd = None,
+          trusteeOrg = Some(
+            TrusteeOrgType(
+              name = "Org Name",
+              phoneNumber = None,
+              email = None,
+              countryOfResidence = Some("ES"),
+              identification = Some(IdentificationOrgType(
+                utr = Some("1234567890"),
+                address = None
+              ))
+            )
+          )
+        )
+      }
+
+    }
+
+
+
+
   }
 
 }

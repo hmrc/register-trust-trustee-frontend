@@ -17,6 +17,8 @@
 package utils.print
 
 import controllers.register.trustees.organisation.routes._
+import controllers.register.trustees.organisation.mld5.routes._
+
 import controllers.register.routes.TrusteeIndividualOrBusinessController
 import com.google.inject.Inject
 import models.UserAnswers
@@ -53,6 +55,9 @@ class TrusteeOrganisationPrintHelper @Inject()(answerRowConverter: AnswerRowConv
       bound.stringQuestion(NamePage(index), s"$prefix.name", NameController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(UtrYesNoPage(index), s"$prefix.utrYesNo", UtrYesNoController.onPageLoad(index, draftId).url),
       bound.stringQuestion(UtrPage(index), s"$prefix.utr", UtrController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(mld5.CountryOfResidenceYesNoPage(index), s"$prefix.5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(mld5.CountryOfResidenceInTheUkYesNoPage(index), s"$prefix.5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
+      bound.countryQuestion(mld5.CountryOfResidenceInTheUkYesNoPage(index), mld5.CountryOfResidencePage(index), s"$prefix.5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressYesNoPage(index), s"$prefix.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUkYesNoPage(index), s"$prefix.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(UkAddressPage(index), s"$prefix.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
