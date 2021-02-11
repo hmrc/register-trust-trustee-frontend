@@ -44,7 +44,7 @@ import play.api.mvc.Call
 class TrusteeOrganisationNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case NamePage(index) => _ => UtrYesNoController.onPageLoad(index, draftId)
+    case NamePage(index) => ua => navigateAwayFromNamePage(draftId, index, ua)
     case UtrPage(index) => ua => navigateAwayFromUTRQuestions(draftId, index, ua)
     case UkAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
@@ -89,6 +89,14 @@ class TrusteeOrganisationNavigator extends Navigator {
       )
   }
 
+  private def navigateAwayFromNamePage(draftId: String, index: Int, userAnswers: ReadableUserAnswers): Call = {
+    if (userAnswers.isTaxable) {
+      UtrYesNoController.onPageLoad(index, draftId)
+    } else {
+      mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
   private def navigateAwayFromUTRQuestions(draftId: String, index: Int, userAnswers: ReadableUserAnswers): Call = {
     if (userAnswers.is5mldEnabled) {
       mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
@@ -97,12 +105,17 @@ class TrusteeOrganisationNavigator extends Navigator {
     }
   }
 
+
   private def addressOrCheckAnswersRoute(draftId: String, index: Int, userAnswers: ReadableUserAnswers): Call = {
-    yesNoNav(
-      ua = userAnswers,
-      fromPage = UtrYesNoPage(index),
-      yesCall = CheckDetailsController.onPageLoad(index, draftId),
-      noCall = AddressYesNoController.onPageLoad(index, draftId)
-    )
+    if (userAnswers.isTaxable) {
+      yesNoNav(
+        ua = userAnswers,
+        fromPage = UtrYesNoPage(index),
+        yesCall = CheckDetailsController.onPageLoad(index, draftId),
+        noCall = AddressYesNoController.onPageLoad(index, draftId)
+      )
+    } else {
+      CheckDetailsController.onPageLoad(index, draftId)
+    }
   }
 }
