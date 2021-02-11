@@ -113,9 +113,9 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
       }
 
     }
-    "A 5mld Trust" must {
+    "A 5mld taxable Trust" must {
 
-      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
 
       "Name page -> UTR yes no page" in {
         navigator.nextPage(NamePage(index), fakeDraftId, baseAnswers)
@@ -263,6 +263,56 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
       }
 
 
+    }
+
+    "A 5mld none taxable Trust" must {
+
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+      "Name page -> Country Of Residence page" in {
+        navigator.nextPage(NamePage(index), fakeDraftId, baseAnswers)
+          .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence Yes No page -> Yes -> Country Of Residence UK yes no page" in {
+        val answers = baseAnswers
+          .set(CountryOfResidenceYesNoPage(index), true).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
+          .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence Yes No page -> No -> Check Details Page" in {
+        val answers = baseAnswers
+          .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
+          .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence UK yes no page -> No -> Country of Residence page" in {
+        val answers = baseAnswers
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+          .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence UK yes no page -> Yes -> Check details Page" in {
+        val answers = baseAnswers
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+          .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
+
+      "CountryOfResidencePage -> CheckDetailsPage" in {
+        val mld5Answers = baseAnswers
+          .set(CountryOfResidencePage(index), "FR").success.value
+
+        navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, mld5Answers)
+          .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
     }
   }
 }
