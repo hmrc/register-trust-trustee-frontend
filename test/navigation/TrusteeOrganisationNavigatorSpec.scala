@@ -152,12 +152,22 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
           .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
       }
 
-      "Country Of Residence Yes No page -> No -> Check details page" in {
+      "Country Of Residence Yes No page -> No (with UTR) -> Check details page" in {
         val answers = baseAnswers
+          .set(UtrYesNoPage(index), true).success.value
           .set(CountryOfResidenceYesNoPage(index), false).success.value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
           .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence Yes No page -> No (without UTR) -> Address Yes No Page" in {
+        val answers = baseAnswers
+          .set(UtrYesNoPage(index), false).success.value
+          .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId, answers)
+          .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
       }
 
       "Country Of Residence UK yes no page -> No -> Country of Residence page" in {
@@ -168,8 +178,18 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
           .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId))
       }
 
-      "Country Of Residence UK yes no page -> Yes -> Address Yes No page" in {
+      "Country Of Residence UK yes no page -> Yes (With UTR) -> Check details Page" in {
         val answers = baseAnswers
+          .set(UtrYesNoPage(index), true).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+          .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
+
+      "Country Of Residence UK yes no page -> Yes (without UTR) -> Address Yes No page" in {
+        val answers = baseAnswers
+          .set(UtrYesNoPage(index), false).success.value
           .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
