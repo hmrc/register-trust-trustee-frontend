@@ -204,13 +204,20 @@ $error-colour: #d4351c;
   padding: 15px;
 }
 
+.inline .multiple-choice {
+    clear: both;
+}
+
 @media all and (min-width: 641px) {
   .indent {
     font-size: 19px;
 
   }
-}
 
+  .inline .multiple-choice {
+    clear: none;
+  }
+}
 
 .heading-confirmation {
   background-color: #00703c;
