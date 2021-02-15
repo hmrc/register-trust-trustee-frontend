@@ -24,7 +24,7 @@
 
 @main_template(
     title = messages("trusteesInfo.title")
-    ) {
+) {
 
     @components.back_link()
 
@@ -36,11 +36,12 @@
 
     <p>@messages("trusteesInfo.paragraph2")</p>
 
-    @components.bullet_list("trusteesInfo",
+    @components.bullet_list(
+        "trusteesInfo",
         List(
-        "bulletpoint1",
-        "bulletpoint2",
-        "bulletpoint3"
+            "bulletpoint1",
+            "bulletpoint2",
+            "bulletpoint3"
         )
     )
 
@@ -52,13 +53,14 @@
 
     <p>@messages("trusteesInfo.paragraph5")</p>
 
-    @components.bullet_list("trusteesInfo",
+    @components.bullet_list(
+        "trusteesInfo",
         List(
-        "bulletpoint4",
-        "bulletpoint5",
-        "bulletpoint6",
-        "bulletpoint7",
-        "bulletpoint8"
+            "bulletpoint4",
+            "bulletpoint5",
+            "bulletpoint6",
+            "bulletpoint7",
+            "bulletpoint8"
         )
     )
 
