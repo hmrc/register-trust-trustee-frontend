@@ -59,7 +59,7 @@ class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
       "bulletpoint16",
       "bulletpoint17",
       "bulletpoint18",
-      "paragraph8",
+      "paragraph9",
       "details",
       "details.subheading1",
       "details.paragraph1",

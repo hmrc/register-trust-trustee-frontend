@@ -339,7 +339,7 @@ trusteesInfo.5mld.bulletpoint15 = registered address
 trusteesInfo.5mld.bulletpoint16 = country of residence
 trusteesInfo.5mld.bulletpoint17 = email address
 trusteesInfo.5mld.bulletpoint18 = phone number
-trusteesInfo.5mld.paragraph8 = For all other trustees that are businesses, tell us their names. Also, tell us their country of residence if you know it.
+trusteesInfo.5mld.paragraph9 = For all other trustees that are businesses, tell us their names. Also, tell us their country of residence if you know it.
 
 trusteesInfo.5mld.details = What we mean by country of residence
 trusteesInfo.5mld.details.subheading1 = Individual
