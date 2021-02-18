@@ -16,20 +16,18 @@
 
 package utils.print
 
+import com.google.inject.Inject
+import controllers.register.routes.TrusteeIndividualOrBusinessController
 import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.routes._
-
-import controllers.register.routes.TrusteeIndividualOrBusinessController
-import com.google.inject.Inject
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import pages.register.TrusteeIndividualOrBusinessPage
 import pages.register.trustees.organisation._
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class TrusteeOrganisationPrintHelper @Inject()(answerRowConverter: AnswerRowConverter, countryOptions: CountryOptions) {
+class TrusteeOrganisationPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
   def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                          (implicit messages: Messages): AnswerSection = {
@@ -42,7 +40,7 @@ class TrusteeOrganisationPrintHelper @Inject()(answerRowConverter: AnswerRowConv
   private def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                      (implicit messages: Messages): Seq[AnswerRow] = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
     val prefix: String = "trustee.organisation"
 
     Seq(
