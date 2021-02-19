@@ -25,10 +25,9 @@ import models.core.pages.IndividualOrBusiness
 import pages.register.TrusteeIndividualOrBusinessPage
 import pages.register.trustees.individual._
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class TrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowConverter, countryOptions: CountryOptions) {
+class TrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
   def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                          (implicit messages: Messages): AnswerSection = {
@@ -41,7 +40,7 @@ class TrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowConver
   private def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                      (implicit messages: Messages): Seq[AnswerRow] = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
     val prefix: String = "trustee.individual"
 
     Seq(

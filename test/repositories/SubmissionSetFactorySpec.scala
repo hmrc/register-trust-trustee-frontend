@@ -53,7 +53,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       |     "middleName":"middle name",
       |     "lastName":"Last Name"
       |   },
-      |   "dateOfBirth":"1500-10-10",
+      |   "dateOfBirth":"2000-10-10",
       |   "phoneNumber":"0191 1111111",
       |   "identification":{
       |     "nino":"AB123456C"
@@ -74,7 +74,7 @@ class SubmissionSetFactorySpec extends SpecBase {
     userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
       .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
       .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-      .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(1500,10,10)).success.value
+      .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(2000,10,10)).success.value
       .set(ltind.TrusteeNinoYesNoPage(index), true).success.value
       .set(ltind.TrusteesNinoPage(index), "AB123456C").success.value
       .set(ltind.AddressUkYesNoPage(index), true).success.value
@@ -161,7 +161,7 @@ class SubmissionSetFactorySpec extends SpecBase {
               List(
                 AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
-                AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
+                AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 2000", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
@@ -198,7 +198,7 @@ class SubmissionSetFactorySpec extends SpecBase {
               List(
                 AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
-                AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 1500", "first name Last Name"),
+                AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 2000", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
