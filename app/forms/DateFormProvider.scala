@@ -25,7 +25,8 @@ import play.api.data.Form
 
 class DateFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings {
 
-  def withPrefix(prefix: String): Form[LocalDate] =
+  def withConfig(prefix: String, is5MldEnabled: Boolean = false): Form[LocalDate] = {
+    val minimumDate: LocalDate = if(is5MldEnabled) appConfig.minLeadTrusteeDob else appConfig.minDate
     Form(
       "value" -> localDate(
         invalidKey     = s"$prefix.error.invalid",
@@ -34,7 +35,8 @@ class DateFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings 
         requiredKey    = s"$prefix.error.required"
       ).verifying(firstError(
         maxDate(LocalDate.now, s"$prefix.error.future", "day", "month", "year"),
-        minDate(appConfig.minDate, s"$prefix.error.past", "day", "month", "year")
+        minDate(minimumDate, s"$prefix.error.past", "day", "month", "year")
       ))
     )
+  }
 }

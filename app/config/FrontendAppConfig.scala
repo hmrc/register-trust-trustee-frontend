@@ -90,6 +90,9 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
   lazy val minDate: LocalDate = getDate("minimum")
   lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 
+  // TRUS-3028
+  lazy val minLeadTrusteeDob: LocalDate = getDate("minLeadTrusteeDob")
+
   private lazy val accessibilityBaseLinkUrl: String = configuration.get[String]("urls.accessibility")
 
   def accessibilityLinkUrl(implicit request: Request[_]): String = {

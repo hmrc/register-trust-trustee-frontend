@@ -29,7 +29,7 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
   val messageKeyPrefix = "leadTrustee.individual.dateOfBirth"
   val index = 0
 
-  val form = new DateFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
+  val form = new DateFormProvider(frontendAppConfig).withConfig(messageKeyPrefix)
 
   "DateOfBirthView view" must {
 

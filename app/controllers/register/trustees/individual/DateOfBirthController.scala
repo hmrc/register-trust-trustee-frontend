@@ -50,7 +50,7 @@ class DateOfBirthController @Inject()(
                                        view: DateOfBirthView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[LocalDate] = formProvider.withPrefix("trustee.individual.dateOfBirth")
+  val form: Form[LocalDate] = formProvider.withConfig("trustee.individual.dateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
