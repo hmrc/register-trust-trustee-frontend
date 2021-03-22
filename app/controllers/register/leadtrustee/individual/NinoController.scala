@@ -27,7 +27,7 @@ import navigation.Navigator
 import pages.register.leadtrustee.individual.{MatchingFailedPage, TrusteesNinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
+import play.api.mvc._
 import repositories.RegistrationsRepository
 import services.TrustsIndividualCheckService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -84,7 +84,7 @@ class NinoController @Inject()(
               case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
                 navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithFailedAttemptsUpdated)
               case UnsuccessfulMatchResponse =>
-                routes.MatchingFailedController.onPageLoad(index, draftId)
+                redirectToMatchingFailedOrLocked(answersWithFailedAttemptsUpdated, index, draftId)
               case IssueBuildingPayloadResponse =>
                 routes.NameController.onPageLoad(index, draftId)
             }
@@ -106,6 +106,17 @@ class NinoController @Inject()(
         }
       case _ =>
         Future.fromTry(Success(userAnswers))
+    }
+  }
+
+  private def redirectToMatchingFailedOrLocked(userAnswers: UserAnswers,
+                                               index: Int,
+                                               draftId: String): Call = {
+    userAnswers.get(MatchingFailedPage(index)) match {
+      case Some(value) if value < 3 =>
+        routes.MatchingFailedController.onPageLoad(index, draftId)
+      case _ =>
+        routes.MatchingLockedController.onPageLoad(index, draftId)
     }
   }
 }
