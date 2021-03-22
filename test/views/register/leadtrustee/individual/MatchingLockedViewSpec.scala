@@ -34,7 +34,7 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
   )
 
   def applyView: HtmlFormat.Appendable =
-    view.apply(fakeDraftId, index, links)(fakeRequest, messages)
+    view.apply(fakeDraftId, index)(fakeRequest, messages)
 
   "MatchingLockedView" must {
 

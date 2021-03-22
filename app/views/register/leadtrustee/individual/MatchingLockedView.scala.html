@@ -15,6 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
+@import controllers.register.leadtrustee.individual.routes._
 @import viewmodels.Link
 
 @this(
@@ -23,7 +24,20 @@
     appConfig: FrontendAppConfig
 )
 
-@(draftId: String, index: Int, links: List[Link])(implicit request: Request[_], messages: Messages)
+@(draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+
+@links = @{
+    List(
+        Link(
+            text = messages("leadTrustee.individual.matching.locked.link1"),
+            url = PassportDetailsController.onPageLoad(index, draftId).url
+        ),
+        Link(
+            text = messages("leadTrustee.individual.matching.locked.link2"),
+            url = IDCardDetailsController.onPageLoad(index, draftId).url
+        )
+    )
+}
 
 @main_template(
     title = messages("leadTrustee.individual.matching.locked.title")
