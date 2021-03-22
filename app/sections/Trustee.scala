@@ -20,7 +20,7 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import viewmodels.addAnother.TrusteeViewModel
 
-case class Trustee(index: Int) extends QuestionPage[TrusteeViewModel]{
+case class Trustee(index: Int) extends QuestionPage[TrusteeViewModel] {
 
   override def path: JsPath = JsPath \ Trustees \ index
 

@@ -47,7 +47,7 @@ class LeadTrusteeMapper @Inject()(addressMapper: AddressMapper,
     val identification = if(leadTrustee.nino.isDefined) {
       IdentificationType(nino = leadTrustee.nino, passport = None, address = None)
     } else {
-      models.IdentificationType(nino = None,
+      IdentificationType(nino = None,
         passport = passportOrIdCardMapper.build(leadTrustee.passportOrIdCard),
         address = addressMapper.buildOptional(leadTrustee.address)
       )

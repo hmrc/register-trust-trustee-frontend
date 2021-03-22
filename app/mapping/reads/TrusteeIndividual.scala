@@ -16,11 +16,13 @@
 
 package mapping.reads
 
-import java.time.LocalDate
-
+import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.{Address, FullName, IndividualOrBusiness}
 import models.registration.pages.PassportOrIdCardDetails
+import play.api.libs.functional.syntax._
 import play.api.libs.json._
+
+import java.time.LocalDate
 
 final case class TrusteeIndividual(override val isLead: Boolean,
                                    name: FullName,
@@ -32,55 +34,41 @@ final case class TrusteeIndividual(override val isLead: Boolean,
                                    nationality: Option[String],
                                    mentalCapacityYesNo: Option[Boolean]) extends Trustee
 
-object TrusteeIndividual extends TrusteeReads {
+object TrusteeIndividual extends TrusteeReads[TrusteeIndividual] {
 
-  import play.api.libs.functional.syntax._
+  override val isLeadTrustee: Boolean = false
+  override val individualOrBusiness: IndividualOrBusiness = Individual
 
-  implicit lazy val reads: Reads[TrusteeIndividual] = {
+  override def trusteeReads: Reads[TrusteeIndividual] = {
 
-    val passportOrIdCardReads: Reads[Option[PassportOrIdCardDetails]] =
-      ((__ \ "passportDetailsYesNo").readNullable[Boolean] and
+    val passportOrIdCardReads: Reads[Option[PassportOrIdCardDetails]] = (
+      (__ \ "passportDetailsYesNo").readNullable[Boolean] and
         (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
         (__ \ "idCardDetailsYesNo").readNullable[Boolean] and
         (__ \ "idCard").readNullable[PassportOrIdCardDetails]
-        )((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
-        case (Some(true), passport @ Some(_), None, None) =>
-          Reads(_ => JsSuccess(passport))
-        case (Some(false), None, Some(true), idCard @ Some(_)) =>
-          Reads(_ => JsSuccess(idCard))
-        case (Some(false), None, Some(false), None) | (None, None, None, None) =>
-          Reads(_ => JsSuccess(None))
-        case _ =>
-          Reads(_ => JsError("individual trustee passport / ID card answers are in an invalid state"))
-      }
-
-    val trusteeReads: Reads[TrusteeIndividual] = {
-      (
-        (__ \ "name").read[FullName] and
-          yesNoReads[LocalDate]("dateOfBirthYesNo", "dateOfBirth") and
-          yesNoReads[String]("ninoYesNo", "nino") and
-          optionalAddressReads("ninoYesNo") and
-          passportOrIdCardReads and
-          (__ \ "countryOfResidence").readNullable[String] and
-          (__ \ "nationality").readNullable[String] and
-          (__ \ "mentalCapacityYesNo").readNullable[Boolean]
-        )((name, dateOfBirth, nino, address, passportOrIdCardDetails, countryOfResidence, countryOfNationality, mentalCapacityYesNo) =>
-        TrusteeIndividual(isLead = false, name, dateOfBirth, nino, address, passportOrIdCardDetails,
-          countryOfResidence = countryOfResidence,
-          nationality = countryOfNationality,
-          mentalCapacityYesNo = mentalCapacityYesNo)
-      )
+      )((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
+      case (Some(true), passport @ Some(_), None, None) =>
+        Reads(_ => JsSuccess(passport))
+      case (Some(false), None, Some(true), idCard @ Some(_)) =>
+        Reads(_ => JsSuccess(idCard))
+      case (Some(false), None, Some(false), None) | (None, None, None, None) =>
+        Reads(_ => JsSuccess(None))
+      case _ =>
+        Reads(_ => JsError("individual trustee passport / ID card answers are in an invalid state"))
     }
 
-    (isLeadReads and
-      (__ \ "individualOrBusiness").read[IndividualOrBusiness]) ((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
-      case (isLead, individualOrBusiness) =>
-        if (individualOrBusiness == IndividualOrBusiness.Individual && !isLead) {
-          Reads(_ => JsSuccess((isLead, individualOrBusiness)))
-        } else {
-          Reads(_ => JsError("trustee individual must not be a `business` or a `lead`"))
-        }
-    }.andKeep(trusteeReads)
+    (
+      Reads(_ => JsSuccess(isLeadTrustee)) and
+        (__ \ "name").read[FullName] and
+        yesNoReads[LocalDate]("dateOfBirthYesNo", "dateOfBirth") and
+        yesNoReads[String]("ninoYesNo", "nino") and
+        optionalAddressReads("ninoYesNo") and
+        passportOrIdCardReads and
+        (__ \ "countryOfResidence").readNullable[String] and
+        (__ \ "nationality").readNullable[String] and
+        (__ \ "mentalCapacityYesNo").readNullable[Boolean]
+      )(TrusteeIndividual.apply _)
 
   }
+
 }
