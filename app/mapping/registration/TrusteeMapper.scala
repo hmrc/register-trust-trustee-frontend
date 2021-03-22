@@ -17,12 +17,11 @@
 package mapping.registration
 
 import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{Trustee, TrusteeIndividual, TrusteeOrganisation, Trustees}
-import models.UserAnswers
+import models.{IdentificationOrgType, IdentificationType, TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers}
 
 class TrusteeMapper @Inject()(addressMapper: AddressMapper,
-                              passportOrIdCardMapper: PassportOrIdCardMapper) extends Mapping[List[TrusteeType]] {
+                              passportOrIdCardMapper: PassportOrIdCardMapper) extends Mapper[List[TrusteeType]] {
 
   override def build(userAnswers: UserAnswers): Option[List[TrusteeType]] = {
     val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(List.empty[Trustee])

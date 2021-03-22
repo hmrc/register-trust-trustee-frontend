@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package mapping
+package mapping.registration
 
 import models.UserAnswers
 
-trait Mapping[T] {
+trait Mapper[T] {
 
-  def build(userAnswers: UserAnswers) : Option[T]
+  def build(userAnswers: UserAnswers): Option[T]
 
 }

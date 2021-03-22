@@ -17,10 +17,9 @@
 package mapping.registration
 
 import java.time.LocalDate
-
 import base.SpecBase
 import generators.Generators
-import mapping.Mapping
+import models.{AddressType, IdentificationOrgType, IdentificationType, LeadTrusteeIndType, LeadTrusteeOrgType, LeadTrusteeType, PassportType}
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
@@ -32,7 +31,7 @@ import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage
 class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
-  val leadTrusteeMapper: Mapping[LeadTrusteeType] = injector.instanceOf[LeadTrusteeMapper]
+  val leadTrusteeMapper: Mapper[LeadTrusteeType] = injector.instanceOf[LeadTrusteeMapper]
 
   "LeadTrusteeMapper" when {
 

@@ -16,7 +16,7 @@
 
 package mapping.registration
 
-import models.UserAnswers
+import models.{AddressType, UserAnswers}
 import models.core.pages.{Address, InternationalAddress, UKAddress}
 import pages.QuestionPage
 import config.FrontendAppConfig
@@ -41,7 +41,7 @@ class AddressMapper @Inject()(implicit val config: FrontendAppConfig)  {
     }
   }
 
-   private def buildUkAddress(address: Option[UKAddress]): Option[AddressType] = {
+  private def buildUkAddress(address: Option[UKAddress]): Option[AddressType] = {
     address.map{
       x =>
         buildUkAddress(x)
@@ -58,7 +58,6 @@ class AddressMapper @Inject()(implicit val config: FrontendAppConfig)  {
       GB
     )
   }
-
 
   private def buildInternationalAddress(address: Option[InternationalAddress]): Option[AddressType] = {
     address.map{
@@ -101,7 +100,5 @@ class AddressMapper @Inject()(implicit val config: FrontendAppConfig)  {
       case ukAddress : UKAddress => buildUkAddress(Some(ukAddress))
       case international : InternationalAddress => buildInternationalAddress(Some(international))
     }
-
-
 
 }

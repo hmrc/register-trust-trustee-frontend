@@ -16,6 +16,7 @@
 
 package mapping.registration
 
+import models.PassportType
 import models.registration.pages.PassportOrIdCardDetails
 
 class PassportOrIdCardMapper {

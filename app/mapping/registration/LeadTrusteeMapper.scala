@@ -17,13 +17,12 @@
 package mapping.registration
 
 import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustee, Trustees}
-import models.UserAnswers
+import models.{IdentificationOrgType, IdentificationType, LeadTrusteeIndType, LeadTrusteeOrgType, LeadTrusteeType, UserAnswers}
 
 class LeadTrusteeMapper @Inject()(addressMapper: AddressMapper,
                                   passportOrIdCardMapper: PassportOrIdCardMapper
-                                 ) extends Mapping[LeadTrusteeType] {
+                                 ) extends Mapper[LeadTrusteeType] {
 
   override def build(userAnswers: UserAnswers): Option[LeadTrusteeType] = {
     val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(List.empty[Trustee])
@@ -48,7 +47,7 @@ class LeadTrusteeMapper @Inject()(addressMapper: AddressMapper,
     val identification = if(leadTrustee.nino.isDefined) {
       IdentificationType(nino = leadTrustee.nino, passport = None, address = None)
     } else {
-      IdentificationType(nino = None,
+      models.IdentificationType(nino = None,
         passport = passportOrIdCardMapper.build(leadTrustee.passportOrIdCard),
         address = addressMapper.buildOptional(leadTrustee.address)
       )
