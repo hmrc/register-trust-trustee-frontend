@@ -694,5 +694,8 @@ trustee.organisation.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you
 trustee.organisation.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the business’s country of residence
 trustee.organisation.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the business is registered (incorporated). The business has UK residency if it is registered with Companies House.
 
-
-
+leadTrustee.individual.matching.failed.title = We cannot match the details you entered with our records
+leadTrustee.individual.matching.failed.heading = We cannot match the details you entered with our records
+leadTrustee.individual.matching.failed.subheading = Failed attempt {0} of 3
+leadTrustee.individual.matching.failed.paragraph1 = Make sure you have entered the lead trustee’s details correctly.
+leadTrustee.individual.matching.failed.paragraph2 = You have {0} attempts left to enter the correct details.
