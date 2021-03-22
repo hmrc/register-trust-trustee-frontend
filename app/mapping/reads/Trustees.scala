@@ -18,11 +18,8 @@ package mapping.reads
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+import sections.{Trustees => section}
 
-case object Trustees extends QuestionPage[List[Trustee]]{
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "trustees"
-
+case object Trustees extends QuestionPage[List[Trustee]] {
+  override def path: JsPath = section.path
 }

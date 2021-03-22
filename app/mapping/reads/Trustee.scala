@@ -16,14 +16,25 @@
 
 package mapping.reads
 
+import mapping.registration.IdentificationMapper.buildAddress
+import models.AddressType
+import models.core.pages.{Address, UKAddress}
 import play.api.libs.json.{JsSuccess, Reads}
 
 import scala.language.implicitConversions
 
 trait Trustee {
+  val isLead: Boolean = false
+}
 
-  val isLead : Boolean
+trait LeadTrustee extends Trustee {
+  override val isLead: Boolean = true
 
+  val address: Address
+  def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
+  def addressType: AddressType = buildAddress(address)
+
+  val telephoneNumber: String
 }
 
 object Trustee {
@@ -37,7 +48,7 @@ object Trustee {
   implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
     a.map(identity)
 
-  implicit lazy val reads : Reads[Trustee] = {
+  implicit lazy val reads: Reads[Trustee] = {
     TrusteeIndividual.reads or
       LeadTrusteeIndividual.reads or
       TrusteeOrganisation.reads or

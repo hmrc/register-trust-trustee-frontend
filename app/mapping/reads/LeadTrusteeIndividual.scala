@@ -16,15 +16,18 @@
 
 package mapping.reads
 
-import java.time.LocalDate
-
+import mapping.registration.IdentificationMapper.{buildAddress, buildPassport}
+import models.IdentificationType
 import models.core.pages.IndividualOrBusiness.Individual
-import models.core.pages.{Address, FullName, UKAddress}
+import models.core.pages.{Address, FullName, IndividualOrBusiness}
 import models.registration.pages.DetailsChoice._
 import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
+import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
-final case class LeadTrusteeIndividual(override val isLead: Boolean = true,
+import java.time.LocalDate
+
+final case class LeadTrusteeIndividual(override val isLead: Boolean,
                                        name: FullName,
                                        dateOfBirth: LocalDate,
                                        nino: Option[String],
@@ -33,36 +36,39 @@ final case class LeadTrusteeIndividual(override val isLead: Boolean = true,
                                        telephoneNumber: String,
                                        email: Option[String],
                                        countryOfResidence: Option[String],
-                                       nationality: Option[String]) extends Trustee {
+                                       nationality: Option[String]) extends LeadTrustee {
 
-  def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
-
+  val identification: IdentificationType = nino match {
+    case Some(_) => IdentificationType(nino, None, None)
+    case _ => IdentificationType(None, buildPassport(passportOrIdCard), Some(buildAddress(address)))
+  }
 }
 
-object LeadTrusteeIndividual extends TrusteeReads {
+object LeadTrusteeIndividual extends TrusteeReads[LeadTrusteeIndividual] {
 
-  import play.api.libs.functional.syntax._
+  override val isLeadTrustee: Boolean = true
+  override val individualOrBusiness: IndividualOrBusiness = Individual
 
-  implicit lazy val reads: Reads[LeadTrusteeIndividual] = {
+  override def trusteeReads: Reads[LeadTrusteeIndividual] = {
 
-    val passportOrIdCardReads: Reads[Option[PassportOrIdCardDetails]] =
-      ((__ \ "ninoYesNo").read[Boolean] and
+    val passportOrIdCardReads: Reads[Option[PassportOrIdCardDetails]] = (
+      (__ \ "ninoYesNo").read[Boolean] and
         (__ \ "trusteeDetailsChoice").readNullable[DetailsChoice] and
         (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
         (__ \ "idCard").readNullable[PassportOrIdCardDetails]
-        ) ((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
-        case (false, Some(Passport), passport @ Some(_), None) =>
-          Reads(_ => JsSuccess(passport))
-        case (false, Some(IdCard), None, idCard @ Some(_)) =>
-          Reads(_ => JsSuccess(idCard))
-        case (true, None, None, None) =>
-          Reads(_ => JsSuccess(None))
-        case _  =>
-          Reads(_ => JsError("individual lead trustee passport / ID card answers are in an invalid state"))
-      }
+      )((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
+      case (false, Some(Passport), passport @ Some(_), None) =>
+        Reads(_ => JsSuccess(passport))
+      case (false, Some(IdCard), None, idCard @ Some(_)) =>
+        Reads(_ => JsSuccess(idCard))
+      case (true, None, None, None) =>
+        Reads(_ => JsSuccess(None))
+      case _  =>
+        Reads(_ => JsError("individual lead trustee passport / ID card answers are in an invalid state"))
+    }
 
-    val leadTrusteeReads: Reads[LeadTrusteeIndividual] = (
-      isLeadReads and
+    (
+      Reads(_ => JsSuccess(isLeadTrustee)) and
         (__ \ "name").read[FullName] and
         (__ \ "dateOfBirth").read[LocalDate] and
         yesNoReads[String]("ninoYesNo", "nino") and
@@ -74,15 +80,6 @@ object LeadTrusteeIndividual extends TrusteeReads {
         (__ \ "nationality").readNullable[String]
       )(LeadTrusteeIndividual.apply _)
 
-    (isLeadReads and
-      (__ \ "individualOrBusiness").read[String]) ((_, _)).flatMap[(Boolean, String)] {
-      case (isLead, individualOrBusiness) =>
-        if (individualOrBusiness == Individual.toString && isLead) {
-          Reads(_ => JsSuccess((isLead, individualOrBusiness)))
-        } else {
-          Reads(_ => JsError("lead trustee individual must not be a `business` or a normal trustee"))
-        }
-    }.andKeep(leadTrusteeReads)
-
   }
+
 }
