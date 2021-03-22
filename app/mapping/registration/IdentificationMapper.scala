@@ -16,19 +16,22 @@
 
 package mapping.registration
 
-import config.FrontendAppConfig
-import models.AddressType
 import models.core.pages.{Address, InternationalAddress, UKAddress}
+import models.registration.pages.PassportOrIdCardDetails
+import models.{AddressType, PassportType}
 import utils.Constants.GB
 
-import javax.inject.Inject
+object IdentificationMapper {
 
-class AddressMapper @Inject()(implicit val config: FrontendAppConfig) {
-
-  private def buildUkAddress(address: Option[UKAddress]): Option[AddressType] = {
-    address.map { x =>
-      buildUkAddress(x)
+  def buildAddress(address: Address): AddressType = {
+    address match {
+      case a: UKAddress => buildUkAddress(a)
+      case a: InternationalAddress => buildInternationalAddress(a)
     }
+  }
+
+  def buildAddress(address: Option[Address]): Option[AddressType] = {
+    address.map(buildAddress)
   }
 
   private def buildUkAddress(address: UKAddress): AddressType = {
@@ -42,12 +45,6 @@ class AddressMapper @Inject()(implicit val config: FrontendAppConfig) {
     )
   }
 
-  private def buildInternationalAddress(address: Option[InternationalAddress]): Option[AddressType] = {
-    address.map { x =>
-      buildInternationalAddress(x)
-    }
-  }
-
   private def buildInternationalAddress(address: InternationalAddress): AddressType = {
     AddressType(
       line1 = address.line1,
@@ -59,28 +56,9 @@ class AddressMapper @Inject()(implicit val config: FrontendAppConfig) {
     )
   }
 
-  def buildOptional(address: Address): Option[AddressType] = {
-    address match {
-      case a: UKAddress =>
-        buildUkAddress(Some(a))
-      case a: InternationalAddress =>
-        buildInternationalAddress(Some(a))
-    }
-  }
-
-  def build(address: Address): AddressType = {
-    address match {
-      case a: UKAddress =>
-        buildUkAddress(a)
-      case a: InternationalAddress =>
-        buildInternationalAddress(a)
-    }
-  }
-
-  def build(ukOrInternationalAddress: Option[Address]): Option[AddressType] = {
-    ukOrInternationalAddress flatMap {
-      case ukAddress: UKAddress => buildUkAddress(Some(ukAddress))
-      case international: InternationalAddress => buildInternationalAddress(Some(international))
+  def buildPassport(passportOrIdCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] = {
+    passportOrIdCardDetails map { passportOrIdCardDetails =>
+      PassportType(passportOrIdCardDetails.cardNumber, passportOrIdCardDetails.expiryDate, passportOrIdCardDetails.country)
     }
   }
 

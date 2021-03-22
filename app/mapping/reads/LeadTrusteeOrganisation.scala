@@ -16,6 +16,8 @@
 
 package mapping.reads
 
+import mapping.registration.IdentificationMapper.buildAddress
+import models.IdentificationOrgType
 import models.core.pages.IndividualOrBusiness.Business
 import models.core.pages.{Address, IndividualOrBusiness}
 import play.api.libs.functional.syntax._
@@ -27,7 +29,13 @@ final case class LeadTrusteeOrganisation(override val isLead: Boolean,
                                          address: Address,
                                          telephoneNumber: String,
                                          email: Option[String],
-                                         countryOfResidence: Option[String]) extends LeadTrustee
+                                         countryOfResidence: Option[String]) extends LeadTrustee {
+
+  val identification: IdentificationOrgType = utr match {
+    case Some(_) => IdentificationOrgType(utr, None)
+    case _ => IdentificationOrgType(None, Some(buildAddress(address)))
+  }
+}
 
 object LeadTrusteeOrganisation extends TrusteeReads[LeadTrusteeOrganisation] {
 

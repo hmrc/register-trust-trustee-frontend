@@ -16,10 +16,9 @@
 
 package mapping.registration
 
-import java.time.LocalDate
-
 import base.SpecBase
 import generators.Generators
+import mapping.registration.IdentificationMapper.buildAddress
 import models.RegistrationSubmission
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
@@ -29,11 +28,12 @@ import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
+import java.time.LocalDate
+
 class CorrespondenceMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
   private val correspondenceMapper = injector.instanceOf[CorrespondenceMapper]
-  private val addressMapper = injector.instanceOf[AddressMapper]
 
   "CorrespondenceMapper" when {
 
@@ -75,7 +75,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           correspondenceMapper.build(userAnswers) mustBe
             List(
               RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
-              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(addressMapper.build(address))),
+              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(buildAddress(address))),
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 222222"))
             )
         }
@@ -111,7 +111,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           correspondenceMapper.build(userAnswers) mustBe
             List(
               RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
-              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(addressMapper.build(address))),
+              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(buildAddress(address))),
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 222222"))
             )
         }
@@ -146,7 +146,7 @@ class CorrespondenceMapperSpec extends SpecBase with MustMatchers
           correspondenceMapper.build(userAnswers) mustBe
             List(
               RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(true)),
-              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(addressMapper.build(address))),
+              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(buildAddress(address))),
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 222222"))
             )
         }

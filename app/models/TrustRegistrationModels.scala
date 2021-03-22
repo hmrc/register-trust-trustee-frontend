@@ -25,8 +25,8 @@ import java.time.LocalDate
  * Trust Registration API Schema - definitions models below
  */
 
-case class TrusteeType(trusteeInd: Option[TrusteeIndividualType],
-                       trusteeOrg: Option[TrusteeOrgType] )
+case class TrusteeType(trusteeInd: Option[TrusteeIndividualType] = None,
+                       trusteeOrg: Option[TrusteeOrgType] = None)
 
 object TrusteeType {
   implicit val trusteeTypeFormat: Format[TrusteeType] = Json.format[TrusteeType]

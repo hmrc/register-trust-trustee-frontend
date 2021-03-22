@@ -16,6 +16,8 @@
 
 package mapping.reads
 
+import mapping.registration.IdentificationMapper.buildAddress
+import models.AddressType
 import models.core.pages.{Address, UKAddress}
 import play.api.libs.json.{JsSuccess, Reads}
 
@@ -30,6 +32,9 @@ trait LeadTrustee extends Trustee {
 
   val address: Address
   def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
+  def addressType: AddressType = buildAddress(address)
+
+  val telephoneNumber: String
 }
 
 object Trustee {
