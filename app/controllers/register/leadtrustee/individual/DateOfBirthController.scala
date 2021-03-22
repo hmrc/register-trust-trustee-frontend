@@ -17,12 +17,13 @@
 package controllers.register.leadtrustee.individual
 
 import java.time.LocalDate
-
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
+import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.DateFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesDateOfBirthPage
@@ -47,7 +48,8 @@ class DateOfBirthController @Inject()(
                                        view: DateOfBirthView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[LocalDate] = formProvider.withConfig("leadTrustee.individual.dateOfBirth")
+  private def form(implicit request: TrusteeNameRequest[_]): Form[LocalDate] =
+    formProvider.withConfig("leadTrustee.individual.dateOfBirth", request.userAnswers.is5mldEnabled)
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
