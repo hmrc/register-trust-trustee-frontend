@@ -30,14 +30,14 @@ class MatchingFailedControllerSpec extends SpecBase {
   private val index: Int = 0
   private val numberOfFailedAttempts: Int = 1
 
-  private lazy val failedMatchingRoute: String =
+  private lazy val matchingFailedRoute: String =
     routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
 
-  "FailedMatching Controller" when {
+  "MatchingFailedController" when {
 
     ".onPageLoad" when {
 
-      "FailedMatchingPage populated" must {
+      "MatchingFailedPage populated" must {
         "return OK and the correct view for a GET" in {
 
           val userAnswers = emptyUserAnswers
@@ -45,7 +45,7 @@ class MatchingFailedControllerSpec extends SpecBase {
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-          val request = FakeRequest(GET, failedMatchingRoute)
+          val request = FakeRequest(GET, matchingFailedRoute)
 
           val result = route(application, request).value
 
@@ -60,12 +60,12 @@ class MatchingFailedControllerSpec extends SpecBase {
         }
       }
 
-      "FailedMatchingPage not populated" must {
+      "MatchingFailedPage not populated" must {
         "return INTERNAL_SERVER_ERROR" in {
 
           val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-          val request = FakeRequest(GET, failedMatchingRoute)
+          val request = FakeRequest(GET, matchingFailedRoute)
 
           val result = route(application, request).value
 
@@ -80,7 +80,7 @@ class MatchingFailedControllerSpec extends SpecBase {
 
           val application = applicationBuilder(userAnswers = None).build()
 
-          val request = FakeRequest(GET, failedMatchingRoute)
+          val request = FakeRequest(GET, matchingFailedRoute)
 
           val result = route(application, request).value
 
@@ -102,7 +102,7 @@ class MatchingFailedControllerSpec extends SpecBase {
               bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
             ).build()
 
-          val request = FakeRequest(POST, failedMatchingRoute)
+          val request = FakeRequest(POST, matchingFailedRoute)
 
           val result = route(application, request).value
 
@@ -119,7 +119,7 @@ class MatchingFailedControllerSpec extends SpecBase {
 
           val application = applicationBuilder(userAnswers = None).build()
 
-          val request = FakeRequest(POST, failedMatchingRoute)
+          val request = FakeRequest(POST, matchingFailedRoute)
 
           val result = route(application, request).value
 

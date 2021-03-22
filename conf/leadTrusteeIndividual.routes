@@ -52,5 +52,7 @@ POST       /:draftId/:index/email                      controllers.register.lead
 GET        /:draftId/:index/check-details              controllers.register.leadtrustee.individual.CheckDetailsController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/check-details              controllers.register.leadtrustee.individual.CheckDetailsController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/:index/failed-matching            controllers.register.leadtrustee.individual.MatchingFailedController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/:index/failed-matching            controllers.register.leadtrustee.individual.MatchingFailedController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/matching-failed            controllers.register.leadtrustee.individual.MatchingFailedController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/matching-failed            controllers.register.leadtrustee.individual.MatchingFailedController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/matching-locked            controllers.register.leadtrustee.individual.MatchingLockedController.onPageLoad(index: Int, draftId: String)
