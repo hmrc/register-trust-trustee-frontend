@@ -27,97 +27,109 @@ import views.html.register.leadtrustee.individual.FailedMatchingView
 
 class FailedMatchingControllerSpec extends SpecBase {
 
-  val index: Int = 0
-  lazy val failedMatchingRoute: String = routes.FailedMatchingController.onPageLoad(index, fakeDraftId).url
+  private val index: Int = 0
+  private val numberOfFailedAttempts: Int = 1
 
-  "FailedMatching Controller" must {
+  private lazy val failedMatchingRoute: String =
+    routes.FailedMatchingController.onPageLoad(index, fakeDraftId).url
 
-    "return OK and the correct view for a GET" in {
+  "FailedMatching Controller" when {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+    ".onPageLoad" when {
 
-      val request = FakeRequest(GET, failedMatchingRoute)
+      "FailedMatchingPage populated" must {
+        "return OK and the correct view for a GET" in {
 
-      val result = route(application, request).value
+          val userAnswers = emptyUserAnswers
+            .set(FailedMatchingPage(index), numberOfFailedAttempts).success.value
 
-      val view = application.injector.instanceOf[FailedMatchingView]
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      status(result) mustEqual OK
+          val request = FakeRequest(GET, failedMatchingRoute)
 
-      contentAsString(result) mustEqual
-        view(fakeDraftId, index, 1)(request, messages).toString
+          val result = route(application, request).value
 
-      application.stop()
+          val view = application.injector.instanceOf[FailedMatchingView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(fakeDraftId, index, numberOfFailedAttempts)(request, messages).toString
+
+          application.stop()
+        }
+      }
+
+      "FailedMatchingPage not populated" must {
+        "return INTERNAL_SERVER_ERROR" in {
+
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+          val request = FakeRequest(GET, failedMatchingRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual INTERNAL_SERVER_ERROR
+
+          application.stop()
+        }
+      }
+
+      "no existing data found" must {
+        "redirect to Session Expired" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          val request = FakeRequest(GET, failedMatchingRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+          application.stop()
+        }
+      }
     }
 
-    "populate the view correctly on a GET on a subsequent failed match" in {
+    ".onSubmit" when {
 
-      val userAnswers = emptyUserAnswers
-        .set(FailedMatchingPage(index), 2).success.value
+      "existing data found" must {
+        "redirect to the next page" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(
+              bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+            ).build()
 
-      val request = FakeRequest(GET, failedMatchingRoute)
+          val request = FakeRequest(POST, failedMatchingRoute)
 
-      val view = application.injector.instanceOf[FailedMatchingView]
+          val result = route(application, request).value
 
-      val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual OK
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-      contentAsString(result) mustEqual
-        view(fakeDraftId, index, 2)(request, messages).toString
+          application.stop()
+        }
+      }
 
-      application.stop()
-    }
+      "no existing data found" must {
+        "redirect to Session Expired" in {
 
-    "redirect to next page when valid data is submitted" in {
+          val application = applicationBuilder(userAnswers = None).build()
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-          )
-          .build()
+          val request = FakeRequest(POST, failedMatchingRoute)
 
-      val request = FakeRequest(POST, failedMatchingRoute)
+          val result = route(application, request).value
 
-      val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val request = FakeRequest(GET, failedMatchingRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val request = FakeRequest(POST, failedMatchingRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
+          application.stop()
+        }
+      }
     }
   }
 }

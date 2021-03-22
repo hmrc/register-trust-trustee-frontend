@@ -52,8 +52,11 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
   "LeadTrusteeIndividual Navigator" must {
 
     "a 4mld trust" must {
+
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
+
       "name page -> Name -> DOB page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TrusteesNamePage(index), FullName("First", None, "Last")).success.value
 
         navigator.nextPage(TrusteesNamePage(index), fakeDraftId, answers)
@@ -61,7 +64,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "DOB page -> DOB -> NinoYesNo page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TrusteesDateOfBirthPage(index), LocalDate.now()).success.value
 
         navigator.nextPage(TrusteesDateOfBirthPage(index), fakeDraftId, answers)
@@ -69,7 +72,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "NinoYesNo -> Yes -> Nino page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TrusteeNinoYesNoPage(index), true).success.value
 
         navigator.nextPage(TrusteeNinoYesNoPage(index), fakeDraftId, answers)
@@ -77,7 +80,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "Nino Page -> Nino -> LiveInTheUk Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TrusteesNinoPage(index), "aa123456b").success.value
 
         navigator.nextPage(TrusteesNinoPage(index), fakeDraftId, answers)
@@ -85,15 +88,20 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "NinoYesNo -> No -> Details page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TrusteeNinoYesNoPage(index), false).success.value
 
         navigator.nextPage(TrusteeNinoYesNoPage(index), fakeDraftId, answers)
           .mustBe(rts.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId))
       }
 
+      "Failed matching Page -> Name Page" in {
+        navigator.nextPage(FailedMatchingPage(index), fakeDraftId, baseAnswers)
+          .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
+      }
+
       "TrusteeDetailsChoice Page -> IdCard -> IDCard page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TrusteeDetailsChoicePage(index), IdCard).success.value
 
         navigator.nextPage(TrusteeDetailsChoicePage(index), fakeDraftId, answers)
@@ -101,7 +109,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "TrusteeDetailsChoice Page -> Passport -> Passport page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TrusteeDetailsChoicePage(index), Passport).success.value
 
         navigator.nextPage(TrusteeDetailsChoicePage(index), fakeDraftId, answers)
@@ -109,7 +117,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "IDCard Page -> IDCard -> AUKCitizen Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(IDCardDetailsPage(index), PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())).success.value
 
         navigator.nextPage(IDCardDetailsPage(index), fakeDraftId, answers)
@@ -117,7 +125,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "Passport Page -> Passport -> AUKCitizen Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(PassportDetailsPage(index), PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())).success.value
 
         navigator.nextPage(PassportDetailsPage(index), fakeDraftId, answers)
@@ -125,7 +133,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "AUKCitizen Page -> Yes -> UkAddress Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(AddressUkYesNoPage(index), true).success.value
 
         navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
@@ -134,7 +142,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
 
 
       "AUKCitizen Page -> No -> InternationalAddress Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(AddressUkYesNoPage(index), false).success.value
 
         navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
@@ -142,7 +150,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "UkAddress Page -> UkAddress -> emailYesNo Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(UkAddressPage(index), UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")).success.value
 
         navigator.nextPage(UkAddressPage(index), fakeDraftId, answers)
@@ -150,7 +158,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "InternationalAddress Page -> InternationalAddress -> emailYesNo Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(InternationalAddressPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
 
         navigator.nextPage(InternationalAddressPage(index), fakeDraftId, answers)
@@ -158,7 +166,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "emailYesNo Page -> Yes -> email Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(EmailAddressYesNoPage(index), true).success.value
 
         navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
@@ -166,7 +174,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "emailYesNo Page -> No -> TelephoneNumber Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(EmailAddressYesNoPage(index), false).success.value
 
         navigator.nextPage(EmailAddressYesNoPage(index), fakeDraftId, answers)
@@ -175,7 +183,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
 
 
       "email Page -> emailaddress -> TelephoneNumber Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(EmailAddressPage(index), "test@test.com").success.value
 
         navigator.nextPage(EmailAddressPage(index), fakeDraftId, answers)
@@ -183,7 +191,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "TelephoneNumber Page -> TelephoneNumber -> CheckDetails Page" in {
-        val answers = emptyUserAnswers
+        val answers = baseAnswers
           .set(TelephoneNumberPage(index), "123456789").success.value
 
         navigator.nextPage(TelephoneNumberPage(index), fakeDraftId, answers)

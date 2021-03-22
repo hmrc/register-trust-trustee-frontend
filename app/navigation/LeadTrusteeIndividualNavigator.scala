@@ -33,6 +33,7 @@ class LeadTrusteeIndividualNavigator extends Navigator {
     case TrusteesDateOfBirthPage(index) => ua => navigateAwayFromDateOfBirthPage(draftId, index, ua.is5mldEnabled)
     case CountryOfNationalityPage(index) => _ => rts.NinoYesNoController.onPageLoad(index, draftId)
     case TrusteesNinoPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
+    case FailedMatchingPage(index) => _ => rts.NameController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
     case PassportDetailsPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
     case IDCardDetailsPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)

@@ -19,26 +19,25 @@ package controllers.register.leadtrustee.individual
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions.StandardActionSets
+import handlers.ErrorHandler
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.leadtrustee.individual.FailedMatchingPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
-import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.FailedMatchingView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
 class FailedMatchingController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           implicit val frontendAppConfig: FrontendAppConfig,
                                           standardActionSets: StandardActionSets,
                                           view: FailedMatchingView,
-                                          registrationsRepository: RegistrationsRepository,
-                                          @LeadTrusteeIndividual navigator: Navigator
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                          @LeadTrusteeIndividual navigator: Navigator,
+                                          errorHandler: ErrorHandler
+                                        ) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index)
@@ -46,18 +45,17 @@ class FailedMatchingController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val numberFailedAttempts: Int = request.userAnswers.get(FailedMatchingPage(index)).getOrElse(1)
-      Ok(view(draftId, index, numberFailedAttempts))
+      request.userAnswers.get(FailedMatchingPage(index)) match {
+        case Some(numberOfFailedAttempts) =>
+          Ok(view(draftId, index, numberOfFailedAttempts))
+        case _ =>
+          InternalServerError(errorHandler.internalServerErrorTemplate)
+      }
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val numberFailedAttempts: Int = request.userAnswers.get(FailedMatchingPage(index)).getOrElse(1)
-
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(FailedMatchingPage(index), numberFailedAttempts + 1))
-        _ <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(navigator.nextPage(FailedMatchingPage(index), draftId, updatedAnswers))
+      Redirect(navigator.nextPage(FailedMatchingPage(index), draftId, request.userAnswers))
   }
 }

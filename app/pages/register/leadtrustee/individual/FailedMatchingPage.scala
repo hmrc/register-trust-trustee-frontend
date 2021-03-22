@@ -20,7 +20,7 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class FailedMatchingPage(index: Int) extends QuestionPage[Int]{
+final case class FailedMatchingPage(index: Int) extends QuestionPage[Int] {
   override def path: JsPath = Trustees.path \ index \ toString
-  override def toString: String = "numberFailedMatching"
+  override def toString: String = "numberOfFailedMatchingAttempts"
 }
