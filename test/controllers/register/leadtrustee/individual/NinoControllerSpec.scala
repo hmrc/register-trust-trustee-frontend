@@ -176,7 +176,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.FailedMatchingController.onPageLoad(index, fakeDraftId).url
+          routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
 
         application.stop()
       }

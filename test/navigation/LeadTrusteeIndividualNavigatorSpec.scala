@@ -34,6 +34,7 @@ package navigation
 
 import java.time.LocalDate
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.register.leadtrustee.individual.{routes => rts}
 import controllers.register.leadtrustee.individual.mld5.{routes => mld5Rts}
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
@@ -47,7 +48,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
 
   val navigator = new LeadTrusteeIndividualNavigator
   val index = 0
-  implicit val config = frontendAppConfig
+  implicit val config: FrontendAppConfig = frontendAppConfig
 
   "LeadTrusteeIndividual Navigator" must {
 
@@ -96,7 +97,7 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "Failed matching Page -> Name Page" in {
-        navigator.nextPage(FailedMatchingPage(index), fakeDraftId, baseAnswers)
+        navigator.nextPage(MatchingFailedPage(index), fakeDraftId, baseAnswers)
           .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
       }
 

@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package pages.behaviours.leadtrustee.individual
+package pages.register.leadtrustee.individual
 
-import pages.behaviours.PageBehaviours
-import pages.register.leadtrustee.individual._
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.Trustees
 
-class FailedMatchingPageSpec extends PageBehaviours {
-
-  "FailedMatching Page" must {
-
-    beRetrievable[Int](FailedMatchingPage(0))
-
-    beSettable[Int](FailedMatchingPage(0))
-
-    beRemovable[Int](FailedMatchingPage(0))
-  }
-
+final case class MatchingFailedPage(index: Int) extends QuestionPage[Int] {
+  override def path: JsPath = Trustees.path \ index \ toString
+  override def toString: String = "numberOfFailedMatchingAttempts"
 }

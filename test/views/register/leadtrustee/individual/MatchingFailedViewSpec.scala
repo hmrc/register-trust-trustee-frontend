@@ -18,14 +18,14 @@ package views.register.leadtrustee.individual
 
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
-import views.html.register.leadtrustee.individual.FailedMatchingView
+import views.html.register.leadtrustee.individual.MatchingFailedView
 
-class FailedMatchingViewSpec extends ViewBehaviours {
+class MatchingFailedViewSpec extends ViewBehaviours {
 
   val prefix = "leadTrustee.individual.matching.failed"
   val index = 0
   val numberOfFailedAttempts: Int = 1
-  val view: FailedMatchingView = viewFor[FailedMatchingView](Some(emptyUserAnswers))
+  val view: MatchingFailedView = viewFor[MatchingFailedView](Some(emptyUserAnswers))
 
   def applyView: HtmlFormat.Appendable =
     view.apply(fakeDraftId, index, numberOfFailedAttempts)(fakeRequest, messages)

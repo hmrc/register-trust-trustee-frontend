@@ -19,19 +19,19 @@ package controllers.register.leadtrustee.individual
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
 import navigation.{FakeNavigator, Navigator}
-import pages.register.leadtrustee.individual.FailedMatchingPage
+import pages.register.leadtrustee.individual.MatchingFailedPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.leadtrustee.individual.FailedMatchingView
+import views.html.register.leadtrustee.individual.MatchingFailedView
 
-class FailedMatchingControllerSpec extends SpecBase {
+class MatchingFailedControllerSpec extends SpecBase {
 
   private val index: Int = 0
   private val numberOfFailedAttempts: Int = 1
 
   private lazy val failedMatchingRoute: String =
-    routes.FailedMatchingController.onPageLoad(index, fakeDraftId).url
+    routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
 
   "FailedMatching Controller" when {
 
@@ -41,7 +41,7 @@ class FailedMatchingControllerSpec extends SpecBase {
         "return OK and the correct view for a GET" in {
 
           val userAnswers = emptyUserAnswers
-            .set(FailedMatchingPage(index), numberOfFailedAttempts).success.value
+            .set(MatchingFailedPage(index), numberOfFailedAttempts).success.value
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -49,7 +49,7 @@ class FailedMatchingControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          val view = application.injector.instanceOf[FailedMatchingView]
+          val view = application.injector.instanceOf[MatchingFailedView]
 
           status(result) mustEqual OK
 

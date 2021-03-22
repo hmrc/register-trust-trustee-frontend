@@ -24,7 +24,7 @@ import controllers.actions.register.leadtrustee.individual.NameRequiredActionImp
 import forms.NinoFormProvider
 import models._
 import navigation.Navigator
-import pages.register.leadtrustee.individual.{FailedMatchingPage, TrusteesNinoPage}
+import pages.register.leadtrustee.individual.{MatchingFailedPage, TrusteesNinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
@@ -84,7 +84,7 @@ class NinoController @Inject()(
               case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
                 navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithFailedAttemptsUpdated)
               case UnsuccessfulMatchResponse =>
-                routes.FailedMatchingController.onPageLoad(index, draftId)
+                routes.MatchingFailedController.onPageLoad(index, draftId)
               case IssueBuildingPayloadResponse =>
                 routes.NameController.onPageLoad(index, draftId)
             }
@@ -98,9 +98,9 @@ class NinoController @Inject()(
                                    index: Int): Future[UserAnswers] = {
     matchingResponse match {
       case UnsuccessfulMatchResponse =>
-        val failedAttempts = userAnswers.get(FailedMatchingPage(index)).getOrElse(0)
+        val failedAttempts = userAnswers.get(MatchingFailedPage(index)).getOrElse(0)
         for {
-          updatedFailedAttempts <- Future.fromTry(userAnswers.set(FailedMatchingPage(index), failedAttempts + 1))
+          updatedFailedAttempts <- Future.fromTry(userAnswers.set(MatchingFailedPage(index), failedAttempts + 1))
         } yield {
           updatedFailedAttempts
         }

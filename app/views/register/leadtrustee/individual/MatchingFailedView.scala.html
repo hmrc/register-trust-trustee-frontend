@@ -27,7 +27,7 @@
     title = messages("leadTrustee.individual.matching.failed.title")
 ) {
 
-    @formHelper(action = FailedMatchingController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = MatchingFailedController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.heading_with_caption(
             messagePrefix = "leadTrustee.individual.matching.failed",

@@ -22,19 +22,19 @@ import controllers.actions.StandardActionSets
 import handlers.ErrorHandler
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
-import pages.register.leadtrustee.individual.FailedMatchingPage
+import pages.register.leadtrustee.individual.MatchingFailedPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.leadtrustee.individual.FailedMatchingView
+import views.html.register.leadtrustee.individual.MatchingFailedView
 
 import javax.inject.Inject
 
-class FailedMatchingController @Inject()(
+class MatchingFailedController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           implicit val frontendAppConfig: FrontendAppConfig,
                                           standardActionSets: StandardActionSets,
-                                          view: FailedMatchingView,
+                                          view: MatchingFailedView,
                                           @LeadTrusteeIndividual navigator: Navigator,
                                           errorHandler: ErrorHandler
                                         ) extends FrontendBaseController with I18nSupport {
@@ -45,7 +45,7 @@ class FailedMatchingController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      request.userAnswers.get(FailedMatchingPage(index)) match {
+      request.userAnswers.get(MatchingFailedPage(index)) match {
         case Some(numberOfFailedAttempts) =>
           Ok(view(draftId, index, numberOfFailedAttempts))
         case _ =>
@@ -56,6 +56,6 @@ class FailedMatchingController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      Redirect(navigator.nextPage(FailedMatchingPage(index), draftId, request.userAnswers))
+      Redirect(navigator.nextPage(MatchingFailedPage(index), draftId, request.userAnswers))
   }
 }
