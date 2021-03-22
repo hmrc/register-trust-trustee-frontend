@@ -112,6 +112,10 @@ trait ViewSpecBase extends SpecBase {
     }
   }
 
+  def assertContainsRegProgressLink(doc: Document): Any = {
+    assertRenderedById(doc, "reg-progress")
+  }
+
   def assertContainsClass(doc: Document, className: String): Any = {
     assert(doc.getElementsByClass(className).size() > 0, s"\n\nPage did not contain element with class $className")
   }

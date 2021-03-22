@@ -14,14 +14,8 @@
  * limitations under the License.
  *@
 
-@import viewmodels.Link
+@import config.FrontendAppConfig
 
-@(link: Link)(implicit messages: Messages)
+@(appConfig: FrontendAppConfig, draftId: String)(implicit messages: Messages)
 
-<li class="app-task-list__item" id="task-list__item--@{link.text}">
-    <span class="app-task-link">
-        <a class="app-task-list__task-name" id="task-list__task--@{link.text}" href="@{link.url}" aria-describedby="task-list__task--@{link.text}__tag">
-            @messages(link.text)
-        </a>
-    </span>
-</li>
+<a href="@{appConfig.registrationProgressUrl(draftId)}" id="reg-progress"><p>@messages("site.reg-progress")</p></a>

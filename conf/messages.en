@@ -60,6 +60,7 @@ site.utr = Unique Taxpayer Reference
 site.sign_out = Sign out
 site.sign_in = Sign in
 site.print-or-save = Print or save this page
+site.reg-progress = Return to registration progress
 
 site.address.uk.line1 = Address line 1
 site.address.uk.line2 = Address line 2
@@ -699,3 +700,15 @@ leadTrustee.individual.matching.failed.heading = We cannot match the details you
 leadTrustee.individual.matching.failed.caption = Failed attempt {0} of 3
 leadTrustee.individual.matching.failed.paragraph1 = Make sure you have entered the lead trustee’s details correctly.
 leadTrustee.individual.matching.failed.paragraph2 = You have {0} attempts left to enter the correct details.
+
+leadTrustee.individual.matching.locked.title = We have not been able to match details for undefined undefined
+leadTrustee.individual.matching.locked.heading = We have not been able to match details for undefined undefined
+leadTrustee.individual.matching.locked.caption = 3 failed matching attempts
+leadTrustee.individual.matching.locked.paragraph1 = We need more information before you can register the lead trustee.
+leadTrustee.individual.matching.locked.paragraph2 = Check the details you have entered are correct for the lead trustee. If you are not sure, you can check to see if HMRC hold a personal tax account (PTA) for you to find your details.
+leadTrustee.individual.matching.locked.subheading1 = Providing other information for a lead trustee
+leadTrustee.individual.matching.locked.paragraph3 = If you have incorrectly entered the lead trustees details, you can provide the lead trustees passport and address details, or an ID and address details from the options below.
+leadTrustee.individual.matching.locked.link1 = Passport and address
+leadTrustee.individual.matching.locked.link2 = ID and address
+leadTrustee.individual.matching.locked.paragraph4 = If you do not have these details to hand, you can return to the registration progress page, to complete the other details for the trust until you have provided alternative information for your existing lead trustee, or have information for a new lead trustee.
+leadTrustee.individual.matching.locked.paragraph5 = When you have confirmed the accurate information, you’ll need to sign out and sign back in. You can complete the other sections in this registration without signing out and these details will be saved for 28 days.

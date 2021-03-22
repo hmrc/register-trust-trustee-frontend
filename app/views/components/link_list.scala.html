@@ -15,13 +15,12 @@
  *@
 
 @import viewmodels.Link
+@import views.html._
 
-@(link: Link)(implicit messages: Messages)
+@(links: List[Link])(implicit messages: Messages)
 
-<li class="app-task-list__item" id="task-list__item--@{link.text}">
-    <span class="app-task-link">
-        <a class="app-task-list__task-name" id="task-list__task--@{link.text}" href="@{link.url}" aria-describedby="task-list__task--@{link.text}__tag">
-            @messages(link.text)
-        </a>
-    </span>
-</li>
+<ul class="app-task-list__items">
+    @for(link <- links){
+        @components.link(link)
+    }
+</ul>

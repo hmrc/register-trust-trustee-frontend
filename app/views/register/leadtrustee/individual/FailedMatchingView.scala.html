@@ -15,15 +15,13 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
-@import config.FrontendAppConfig
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF,
-    appConfig: FrontendAppConfig
+    formHelper: FormWithCSRF
 )
 
-@(draftId: String, index : Int, numberOfFailedAttempts: Int)(implicit request: Request[_], messages: Messages)
+@(draftId: String, index: Int, numberOfFailedAttempts: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("leadTrustee.individual.matching.failed.title")
@@ -31,7 +29,10 @@
 
     @formHelper(action = FailedMatchingController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.heading_with_caption("leadTrustee.individual.matching.failed", captionParam = Some(numberOfFailedAttempts.toString))
+        @components.heading_with_caption(
+            messagePrefix = "leadTrustee.individual.matching.failed",
+            captionParam = Some(numberOfFailedAttempts.toString)
+        )
 
         <p>@messages("leadTrustee.individual.matching.failed.paragraph1")</p>
 
