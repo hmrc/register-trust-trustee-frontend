@@ -16,42 +16,31 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustees}
+import mapping.reads.{LeadTrustee, Trustees}
 import models.{RegistrationSubmission, UserAnswers}
 import play.api.Logging
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
-class CorrespondenceMapper @Inject()(addressMapper: AddressMapper) extends Logging {
+class CorrespondenceMapper extends Logging {
 
   def build(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
     val result = userAnswers.get(Trustees).getOrElse(Nil) match {
       case Nil => None
-      case list =>
-        list.find(_.isLead).map {
-          case lti: LeadTrusteeIndividual =>
-            val address = addressMapper.build(lti.address)
-            List(
-              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lti.hasUkAddress)),
-              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(address)),
-              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lti.telephoneNumber))
-            )
-          case lto: LeadTrusteeOrganisation =>
-            val address = addressMapper.build(lto.address)
-            List(
-              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lto.hasUkAddress)),
-              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(address)),
-              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lto.telephoneNumber))
-            )
-          case _ =>
-            logger.info(s"[build] unable to create correspondence due to unexpected lead trustee type")
-            List.empty
-        }
+      case list => list.find(_.isLead).map {
+        case lt: LeadTrustee => List(
+          RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lt.hasUkAddress)),
+          RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(lt.addressType)),
+          RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lt.telephoneNumber))
+        )
+        case _ =>
+          logger.info(s"[build] unable to create correspondence due to unexpected lead trustee type")
+          List.empty
+      }
     }
 
     result match {
       case Some(list) => list
-      case None => List.empty
+      case None => Nil
     }
   }
 }

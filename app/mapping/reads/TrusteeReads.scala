@@ -17,19 +17,38 @@
 package mapping.reads
 
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
-import models.core.pages.{Address, InternationalAddress, TrusteeOrLeadTrustee, UKAddress}
+import models.core.pages._
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-trait TrusteeReads {
+import scala.reflect.{ClassTag, classTag}
 
-  val isLeadReads: Reads[Boolean] =
+abstract class TrusteeReads[A : ClassTag] {
+
+  val isLeadTrustee: Boolean
+  val individualOrBusiness: IndividualOrBusiness
+
+  implicit lazy val reads: Reads[A] = (
+    isLeadReads and
+      (__ \ "individualOrBusiness").read[IndividualOrBusiness]
+    )((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
+    case (a, b) =>
+      if (a == isLeadTrustee && b == individualOrBusiness) {
+        Reads(_ => JsSuccess((isLeadTrustee, individualOrBusiness)))
+      } else {
+        Reads(_ => JsError(s"${classTag[A].runtimeClass.getSimpleName} must not have values isLeadTrustee = $a and individualOrBusiness = $b"))
+      }
+  }.andKeep(trusteeReads)
+
+  def trusteeReads: Reads[A]
+
+  def isLeadReads: Reads[Boolean] =
     (__ \ 'trusteeOrLeadTrustee).read[TrusteeOrLeadTrustee].map[Boolean] {
       case LeadTrustee => true
       case _ => false
     }
 
-  val addressReads: Reads[Address] =
+  def addressReads: Reads[Address] =
     (__ \ 'ukAddress).read[UKAddress].widen[Address] or
       (__ \ 'internationalAddress).read[InternationalAddress].widen[Address]
 
@@ -54,7 +73,7 @@ trait TrusteeReads {
     }
   }
 
-  def yesNoReads[T](yesNoPath: String, valuePath: String)(implicit reads: Reads[T]): Reads[Option[T]] =
+  def yesNoReads[T](yesNoPath: String, valuePath: String)(implicit reads: Reads[T]): Reads[Option[T]] = {
     ((__ \ yesNoPath).readNullable[Boolean] and
       (__ \ valuePath).readNullable[T]
       ) ((_, _)).flatMap[Option[T]] {
@@ -65,5 +84,6 @@ trait TrusteeReads {
       case _ =>
         Reads(_ => JsError(s"answers at $yesNoPath and $valuePath are in an invalid state"))
     }
+  }
 
 }
