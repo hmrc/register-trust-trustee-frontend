@@ -24,19 +24,19 @@ import controllers.actions.register.leadtrustee.individual.NameRequiredActionImp
 import forms.NinoFormProvider
 import models._
 import navigation.Navigator
-import pages.register.leadtrustee.individual.{MatchingFailedPage, TrusteesNinoPage}
+import pages.register.leadtrustee.individual.TrusteesNinoPage
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import services.TrustsIndividualCheckService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.NinoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Success
 
 class NinoController @Inject()(
                                 override val messagesApi: MessagesApi,
@@ -78,15 +78,15 @@ class NinoController @Inject()(
           for {
             answersWithNinoUpdated <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
             matchingResponse <- service.matchLeadTrustee(answersWithNinoUpdated, index)
-            answersWithFailedAttemptsUpdated <- updateFailedAttempts(matchingResponse, answersWithNinoUpdated, index)
-            _ <- registrationsRepository.set(answersWithFailedAttemptsUpdated)
+            updatedFailCount <- getUpdatedFailCount(matchingResponse, draftId)
+            _ <- registrationsRepository.set(answersWithNinoUpdated)
           } yield Redirect {
             matchingResponse match {
               case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
-                navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithFailedAttemptsUpdated)
-              case UnsuccessfulMatchResponse =>
+                navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithNinoUpdated)
+              case UnsuccessfulMatchResponse if updatedFailCount < 3 =>
                 routes.MatchingFailedController.onPageLoad(index, draftId)
-              case LockedMatchResponse =>
+              case UnsuccessfulMatchResponse | LockedMatchResponse =>
                 routes.MatchingLockedController.onPageLoad(index, draftId)
               case _ =>
                 logger.error("Something went wrong. Redirecting back to start of lead trustee matching journey.")
@@ -97,19 +97,12 @@ class NinoController @Inject()(
       )
   }
 
-  private def updateFailedAttempts(matchingResponse: TrustsIndividualCheckServiceResponse,
-                                   userAnswers: UserAnswers,
-                                   index: Int): Future[UserAnswers] = {
+  private def getUpdatedFailCount(matchingResponse: TrustsIndividualCheckServiceResponse, draftId: String)
+                                 (implicit hc: HeaderCarrier): Future[Int] = {
+
     matchingResponse match {
-      case UnsuccessfulMatchResponse =>
-        val failedAttempts = userAnswers.get(MatchingFailedPage(index)).getOrElse(0)
-        for {
-          updatedFailedAttempts <- Future.fromTry(userAnswers.set(MatchingFailedPage(index), failedAttempts + 1))
-        } yield {
-          updatedFailedAttempts
-        }
-      case _ =>
-        Future.fromTry(Success(userAnswers))
+      case UnsuccessfulMatchResponse => service.failedAttempts(draftId)
+      case _ => Future.successful(0)
     }
   }
 }
