@@ -75,13 +75,13 @@ class NinoController @Inject()(
 
         value => {
           for {
-            answersWithNinoUpdated <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
-            matchingResponse <- service.matchLeadTrustee(answersWithNinoUpdated, index)
-            _ <- registrationsRepository.set(answersWithNinoUpdated)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
+            matchingResponse <- service.matchLeadTrustee(updatedAnswers, index)
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect {
             matchingResponse match {
               case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
-                navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithNinoUpdated)
+                navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers)
               case UnsuccessfulMatchResponse =>
                 routes.MatchingFailedController.onPageLoad(index, draftId)
               case LockedMatchResponse =>
