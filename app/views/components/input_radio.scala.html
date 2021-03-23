@@ -17,15 +17,16 @@
 @import viewmodels.RadioOption
 
 @(
-        field: Field,
-        legend: String,
-        legendClass: Option[String] = None,
-        fieldSetClass: Option[String] = None,
-        hint: Option[String] = None,
-        trackGa: Boolean = false,
-        inputs: Seq[RadioOption],
-        legendAsHeading: Boolean = false,
-        legendAsH2Heading: Boolean = false
+    field: Field,
+    legend: String,
+    legendClass: Option[String] = None,
+    fieldSetClass: Option[String] = None,
+    hint: Option[String] = None,
+    trackGa: Boolean = false,
+    inputs: Seq[RadioOption],
+    legendAsHeading: Boolean = false,
+    legendAsH2Heading: Boolean = false,
+    additionalContent: Option[Html] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -41,14 +42,21 @@
             @if(legendAsH2Heading){</h2>}
             @if(legendAsHeading){</h1>}
         </legend>
+
+        @if(additionalContent.isDefined){
+            @additionalContent
+        }
+
         @if(hint.nonEmpty){
-        <span id="form-hint" class="form-hint form-field">@{hint.get}</span>
+            <span id="form-hint" class="form-hint form-field">@{hint.get}</span>
         }
+
         @field.errors.map { error =>
-        <span class="error-message" id="error-message-@{field.id}-input">
-            <span class="visually-hidden">@messages("site.error")</span> @messages(error.message, error.args: _*)
-        </span>
+            <span class="error-message" id="error-message-@{field.id}-input">
+                <span class="visually-hidden">@messages("site.error")</span> @messages(error.message, error.args: _*)
+            </span>
         }
+
         @for(input <- inputs) {
             <div class="multiple-choice">
                 <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}" @if(field.value == Some(input.value)){checked="checked"} @if(trackGa){data-journey-click="trusts-frontend:click:@{input.id}"} />

@@ -539,8 +539,11 @@ leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}�
 leadTrustee.individual.trusteeDetailsChoice.title = Which of the lead trustees’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}’s details can you provide?
-leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
+leadTrustee.individual.5mld.trusteeDetailsChoice.paragraph1 = If you do not have these details to hand, you can return to this page to complete these details at another stage. These details will be saved for 28 days.
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
+leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
+leadTrustee.individual.5mld.trusteeDetailsChoice.passport = Passport and address
+leadTrustee.individual.5mld.trusteeDetailsChoice.idCard = ID card and address
 leadTrustee.individual.trusteeDetailsChoice.error.required = Select which details you can provide
 
 leadTrustee.individual.iDCardDetails.title = What are the lead trustee’s ID card details?
