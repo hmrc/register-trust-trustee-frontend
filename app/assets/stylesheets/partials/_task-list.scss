@@ -79,3 +79,9 @@
     margin-bottom: 0;
   }
 }
+
+@media(min-width: 621px) {
+  .app-task-list__items {
+    padding-left: 0;
+  }
+}
