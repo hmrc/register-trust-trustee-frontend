@@ -26,7 +26,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.leadtrustee.individual.{MatchingFailedPage, TrusteesNamePage, TrusteesNinoPage}
+import pages.register.leadtrustee.individual.{TrusteesNamePage, TrusteesNinoPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -123,7 +123,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         application.stop()
       }
 
-      "in 5mld mode and lead trustee matching successful" in {
+      "in 5mld mode and SuccessfulMatchResponse" in {
 
         val mockService = mock[TrustsIndividualCheckService]
 
@@ -153,36 +153,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     }
 
     "redirect to matching failed page" when {
-
-      "1st unsuccessful match" in {
-
-        val mockService = mock[TrustsIndividualCheckService]
-
-        when(mockService.matchLeadTrustee(any(), any())(any(), any()))
-          .thenReturn(Future.successful(UnsuccessfulMatchResponse))
-
-        val userAnswers = baseAnswers
-          .set(TrusteesNinoPage(index), validAnswer).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[TrustsIndividualCheckService].toInstance(mockService)
-          ).build()
-
-        val request = FakeRequest(POST, ninoRoute)
-          .withFormUrlEncodedBody(("value", validAnswer))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
-
-        application.stop()
-      }
-
-      "2nd unsuccessful match" in {
+      "UnsuccessfulMatchResponse" in {
 
         val mockService = mock[TrustsIndividualCheckService]
 
@@ -190,7 +161,6 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
           .thenReturn(Future.successful(UnsuccessfulMatchResponse))
 
         val userAnswers = baseAnswers
-          .set(MatchingFailedPage(index), 1).success.value
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -213,15 +183,14 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     }
 
     "redirect to matching locked page" when {
-      "3rd unsuccessful match" in {
+      "LockedMatchResponse" in {
 
         val mockService = mock[TrustsIndividualCheckService]
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
-          .thenReturn(Future.successful(UnsuccessfulMatchResponse))
+          .thenReturn(Future.successful(LockedMatchResponse))
 
         val userAnswers = baseAnswers
-          .set(MatchingFailedPage(index), 2).success.value
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -244,12 +213,41 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     }
 
     "redirect back to trustee name page" when {
-      "issue building payload" in {
+
+      "IssueBuildingPayloadResponse" in {
 
         val mockService = mock[TrustsIndividualCheckService]
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
           .thenReturn(Future.successful(IssueBuildingPayloadResponse))
+
+        val userAnswers = baseAnswers
+          .set(TrusteesNinoPage(index), validAnswer).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[TrustsIndividualCheckService].toInstance(mockService)
+          ).build()
+
+        val request = FakeRequest(POST, ninoRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.NameController.onPageLoad(index, fakeDraftId).url
+
+        application.stop()
+      }
+
+      "MatchingErrorResponse" in {
+
+        val mockService = mock[TrustsIndividualCheckService]
+
+        when(mockService.matchLeadTrustee(any(), any())(any(), any()))
+          .thenReturn(Future.successful(MatchingErrorResponse))
 
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value

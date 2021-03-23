@@ -78,7 +78,6 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           .set(TrusteesNinoPage(index), nino).success.value
 
         "return SuccessfulMatchResponse" when {
-
           "successfully matched" in {
 
             val mockConnector = mock[TrustsIndividualCheckConnector]
@@ -97,7 +96,6 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
         }
 
         "return UnsuccessfulMatchResponse" when {
-
           "unsuccessfully matched" in {
 
             val mockConnector = mock[TrustsIndividualCheckConnector]
@@ -113,6 +111,27 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
               verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
             }
           }
+        }
+
+        "return LockedMatchResponse" when {
+          "attempt limit exceeded" in {
+
+            val mockConnector = mock[TrustsIndividualCheckConnector]
+            val service = new TrustsIndividualCheckService(mockConnector)
+
+            when(mockConnector.matchLeadTrustee(any())(any(), any()))
+              .thenReturn(Future.successful(AttemptLimitExceededResponse))
+
+            val result = service.matchLeadTrustee(userAnswers, index)
+
+            whenReady(result) { res =>
+              res mustBe LockedMatchResponse
+              verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
+            }
+          }
+        }
+
+        "return MatchingErrorResponse" when {
 
           "invalid match ID" in {
 
@@ -125,23 +144,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
             val result = service.matchLeadTrustee(userAnswers, index)
 
             whenReady(result) { res =>
-              res mustBe UnsuccessfulMatchResponse
-              verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
-            }
-          }
-
-          "attempt limit exceeded" in {
-
-            val mockConnector = mock[TrustsIndividualCheckConnector]
-            val service = new TrustsIndividualCheckService(mockConnector)
-
-            when(mockConnector.matchLeadTrustee(any())(any(), any()))
-              .thenReturn(Future.successful(AttemptLimitExceededResponse))
-
-            val result = service.matchLeadTrustee(userAnswers, index)
-
-            whenReady(result) { res =>
-              res mustBe UnsuccessfulMatchResponse
+              res mustBe MatchingErrorResponse
               verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
             }
           }
@@ -157,7 +160,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
             val result = service.matchLeadTrustee(userAnswers, index)
 
             whenReady(result) { res =>
-              res mustBe UnsuccessfulMatchResponse
+              res mustBe MatchingErrorResponse
               verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
             }
           }
@@ -173,7 +176,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
             val result = service.matchLeadTrustee(userAnswers, index)
 
             whenReady(result) { res =>
-              res mustBe UnsuccessfulMatchResponse
+              res mustBe MatchingErrorResponse
               verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
             }
           }

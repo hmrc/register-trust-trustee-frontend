@@ -25,6 +25,7 @@ import forms.NinoFormProvider
 import models._
 import navigation.Navigator
 import pages.register.leadtrustee.individual.{MatchingFailedPage, TrusteesNinoPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -48,7 +49,7 @@ class NinoController @Inject()(
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NinoView,
                                 service: TrustsIndividualCheckService
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = formProvider("leadTrustee.individual.nino")
 
@@ -84,8 +85,11 @@ class NinoController @Inject()(
               case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
                 navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithFailedAttemptsUpdated)
               case UnsuccessfulMatchResponse =>
-                redirectToMatchingFailedOrLocked(answersWithFailedAttemptsUpdated, index, draftId)
-              case IssueBuildingPayloadResponse =>
+                routes.MatchingFailedController.onPageLoad(index, draftId)
+              case LockedMatchResponse =>
+                routes.MatchingLockedController.onPageLoad(index, draftId)
+              case _ =>
+                logger.error("Something went wrong. Redirecting back to start of lead trustee matching journey.")
                 routes.NameController.onPageLoad(index, draftId)
             }
           }
@@ -106,17 +110,6 @@ class NinoController @Inject()(
         }
       case _ =>
         Future.fromTry(Success(userAnswers))
-    }
-  }
-
-  private def redirectToMatchingFailedOrLocked(userAnswers: UserAnswers,
-                                               index: Int,
-                                               draftId: String): Call = {
-    userAnswers.get(MatchingFailedPage(index)) match {
-      case Some(value) if value < 3 =>
-        routes.MatchingFailedController.onPageLoad(index, draftId)
-      case _ =>
-        routes.MatchingLockedController.onPageLoad(index, draftId)
     }
   }
 }
