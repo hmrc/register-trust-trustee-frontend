@@ -17,7 +17,8 @@
 package controllers.register.leadtrustee.individual
 
 import controllers.actions.StandardActionSets
-import models.requests.RegistrationDataRequest
+import controllers.actions.register.TrusteeNameRequest
+import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -28,15 +29,16 @@ import javax.inject.Inject
 class MatchingLockedController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           standardActionSets: StandardActionSets,
+                                          nameAction: NameRequiredActionImpl,
                                           view: MatchingLockedView
                                         ) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
-    standardActionSets.indexValidated(draftId, index)
+  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
+    standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      Ok(view(draftId, index))
+      Ok(view(draftId, index, request.trusteeName))
   }
 }

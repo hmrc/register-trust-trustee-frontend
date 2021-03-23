@@ -33,11 +33,18 @@ class MatchingFailedViewSpec extends ViewBehaviours {
   "FailedMatching View" must {
 
     behave like normalPageTitleWithCaption(
-      applyView,
-      prefix,
-      numberOfFailedAttempts.toString,
-     "paragraph1", "paragraph2"
+      view = applyView,
+      messageKeyPrefix = prefix,
+      messageKeyParam = "",
+      captionParam = numberOfFailedAttempts.toString,
+      expectedGuidanceKeys = "paragraph1"
     )
+
+    "show number of remaining attempts" in {
+      val doc = asDocument(applyView)
+
+      assertContainsText(doc, "You have 2 attempts left to enter the correct details.")
+    }
 
     behave like pageWithASubmitButton(applyView)
 

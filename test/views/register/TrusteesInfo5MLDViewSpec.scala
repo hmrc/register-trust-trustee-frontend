@@ -28,9 +28,12 @@ class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(applyView, "trusteesInfo.5mld",
-      "caption",
-      "subheading1",
+    behave like normalPageTitleWithCaption(
+      view = applyView,
+      messageKeyPrefix = "trusteesInfo.5mld",
+      messageKeyParam = "",
+      captionParam = "",
+      expectedGuidanceKeys = "subheading1",
       "paragraph1",
       "paragraph2",
       "subheading2",

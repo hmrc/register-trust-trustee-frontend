@@ -17,6 +17,7 @@
 package views.register.leadtrustee.individual
 
 import controllers.register.leadtrustee.individual.routes
+import models.core.pages.FullName
 import play.twirl.api.HtmlFormat
 import viewmodels.Link
 import views.behaviours.LinkListViewBehaviours
@@ -33,16 +34,19 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
     Link("ID and address", routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url)
   )
 
+  val name: FullName = FullName("Joe", None, "Bloggs")
+
   def applyView: HtmlFormat.Appendable =
-    view.apply(fakeDraftId, index)(fakeRequest, messages)
+    view.apply(fakeDraftId, index, name.toString)(fakeRequest, messages)
 
   "MatchingLockedView" must {
 
     behave like normalPageTitleWithCaption(
-      applyView,
-      prefix,
-      "",
-     "paragraph1", "paragraph2", "subheading1", "paragraph3", "paragraph4", "paragraph5"
+      view = applyView,
+      messageKeyPrefix = prefix,
+      messageKeyParam = name.toString,
+      captionParam = "",
+      expectedGuidanceKeys = "paragraph1", "paragraph2", "subheading1", "paragraph3", "paragraph4", "paragraph5"
     )
 
     behave like linkList(applyView, links)

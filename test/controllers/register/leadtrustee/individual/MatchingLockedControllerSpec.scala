@@ -17,6 +17,9 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
+import models.UserAnswers
+import models.core.pages.FullName
+import pages.register.leadtrustee.individual.TrusteesNamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.leadtrustee.individual.MatchingLockedView
@@ -28,6 +31,11 @@ class MatchingLockedControllerSpec extends SpecBase {
   private lazy val matchingLockedRoute: String =
     routes.MatchingLockedController.onPageLoad(index, fakeDraftId).url
 
+  private val name: FullName = FullName("Joe", None, "Bloggs")
+
+  private val baseAnswers: UserAnswers = emptyUserAnswers
+    .set(TrusteesNamePage(index), name).success.value
+
   "MatchingLockedController" when {
 
     ".onPageLoad" when {
@@ -35,7 +43,7 @@ class MatchingLockedControllerSpec extends SpecBase {
       "existing data found" must {
         "return OK and the correct view for a GET" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
           val request = FakeRequest(GET, matchingLockedRoute)
 
@@ -46,7 +54,7 @@ class MatchingLockedControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(fakeDraftId, index)(request, messages).toString
+            view(fakeDraftId, index, name.toString)(request, messages).toString
 
           application.stop()
         }

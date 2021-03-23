@@ -24,7 +24,7 @@
     appConfig: FrontendAppConfig
 )
 
-@(draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @links = @{
     List(
@@ -43,7 +43,10 @@
     title = messages("leadTrustee.individual.matching.locked.title")
 ) {
 
-    @components.heading_with_caption("leadTrustee.individual.matching.locked")
+    @components.heading_with_caption(
+        messagePrefix = "leadTrustee.individual.matching.locked",
+        optionalParam = Some(name)
+    )
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph1")</p>
 

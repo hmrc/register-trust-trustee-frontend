@@ -701,8 +701,8 @@ leadTrustee.individual.matching.failed.caption = Failed attempt {0} of 3
 leadTrustee.individual.matching.failed.paragraph1 = Make sure you have entered the lead trustee’s details correctly.
 leadTrustee.individual.matching.failed.paragraph2 = You have {0} attempts left to enter the correct details.
 
-leadTrustee.individual.matching.locked.title = We have not been able to match details for undefined undefined
-leadTrustee.individual.matching.locked.heading = We have not been able to match details for undefined undefined
+leadTrustee.individual.matching.locked.title = We have not been able to match details for the lead trustee
+leadTrustee.individual.matching.locked.heading = We have not been able to match details for {0}
 leadTrustee.individual.matching.locked.caption = 3 failed matching attempts
 leadTrustee.individual.matching.locked.paragraph1 = We need more information before you can register the lead trustee.
 leadTrustee.individual.matching.locked.paragraph2 = Check the details you have entered are correct for the lead trustee. If you are not sure, you can check to see if HMRC hold a personal tax account (PTA) for you to find your details.
