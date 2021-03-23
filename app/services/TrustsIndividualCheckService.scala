@@ -32,8 +32,7 @@ class TrustsIndividualCheckService @Inject()(connector: TrustsIndividualCheckCon
 
     if (userAnswers.is5mldEnabled) {
       val body: Option[IdMatchRequest] = for {
-        sessionId <- hc.sessionId
-        id = s"${sessionId.value}~${userAnswers.draftId}"
+        id <- generateId(userAnswers.draftId)
         nino <- userAnswers.get(TrusteesNinoPage(index))
         name <- userAnswers.get(TrusteesNamePage(index))
         dob <- userAnswers.get(TrusteesDateOfBirthPage(index))
@@ -55,6 +54,23 @@ class TrustsIndividualCheckService @Inject()(connector: TrustsIndividualCheckCon
       }
     } else {
       Future.successful(ServiceNotIn5mldModeResponse)
+    }
+  }
+
+  def failedAttempts(draftId: String)
+                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int] = {
+
+    generateId(draftId) match {
+      case Some(id) =>
+        connector.failedAttempts(id)
+      case _ =>
+        Future.failed(new Throwable("Failed to extract session ID from header carrier."))
+    }
+  }
+
+  private def generateId(draftId: String)(implicit hc: HeaderCarrier): Option[String] = {
+    hc.sessionId map { sessionId =>
+      s"${sessionId.value}~$draftId"
     }
   }
 }

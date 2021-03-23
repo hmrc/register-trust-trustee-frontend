@@ -39,8 +39,6 @@ class TrustsIndividualCheckConnectorSpec extends SpecBase with MustMatchers with
 
   private lazy val connector = injector.instanceOf[TrustsIndividualCheckConnector]
 
-  private val url = s"/trusts-individual-check/individual-check"
-
   private val id: String = "id"
 
   private val idMatchRequest: IdMatchRequest = IdMatchRequest(
@@ -51,111 +49,138 @@ class TrustsIndividualCheckConnectorSpec extends SpecBase with MustMatchers with
     birthDate = "1996-02-03"
   )
 
-  "TrustsIndividualCheckConnector" must {
+  "TrustsIndividualCheckConnector" when {
 
-    "return SuccessfulOrUnsuccessfulMatchResponse" when {
-      "OK status received" when {
+    ".matchLeadTrustee" must {
 
-        "successful match response" in {
+      val url = s"/trusts-individual-check/individual-check"
 
-          val idMatch = true
+      "return SuccessfulOrUnsuccessfulMatchResponse" when {
+        "OK status received" when {
+
+          "successful match response" in {
+
+            val idMatch = true
+
+            server.stubFor(
+              post(urlEqualTo(url))
+                .willReturn(
+                  aResponse()
+                    .withStatus(Status.OK)
+                    .withBody(Json.stringify(Json.toJson(SuccessfulOrUnsuccessfulMatchResponse(id, idMatch))))
+                )
+            )
+
+            val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
+            result mustBe SuccessfulOrUnsuccessfulMatchResponse(id, idMatch)
+          }
+
+          "unsuccessful match response" in {
+
+            val idMatch = false
+
+            server.stubFor(
+              post(urlEqualTo(url))
+                .willReturn(
+                  aResponse()
+                    .withStatus(Status.OK)
+                    .withBody(Json.stringify(Json.toJson(SuccessfulOrUnsuccessfulMatchResponse(id, idMatch))))
+                )
+            )
+
+            val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
+            result mustBe SuccessfulOrUnsuccessfulMatchResponse(id, idMatch)
+          }
+        }
+      }
+
+      "return InvalidIdMatchResponse" when {
+        "BAD_REQUEST status received" in {
 
           server.stubFor(
             post(urlEqualTo(url))
               .willReturn(
                 aResponse()
-                  .withStatus(Status.OK)
-                  .withBody(Json.stringify(Json.toJson(SuccessfulOrUnsuccessfulMatchResponse(id, idMatch))))
+                  .withStatus(Status.BAD_REQUEST)
+                  .withBody(Json.stringify(Json.toJson(IdMatchErrorResponse(Seq("Could not validate the request")))))
               )
           )
 
           val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
-          result mustBe SuccessfulOrUnsuccessfulMatchResponse(id, idMatch)
+          result mustBe InvalidIdMatchResponse
         }
+      }
 
-        "unsuccessful match response" in {
-
-          val idMatch = false
+      "return AttemptLimitExceededResponse" when {
+        "FORBIDDEN status received" in {
 
           server.stubFor(
             post(urlEqualTo(url))
               .willReturn(
                 aResponse()
-                  .withStatus(Status.OK)
-                  .withBody(Json.stringify(Json.toJson(SuccessfulOrUnsuccessfulMatchResponse(id, idMatch))))
+                  .withStatus(Status.FORBIDDEN)
+                  .withBody(Json.stringify(Json.toJson(IdMatchErrorResponse(Seq("Individual check - retry limit reached (3)")))))
               )
           )
 
           val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
-          result mustBe SuccessfulOrUnsuccessfulMatchResponse(id, idMatch)
+          result mustBe AttemptLimitExceededResponse
+        }
+      }
+
+      "return NinoNotFoundResponse" when {
+        "NOT_FOUND status received" in {
+
+          server.stubFor(
+            post(urlEqualTo(url))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.NOT_FOUND)
+                  .withBody(Json.stringify(Json.toJson(IdMatchErrorResponse(Seq("Dependent service indicated that no data can be found")))))
+              )
+          )
+
+          val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
+          result mustBe NinoNotFoundResponse
+        }
+      }
+
+      "return InternalServerErrorResponse" when {
+        "5xx status received" in {
+
+          server.stubFor(
+            post(urlEqualTo(url))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.INTERNAL_SERVER_ERROR)
+              )
+          )
+
+          val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
+          result mustBe InternalServerErrorResponse
         }
       }
     }
 
-    "return InvalidIdMatchResponse" when {
-      "BAD_REQUEST status received" in {
+    ".failedAttempts" must {
+
+      val url = s"/trusts-individual-check/$id/failed-attempts"
+
+      "return number of failed matching attempts for a given id" in {
+
+        val numberOfFailedAttempts = 1
 
         server.stubFor(
-          post(urlEqualTo(url))
+          get(urlEqualTo(url))
             .willReturn(
               aResponse()
-                .withStatus(Status.BAD_REQUEST)
-                .withBody(Json.stringify(Json.toJson(IdMatchErrorResponse(Seq("Could not validate the request")))))
+                .withStatus(Status.OK)
+                .withBody(Json.stringify(Json.toJson(numberOfFailedAttempts)))
             )
         )
 
-        val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
-        result mustBe InvalidIdMatchResponse
-      }
-    }
-
-    "return AttemptLimitExceededResponse" when {
-      "FORBIDDEN status received" in {
-
-        server.stubFor(
-          post(urlEqualTo(url))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.FORBIDDEN)
-                .withBody(Json.stringify(Json.toJson(IdMatchErrorResponse(Seq("Individual check - retry limit reached (3)")))))
-            )
-        )
-
-        val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
-        result mustBe AttemptLimitExceededResponse
-      }
-    }
-
-    "return NinoNotFoundResponse" when {
-      "NOT_FOUND status received" in {
-
-        server.stubFor(
-          post(urlEqualTo(url))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.NOT_FOUND)
-                .withBody(Json.stringify(Json.toJson(IdMatchErrorResponse(Seq("Dependent service indicated that no data can be found")))))
-            )
-        )
-
-        val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
-        result mustBe NinoNotFoundResponse
-      }
-    }
-
-    "return InternalServerErrorResponse" when {
-      "5xx status received" in {
-
-        server.stubFor(
-          post(urlEqualTo(url))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.INTERNAL_SERVER_ERROR)
-            )
-        )
-
-        val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
-        result mustBe InternalServerErrorResponse
+        val result = Await.result(connector.failedAttempts(id), Duration.Inf)
+        result mustBe numberOfFailedAttempts
       }
     }
   }
