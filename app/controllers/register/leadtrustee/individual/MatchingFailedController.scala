@@ -23,12 +23,15 @@ import handlers.ErrorHandler
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.leadtrustee.individual.MatchingFailedPage
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
+import services.TrustsIndividualCheckService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.MatchingFailedView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class MatchingFailedController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
@@ -36,20 +39,22 @@ class MatchingFailedController @Inject()(
                                           standardActionSets: StandardActionSets,
                                           view: MatchingFailedView,
                                           @LeadTrusteeIndividual navigator: Navigator,
-                                          errorHandler: ErrorHandler
-                                        ) extends FrontendBaseController with I18nSupport {
+                                          errorHandler: ErrorHandler,
+                                          service: TrustsIndividualCheckService
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      request.userAnswers.get(MatchingFailedPage(index)) match {
-        case Some(numberOfFailedAttempts) =>
-          Ok(view(draftId, index, numberOfFailedAttempts))
-        case _ =>
-          InternalServerError(errorHandler.internalServerErrorTemplate)
+      service.failedAttempts(draftId) map { numberOfFailedAttempts =>
+        Ok(view(draftId, index, numberOfFailedAttempts))
+      } recoverWith {
+        case e =>
+          logger.error(s"Failed to retrieve number of failed matching attempts: ${e.getMessage}")
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 

@@ -19,11 +19,15 @@ package controllers.register.leadtrustee.individual
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
 import navigation.{FakeNavigator, Navigator}
-import pages.register.leadtrustee.individual.MatchingFailedPage
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.TrustsIndividualCheckService
 import views.html.register.leadtrustee.individual.MatchingFailedView
+
+import scala.concurrent.Future
 
 class MatchingFailedControllerSpec extends SpecBase {
 
@@ -33,17 +37,21 @@ class MatchingFailedControllerSpec extends SpecBase {
   private lazy val matchingFailedRoute: String =
     routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
 
+  private val mockService = mock[TrustsIndividualCheckService]
+
   "MatchingFailedController" when {
 
     ".onPageLoad" when {
 
-      "MatchingFailedPage populated" must {
+      "successful call to retrieve number of failed matching attempts" must {
         "return OK and the correct view for a GET" in {
 
-          val userAnswers = emptyUserAnswers
-            .set(MatchingFailedPage(index), numberOfFailedAttempts).success.value
+          when(mockService.failedAttempts(any())(any(), any()))
+            .thenReturn(Future.successful(numberOfFailedAttempts))
 
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+            .build()
 
           val request = FakeRequest(GET, matchingFailedRoute)
 
@@ -60,10 +68,15 @@ class MatchingFailedControllerSpec extends SpecBase {
         }
       }
 
-      "MatchingFailedPage not populated" must {
+      "unsuccessful call to retrieve number of failed matching attempts" must {
         "return INTERNAL_SERVER_ERROR" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          when(mockService.failedAttempts(any())(any(), any()))
+            .thenReturn(Future.failed(new Throwable("Failed to extract session ID from header carrier.")))
+
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+            .build()
 
           val request = FakeRequest(GET, matchingFailedRoute)
 
