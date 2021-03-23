@@ -32,17 +32,18 @@
 
 package navigation
 
-import java.time.LocalDate
 import base.SpecBase
 import config.FrontendAppConfig
-import controllers.register.leadtrustee.individual.{routes => rts}
 import controllers.register.leadtrustee.individual.mld5.{routes => mld5Rts}
+import controllers.register.leadtrustee.individual.{routes => rts}
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.leadtrustee.individual._
-import pages.register.leadtrustee.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
+import pages.register.leadtrustee.individual.mld5._
+
+import java.time.LocalDate
 
 class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -94,11 +95,6 @@ class LeadTrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         navigator.nextPage(TrusteeNinoYesNoPage(index), fakeDraftId, answers)
           .mustBe(rts.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId))
-      }
-
-      "Failed matching Page -> Name Page" in {
-        navigator.nextPage(MatchingFailedPage(index), fakeDraftId, baseAnswers)
-          .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))
       }
 
       "TrusteeDetailsChoice Page -> IdCard -> IDCard page" in {

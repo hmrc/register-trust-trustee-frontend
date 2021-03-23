@@ -17,8 +17,6 @@
 package controllers.register.leadtrustee.individual
 
 import base.SpecBase
-import config.annotations.LeadTrusteeIndividual
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import play.api.inject.bind
@@ -110,10 +108,7 @@ class MatchingFailedControllerSpec extends SpecBase {
       "existing data found" must {
         "redirect to the next page" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(
-              bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-            ).build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
           val request = FakeRequest(POST, matchingFailedRoute)
 
@@ -121,7 +116,7 @@ class MatchingFailedControllerSpec extends SpecBase {
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+          redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
           application.stop()
         }

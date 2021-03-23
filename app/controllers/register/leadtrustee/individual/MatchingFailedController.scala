@@ -17,12 +17,9 @@
 package controllers.register.leadtrustee.individual
 
 import config.FrontendAppConfig
-import config.annotations.LeadTrusteeIndividual
 import controllers.actions.StandardActionSets
 import handlers.ErrorHandler
 import models.requests.RegistrationDataRequest
-import navigation.Navigator
-import pages.register.leadtrustee.individual.MatchingFailedPage
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
@@ -38,7 +35,6 @@ class MatchingFailedController @Inject()(
                                           implicit val frontendAppConfig: FrontendAppConfig,
                                           standardActionSets: StandardActionSets,
                                           view: MatchingFailedView,
-                                          @LeadTrusteeIndividual navigator: Navigator,
                                           errorHandler: ErrorHandler,
                                           service: TrustsIndividualCheckService
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
@@ -59,8 +55,6 @@ class MatchingFailedController @Inject()(
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
-
-      Redirect(navigator.nextPage(MatchingFailedPage(index), draftId, request.userAnswers))
+      Redirect(routes.NameController.onPageLoad(index, draftId))
   }
 }
