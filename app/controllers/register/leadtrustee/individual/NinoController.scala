@@ -31,7 +31,6 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import services.TrustsIndividualCheckService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.NinoView
 
@@ -78,15 +77,14 @@ class NinoController @Inject()(
           for {
             answersWithNinoUpdated <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
             matchingResponse <- service.matchLeadTrustee(answersWithNinoUpdated, index)
-            updatedFailCount <- getUpdatedFailCount(matchingResponse, draftId)
             _ <- registrationsRepository.set(answersWithNinoUpdated)
           } yield Redirect {
             matchingResponse match {
               case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
                 navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithNinoUpdated)
-              case UnsuccessfulMatchResponse if updatedFailCount < frontendAppConfig.maxMatchingAttempts =>
+              case UnsuccessfulMatchResponse =>
                 routes.MatchingFailedController.onPageLoad(index, draftId)
-              case UnsuccessfulMatchResponse | LockedMatchResponse =>
+              case LockedMatchResponse =>
                 routes.MatchingLockedController.onPageLoad(index, draftId)
               case _ =>
                 logger.error("Something went wrong. Redirecting back to start of lead trustee matching journey.")
@@ -95,14 +93,5 @@ class NinoController @Inject()(
           }
         }
       )
-  }
-
-  private def getUpdatedFailCount(matchingResponse: TrustsIndividualCheckServiceResponse, draftId: String)
-                                 (implicit hc: HeaderCarrier): Future[Int] = {
-
-    matchingResponse match {
-      case UnsuccessfulMatchResponse => service.failedAttempts(draftId)
-      case _ => Future.successful(0)
-    }
   }
 }

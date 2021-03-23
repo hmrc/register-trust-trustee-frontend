@@ -30,7 +30,6 @@ import scala.concurrent.Future
 class MatchingFailedControllerSpec extends SpecBase {
 
   private val index: Int = 0
-  private val numberOfFailedAttempts: Int = 1
 
   private lazy val matchingFailedRoute: String =
     routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
@@ -41,28 +40,57 @@ class MatchingFailedControllerSpec extends SpecBase {
 
     ".onPageLoad" when {
 
-      "successful call to retrieve number of failed matching attempts" must {
-        "return OK and the correct view for a GET" in {
+      "successful call to retrieve number of failed matching attempts" when {
 
-          when(mockService.failedAttempts(any())(any(), any()))
-            .thenReturn(Future.successful(numberOfFailedAttempts))
+        "less than 3 failed attempts" must {
+          "return OK and the correct view for a GET" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
-            .build()
+            val numberOfFailedAttempts: Int = 1
 
-          val request = FakeRequest(GET, matchingFailedRoute)
+            when(mockService.failedAttempts(any())(any(), any()))
+              .thenReturn(Future.successful(numberOfFailedAttempts))
 
-          val result = route(application, request).value
+            val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+              .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+              .build()
 
-          val view = application.injector.instanceOf[MatchingFailedView]
+            val request = FakeRequest(GET, matchingFailedRoute)
 
-          status(result) mustEqual OK
+            val result = route(application, request).value
 
-          contentAsString(result) mustEqual
-            view(fakeDraftId, index, numberOfFailedAttempts)(request, messages).toString
+            val view = application.injector.instanceOf[MatchingFailedView]
 
-          application.stop()
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(fakeDraftId, index, numberOfFailedAttempts)(request, messages).toString
+
+            application.stop()
+          }
+        }
+
+        "not less than 3 failed attempts" must {
+          "redirect to matching locked" in {
+
+            val numberOfFailedAttempts: Int = 3
+
+            when(mockService.failedAttempts(any())(any(), any()))
+              .thenReturn(Future.successful(numberOfFailedAttempts))
+
+            val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+              .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+              .build()
+
+            val request = FakeRequest(GET, matchingFailedRoute)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.MatchingLockedController.onPageLoad(index, fakeDraftId).url
+
+            application.stop()
+          }
         }
       }
 

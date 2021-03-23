@@ -45,8 +45,11 @@ class MatchingFailedController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      service.failedAttempts(draftId) map { numberOfFailedAttempts =>
-        Ok(view(draftId, index, numberOfFailedAttempts))
+      service.failedAttempts(draftId) map {
+        case x if x < frontendAppConfig.maxMatchingAttempts =>
+          Ok(view(draftId, index, x))
+        case _ =>
+          Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
       } recoverWith {
         case e =>
           logger.error(s"Failed to retrieve number of failed matching attempts: ${e.getMessage}")
