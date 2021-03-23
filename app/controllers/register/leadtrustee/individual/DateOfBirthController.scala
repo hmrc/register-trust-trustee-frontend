@@ -29,7 +29,7 @@ import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesDateOfBirthPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.DateOfBirthView
@@ -51,7 +51,7 @@ class DateOfBirthController @Inject()(
   private def form(implicit request: TrusteeNameRequest[_]): Form[LocalDate] =
     formProvider.withConfig("leadTrustee.individual.dateOfBirth", request.userAnswers.is5mldEnabled)
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {

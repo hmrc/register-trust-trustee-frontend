@@ -16,7 +16,6 @@
 
 package controllers.register.leadtrustee.individual
 
-import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
 import controllers.register.IndexValidation
@@ -33,26 +32,30 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.leadtrustee.individual.DateOfBirthView
 
+import java.time.{LocalDate, ZoneOffset}
+
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
   val messagePrefix = "leadTrustee.individual.dateOfBirth"
   val formProvider = new DateFormProvider(frontendAppConfig)
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
   val index = 0
-  val name = FullName("FirstName", None, "LastName").toString
+  val name: FullName = FullName("FirstName", None, "LastName")
 
-  lazy val trusteesDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteesDateOfBirthRoute: String = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
   "DateOfBirth Controller" when {
 
     "4MLD" must {
-      val form = formProvider.withConfig(messagePrefix, false)
-      val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
+
+      val is5mldEnabled = false
+      val form = formProvider.withConfig(messagePrefix, is5mldEnabled)
+      val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)
       
       "return OK and the correct view for a GET" in {
 
         val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+          .set(TrusteesNamePage(index), name).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -65,7 +68,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, name)(request, messages).toString
+          view(form, fakeDraftId, index, name.toString)(request, messages).toString
 
         application.stop()
       }
@@ -87,7 +90,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(validAnswer), fakeDraftId, index, name)(request, messages).toString
+          view(form.fill(validAnswer), fakeDraftId, index, name.toString)(request, messages).toString
 
         application.stop()
       }
@@ -141,7 +144,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, name)(request, messages).toString
+          view(boundForm, fakeDraftId, index, name.toString)(request, messages).toString
 
         application.stop()
       }
@@ -221,8 +224,10 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
     }
     
     "5MLD" must {
-      val form = formProvider.withConfig(messagePrefix, true)
-      val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
+
+      val is5mldEnabled = true
+      val form = formProvider.withConfig(messagePrefix, is5mldEnabled)
+      val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)
 
       "return OK and the correct view for a GET" in {
 
@@ -240,7 +245,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, name)(request, messages).toString
+          view(form, fakeDraftId, index, name.toString)(request, messages).toString
 
         application.stop()
       }
@@ -262,7 +267,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(validAnswer), fakeDraftId, index, name)(request, messages).toString
+          view(form.fill(validAnswer), fakeDraftId, index, name.toString)(request, messages).toString
 
         application.stop()
       }
@@ -316,7 +321,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, name)(request, messages).toString
+          view(boundForm, fakeDraftId, index, name.toString)(request, messages).toString
 
         application.stop()
       }
