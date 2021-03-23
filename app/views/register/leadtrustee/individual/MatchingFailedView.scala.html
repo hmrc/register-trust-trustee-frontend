@@ -14,11 +14,13 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    appConfig: FrontendAppConfig
 )
 
 @(draftId: String, index: Int, numberOfFailedAttempts: Int)(implicit request: Request[_], messages: Messages)
@@ -36,7 +38,7 @@
 
         <p>@messages("leadTrustee.individual.matching.failed.paragraph1")</p>
 
-        <p>@messages("leadTrustee.individual.matching.failed.paragraph2", 3 - numberOfFailedAttempts)</p>
+        <p>@messages("leadTrustee.individual.matching.failed.paragraph2", appConfig.maxMatchingAttempts - numberOfFailedAttempts)</p>
 
         @components.submit_button(overrideMessage = Some("site.try-again"))
 

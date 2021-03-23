@@ -84,7 +84,7 @@ class NinoController @Inject()(
             matchingResponse match {
               case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
                 navigator.nextPage(TrusteesNinoPage(index), draftId, answersWithNinoUpdated)
-              case UnsuccessfulMatchResponse if updatedFailCount < 3 =>
+              case UnsuccessfulMatchResponse if updatedFailCount < frontendAppConfig.maxMatchingAttempts =>
                 routes.MatchingFailedController.onPageLoad(index, draftId)
               case UnsuccessfulMatchResponse | LockedMatchResponse =>
                 routes.MatchingLockedController.onPageLoad(index, draftId)

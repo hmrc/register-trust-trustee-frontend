@@ -82,6 +82,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   private def getInt(path: String): Int = configuration.get[Int](path)
+
   private def getDate(entry: String): LocalDate =
     LocalDate.of(
       getInt(s"dates.$entry.year"),
@@ -108,4 +109,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
     configuration.get[String](path)
   }
+
+  val maxMatchingAttempts: Int = getInt("individual-match.max-attempts")
 }
