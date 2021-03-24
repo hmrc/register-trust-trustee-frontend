@@ -280,4 +280,13 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithoutRegProgressLink[A](view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page without a reg progress link" in {
+
+      val doc = asDocument(view)
+      assertDoesNotContainRegProgressLink(doc)
+    }
+  }
+
 }

@@ -47,7 +47,7 @@
             legendAsHeading = true,
             fieldSetClass = if (is5mldEnabled) None else Some("inline"),
             inputs = DetailsChoice.options(is5mldEnabled).toSeq,
-            additionalContent = Some(content)
+            additionalContent = if (is5mldEnabled) Some(content) else None
         )
 
         @components.submit_button()

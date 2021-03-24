@@ -33,6 +33,9 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
 
   lazy val form: Form[DetailsChoice] = injector.instanceOf[DetailsChoiceFormProvider].withPrefix(messageKeyPrefix)
 
+  private val additionalContent: String =
+    "If you do not have these details to hand, you can return to this page to complete these details at another stage. These details will be saved for 28 days."
+
   "TrusteeDetailsChoiceView" when {
 
     "4mld" must {
@@ -51,6 +54,13 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
       behave like pageWithOptions(form, applyView, DetailsChoice.options(is5mldEnabled))
 
       behave like pageWithASubmitButton(applyView(form))
+
+      behave like pageWithoutRegProgressLink(applyView(form))
+
+      "not show additional content" in {
+        val doc = asDocument(applyView(form))
+        assertDoesNotContainText(doc, additionalContent)
+      }
     }
 
     "5mld" must {
@@ -71,7 +81,11 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
       behave like pageWithASubmitButton(applyView(form))
 
       behave like pageWithRegProgressLink(applyView(form))
-    }
 
+      "show additional content" in {
+        val doc = asDocument(applyView(form))
+        assertContainsText(doc, additionalContent)
+      }
+    }
   }
 }
