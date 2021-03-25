@@ -145,8 +145,24 @@ class TrustsIndividualCheckConnectorSpec extends SpecBase with MustMatchers with
         }
       }
 
+      "return ServiceUnavailableResponse" when {
+        "SERVICE_UNAVAILABLE status received" in {
+
+          server.stubFor(
+            post(urlEqualTo(url))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.SERVICE_UNAVAILABLE)
+              )
+          )
+
+          val result = Await.result(connector.matchLeadTrustee(idMatchRequest), Duration.Inf)
+          result mustBe ServiceUnavailableResponse
+        }
+      }
+
       "return InternalServerErrorResponse" when {
-        "5xx status received" in {
+        "other status received" in {
 
           server.stubFor(
             post(urlEqualTo(url))

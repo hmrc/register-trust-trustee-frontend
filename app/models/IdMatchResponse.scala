@@ -42,6 +42,7 @@ case object InvalidIdMatchResponse extends IdMatchResponse
 case object AttemptLimitExceededResponse extends IdMatchResponse
 case object NinoNotFoundResponse extends IdMatchResponse
 case object InternalServerErrorResponse extends IdMatchResponse
+case object ServiceUnavailableResponse extends IdMatchResponse
 
 object IdMatchResponse extends Logging {
 
@@ -78,6 +79,9 @@ object IdMatchResponse extends Logging {
       case NOT_FOUND =>
         logger.warn(errorLog)
         NinoNotFoundResponse
+      case SERVICE_UNAVAILABLE =>
+        logger.error(errorLog)
+        ServiceUnavailableResponse
       case _ =>
         logger.error(errorLog)
         InternalServerErrorResponse
