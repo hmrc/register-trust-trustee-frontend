@@ -29,9 +29,10 @@ class DateFormProviderSpec extends DateBehaviours with FakeTrustsApp {
   private val max = LocalDate.now(ZoneOffset.UTC)
 
   "DateFormProvider" when {
-    "4MLD" should {
 
-      val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messagePrefix, false)
+    "not lead trustee matching" should {
+
+      val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messagePrefix)
 
       val min = frontendAppConfig.minDate
       val validData = datesBetween(
@@ -53,9 +54,10 @@ class DateFormProviderSpec extends DateBehaviours with FakeTrustsApp {
         FormError("value", s"$messagePrefix.error.past", List("day", "month", "year"))
       )
     }
-    "5MLD" should {
 
-      val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messagePrefix, true)
+    "lead trustee matching" should {
+
+      val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messagePrefix, matchingLeadTrustee = true)
 
       val min = frontendAppConfig.minLeadTrusteeDob
       val validData = datesBetween(
@@ -74,7 +76,7 @@ class DateFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
       behave like dateFieldWithMin(form, "value",
         min = min,
-        FormError("value", s"$messagePrefix.error.past", List("day", "month", "year"))
+        FormError("value", s"$messagePrefix.matching.error.past", List("day", "month", "year"))
       )
     }
   }
