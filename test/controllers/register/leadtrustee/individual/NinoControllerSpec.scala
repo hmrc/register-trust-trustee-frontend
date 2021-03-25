@@ -153,6 +153,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     }
 
     "redirect to matching failed page" when {
+
       "UnsuccessfulMatchResponse" in {
 
         val mockService = mock[TrustsIndividualCheckService]
@@ -215,7 +216,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       }
     }
 
-    "redirect back to trustee name page" when {
+    "return INTERNAL_SERVER_ERROR" when {
 
       "IssueBuildingPayloadResponse" in {
 
@@ -237,20 +238,17 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          routes.NameController.onPageLoad(index, fakeDraftId).url
+        status(result) mustEqual INTERNAL_SERVER_ERROR
 
         application.stop()
       }
 
-      "MatchingErrorResponse" in {
+      "ServiceUnavailableErrorResponse" in {
 
         val mockService = mock[TrustsIndividualCheckService]
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
-          .thenReturn(Future.successful(MatchingErrorResponse))
+          .thenReturn(Future.successful(ServiceUnavailableErrorResponse))
 
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
@@ -265,10 +263,32 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        status(result) mustEqual INTERNAL_SERVER_ERROR
 
-        redirectLocation(result).value mustEqual
-          routes.NameController.onPageLoad(index, fakeDraftId).url
+        application.stop()
+      }
+
+      "TechnicalDifficultiesErrorResponse" in {
+
+        val mockService = mock[TrustsIndividualCheckService]
+
+        when(mockService.matchLeadTrustee(any(), any())(any(), any()))
+          .thenReturn(Future.successful(TechnicalDifficultiesErrorResponse))
+
+        val userAnswers = baseAnswers
+          .set(TrusteesNinoPage(index), validAnswer).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[TrustsIndividualCheckService].toInstance(mockService)
+          ).build()
+
+        val request = FakeRequest(POST, ninoRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
 
         application.stop()
       }

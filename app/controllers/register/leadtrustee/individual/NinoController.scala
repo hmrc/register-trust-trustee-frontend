@@ -22,6 +22,7 @@ import controllers.actions._
 import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.NinoFormProvider
+import handlers.ErrorHandler
 import models._
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesNinoPage
@@ -47,7 +48,8 @@ class NinoController @Inject()(
                                 formProvider: NinoFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NinoView,
-                                service: TrustsIndividualCheckService
+                                service: TrustsIndividualCheckService,
+                                errorHandler: ErrorHandler
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = formProvider("leadTrustee.individual.nino")
@@ -78,18 +80,15 @@ class NinoController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
             matchingResponse <- service.matchLeadTrustee(updatedAnswers, index)
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect {
-            matchingResponse match {
-              case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
-                navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers)
-              case UnsuccessfulMatchResponse =>
-                routes.MatchingFailedController.onPageLoad(index, draftId)
-              case LockedMatchResponse =>
-                routes.MatchingLockedController.onPageLoad(index, draftId)
-              case _ =>
-                logger.error("Something went wrong. Redirecting back to start of lead trustee matching journey.")
-                routes.NameController.onPageLoad(index, draftId)
-            }
+          } yield matchingResponse match {
+            case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
+              Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
+            case UnsuccessfulMatchResponse =>
+              Redirect(routes.MatchingFailedController.onPageLoad(index, draftId))
+            case LockedMatchResponse =>
+              Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
+            case _ =>
+              InternalServerError(errorHandler.internalServerErrorTemplate)
           }
         }
       )
