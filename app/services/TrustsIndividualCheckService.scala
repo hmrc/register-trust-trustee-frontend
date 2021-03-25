@@ -44,9 +44,10 @@ class TrustsIndividualCheckService @Inject()(connector: TrustsIndividualCheckCon
         case Some(idMatchRequest) =>
           connector.matchLeadTrustee(idMatchRequest) map {
             case SuccessfulOrUnsuccessfulMatchResponse(_, true) => SuccessfulMatchResponse
-            case SuccessfulOrUnsuccessfulMatchResponse(_, false) => UnsuccessfulMatchResponse
+            case SuccessfulOrUnsuccessfulMatchResponse(_, false) | NinoNotFoundResponse => UnsuccessfulMatchResponse
             case AttemptLimitExceededResponse => LockedMatchResponse
-            case _ => MatchingErrorResponse
+            case ServiceUnavailableResponse => ServiceUnavailableErrorResponse
+            case _ => TechnicalDifficultiesErrorResponse
           }
         case _ =>
           logger.error(s"[matchLeadTrustee] Unable to build request body.")

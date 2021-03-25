@@ -99,6 +99,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           }
 
           "return UnsuccessfulMatchResponse" when {
+
             "unsuccessfully matched" in {
 
               val mockConnector = mock[TrustsIndividualCheckConnector]
@@ -106,6 +107,22 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
 
               when(mockConnector.matchLeadTrustee(any())(any(), any()))
                 .thenReturn(Future.successful(SuccessfulOrUnsuccessfulMatchResponse(id, idMatch = false)))
+
+              val result = service.matchLeadTrustee(userAnswers, index)
+
+              whenReady(result) { res =>
+                res mustBe UnsuccessfulMatchResponse
+                verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
+              }
+            }
+
+            "NINO not found" in {
+
+              val mockConnector = mock[TrustsIndividualCheckConnector]
+              val service = new TrustsIndividualCheckService(mockConnector)
+
+              when(mockConnector.matchLeadTrustee(any())(any(), any()))
+                .thenReturn(Future.successful(NinoNotFoundResponse))
 
               val result = service.matchLeadTrustee(userAnswers, index)
 
@@ -134,7 +151,25 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
             }
           }
 
-          "return MatchingErrorResponse" when {
+          "return ServiceUnavailableErrorResponse" when {
+            "service unavailable" in {
+
+              val mockConnector = mock[TrustsIndividualCheckConnector]
+              val service = new TrustsIndividualCheckService(mockConnector)
+
+              when(mockConnector.matchLeadTrustee(any())(any(), any()))
+                .thenReturn(Future.successful(ServiceUnavailableResponse))
+
+              val result = service.matchLeadTrustee(userAnswers, index)
+
+              whenReady(result) { res =>
+                res mustBe ServiceUnavailableErrorResponse
+                verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
+              }
+            }
+          }
+
+          "return TechnicalDifficultiesErrorResponse" when {
 
             "invalid match ID" in {
 
@@ -147,23 +182,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
               val result = service.matchLeadTrustee(userAnswers, index)
 
               whenReady(result) { res =>
-                res mustBe MatchingErrorResponse
-                verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
-              }
-            }
-
-            "NINO not found" in {
-
-              val mockConnector = mock[TrustsIndividualCheckConnector]
-              val service = new TrustsIndividualCheckService(mockConnector)
-
-              when(mockConnector.matchLeadTrustee(any())(any(), any()))
-                .thenReturn(Future.successful(NinoNotFoundResponse))
-
-              val result = service.matchLeadTrustee(userAnswers, index)
-
-              whenReady(result) { res =>
-                res mustBe MatchingErrorResponse
+                res mustBe TechnicalDifficultiesErrorResponse
                 verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
               }
             }
@@ -179,7 +198,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
               val result = service.matchLeadTrustee(userAnswers, index)
 
               whenReady(result) { res =>
-                res mustBe MatchingErrorResponse
+                res mustBe TechnicalDifficultiesErrorResponse
                 verify(mockConnector).matchLeadTrustee(eqTo(idMatchRequest))(any(), any())
               }
             }
