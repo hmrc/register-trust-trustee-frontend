@@ -24,29 +24,57 @@ class MatchingFailedViewSpec extends ViewBehaviours {
 
   val prefix = "leadTrustee.individual.matching.failed"
   val index = 0
-  val numberOfFailedAttempts: Int = 1
   val view: MatchingFailedView = viewFor[MatchingFailedView](Some(emptyUserAnswers))
 
-  def applyView: HtmlFormat.Appendable =
-    view.apply(fakeDraftId, index, numberOfFailedAttempts)(fakeRequest, messages)
+  "FailedMatching View" when {
 
-  "FailedMatching View" must {
+    "1 attempt left" must {
 
-    behave like normalPageTitleWithCaption(
-      view = applyView,
-      messageKeyPrefix = prefix,
-      messageKeyParam = "",
-      captionParam = numberOfFailedAttempts.toString,
-      expectedGuidanceKeys = "paragraph1"
-    )
+      val numberOfFailedAttempts: Int = 2
 
-    "show number of remaining attempts" in {
-      val doc = asDocument(applyView)
+      def applyView: HtmlFormat.Appendable =
+        view.apply(fakeDraftId, index, numberOfFailedAttempts)(fakeRequest, messages)
 
-      assertContainsText(doc, "You have 2 attempts left to enter the correct details.")
+      behave like normalPageTitleWithCaption(
+        view = applyView,
+        messageKeyPrefix = prefix,
+        messageKeyParam = "",
+        captionParam = numberOfFailedAttempts.toString,
+        expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.singular"
+      )
+
+      "show number of remaining attempts in bold" in {
+        val doc = asDocument(applyView)
+
+        assertContainsText(doc, "<span class=\"bold\">1</span>")
+      }
+
+      behave like pageWithASubmitButton(applyView)
     }
 
-    behave like pageWithASubmitButton(applyView)
+    "more than 1 attempt left" must {
 
+      val numberOfFailedAttempts: Int = 1
+
+      def applyView: HtmlFormat.Appendable =
+        view.apply(fakeDraftId, index, numberOfFailedAttempts)(fakeRequest, messages)
+
+      behave like normalPageTitleWithCaption(
+        view = applyView,
+        messageKeyPrefix = prefix,
+        messageKeyParam = "",
+        captionParam = numberOfFailedAttempts.toString,
+        expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.plural"
+      )
+
+      "show number of remaining attempts in bold" in {
+        val doc = asDocument(applyView)
+
+        assertContainsText(doc, "<span class=\"bold\">2</span>")
+      }
+
+      behave like pageWithASubmitButton(applyView)
+
+    }
   }
 }

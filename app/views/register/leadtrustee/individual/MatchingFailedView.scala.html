@@ -38,7 +38,14 @@
 
         <p>@messages("leadTrustee.individual.matching.failed.paragraph1")</p>
 
-        <p>@messages("leadTrustee.individual.matching.failed.paragraph2", appConfig.maxMatchingAttempts - numberOfFailedAttempts)</p>
+        <p>
+            <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part1")</span>
+            <span class="bold">@messages("leadTrustee.individual.matching.failed.paragraph2.remainingAttempts", appConfig.maxMatchingAttempts - numberOfFailedAttempts)</span>
+            @(appConfig.maxMatchingAttempts - numberOfFailedAttempts) match {
+                case 1 => { <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part2.singular")</span> }
+                case x => { <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part2.plural")</span> }
+            }
+        </p>
 
         @components.submit_button(overrideMessage = Some("site.try-again"))
 

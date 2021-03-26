@@ -703,7 +703,10 @@ leadTrustee.individual.matching.failed.title = We cannot match the details you e
 leadTrustee.individual.matching.failed.heading = We cannot match the details you entered with our records
 leadTrustee.individual.matching.failed.caption = Failed attempt {0} of 3
 leadTrustee.individual.matching.failed.paragraph1 = Make sure you have entered the lead trustee’s details correctly.
-leadTrustee.individual.matching.failed.paragraph2 = You have {0} attempts left to enter the correct details.
+leadTrustee.individual.matching.failed.paragraph2.part1 = You have
+leadTrustee.individual.matching.failed.paragraph2.remainingAttempts = {0}
+leadTrustee.individual.matching.failed.paragraph2.part2.singular = attempt left to enter the correct details.
+leadTrustee.individual.matching.failed.paragraph2.part2.plural = attempts left to enter the correct details.
 
 leadTrustee.individual.matching.locked.title = We have not been able to match details for the lead trustee
 leadTrustee.individual.matching.locked.heading = We have not been able to match details for {0}
