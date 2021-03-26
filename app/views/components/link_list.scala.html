@@ -19,8 +19,8 @@
 
 @(links: List[Link])(implicit messages: Messages)
 
-<ul class="app-task-list__items">
+<ul class="app-link-list__items">
     @for(link <- links){
-        @components.link(link)
+        @components.link_list_link(link)
     }
 </ul>
