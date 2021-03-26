@@ -41,7 +41,7 @@
             <span class="bold">@messages("leadTrustee.individual.matching.failed.paragraph2.remainingAttempts", numberOfRemainingAttempts)</span>
             @numberOfRemainingAttempts match {
                 case 1 => { <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part2.singular")</span> }
-                case x => { <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part2.plural")</span> }
+                case _ => { <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part2.plural")</span> }
             }
         </p>
 
