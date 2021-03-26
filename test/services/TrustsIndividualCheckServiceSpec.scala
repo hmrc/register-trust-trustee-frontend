@@ -43,10 +43,11 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
   private val firstNameCapitalised = "Joe"
   private val lastName = "bloggs"
   private val lastNameCapitalised = "Bloggs"
-  private val nino = "AA000000A"
+  private val nino = "aa000000a"
+  private val ninoUpperCase = "AA000000A"
   private val date = "1996-02-03"
 
-  private val idMatchRequest = IdMatchRequest(id, nino, firstNameCapitalised, lastNameCapitalised, date)
+  private val idMatchRequest = IdMatchRequest(id, ninoUpperCase, firstNameCapitalised, lastNameCapitalised, date)
 
   "TrustsIndividualCheck" when {
 

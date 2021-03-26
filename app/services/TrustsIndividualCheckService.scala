@@ -37,7 +37,7 @@ class TrustsIndividualCheckService @Inject()(connector: TrustsIndividualCheckCon
         name <- userAnswers.get(TrusteesNamePage(index))
         dob <- userAnswers.get(TrusteesDateOfBirthPage(index))
       } yield {
-        IdMatchRequest(id, nino, name.firstName.capitalize, name.lastName.capitalize, dob.toString)
+        IdMatchRequest(id, nino.toUpperCase, name.firstName.capitalize, name.lastName.capitalize, dob.toString)
       }
 
       body match {
