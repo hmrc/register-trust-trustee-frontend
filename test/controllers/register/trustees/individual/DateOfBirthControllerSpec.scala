@@ -37,7 +37,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
 
   val trusteeMessagePrefix = "trustee.individual.dateOfBirth"
   val formProvider = new DateFormProvider(frontendAppConfig)
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  val form = formProvider.withConfig(trusteeMessagePrefix)
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 

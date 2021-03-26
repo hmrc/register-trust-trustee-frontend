@@ -60,6 +60,7 @@ site.utr = Unique Taxpayer Reference
 site.sign_out = Sign out
 site.sign_in = Sign in
 site.print-or-save = Print or save this page
+site.reg-progress = Return to registration progress
 
 site.address.uk.line1 = Address line 1
 site.address.uk.line2 = Address line 2
@@ -538,8 +539,11 @@ leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}�
 leadTrustee.individual.trusteeDetailsChoice.title = Which of the lead trustees’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.checkYourAnswersLabel = Which of {0}’s details can you provide?
-leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
+leadTrustee.individual.5mld.trusteeDetailsChoice.paragraph1 = If you do not have these details to hand, you can return to this page to complete these details at another stage. These details will be saved for 28 days.
 leadTrustee.individual.trusteeDetailsChoice.passport = Passport
+leadTrustee.individual.trusteeDetailsChoice.idCard = ID card
+leadTrustee.individual.5mld.trusteeDetailsChoice.passport = Passport and address
+leadTrustee.individual.5mld.trusteeDetailsChoice.idCard = ID card and address
 leadTrustee.individual.trusteeDetailsChoice.error.required = Select which details you can provide
 
 leadTrustee.individual.iDCardDetails.title = What are the lead trustee’s ID card details?
@@ -671,6 +675,7 @@ leadTrustee.individual.dateOfBirth.error.required = Date of birth must include a
 leadTrustee.individual.dateOfBirth.error.invalid = Enter a real date of birth
 leadTrustee.individual.dateOfBirth.error.future = Date of birth must be today or in the past
 leadTrustee.individual.dateOfBirth.error.past = Date of birth must be after 31 December 1499
+leadTrustee.individual.dateOfBirth.matching.error.past = Date of birth must be after 31 December 1899
 
 leadTrustee.individual.checkDetails.title = Check lead trustee details
 leadTrustee.individual.checkDetails.heading = Check lead trustee details
@@ -694,5 +699,23 @@ trustee.organisation.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you
 trustee.organisation.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the business’s country of residence
 trustee.organisation.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the business is registered (incorporated). The business has UK residency if it is registered with Companies House.
 
+leadTrustee.individual.matching.failed.title = We cannot match the details you entered with our records
+leadTrustee.individual.matching.failed.heading = We cannot match the details you entered with our records
+leadTrustee.individual.matching.failed.caption = Failed attempt {0} of 3
+leadTrustee.individual.matching.failed.paragraph1 = Make sure you have entered the lead trustee’s details correctly.
+leadTrustee.individual.matching.failed.paragraph2.part1 = You have
+leadTrustee.individual.matching.failed.paragraph2.remainingAttempts = {0}
+leadTrustee.individual.matching.failed.paragraph2.part2.singular = attempt left to enter the correct details.
+leadTrustee.individual.matching.failed.paragraph2.part2.plural = attempts left to enter the correct details.
 
-
+leadTrustee.individual.matching.locked.title = We have not been able to match details for the lead trustee
+leadTrustee.individual.matching.locked.heading = We have not been able to match details for {0}
+leadTrustee.individual.matching.locked.caption = 3 failed matching attempts
+leadTrustee.individual.matching.locked.paragraph1 = We need more information before you can register the lead trustee.
+leadTrustee.individual.matching.locked.paragraph2 = Check the details you have entered are correct for the lead trustee. If you are not sure, you can check to see if HMRC hold a personal tax account (PTA) for you to find your details.
+leadTrustee.individual.matching.locked.subheading1 = Providing other information for a lead trustee
+leadTrustee.individual.matching.locked.paragraph3 = If you have incorrectly entered the lead trustees details, you can provide the lead trustees passport and address details, or an ID and address details from the options below.
+leadTrustee.individual.matching.locked.link1 = Passport and address
+leadTrustee.individual.matching.locked.link2 = ID and address
+leadTrustee.individual.matching.locked.paragraph4 = If you do not have these details to hand, you can return to the registration progress page, to complete the other details for the trust until you have provided alternative information for your existing lead trustee, or have information for a new lead trustee.
+leadTrustee.individual.matching.locked.paragraph5 = When you have confirmed the accurate information, you’ll need to sign out and sign back in. You can complete the other sections in this registration without signing out and these details will be saved for 28 days.

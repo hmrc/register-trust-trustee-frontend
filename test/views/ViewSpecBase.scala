@@ -54,14 +54,22 @@ trait ViewSpecBase extends SpecBase {
     headers.first.text.replaceAll("\u00a0", " ") mustBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
   }
 
-  def assertPageTitleWithCaptionEqualsMessages(doc: Document, expectedCaptionMessageKey: String, captionParam: String, expectedMessageKey: String) = {
+  def assertPageTitleWithCaptionEqualsMessages(doc: Document,
+                                               expectedCaptionMessageKey: String,
+                                               captionParam: String,
+                                               expectedMessageKey: String,
+                                               messageKeyParam: String): Assertion = {
     val headers = doc.getElementsByTag("h1")
     headers.size mustBe 1
     headers.first.text.replaceAll("\u00a0", " ") mustBe
-      messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ") + messages(expectedMessageKey).replaceAll("&nbsp;", " ")
+      messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ") + messages(expectedMessageKey, messageKeyParam).replaceAll("&nbsp;", " ")
   }
 
-  def assertContainsText(doc: Document, text: String): Assertion = assert(doc.toString.contains(text), "\n\ntext " + text + " was not rendered on the page.\n")
+  def assertContainsText(doc: Document, text: String): Assertion =
+    assert(doc.toString.contains(text), "\n\ntext " + text + " was not rendered on the page.\n")
+
+  def assertDoesNotContainText(doc: Document, text: String): Assertion =
+    assert(!doc.toString.contains(text), "\n\ntext " + text + " was rendered on the page.\n")
 
   def assertContainsMessages(doc: Document, expectedMessageKeys: String*): Unit = {
     for (key <- expectedMessageKeys) assertContainsText(doc, messages(key))
@@ -110,6 +118,14 @@ trait ViewSpecBase extends SpecBase {
       assert(doc.getElementsByClass("form-hint").first.text == expectedHintText.get,
         s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
     }
+  }
+
+  def assertContainsRegProgressLink(doc: Document): Any = {
+    assertRenderedById(doc, "reg-progress")
+  }
+
+  def assertDoesNotContainRegProgressLink(doc: Document): Any = {
+    assertNotRenderedById(doc, "reg-progress")
   }
 
   def assertContainsClass(doc: Document, className: String): Any = {

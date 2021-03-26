@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(href : String, id : String = "", key : String, openInNewWindow: Boolean = false)(implicit messages: Messages)
+package models
 
-<a id="@id" href="@href" @if(openInNewWindow) {target="_blank"}>@messages(key)</a>
+import play.api.libs.json.{Format, Json}
+
+case class IdMatchRequest(id: String,
+                          nino: String,
+                          surname: String,
+                          forename: String,
+                          birthDate: String)
+
+object IdMatchRequest {
+  implicit val formats: Format[IdMatchRequest] = Json.format[IdMatchRequest]
+}

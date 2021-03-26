@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,23 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package connectors
+@import viewmodels.Link
+@import views.html._
 
-import config.FrontendAppConfig
-import models.FeatureResponse
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+@(links: List[Link])(implicit messages: Messages)
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-
-class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
-
-  def getFeature(feature: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[FeatureResponse] = {
-    val url: String = s"${config.trustsStoreUrl}/trusts-store/features/$feature"
-    http.GET[FeatureResponse](url)
-  }
-
-}
+<ul class="app-link-list__items">
+    @for(link <- links){
+        @components.link_list_link(link)
+    }
+</ul>
