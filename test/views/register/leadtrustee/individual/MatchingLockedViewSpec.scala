@@ -30,8 +30,8 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
   val view: MatchingLockedView = viewFor[MatchingLockedView](Some(emptyUserAnswers))
 
   val links: List[Link] = List(
-    Link("Passport and address", routes.PassportDetailsController.onPageLoad(index, fakeDraftId).url),
-    Link("ID and address", routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url)
+    Link("Passport and address", routes.MatchingLockedController.continueWithPassport(index, fakeDraftId).url),
+    Link("ID and address", routes.MatchingLockedController.continueWithIdCard(index, fakeDraftId).url)
   )
 
   val name: FullName = FullName("Joe", None, "Bloggs")

@@ -56,3 +56,5 @@ GET        /:draftId/:index/matching-failed            controllers.register.lead
 POST       /:draftId/:index/matching-failed            controllers.register.leadtrustee.individual.MatchingFailedController.onSubmit(index: Int, draftId: String)
 
 GET        /:draftId/:index/matching-locked            controllers.register.leadtrustee.individual.MatchingLockedController.onPageLoad(index: Int, draftId: String)
+GET        /:draftId/:index/continue-with-passport     controllers.register.leadtrustee.individual.MatchingLockedController.continueWithPassport(index: Int, draftId: String)
+GET        /:draftId/:index/continue-with-id-card      controllers.register.leadtrustee.individual.MatchingLockedController.continueWithIdCard(index: Int, draftId: String)

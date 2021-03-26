@@ -30,11 +30,11 @@
     List(
         Link(
             text = messages("leadTrustee.individual.matching.locked.link1"),
-            url = PassportDetailsController.onPageLoad(index, draftId).url
+            url = MatchingLockedController.continueWithPassport(index, draftId).url
         ),
         Link(
             text = messages("leadTrustee.individual.matching.locked.link2"),
-            url = IDCardDetailsController.onPageLoad(index, draftId).url
+            url = MatchingLockedController.continueWithIdCard(index, draftId).url
         )
     )
 }

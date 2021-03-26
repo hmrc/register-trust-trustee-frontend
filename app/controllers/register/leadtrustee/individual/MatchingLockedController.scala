@@ -19,19 +19,25 @@ package controllers.register.leadtrustee.individual
 import controllers.actions.StandardActionSets
 import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
+import models.registration.pages.DetailsChoice
+import models.registration.pages.DetailsChoice._
+import pages.register.leadtrustee.individual.{TrusteeDetailsChoicePage, TrusteeNinoYesNoPage}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
+import play.api.mvc._
+import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.MatchingLockedView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class MatchingLockedController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           standardActionSets: StandardActionSets,
                                           nameAction: NameRequiredActionImpl,
-                                          view: MatchingLockedView
-                                        ) extends FrontendBaseController with I18nSupport {
+                                          view: MatchingLockedView,
+                                          registrationsRepository: RegistrationsRepository
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
@@ -40,5 +46,26 @@ class MatchingLockedController @Inject()(
     implicit request =>
 
       Ok(view(draftId, index, request.trusteeName))
+  }
+
+  def continueWithPassport(index: Int, draftId: String): Action[AnyContent] =
+    amendUserAnswersAndRedirect(index, draftId, Passport, routes.PassportDetailsController.onPageLoad(index, draftId))
+
+  def continueWithIdCard(index: Int, draftId: String): Action[AnyContent] =
+    amendUserAnswersAndRedirect(index, draftId, IdCard, routes.IDCardDetailsController.onPageLoad(index, draftId))
+
+  private def amendUserAnswersAndRedirect(index: Int,
+                                          draftId: String,
+                                          detailsChoice: DetailsChoice,
+                                          call: Call): Action[AnyContent] = actions(index, draftId).async {
+    implicit request =>
+
+      for {
+        ninoYesNoSet <- Future.fromTry(request.userAnswers.set(TrusteeNinoYesNoPage(index), false))
+        detailsChoiceSet <- Future.fromTry(ninoYesNoSet.set(TrusteeDetailsChoicePage(index), detailsChoice))
+        _ <- registrationsRepository.set(detailsChoiceSet)
+      } yield {
+        Redirect(call)
+      }
   }
 }
