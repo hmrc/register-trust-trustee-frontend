@@ -33,7 +33,7 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       val numberOfFailedAttempts: Int = 2
 
       def applyView: HtmlFormat.Appendable =
-        view.apply(fakeDraftId, index, numberOfFailedAttempts)(fakeRequest, messages)
+        view.apply(fakeDraftId, index, numberOfFailedAttempts, frontendAppConfig.maxMatchingAttempts - numberOfFailedAttempts)(fakeRequest, messages)
 
       behave like normalPageTitleWithCaption(
         view = applyView,
@@ -57,7 +57,7 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       val numberOfFailedAttempts: Int = 1
 
       def applyView: HtmlFormat.Appendable =
-        view.apply(fakeDraftId, index, numberOfFailedAttempts)(fakeRequest, messages)
+        view.apply(fakeDraftId, index, numberOfFailedAttempts, frontendAppConfig.maxMatchingAttempts - numberOfFailedAttempts)(fakeRequest, messages)
 
       behave like normalPageTitleWithCaption(
         view = applyView,

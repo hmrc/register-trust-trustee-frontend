@@ -14,16 +14,14 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF,
-    appConfig: FrontendAppConfig
+    formHelper: FormWithCSRF
 )
 
-@(draftId: String, index: Int, numberOfFailedAttempts: Int)(implicit request: Request[_], messages: Messages)
+@(draftId: String, index: Int, numberOfFailedAttempts: Int, numberOfRemainingAttempts: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("leadTrustee.individual.matching.failed.title")
@@ -40,8 +38,8 @@
 
         <p>
             <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part1")</span>
-            <span class="bold">@messages("leadTrustee.individual.matching.failed.paragraph2.remainingAttempts", appConfig.maxMatchingAttempts - numberOfFailedAttempts)</span>
-            @(appConfig.maxMatchingAttempts - numberOfFailedAttempts) match {
+            <span class="bold">@messages("leadTrustee.individual.matching.failed.paragraph2.remainingAttempts", numberOfRemainingAttempts)</span>
+            @numberOfRemainingAttempts match {
                 case 1 => { <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part2.singular")</span> }
                 case x => { <span>@messages("leadTrustee.individual.matching.failed.paragraph2.part2.plural")</span> }
             }

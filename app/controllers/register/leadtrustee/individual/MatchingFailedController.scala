@@ -47,7 +47,7 @@ class MatchingFailedController @Inject()(
 
       service.failedAttempts(draftId) map {
         case x if x < frontendAppConfig.maxMatchingAttempts =>
-          Ok(view(draftId, index, x))
+          Ok(view(draftId, index, x, frontendAppConfig.maxMatchingAttempts - x))
         case _ =>
           Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
       } recoverWith {
