@@ -25,7 +25,7 @@ import org.mockito.Mockito.{never, verify, when}
 import org.scalatest.RecoverMethods.recoverToSucceededIf
 import pages.register.leadtrustee.individual._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.http.SessionId
 
 import java.time.LocalDate
 import scala.concurrent.Future
