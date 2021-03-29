@@ -16,77 +16,45 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{Trustee, TrusteeIndividual, TrusteeOrganisation, Trustees}
-import models.UserAnswers
+import models.{TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers}
 
-class TrusteeMapper @Inject()(addressMapper: AddressMapper,
-                              passportOrIdCardMapper: PassportOrIdCardMapper) extends Mapping[List[TrusteeType]] {
+class TrusteeMapper {
 
-  override def build(userAnswers: UserAnswers): Option[List[TrusteeType]] = {
-    val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(List.empty[Trustee])
-    val trusteesList: List[Trustee] = trustees.filter(!_.isLead)
-    trusteesList match {
+  def build(userAnswers: UserAnswers): Option[List[TrusteeType]] = {
+    val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(Nil).filter(!_.isLead)
+    trustees match {
       case Nil => None
-      case list =>
-        Some(list.map { trustee =>
-          getTrusteeType(trustee)
-        })
+      case _ => Some(trustees.map(buildTrusteeType))
     }
   }
 
-  private def getTrusteeType(trustee: Trustee): TrusteeType = {
+  private def buildTrusteeType(trustee: Trustee): TrusteeType = {
     trustee match {
-      case indTrustee: TrusteeIndividual =>
-        TrusteeType(
-          trusteeInd = Some(
-            TrusteeIndividualType(
-              name = indTrustee.name,
-              dateOfBirth = indTrustee.dateOfBirth,
-              phoneNumber = None,
-              identification = identificationMap(indTrustee),
-              countryOfResidence = indTrustee.countryOfResidence,
-              nationality = indTrustee.nationality,
-              legallyIncapable = indTrustee.mentalCapacityYesNo.map(!_)
-            )
-          ),
-          trusteeOrg = None
-        )
-      case orgTrustee: TrusteeOrganisation =>
-        TrusteeType(
-          trusteeInd = None,
-          trusteeOrg = Some(
-            TrusteeOrgType(
-              name = orgTrustee.name,
-              phoneNumber = None,
-              email = None,
-              identification = identificationMap(orgTrustee),
-              countryOfResidence = orgTrustee.countryOfResidence
-            )
+      case indTrustee: TrusteeIndividual => TrusteeType(
+        trusteeInd = Some(
+          TrusteeIndividualType(
+            name = indTrustee.name,
+            dateOfBirth = indTrustee.dateOfBirth,
+            phoneNumber = None,
+            identification = indTrustee.identification,
+            countryOfResidence = indTrustee.countryOfResidence,
+            nationality = indTrustee.nationality,
+            legallyIncapable = indTrustee.mentalCapacityYesNo.map(!_)
           )
         )
-    }
-  }
-
-
-  private def identificationMap(trustee: TrusteeIndividual): Option[IdentificationType] = {
-    val identificationType = IdentificationType(
-      trustee.nino,
-      passportOrIdCardMapper.build(trustee.passportOrIdCard),
-      addressMapper.build(trustee.address)
-    )
-
-    identificationType match {
-      case IdentificationType(None, None, None) => None
-      case _ => Some(identificationType)
-    }
-  }
-
-  private def identificationMap(trustee: TrusteeOrganisation): Option[IdentificationOrgType] = {
-    (trustee.utr, addressMapper.build(trustee.address)) match {
-      case (None, None) => None
-      case (utr, address) => Some(IdentificationOrgType(utr, address))
+      )
+      case orgTrustee: TrusteeOrganisation => TrusteeType(
+        trusteeOrg = Some(
+          TrusteeOrgType(
+            name = orgTrustee.name,
+            phoneNumber = None,
+            email = None,
+            identification = orgTrustee.identification,
+            countryOfResidence = orgTrustee.countryOfResidence
+          )
+        )
+      )
     }
   }
 }

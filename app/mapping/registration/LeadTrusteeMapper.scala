@@ -16,85 +16,45 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{LeadTrusteeIndividual, LeadTrusteeOrganisation, Trustee, Trustees}
-import models.UserAnswers
+import models.{LeadTrusteeIndType, LeadTrusteeOrgType, LeadTrusteeType, UserAnswers}
 
-class LeadTrusteeMapper @Inject()(addressMapper: AddressMapper,
-                                  passportOrIdCardMapper: PassportOrIdCardMapper
-                                 ) extends Mapping[LeadTrusteeType] {
+class LeadTrusteeMapper {
 
-  override def build(userAnswers: UserAnswers): Option[LeadTrusteeType] = {
-    val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(List.empty[Trustee])
-    trustees match {
-      case Nil => None
-      case list =>
-        list
-          .find(_.isLead)
-          .map(buildLeadTrusteeType)
+  def build(userAnswers: UserAnswers): Option[LeadTrusteeType] = {
+    val leadTrustee: Option[Trustee] = userAnswers.get(Trustees).getOrElse(Nil).find(_.isLead)
+    leadTrustee match {
+      case None => None
+      case _ => leadTrustee.map(buildLeadTrusteeType)
     }
   }
 
   private def buildLeadTrusteeType(leadTrustee: Trustee): LeadTrusteeType = {
     leadTrustee match {
-      case indLeadTrustee: LeadTrusteeIndividual => buildLeadTrusteeIndividual(indLeadTrustee)
-      case orgLeadTrustee: LeadTrusteeOrganisation => buildLeadTrusteeBusiness(orgLeadTrustee)
-    }
-  }
-
-  private def buildLeadTrusteeIndividual(leadTrustee: LeadTrusteeIndividual) = {
-
-    val identification = if(leadTrustee.nino.isDefined) {
-      IdentificationType(nino = leadTrustee.nino, passport = None, address = None)
-    } else {
-      IdentificationType(nino = None,
-        passport = passportOrIdCardMapper.build(leadTrustee.passportOrIdCard),
-        address = addressMapper.buildOptional(leadTrustee.address)
-      )
-    }
-
-    LeadTrusteeType(
-      leadTrusteeInd = Some(
-        LeadTrusteeIndType(
-          name = leadTrustee.name,
-          dateOfBirth = leadTrustee.dateOfBirth,
-          phoneNumber = leadTrustee.telephoneNumber,
-          email = leadTrustee.email,
-          identification = identification,
-          countryOfResidence = leadTrustee.countryOfResidence,
-          nationality = leadTrustee.nationality
-        )
-      ),
-      leadTrusteeOrg = None
-    )
-  }
-
-  private def buildLeadTrusteeBusiness(leadTrustee: LeadTrusteeOrganisation) = {
-
-    val identification = if(leadTrustee.utr.isDefined) {
-      IdentificationOrgType(
-        utr = leadTrustee.utr,
-        address = None
-      )
-    } else {
-      IdentificationOrgType(
-        utr = None,
-        address = addressMapper.buildOptional(leadTrustee.address)
-      )
-    }
-
-      LeadTrusteeType(
-        leadTrusteeInd = None,
-        leadTrusteeOrg = Some(
-          LeadTrusteeOrgType(
-            name = leadTrustee.name,
-            phoneNumber = leadTrustee.telephoneNumber,
-            email = leadTrustee.email,
-            identification = identification,
-            countryOfResidence = leadTrustee.countryOfResidence
+      case indLeadTrustee: LeadTrusteeIndividual => LeadTrusteeType(
+        leadTrusteeInd = Some(
+          LeadTrusteeIndType(
+            name = indLeadTrustee.name,
+            dateOfBirth = indLeadTrustee.dateOfBirth,
+            phoneNumber = indLeadTrustee.telephoneNumber,
+            email = indLeadTrustee.email,
+            identification = indLeadTrustee.identification,
+            countryOfResidence = indLeadTrustee.countryOfResidence,
+            nationality = indLeadTrustee.nationality
           )
         )
       )
+      case orgLeadTrustee: LeadTrusteeOrganisation => LeadTrusteeType(
+        leadTrusteeOrg = Some(
+          LeadTrusteeOrgType(
+            name = orgLeadTrustee.name,
+            phoneNumber = orgLeadTrustee.telephoneNumber,
+            email = orgLeadTrustee.email,
+            identification = orgLeadTrustee.identification,
+            countryOfResidence = orgLeadTrustee.countryOfResidence
+          )
+        )
+      )
+    }
   }
 }

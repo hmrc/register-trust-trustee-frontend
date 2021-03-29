@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package mapping.registration
+@import config.FrontendAppConfig
 
-import models.registration.pages.PassportOrIdCardDetails
+@(appConfig: FrontendAppConfig, draftId: String)(implicit messages: Messages)
 
-class PassportOrIdCardMapper {
-
-  def build(passportOrIdCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] = {
-    passportOrIdCardDetails map { passportOrIdCardDetails =>
-      PassportType(passportOrIdCardDetails.cardNumber, passportOrIdCardDetails.expiryDate, passportOrIdCardDetails.country)
-    }
-  }
-
-}
+<a href="@{appConfig.registrationProgressUrl(draftId)}" id="reg-progress"><p>@messages("site.reg-progress")</p></a>

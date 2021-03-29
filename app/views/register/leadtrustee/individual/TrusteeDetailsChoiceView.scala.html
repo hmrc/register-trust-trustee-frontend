@@ -14,19 +14,25 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
 @import models.registration.pages.DetailsChoice
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    appConfig: FrontendAppConfig
 )
 
-@(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String, is5mldEnabled: Boolean)(implicit request: Request[_], messages: Messages)
+
+@content = {
+    <p>@messages("leadTrustee.individual.5mld.trusteeDetailsChoice.paragraph1")</p>
+}
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.individual.trusteeDetailsChoice.title")}"
-    ) {
+) {
 
     @formHelper(action = TrusteeDetailsChoiceController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
@@ -39,10 +45,15 @@
             legend = messages("leadTrustee.individual.trusteeDetailsChoice.heading", name),
             legendClass = Some("heading-large"),
             legendAsHeading = true,
-            fieldSetClass = Some("inline"),
-            inputs = DetailsChoice.options.toSeq
+            fieldSetClass = if (is5mldEnabled) None else Some("inline"),
+            inputs = DetailsChoice.options(is5mldEnabled).toSeq,
+            additionalContent = if (is5mldEnabled) Some(content) else None
         )
 
         @components.submit_button()
+
+        @if(is5mldEnabled) {
+            @components.reg_progress_link(appConfig, draftId)
+        }
     }
 }

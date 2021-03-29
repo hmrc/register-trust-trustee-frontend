@@ -51,3 +51,10 @@ POST       /:draftId/:index/email                      controllers.register.lead
 
 GET        /:draftId/:index/check-details              controllers.register.leadtrustee.individual.CheckDetailsController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/check-details              controllers.register.leadtrustee.individual.CheckDetailsController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/matching-failed            controllers.register.leadtrustee.individual.MatchingFailedController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/matching-failed            controllers.register.leadtrustee.individual.MatchingFailedController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/matching-locked            controllers.register.leadtrustee.individual.MatchingLockedController.onPageLoad(index: Int, draftId: String)
+GET        /:draftId/:index/continue-with-passport     controllers.register.leadtrustee.individual.MatchingLockedController.continueWithPassport(index: Int, draftId: String)
+GET        /:draftId/:index/continue-with-id-card      controllers.register.leadtrustee.individual.MatchingLockedController.continueWithIdCard(index: Int, draftId: String)

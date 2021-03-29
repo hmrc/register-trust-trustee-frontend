@@ -19,19 +19,20 @@ package controllers.register.leadtrustee.individual
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
+import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.DetailsChoiceFormProvider
-import javax.inject.Inject
 import models.registration.pages.DetailsChoice
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteeDetailsChoicePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.TrusteeDetailsChoiceView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrusteeDetailsChoiceController @Inject()(
@@ -44,11 +45,11 @@ class TrusteeDetailsChoiceController @Inject()(
                                                 formProvider: DetailsChoiceFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: TrusteeDetailsChoiceView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[DetailsChoice] = formProvider.withPrefix("leadTrustee.individual.trusteeDetailsChoice")
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
@@ -59,7 +60,7 @@ class TrusteeDetailsChoiceController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName, request.userAnswers.is5mldEnabled))
   }
 
 
@@ -68,7 +69,7 @@ class TrusteeDetailsChoiceController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, request.userAnswers.is5mldEnabled))),
 
         value => {
           for {

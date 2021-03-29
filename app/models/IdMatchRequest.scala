@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package mapping
+package models
 
-import models.UserAnswers
+import play.api.libs.json.{Format, Json}
 
-trait Mapping[T] {
+case class IdMatchRequest(id: String,
+                          nino: String,
+                          surname: String,
+                          forename: String,
+                          birthDate: String)
 
-  def build(userAnswers: UserAnswers) : Option[T]
-
+object IdMatchRequest {
+  implicit val formats: Format[IdMatchRequest] = Json.format[IdMatchRequest]
 }

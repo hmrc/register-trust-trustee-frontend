@@ -14,6 +14,13 @@
  * limitations under the License.
  *@
 
-@(href : String, id : String = "", key : String, openInNewWindow: Boolean = false)(implicit messages: Messages)
+@import viewmodels.Link
+@import views.html._
 
-<a id="@id" href="@href" @if(openInNewWindow) {target="_blank"}>@messages(key)</a>
+@(links: List[Link])(implicit messages: Messages)
+
+<ul class="app-link-list__items">
+    @for(link <- links){
+        @components.link_list_link(link)
+    }
+</ul>

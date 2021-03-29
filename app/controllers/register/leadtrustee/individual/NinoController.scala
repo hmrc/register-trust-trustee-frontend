@@ -19,18 +19,23 @@ package controllers.register.leadtrustee.individual
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
+import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.NinoFormProvider
-import javax.inject.Inject
+import handlers.ErrorHandler
+import models._
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesNinoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc._
 import repositories.RegistrationsRepository
+import services.TrustsIndividualCheckService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.NinoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NinoController @Inject()(
@@ -42,16 +47,18 @@ class NinoController @Inject()(
                                 nameAction: NameRequiredActionImpl,
                                 formProvider: NinoFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: NinoView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                view: NinoView,
+                                service: TrustsIndividualCheckService,
+                                errorHandler: ErrorHandler
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private def actions(index: Int, draftId: String) =
+  private val form: Form[String] = formProvider("leadTrustee.individual.nino")
+
+  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
-
-      val form = formProvider("leadTrustee.individual.nino")
 
       val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
         case None => form
@@ -64,8 +71,6 @@ class NinoController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
-      val form = formProvider("leadTrustee.individual.nino")
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
@@ -73,8 +78,18 @@ class NinoController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
+            matchingResponse <- service.matchLeadTrustee(updatedAnswers, index)
+            _ <- registrationsRepository.set(updatedAnswers)
+          } yield matchingResponse match {
+            case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
+              Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
+            case UnsuccessfulMatchResponse =>
+              Redirect(routes.MatchingFailedController.onPageLoad(index, draftId))
+            case LockedMatchResponse =>
+              Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
+            case _ =>
+              InternalServerError(errorHandler.internalServerErrorTemplate)
+          }
         }
       )
   }

@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package mapping.reads
+@import viewmodels.Link
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.{Trustees => section}
+@(link: Link)(implicit messages: Messages)
 
-case object Trustees extends QuestionPage[List[Trustee]] {
-  override def path: JsPath = section.path
-}
+<li class="app-link-list__item" id="link-list__item--@{link.text}">
+    <span class="app-link-link">
+        <a class="app-link-list__link-name" id="link-list__link--@{link.text}" href="@{link.url}" aria-describedby="link-list__link--@{link.text}__tag">
+            @messages(link.text)
+        </a>
+    </span>
+</li>

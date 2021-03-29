@@ -18,10 +18,9 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
-import mapping.Mapping
-import models.UserAnswers
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
+import models.{AddressType, IdentificationOrgType, IdentificationType, TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.trustees.individual._
 import pages.register.trustees.{individual => ind, organisation => org}
@@ -32,7 +31,7 @@ import java.time.LocalDate
 class TrusteeMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
-  val trusteeMapper: Mapping[List[TrusteeType]] = injector.instanceOf[TrusteeMapper]
+  val trusteeMapper: TrusteeMapper = injector.instanceOf[TrusteeMapper]
 
   "TrusteeMapper" when {
 

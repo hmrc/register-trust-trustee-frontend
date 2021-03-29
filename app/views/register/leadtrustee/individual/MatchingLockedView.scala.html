@@ -1,0 +1,67 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import controllers.register.leadtrustee.individual.routes._
+@import viewmodels.Link
+
+@this(
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF,
+    appConfig: FrontendAppConfig
+)
+
+@(draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
+
+@links = @{
+    List(
+        Link(
+            text = messages("leadTrustee.individual.matching.locked.link1"),
+            url = MatchingLockedController.continueWithPassport(index, draftId).url
+        ),
+        Link(
+            text = messages("leadTrustee.individual.matching.locked.link2"),
+            url = MatchingLockedController.continueWithIdCard(index, draftId).url
+        )
+    )
+}
+
+@main_template(
+    title = messages("leadTrustee.individual.matching.locked.title")
+) {
+
+    @components.heading_with_caption(
+        messagePrefix = "leadTrustee.individual.matching.locked",
+        optionalParam = Some(name)
+    )
+
+    <p>@messages("leadTrustee.individual.matching.locked.paragraph1")</p>
+
+    <p>@messages("leadTrustee.individual.matching.locked.paragraph2")</p>
+
+    <h2>@messages("leadTrustee.individual.matching.locked.subheading1")</h2>
+
+    <p>@messages("leadTrustee.individual.matching.locked.paragraph3")</p>
+
+    @components.link_list(links)
+
+    <p>@messages("leadTrustee.individual.matching.locked.paragraph4")</p>
+
+    <p>@messages("leadTrustee.individual.matching.locked.paragraph5")</p>
+
+    @components.reg_progress_link(appConfig, draftId)
+
+}

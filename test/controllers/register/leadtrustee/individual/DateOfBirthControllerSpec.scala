@@ -16,12 +16,11 @@
 
 package controllers.register.leadtrustee.individual
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
 import controllers.register.IndexValidation
 import forms.DateFormProvider
+import models.UserAnswers
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
@@ -33,190 +32,372 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.leadtrustee.individual.DateOfBirthView
 
+import java.time.{LocalDate, ZoneOffset}
+
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
   val messagePrefix = "leadTrustee.individual.dateOfBirth"
   val formProvider = new DateFormProvider(frontendAppConfig)
-  val form = formProvider.withPrefix(messagePrefix)
-
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
-
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
   val index = 0
-  val name = FullName("FirstName", None, "LastName").toString
+  val name: FullName = FullName("FirstName", None, "LastName")
 
-  lazy val trusteesDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteesDateOfBirthRoute: String = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
-  "DateOfBirth Controller" must {
+  "DateOfBirth Controller" when {
 
-    "return OK and the correct view for a GET" in {
+    "4MLD" must {
 
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+      val is5mldEnabled = false
+      val form = formProvider.withConfig(messagePrefix, is5mldEnabled)
+      val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)
+      
+      "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), name).success.value
 
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val result = route(application, request).value
+        val request = FakeRequest(GET, trusteesDateOfBirthRoute)
 
-      val view = application.injector.instanceOf[DateOfBirthView]
+        val result = route(application, request).value
 
-      status(result) mustEqual OK
+        val view = application.injector.instanceOf[DateOfBirthView]
 
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name)(request, messages).toString
+        status(result) mustEqual OK
 
-      application.stop()
-    }
+        contentAsString(result) mustEqual
+          view(form, fakeDraftId, index, name.toString)(request, messages).toString
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
-
-      val view = application.injector.instanceOf[DateOfBirthView]
-
-      val result = route(application, request).value
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, name)(request, messages).toString
-
-      application.stop()
-    }
-
-    "redirect to the next page when valid data is submitted" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-          )
-          .build()
-
-      val request =
-        FakeRequest(POST, trusteesDateOfBirthRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> validAnswer.getDayOfMonth.toString,
-            "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year"  -> validAnswer.getYear.toString
-          )
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
-
-      application.stop()
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request =
-        FakeRequest(POST, trusteesDateOfBirthRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
-
-      val view = application.injector.instanceOf[DateOfBirthView]
-
-      val result = route(application, request).value
-
-      status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(request, messages).toString
-
-      application.stop()
-    }
-
-    "redirect to Session Expired for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val request = FakeRequest(GET, trusteesDateOfBirthRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val request =
-        FakeRequest(POST, trusteesDateOfBirthRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> validAnswer.getDayOfMonth.toString,
-            "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year"  -> validAnswer.getYear.toString
-          )
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-
-    "for a GET" must {
-
-      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
-        val route = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
-
-        FakeRequest(GET, route)
+        application.stop()
       }
 
-      validateIndex(
-        Gen.const(LocalDate.of(2010,10,10)),
-        TrusteesDateOfBirthPage.apply,
-        getForIndex
-      )
+      "populate the view correctly on a GET when the question has previously been answered" in {
 
-    }
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+          .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
 
-    "for a POST" must {
-      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val route =
-          routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+        val request = FakeRequest(GET, trusteesDateOfBirthRoute)
 
-        FakeRequest(POST, route)
-          .withFormUrlEncodedBody(
-            "value.day"   -> validAnswer.getDayOfMonth.toString,
-            "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year"  -> validAnswer.getYear.toString
-          )
+        val view = application.injector.instanceOf[DateOfBirthView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form.fill(validAnswer), fakeDraftId, index, name.toString)(request, messages).toString
+
+        application.stop()
       }
 
-      validateIndex(
-        Gen.const(LocalDate.of(2010,10,10)),
-        TrusteesDateOfBirthPage.apply,
-        postForIndex
-      )
-    }
+      "redirect to the next page when valid data is submitted" in {
 
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+            )
+            .build()
+
+        val request =
+          FakeRequest(POST, trusteesDateOfBirthRoute)
+            .withFormUrlEncodedBody(
+              "value.day" -> validAnswer.getDayOfMonth.toString,
+              "value.month" -> validAnswer.getMonthValue.toString,
+              "value.year" -> validAnswer.getYear.toString
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        application.stop()
+      }
+
+      "return a Bad Request and errors when invalid data is submitted" in {
+
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request =
+          FakeRequest(POST, trusteesDateOfBirthRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
+
+        val boundForm = form.bind(Map("value" -> "invalid value"))
+
+        val view = application.injector.instanceOf[DateOfBirthView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, fakeDraftId, index, name.toString)(request, messages).toString
+
+        application.stop()
+      }
+
+      "redirect to Session Expired for a GET if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+        application.stop()
+      }
+
+      "redirect to Session Expired for a POST if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val request =
+          FakeRequest(POST, trusteesDateOfBirthRoute)
+            .withFormUrlEncodedBody(
+              "value.day" -> validAnswer.getDayOfMonth.toString,
+              "value.month" -> validAnswer.getMonthValue.toString,
+              "value.year" -> validAnswer.getYear.toString
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+        application.stop()
+      }
+
+
+      "for a GET" must {
+
+        def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
+          val route = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+
+          FakeRequest(GET, route)
+        }
+
+        validateIndex(
+          Gen.const(LocalDate.of(2010, 10, 10)),
+          TrusteesDateOfBirthPage.apply,
+          getForIndex
+        )
+
+      }
+
+      "for a POST" must {
+        def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
+
+          val route =
+            routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+
+          FakeRequest(POST, route)
+            .withFormUrlEncodedBody(
+              "value.day" -> validAnswer.getDayOfMonth.toString,
+              "value.month" -> validAnswer.getMonthValue.toString,
+              "value.year" -> validAnswer.getYear.toString
+            )
+        }
+
+        validateIndex(
+          Gen.const(LocalDate.of(2010, 10, 10)),
+          TrusteesDateOfBirthPage.apply,
+          postForIndex
+        )
+      }
+    }
+    
+    "5MLD" must {
+
+      val is5mldEnabled = true
+      val form = formProvider.withConfig(messagePrefix, is5mldEnabled)
+      val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)
+
+      "return OK and the correct view for a GET" in {
+
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[DateOfBirthView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form, fakeDraftId, index, name.toString)(request, messages).toString
+
+        application.stop()
+      }
+
+      "populate the view correctly on a GET when the question has previously been answered" in {
+
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+          .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+
+        val view = application.injector.instanceOf[DateOfBirthView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form.fill(validAnswer), fakeDraftId, index, name.toString)(request, messages).toString
+
+        application.stop()
+      }
+
+      "redirect to the next page when valid data is submitted" in {
+
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+            )
+            .build()
+
+        val request =
+          FakeRequest(POST, trusteesDateOfBirthRoute)
+            .withFormUrlEncodedBody(
+              "value.day" -> validAnswer.getDayOfMonth.toString,
+              "value.month" -> validAnswer.getMonthValue.toString,
+              "value.year" -> validAnswer.getYear.toString
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        application.stop()
+      }
+
+      "return a Bad Request and errors when invalid data is submitted" in {
+
+        val userAnswers = baseUserAnswers
+          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request =
+          FakeRequest(POST, trusteesDateOfBirthRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
+
+        val boundForm = form.bind(Map("value" -> "invalid value"))
+
+        val view = application.injector.instanceOf[DateOfBirthView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, fakeDraftId, index, name.toString)(request, messages).toString
+
+        application.stop()
+      }
+
+      "redirect to Session Expired for a GET if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+        application.stop()
+      }
+
+      "redirect to Session Expired for a POST if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val request =
+          FakeRequest(POST, trusteesDateOfBirthRoute)
+            .withFormUrlEncodedBody(
+              "value.day" -> validAnswer.getDayOfMonth.toString,
+              "value.month" -> validAnswer.getMonthValue.toString,
+              "value.year" -> validAnswer.getYear.toString
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+        application.stop()
+      }
+
+
+      "for a GET" must {
+
+        def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
+          val route = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+
+          FakeRequest(GET, route)
+        }
+
+        validateIndex(
+          Gen.const(LocalDate.of(2010, 10, 10)),
+          TrusteesDateOfBirthPage.apply,
+          getForIndex
+        )
+
+      }
+
+      "for a POST" must {
+        def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
+
+          val route =
+            routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+
+          FakeRequest(POST, route)
+            .withFormUrlEncodedBody(
+              "value.day" -> validAnswer.getDayOfMonth.toString,
+              "value.month" -> validAnswer.getMonthValue.toString,
+              "value.year" -> validAnswer.getYear.toString
+            )
+        }
+
+        validateIndex(
+          Gen.const(LocalDate.of(2010, 10, 10)),
+          TrusteesDateOfBirthPage.apply,
+          postForIndex
+        )
+      }
+    }
   }
 }

@@ -31,9 +31,11 @@ object DetailsChoice extends Enumerable.Implicits {
     Passport, IdCard
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("leadTrustee.individual.trusteeDetailsChoice", value.toString)
+  def options(is5mldEnabled: Boolean): List[RadioOption] = values.map {
+    value => {
+      val prefix: String =  "leadTrustee.individual" + (if (is5mldEnabled) ".5mld" else "") + ".trusteeDetailsChoice"
+      RadioOption(prefix, value.toString)
+    }
   }
 
   implicit val enumerable: Enumerable[DetailsChoice] =

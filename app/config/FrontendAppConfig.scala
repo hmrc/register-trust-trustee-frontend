@@ -63,6 +63,8 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl
 
+  lazy val trustsIndividualCheckUrl: String = configuration.get[Service]("microservice.services.trusts-individual-check").baseUrl
+
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
 
@@ -80,6 +82,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   private def getInt(path: String): Int = configuration.get[Int](path)
+
   private def getDate(entry: String): LocalDate =
     LocalDate.of(
       getInt(s"dates.$entry.year"),
@@ -89,6 +92,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   lazy val minDate: LocalDate = getDate("minimum")
   lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
+  lazy val minLeadTrusteeDob: LocalDate = getDate("minLeadTrusteeDob")
 
   private lazy val accessibilityBaseLinkUrl: String = configuration.get[String]("urls.accessibility")
 
@@ -105,4 +109,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
     configuration.get[String](path)
   }
+
+  val maxMatchingAttempts: Int = getInt("individual-match.max-attempts")
 }

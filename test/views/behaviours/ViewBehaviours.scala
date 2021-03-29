@@ -68,6 +68,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
   def normalPageTitleWithCaption(view: HtmlFormat.Appendable,
                                  messageKeyPrefix: String,
+                                 messageKeyParam: String,
                                  captionParam: String,
                                  expectedGuidanceKeys: String*): Unit = {
 
@@ -86,13 +87,13 @@ trait ViewBehaviours extends ViewSpecBase {
         "display the correct browser title" in {
 
           val doc = asDocument(view)
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
+          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title", messageKeyParam)
         }
 
         "display the correct page title with caption" in {
 
           val doc = asDocument(view)
-          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading")
+          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading", messageKeyParam)
         }
 
         "display the correct guidance" in {
@@ -270,6 +271,22 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithRegProgressLink[A](view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a reg progress link" in {
+
+      val doc = asDocument(view)
+      assertContainsRegProgressLink(doc)
+    }
+  }
+
+  def pageWithoutRegProgressLink[A](view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page without a reg progress link" in {
+
+      val doc = asDocument(view)
+      assertDoesNotContainRegProgressLink(doc)
+    }
+  }
+
 }
-
-
