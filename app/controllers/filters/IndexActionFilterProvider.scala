@@ -25,7 +25,7 @@ import play.api.libs.json.Reads
 import play.api.mvc.{ActionFilter, Result}
 import queries.Gettable
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +36,7 @@ class IndexActionFilter[T](index : Int, entity : Gettable[List[T]], errorHandler
 
   override protected def filter[A](request: RegistrationDataRequest[A]): Future[Option[Result]] = {
 
-    val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     lazy val entities = request.userAnswers.get(entity).getOrElse(List.empty)
 
