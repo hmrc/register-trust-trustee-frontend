@@ -16,4 +16,7 @@
 
 package viewmodels
 
-case class Link(text: String, url: String)
+case class Link(text: String, url: String) {
+
+  def cssText: String = text.toLowerCase.replaceAll(" ", "-")
+}

@@ -32,11 +32,11 @@ trait LinkListViewBehaviours extends ViewBehaviours {
 
             s"render a list item" in {
               val doc = asDocument(view)
-              assertRenderedById(doc, s"link-list__item--${link.text}")
+              assertRenderedById(doc, s"link-list__item--${link.cssText}")
             }
 
             s"render a link" in {
-              val id = s"link-list__link--${link.text}"
+              val id = s"link-list__link--${link.cssText}"
 
               val doc = asDocument(view)
               doc.getElementById(id).hasAttr("href")
