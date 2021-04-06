@@ -578,7 +578,6 @@ leadTrustee.individual.passportDetails.country = Passport country of issue
 leadTrustee.individual.passportDetails.country.error.required = Enter the trustee’s passport country of issue
 leadTrustee.individual.passportDetails.country.error.length = The trustee’s passport country must be 100 characters or less
 leadTrustee.individual.passportDetails.number = Passport number
-leadTrustee.individual.passportDetails.title = Expiry date
 leadTrustee.individual.passportDetails.number.hint = For example, 502135326.
 leadTrustee.individual.passportDetails.number.error.required = Enter the trustee’s passport number
 leadTrustee.individual.passportDetails.number.error.length = The trustee’s passport number must be 30 characters or less
