@@ -58,6 +58,6 @@ class MatchingFailedController @Inject()(
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-      Redirect(routes.NameController.onPageLoad(index, draftId))
+    Redirect(routes.NameController.onPageLoad(index, draftId))
   }
 }

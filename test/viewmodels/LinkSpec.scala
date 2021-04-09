@@ -32,9 +32,9 @@ class LinkSpec extends SpecBase {
           link.cssText mustBe "passport-and-address"
         }
 
-        "ID and address" in {
-          val link = Link("ID and address", url)
-          link.cssText mustBe "id-and-address"
+        "ID card and address" in {
+          val link = Link("ID card and address", url)
+          link.cssText mustBe "id-card-and-address"
         }
       }
     }
