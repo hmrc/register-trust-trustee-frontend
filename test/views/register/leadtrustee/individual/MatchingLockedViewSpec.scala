@@ -46,8 +46,10 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
       messageKeyPrefix = prefix,
       messageKeyParam = name.toString,
       captionParam = "",
-      expectedGuidanceKeys = "paragraph1", "paragraph2", "subheading1", "paragraph3", "paragraph4", "paragraph5"
+      expectedGuidanceKeys = "paragraph1", "subheading1", "paragraph3", "paragraph4", "paragraph5"
     )
+
+    behave like pageWithText(applyView, s"$prefix.paragraph2", name.toString)
 
     behave like linkList(applyView, links)
 
