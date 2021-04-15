@@ -53,7 +53,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display the correct guidance" in {
 
           val doc = asDocument(view)
-          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+          for (key <- expectedGuidanceKeys)  assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
         }
 
         "display language toggles" in {
@@ -98,8 +98,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "display the correct guidance" in {
 
-          val doc = asDocument(view)
-          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+          for (key <- expectedGuidanceKeys) pageWithText(view, s"$messageKeyPrefix.$key")
         }
 
         "display language toggles" in {
@@ -287,6 +286,11 @@ trait ViewBehaviours extends ViewSpecBase {
       val doc = asDocument(view)
       assertDoesNotContainRegProgressLink(doc)
     }
+  }
+
+  def pageWithText(view: HtmlFormat.Appendable, messageKey: String, messageParam: String = ""): Unit = {
+    val doc = asDocument(view)
+    assertContainsText(doc, messages(messageKey, messageParam))
   }
 
 }
