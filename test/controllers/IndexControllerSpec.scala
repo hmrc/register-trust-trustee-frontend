@@ -23,6 +23,8 @@ import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.TrusteeOrLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -31,25 +33,39 @@ import services.FeatureFlagService
 
 import scala.concurrent.Future
 
-class IndexControllerSpec extends SpecBase {
+class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   private val featureFlagService: FeatureFlagService = mock[FeatureFlagService]
   private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
-  
+
+  def beforeTest(is5mldEnabled: Boolean = false, isTaxable: Boolean = true): Unit = {
+    reset(registrationsRepository)
+    when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+
+    reset(featureFlagService)
+    when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(is5mldEnabled))
+
+    reset(submissionDraftConnector)
+    when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(isTaxable))
+  }
+
   "Index Controller" when {
 
     "pre-existing user answers" must {
 
       "redirect to TrusteesInfoController when there are no trustees" in {
-        
+
+        beforeTest()
+
         val userAnswers = emptyUserAnswers
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
-          .build()
-        
+          .overrides(
+            bind[FeatureFlagService].toInstance(featureFlagService),
+            bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+          ).build()
+
         when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -64,15 +80,18 @@ class IndexControllerSpec extends SpecBase {
 
       "redirect to AddATrusteeController when there are trustees" in {
 
+        beforeTest()
+
         val userAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
-          .build()
-        
+          .overrides(
+            bind[FeatureFlagService].toInstance(featureFlagService),
+            bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+          ).build()
+
         when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -88,18 +107,17 @@ class IndexControllerSpec extends SpecBase {
 
     "update value of is5mldEnabled and isTaxable in user answers" in {
 
-      reset(registrationsRepository)
+      beforeTest(is5mldEnabled = true)
 
       val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
-        .build()
+        .overrides(
+          bind[FeatureFlagService].toInstance(featureFlagService),
+          bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+        ).build()
 
       when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-      when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
-      when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -116,21 +134,19 @@ class IndexControllerSpec extends SpecBase {
   }
 
   "no pre-existing user answers" must {
-    "instantiate new set of user answers" when {
+    "instantiate new set of user answers" in {
 
-      "5mld enabled" must {
-
-        "add is5mldEnabled = true to user answers" in {
-
-          reset(registrationsRepository)
+      forAll(arbitrary[Boolean], arbitrary[Boolean]) {
+        (is5mldEnabled, isTrustTaxable) =>
+          beforeTest(is5mldEnabled = is5mldEnabled, isTaxable = isTrustTaxable)
 
           val application = applicationBuilder(userAnswers = None)
-            .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
-            .build()
+            .overrides(
+              bind[FeatureFlagService].toInstance(featureFlagService),
+              bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+            ).build()
 
           when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
-          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-          when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
 
           val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -138,42 +154,13 @@ class IndexControllerSpec extends SpecBase {
             val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
             verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-            uaCaptor.getValue.is5mldEnabled mustBe true
+            uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
+            uaCaptor.getValue.isTaxable mustBe isTrustTaxable
             uaCaptor.getValue.draftId mustBe fakeDraftId
             uaCaptor.getValue.internalAuthId mustBe "id"
 
             application.stop()
           }
-        }
-      }
-
-      "5mld not enabled" must {
-
-        "add is5mldEnabled = false to user answers" in {
-
-          reset(registrationsRepository)
-
-          val application = applicationBuilder(userAnswers = None)
-            .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
-            .build()
-
-          when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
-          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-          when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
-
-          val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
-
-          route(application, request).value.map { _ =>
-            val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-            verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
-
-            uaCaptor.getValue.is5mldEnabled mustBe false
-            uaCaptor.getValue.draftId mustBe fakeDraftId
-            uaCaptor.getValue.internalAuthId mustBe "id"
-
-            application.stop()
-          }
-        }
       }
     }
   }
