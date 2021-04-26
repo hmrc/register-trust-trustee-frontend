@@ -61,6 +61,7 @@ site.sign_out = Sign out
 site.sign_in = Sign in
 site.print-or-save = Print or save this page
 site.reg-progress = Return to registration progress
+site.verified = Verified
 
 site.address.uk.line1 = Address line 1
 site.address.uk.line2 = Address line 2

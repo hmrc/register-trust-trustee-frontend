@@ -33,4 +33,11 @@
             }
         </div>
     }
+    @if(row.verified) {
+    <div class="cya-change">
+        <strong class="govuk-tag govuk-tag.completed">
+            @messages("site.verified")
+        </strong>
+    </div>
+    }
 </li>
