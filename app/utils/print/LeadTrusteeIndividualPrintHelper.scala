@@ -52,12 +52,12 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
         regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId).url,
         "individualOrBusiness"
       ),
-      bound.nameQuestion(TrusteesNamePage(index), s"$prefix.name", None, verified = showVerifiedTag),
-      bound.dateQuestion(DateOfBirthPage(index), s"$prefix.dateOfBirth", None, verified = showVerifiedTag),
+      bound.nameQuestion(TrusteesNamePage(index), s"$prefix.name", None, verified = showVerifiedTag, canEdit = false),
+      bound.dateQuestion(DateOfBirthPage(index), s"$prefix.dateOfBirth", None, verified = showVerifiedTag, canEdit = false),
       bound.yesNoQuestion(mld5.CountryOfNationalityInTheUkYesNoPage(index), s"$prefix.5mld.countryOfNationalityInTheUkYesNo", mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId).url),
       bound.countryQuestion(mld5.CountryOfNationalityInTheUkYesNoPage(index), mld5.CountryOfNationalityPage(index), s"$prefix.5mld.countryOfNationality", mld5Rts.CountryOfNationalityController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(TrusteeNinoYesNoPage(index), s"$prefix.ninoYesNo", rts.NinoYesNoController.onPageLoad(index, draftId).url),
-      bound.ninoQuestion(TrusteesNinoPage(index), s"$prefix.nino", None, verified = showVerifiedTag),
+      bound.ninoQuestion(TrusteesNinoPage(index), s"$prefix.nino", None, verified = showVerifiedTag, canEdit = false),
       bound.enumQuestion(TrusteeDetailsChoicePage(index),
         s"$prefix.trusteeDetailsChoice", rts.TrusteeDetailsChoiceController.onPageLoad(index, draftId).url,
         s"$prefix.trusteeDetailsChoice"
