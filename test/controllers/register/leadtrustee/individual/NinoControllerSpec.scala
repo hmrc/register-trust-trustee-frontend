@@ -23,10 +23,12 @@ import forms.NinoFormProvider
 import models._
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.leadtrustee.individual.{TrusteesNamePage, TrusteesNinoPage}
+import org.scalatest.BeforeAndAfterEach
+import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesNamePage, TrusteesNinoPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -36,7 +38,7 @@ import views.html.register.leadtrustee.individual.NinoView
 
 import scala.concurrent.Future
 
-class NinoControllerSpec extends SpecBase with IndexValidation {
+class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAfterEach {
 
   val messagePrefix = "leadTrustee.individual.nino"
 
@@ -51,6 +53,11 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     .set(TrusteesNamePage(index), trusteeName).success.value
 
   lazy val ninoRoute: String = routes.NinoController.onPageLoad(index, fakeDraftId).url
+
+  override def beforeEach(): Unit = {
+    reset(registrationsRepository)
+    when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+  }
 
   "Nino Controller" must {
 
@@ -120,6 +127,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
         redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
+
         application.stop()
       }
 
@@ -147,6 +158,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe true
 
         application.stop()
       }
@@ -182,6 +197,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         redirectLocation(result).value mustEqual
           routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
 
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
+
         application.stop()
       }
     }
@@ -212,6 +231,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         redirectLocation(result).value mustEqual
           routes.MatchingLockedController.onPageLoad(index, fakeDraftId).url
 
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
+
         application.stop()
       }
     }
@@ -240,6 +263,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
         status(result) mustEqual INTERNAL_SERVER_ERROR
 
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
+
         application.stop()
       }
 
@@ -265,6 +292,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
         status(result) mustEqual INTERNAL_SERVER_ERROR
 
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
+
         application.stop()
       }
 
@@ -289,6 +320,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         val result = route(application, request).value
 
         status(result) mustEqual INTERNAL_SERVER_ERROR
+
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
 
         application.stop()
       }

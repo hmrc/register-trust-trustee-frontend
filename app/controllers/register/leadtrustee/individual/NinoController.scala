@@ -25,7 +25,7 @@ import forms.NinoFormProvider
 import handlers.ErrorHandler
 import models._
 import navigation.Navigator
-import pages.register.leadtrustee.individual.TrusteesNinoPage
+import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesNinoPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -79,10 +79,11 @@ class NinoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
             matchingResponse <- service.matchLeadTrustee(updatedAnswers, index)
-            _ <- registrationsRepository.set(updatedAnswers)
+            updatedAnswersWithMatched <- Future.fromTry(updatedAnswers.set(MatchedYesNoPage(index), matchingResponse == SuccessfulMatchResponse))
+            _ <- registrationsRepository.set(updatedAnswersWithMatched)
           } yield matchingResponse match {
             case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
-              Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
+              Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswersWithMatched))
             case UnsuccessfulMatchResponse =>
               Redirect(routes.MatchingFailedController.onPageLoad(index, draftId))
             case LockedMatchResponse =>

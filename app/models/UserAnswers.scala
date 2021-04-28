@@ -53,6 +53,8 @@ final case class UserAnswers(draftId: String,
                              override val is5mldEnabled: Boolean = false,
                              override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
 
+  //def isLeadTrusteeMatched
+
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A], reads: Reads[A]): Try[UserAnswers] = {
 
     val hasValueChanged: Boolean = !getAtPath(page.path).contains(value)

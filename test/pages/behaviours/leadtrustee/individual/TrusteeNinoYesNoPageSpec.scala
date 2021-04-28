@@ -16,14 +16,14 @@
 
 package pages.behaviours.leadtrustee.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.registration.pages.DetailsChoice.Passport
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.leadtrustee.individual._
+
+import java.time.LocalDate
 
 class TrusteeNinoYesNoPageSpec extends PageBehaviours {
 
@@ -68,10 +68,12 @@ class TrusteeNinoYesNoPageSpec extends PageBehaviours {
               userAnswers
                 .set(TrusteeNinoYesNoPage(index), true).success.value
                 .set(TrusteesNinoPage(index), "nino").success.value
+                .set(MatchedYesNoPage(index), true).success.value
 
             val result = initial.set(TrusteeNinoYesNoPage(index), false).success.value
 
             result.get(TrusteesNinoPage(index)) mustNot be(defined)
+            result.get(MatchedYesNoPage(index)) mustNot be(defined)
         }
       }
     }
