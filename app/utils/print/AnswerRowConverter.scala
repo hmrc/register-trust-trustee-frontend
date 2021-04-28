@@ -39,7 +39,6 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
     def nameQuestion(query: Gettable[FullName],
                      labelKey: String,
                      changeUrl: String,
-                     verified: Boolean = false,
                      canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: FullName) => HtmlFormat.escape(x.fullName)
       question(query, labelKey, format, changeUrl, canEdit = canEdit)
