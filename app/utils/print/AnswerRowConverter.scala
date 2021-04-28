@@ -42,7 +42,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                      verified: Boolean = false,
                      canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: FullName) => HtmlFormat.escape(x.fullName)
-      question(query, labelKey, format, changeUrl, labelArg = "", verified, canEdit)
+      question(query, labelKey, format, changeUrl, verified = verified, canEdit = canEdit)
     }
 
     def stringQuestion(query: Gettable[String],
@@ -85,7 +85,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                      verified: Boolean = false,
                      canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: LocalDate) => checkAnswersFormatters.formatDate(x)
-      question(query, labelKey, format, changeUrl, name, verified = true, canEdit = false)
+      question(query, labelKey, format, changeUrl, name, verified, canEdit)
     }
 
     def ninoQuestion(query: Gettable[String],
@@ -94,7 +94,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                      verified: Boolean = false,
                      canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: String) => checkAnswersFormatters.formatNino(x)
-      question(query, labelKey, format, changeUrl, name, verified, canEdit = false)
+      question(query, labelKey, format, changeUrl, name, verified, canEdit)
     }
 
     def addressQuestion[T <: Address](query: Gettable[T],
