@@ -23,7 +23,7 @@ import forms.NameFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.leadtrustee.individual.TrusteesNamePage
+import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesNamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -36,7 +36,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
   val index = 0
 
-  val name = FullName("first name", Some("middle name"), "last name")
+  val name: FullName = FullName("first name", Some("middle name"), "last name")
 
   val messageKeyPrefix = "leadTrustee.individual.name"
 
@@ -59,7 +59,31 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index)(request, messages).toString
+        view(form, fakeDraftId, index, readOnly = false)(request, messages).toString
+
+      application.stop()
+
+    }
+
+    "return Ok and the correct view for a GET when lead trustee matched" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(MatchedYesNoPage(index), true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, trusteesNameRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[NameView]
+
+      val form = formProvider(messageKeyPrefix)
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, fakeDraftId, index, readOnly = true)(request, messages).toString
 
       application.stop()
 
@@ -85,7 +109,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index)(request, messages).toString
+        view(boundForm, fakeDraftId, index, readOnly = false)(request, messages).toString
 
       application.stop()
 
@@ -109,7 +133,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(name), fakeDraftId, index)(request, messages).toString
+        view(form.fill(name), fakeDraftId, index, readOnly = false)(request, messages).toString
 
       application.stop()
     }

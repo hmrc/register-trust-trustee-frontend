@@ -21,11 +21,11 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index : Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.individual.name.title")}"
-    ) {
+) {
 
     @formHelper(action = NameController.onSubmit(index, draftId),  'autoComplete -> "on") {
 
@@ -33,30 +33,35 @@
 
         @components.error_summary(form.errors)
 
-    <fieldset>
+        <fieldset>
 
-        <legend>
-         @components.heading("leadTrustee.individual.name.heading")
-        </legend>
+            <legend>
+                @components.heading("leadTrustee.individual.name.heading")
+            </legend>
 
             @components.input_text(
-            field = form("firstName"),
-            label = messages("leadTrustee.individual.name.firstName"),
-            autocomplete = Some("given-name")
+                field = form("firstName"),
+                label = messages("leadTrustee.individual.name.firstName"),
+                autocomplete = Some("given-name"),
+                readOnly = readOnly
             )
 
             @components.input_text(
-            field = form("middleName"),
-            label = messages("leadTrustee.individual.name.middleName"),
-            autocomplete = Some("additional-name")
+                field = form("middleName"),
+                label = messages("leadTrustee.individual.name.middleName"),
+                autocomplete = Some("additional-name"),
+                readOnly = readOnly
             )
 
             @components.input_text(
-            field = form("lastName"),
-            label = messages("leadTrustee.individual.name.lastName"),
-            autocomplete = Some("family-name")
+                field = form("lastName"),
+                label = messages("leadTrustee.individual.name.lastName"),
+                autocomplete = Some("family-name"),
+                readOnly = readOnly
             )
-    </fieldset>
+
+        </fieldset>
+
         @components.submit_button()
     }
 }

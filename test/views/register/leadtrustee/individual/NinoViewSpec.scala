@@ -33,20 +33,42 @@ class NinoViewSpec extends StringViewBehaviours {
 
   val name = FullName("FirstName", None, "LastName").toString
 
-  "NinoView view" must {
+  "NinoView" when {
 
-    val view = viewFor[NinoView](Some(emptyUserAnswers))
+    "not read-only" must {
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+      val view = viewFor[NinoView](Some(emptyUserAnswers))
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView(form))
+      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
-    behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name, Some(s"$messageKeyPrefix.hint"))
+      behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithASubmitButton(applyView(form))
+      behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name, Some(s"$messageKeyPrefix.hint"))
 
+      behave like pageWithASubmitButton(applyView(form))
+
+      behave like pageWithoutReadOnlyInput(applyView(form))
+    }
+
+    "read-only" must {
+
+      val view = viewFor[NinoView](Some(emptyUserAnswers))
+
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
+
+      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+
+      behave like pageWithBackLink(applyView(form))
+
+      behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name, Some(s"$messageKeyPrefix.hint"))
+
+      behave like pageWithASubmitButton(applyView(form))
+
+      behave like pageWithReadOnlyInput(applyView(form))
+    }
   }
 }

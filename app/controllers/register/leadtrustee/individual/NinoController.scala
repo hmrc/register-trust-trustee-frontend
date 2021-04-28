@@ -57,6 +57,9 @@ class NinoController @Inject()(
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
+  private def isLeadTrusteeMatched(index: Int)(implicit request: TrusteeNameRequest[_]) =
+    request.userAnswers.isLeadTrusteeMatched(index)
+
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
@@ -65,7 +68,7 @@ class NinoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
@@ -73,7 +76,7 @@ class NinoController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
 
         value => {
           for {

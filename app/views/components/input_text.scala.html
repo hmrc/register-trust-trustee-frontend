@@ -25,7 +25,8 @@
     optionalHtmlContent: Option[Html] = None,
     symbolText: Option[String] = None,
     inputMode: Option[String] = None,
-    autocomplete: Option[String] = None
+    autocomplete: Option[String] = None,
+    readOnly: Boolean = false
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -71,6 +72,7 @@
         @if(hint.nonEmpty || field.hasErrors) {
             aria-describedby="@if(hint.nonEmpty){@{field.id}_hint}@if(hint.nonEmpty && field.hasErrors){ }@if(field.hasErrors){error-message-@{field.id}-input}"
         }
+        @if(readOnly){readonly}
         />
     </div>
 </div>

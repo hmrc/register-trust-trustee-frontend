@@ -30,23 +30,48 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] {
   val form: Form[FullName] = new NameFormProvider()(prefix)
   val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
 
-  "Name View" must {
+  "NameView" when {
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index)(fakeRequest, messages)
+    "not read-only" must {
 
-    behave like normalPage(applyView(form), prefix)
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, readOnly = false)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView(form))
+      behave like normalPage(applyView(form), prefix)
 
-    behave like pageWithTextFields(
-      form,
-      applyView,
-      prefix,
-      Seq(("firstName", None), ("middleName", None), ("lastName", None))
-    )
+      behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithASubmitButton(applyView(form))
+      behave like pageWithTextFields(
+        form,
+        applyView,
+        prefix,
+        Seq(("firstName", None), ("middleName", None), ("lastName", None))
+      )
 
+      behave like pageWithASubmitButton(applyView(form))
+
+      behave like pageWithoutReadOnlyInput(applyView(form))
+    }
+
+    "read-only" must {
+
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, readOnly = true)(fakeRequest, messages)
+
+      behave like normalPage(applyView(form), prefix)
+
+      behave like pageWithBackLink(applyView(form))
+
+      behave like pageWithTextFields(
+        form,
+        applyView,
+        prefix,
+        Seq(("firstName", None), ("middleName", None), ("lastName", None))
+      )
+
+      behave like pageWithASubmitButton(applyView(form))
+
+      behave like pageWithReadOnlyInput(applyView(form))
+    }
   }
 }

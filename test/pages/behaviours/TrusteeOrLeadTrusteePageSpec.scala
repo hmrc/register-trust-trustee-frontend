@@ -33,7 +33,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
   private val name: String = "Name"
   private val utr: String = "utr"
   private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
-  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "DE")
+  private val country: String = "DE"
+  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, country)
   private val email: String = "email"
   private val tel: String = "tel"
 
@@ -58,6 +59,9 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
               .set(torg.UtrPage(index), utr).success.value
+              .set(torg.mld5.CountryOfResidenceYesNoPage(index), true).success.value
+              .set(torg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(torg.mld5.CountryOfResidencePage(index), country).success.value
               .set(torg.AddressYesNoPage(index), true).success.value
               .set(torg.AddressUkYesNoPage(index), true).success.value
               .set(torg.UkAddressPage(index), ukAddress).success.value
@@ -73,6 +77,9 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(torg.NamePage(index)) mustNot be(defined)
             result.get(torg.UtrYesNoPage(index)) mustNot be(defined)
             result.get(torg.UtrPage(index)) mustNot be(defined)
+            result.get(torg.mld5.CountryOfResidenceYesNoPage(index)) mustNot be(defined)
+            result.get(torg.mld5.CountryOfResidenceInTheUkYesNoPage(index)) mustNot be(defined)
+            result.get(torg.mld5.CountryOfResidencePage(index)) mustNot be(defined)
             result.get(torg.AddressYesNoPage(index)) mustNot be(defined)
             result.get(torg.AddressUkYesNoPage(index)) mustNot be(defined)
             result.get(torg.UkAddressPage(index)) mustNot be(defined)
@@ -93,6 +100,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
               .set(ltorg.UtrPage(index), utr).success.value
+              .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(ltorg.mld5.CountryOfResidencePage(index), country).success.value
               .set(ltorg.AddressUkYesNoPage(index), true).success.value
               .set(ltorg.UkAddressPage(index), ukAddress).success.value
               .set(ltorg.InternationalAddressPage(index), internationalAddress).success.value
@@ -110,6 +119,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(ltorg.UkRegisteredYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.NamePage(index)) mustNot be(defined)
             result.get(ltorg.UtrPage(index)) mustNot be(defined)
+            result.get(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index)) mustNot be(defined)
+            result.get(ltorg.mld5.CountryOfResidencePage(index)) mustNot be(defined)
             result.get(ltorg.AddressUkYesNoPage(index)) mustNot be(defined)
             result.get(ltorg.UkAddressPage(index)) mustNot be(defined)
             result.get(ltorg.InternationalAddressPage(index)) mustNot be(defined)
@@ -135,6 +146,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
               .set(ltorg.NamePage(index), name).success.value
               .set(ltorg.UtrPage(index), utr).success.value
+              .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(ltorg.mld5.CountryOfResidencePage(index), country).success.value
               .set(ltorg.AddressUkYesNoPage(index), true).success.value
               .set(ltorg.UkAddressPage(index), ukAddress).success.value
               .set(ltorg.InternationalAddressPage(index), internationalAddress).success.value
@@ -152,6 +165,8 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(ltorg.UkRegisteredYesNoPage(index)) must be(defined)
             result.get(ltorg.NamePage(index)) must be(defined)
             result.get(ltorg.UtrPage(index)) must be(defined)
+            result.get(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index)) must be(defined)
+            result.get(ltorg.mld5.CountryOfResidencePage(index)) must be(defined)
             result.get(ltorg.AddressUkYesNoPage(index)) must be(defined)
             result.get(ltorg.UkAddressPage(index)) must be(defined)
             result.get(ltorg.InternationalAddressPage(index)) must be(defined)
@@ -174,6 +189,9 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
               .set(torg.NamePage(index), name).success.value
               .set(torg.UtrYesNoPage(index), true).success.value
               .set(torg.UtrPage(index), utr).success.value
+              .set(torg.mld5.CountryOfResidenceYesNoPage(index), true).success.value
+              .set(torg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(torg.mld5.CountryOfResidencePage(index), country).success.value
               .set(torg.AddressYesNoPage(index), true).success.value
               .set(torg.AddressUkYesNoPage(index), true).success.value
               .set(torg.UkAddressPage(index), ukAddress).success.value
@@ -189,6 +207,9 @@ class TrusteeOrLeadTrusteePageSpec extends PageBehaviours {
             result.get(torg.NamePage(index)) must be(defined)
             result.get(torg.UtrYesNoPage(index)) must be(defined)
             result.get(torg.UtrPage(index)) must be(defined)
+            result.get(torg.mld5.CountryOfResidenceYesNoPage(index)) must be(defined)
+            result.get(torg.mld5.CountryOfResidenceInTheUkYesNoPage(index)) must be(defined)
+            result.get(torg.mld5.CountryOfResidencePage(index)) must be(defined)
             result.get(torg.AddressYesNoPage(index)) must be(defined)
             result.get(torg.AddressUkYesNoPage(index)) must be(defined)
             result.get(torg.UkAddressPage(index)) must be(defined)

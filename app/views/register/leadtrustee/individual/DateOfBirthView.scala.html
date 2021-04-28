@@ -21,7 +21,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.individual.dateOfBirth.title", name)}"
@@ -38,7 +38,8 @@
             legend = messages("leadTrustee.individual.dateOfBirth.heading", name),
             legendClass = "heading-large",
             legendAsHeading = true,
-            hint = Some(messages(s"site.date.hint"))
+            hint = Some(messages(s"site.date.hint")),
+            readOnly = readOnly
         )
 
         @components.submit_button()

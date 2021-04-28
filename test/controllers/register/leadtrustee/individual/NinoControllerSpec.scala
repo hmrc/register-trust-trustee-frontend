@@ -74,7 +74,28 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName.toString)(request, messages).toString
+        view(form, fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for a GET when lead trustee matched" in {
+
+      val userAnswers = baseAnswers
+        .set(MatchedYesNoPage(index), true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, ninoRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[NinoView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, fakeDraftId, index, trusteeName.toString, readOnly = true)(request, messages).toString
 
       application.stop()
     }
@@ -95,7 +116,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, trusteeName.toString)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
 
       application.stop()
     }
@@ -348,7 +369,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeName.toString)(request, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
 
       application.stop()
     }

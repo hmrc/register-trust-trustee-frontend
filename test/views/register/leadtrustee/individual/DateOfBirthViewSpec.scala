@@ -17,8 +17,8 @@
 package views.register.leadtrustee.individual
 
 import java.time.LocalDate
-
 import forms.DateFormProvider
+import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
@@ -27,21 +27,43 @@ import views.html.register.leadtrustee.individual.DateOfBirthView
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "leadTrustee.individual.dateOfBirth"
+  val name: String = FullName("FirstName", None, "LastName").toString
   val index = 0
 
-  val form = new DateFormProvider(frontendAppConfig).withConfig(messageKeyPrefix)
+  val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messageKeyPrefix)
 
-  "DateOfBirthView view" must {
+  "DateOfBirthView" when {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+    "not read-only" must {
 
-    val view = application.injector.instanceOf[DateOfBirthView]
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, "LeadTrusteeName")(fakeRequest, messages)
+      val view = application.injector.instanceOf[DateOfBirthView]
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, "LeadTrusteeName")
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView(form))
+      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+
+      behave like pageWithBackLink(applyView(form))
+
+      behave like pageWithoutReadOnlyInput(applyView(form))
+    }
+
+    "read-only" must {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val view = application.injector.instanceOf[DateOfBirthView]
+
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
+
+      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+
+      behave like pageWithBackLink(applyView(form))
+
+      behave like pageWithReadOnlyInput(applyView(form))
+    }
   }
 }

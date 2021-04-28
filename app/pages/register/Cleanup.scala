@@ -44,10 +44,14 @@ trait Cleanup {
 
   def removeTrusteeBusiness(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
     import pages.register.trustees.organisation._
+    import pages.register.trustees.organisation.mld5._
 
     userAnswers.remove(NamePage(index))
       .flatMap(_.remove(UtrYesNoPage(index)))
       .flatMap(_.remove(UtrPage(index)))
+      .flatMap(_.remove(CountryOfResidenceYesNoPage(index)))
+      .flatMap(_.remove(CountryOfResidenceInTheUkYesNoPage(index)))
+      .flatMap(_.remove(CountryOfResidencePage(index)))
       .flatMap(_.remove(AddressYesNoPage(index)))
       .flatMap(_.remove(AddressUkYesNoPage(index)))
       .flatMap(_.remove(UkAddressPage(index)))
@@ -60,8 +64,11 @@ trait Cleanup {
 
     userAnswers.remove(TrusteesNamePage(index))
       .flatMap(_.remove(TrusteesDateOfBirthPage(index)))
+      .flatMap(_.remove(CountryOfNationalityInTheUkYesNoPage(index)))
+      .flatMap(_.remove(CountryOfNationalityPage(index)))
       .flatMap(_.remove(TrusteeNinoYesNoPage(index)))
       .flatMap(_.remove(TrusteesNinoPage(index)))
+      .flatMap(_.remove(MatchedYesNoPage(index)))
       .flatMap(_.remove(CountryOfResidenceInTheUkYesNoPage(index)))
       .flatMap(_.remove(CountryOfResidencePage(index)))
       .flatMap(_.remove(TrusteeDetailsChoicePage(index)))

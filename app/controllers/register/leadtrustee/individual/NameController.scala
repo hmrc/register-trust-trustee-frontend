@@ -20,12 +20,14 @@ import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import forms.NameFormProvider
+import models.requests.RegistrationDataRequest
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.NameView
@@ -45,8 +47,11 @@ class NameController @Inject()(
 
   private val form = formProvider("leadTrustee.individual.name")
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index)
+
+  private def isLeadTrusteeMatched(index: Int)(implicit request: RegistrationDataRequest[_]) =
+    request.userAnswers.isLeadTrusteeMatched(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
@@ -56,7 +61,7 @@ class NameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index))
+      Ok(view(preparedForm, draftId, index, isLeadTrusteeMatched(index)))
 
   }
 
@@ -65,7 +70,7 @@ class NameController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, isLeadTrusteeMatched(index)))),
 
         value => {
           for {
