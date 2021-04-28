@@ -38,7 +38,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
 
     def nameQuestion(query: Gettable[FullName],
                      labelKey: String,
-                     changeUrl: Option[String],
+                     changeUrl: String,
                      verified: Boolean = false,
                      canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: FullName) => HtmlFormat.escape(x.fullName)
@@ -49,7 +49,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                        labelKey: String,
                        changeUrl: String): Option[AnswerRow] = {
       val format = (x: String) => HtmlFormat.escape(x)
-      question(query, labelKey, format, Some(changeUrl), name)
+      question(query, labelKey, format, changeUrl, name)
     }
 
     def countryQuestion(isUkQuery: Gettable[Boolean],
@@ -59,7 +59,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
       userAnswers.get(isUkQuery) flatMap {
         case false =>
           val format = (x: String) => HtmlFormat.escape(checkAnswersFormatters.country(x))
-          question(query, labelKey, format, Some(changeUrl), name)
+          question(query, labelKey, format, changeUrl, name)
         case _ =>
           None
       }
@@ -69,19 +69,19 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                     labelKey: String,
                     changeUrl: String): Option[AnswerRow] = {
       val format = (x: Int) => HtmlFormat.escape(x.toString)
-      question(query, labelKey, format, Some(changeUrl), name)
+      question(query, labelKey, format, changeUrl, name)
     }
 
     def yesNoQuestion(query: Gettable[Boolean],
                       labelKey: String,
                       changeUrl: String): Option[AnswerRow] = {
       val format = (x: Boolean) => checkAnswersFormatters.yesOrNo(x)
-      question(query, labelKey, format, Some(changeUrl), name)
+      question(query, labelKey, format, changeUrl, name)
     }
 
     def dateQuestion(query: Gettable[LocalDate],
                      labelKey: String,
-                     changeUrl: Option[String],
+                     changeUrl: String,
                      verified: Boolean = false,
                      canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: LocalDate) => checkAnswersFormatters.formatDate(x)
@@ -90,7 +90,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
 
     def ninoQuestion(query: Gettable[String],
                      labelKey: String,
-                     changeUrl: Option[String],
+                     changeUrl: String,
                      verified: Boolean = false,
                      canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: String) => checkAnswersFormatters.formatNino(x)
@@ -102,14 +102,14 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                                       changeUrl: String)
                                      (implicit reads: Reads[T]): Option[AnswerRow] = {
       val format = (x: T) => checkAnswersFormatters.addressFormatter(x)
-      question(query, labelKey, format, Some(changeUrl), name)
+      question(query, labelKey, format, changeUrl, name)
     }
 
     def passportDetailsQuestion(query: Gettable[PassportOrIdCardDetails],
                                 labelKey: String,
                                 changeUrl: String): Option[AnswerRow] = {
       val format = (x: PassportOrIdCardDetails) => checkAnswersFormatters.passportOrIDCard(x)
-      question(query, labelKey, format, Some(changeUrl), name)
+      question(query, labelKey, format, changeUrl, name)
     }
 
     def enumQuestion[T](query: Gettable[T],
@@ -118,13 +118,13 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                         enumPrefix: String)
                        (implicit messages:Messages, rds: Reads[T]): Option[AnswerRow] = {
       val format = (x: T) => checkAnswersFormatters.formatEnum(enumPrefix, x)
-      question(query, labelKey, format, Some(changeUrl), name)
+      question(query, labelKey, format, changeUrl, name)
     }
 
     private def question[T](query: Gettable[T],
                             labelKey: String,
                             format: T => Html,
-                            changeUrl: Option[String],
+                            changeUrl: String,
                             labelArg: String = "",
                             verified: Boolean = false,
                             canEdit: Boolean = true)
@@ -133,7 +133,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
         AnswerRow(
           label = s"$labelKey.checkYourAnswersLabel",
           answer = format(x),
-          changeUrl = changeUrl,
+          changeUrl = Some(changeUrl),
           labelArg = labelArg,
           verified = verified,
           canEdit = canEdit
