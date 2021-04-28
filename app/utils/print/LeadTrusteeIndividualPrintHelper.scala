@@ -17,9 +17,9 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.register.{routes => regRts}
-import controllers.register.leadtrustee.individual.{routes => rts}
 import controllers.register.leadtrustee.individual.mld5.{routes => mld5Rts}
+import controllers.register.leadtrustee.individual.{routes => rts}
+import controllers.register.{routes => regRts}
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import pages.register.TrusteeIndividualOrBusinessPage
@@ -43,7 +43,7 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
     val prefix: String = "leadTrustee.individual"
-    val isVerified = userAnswers.get(TrusteesNinoPage(index)).isDefined
+    val isVerified = userAnswers.isLeadTrusteeMatched(index)
 
     Seq(
       bound.enumQuestion[IndividualOrBusiness](

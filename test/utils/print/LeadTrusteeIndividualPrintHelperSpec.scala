@@ -202,6 +202,7 @@ class LeadTrusteeIndividualPrintHelperSpec extends SpecBase {
             .set(mld5.CountryOfNationalityPage(index), "DE").success.value
             .set(TrusteeNinoYesNoPage(index), true).success.value
             .set(TrusteesNinoPage(index), nino).success.value
+            .set(MatchedYesNoPage(index), true).success.value
             .set(mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
             .set(mld5.CountryOfResidencePage(index), "DE").success.value
             .set(InternationalAddressPage(index), internationalAddress).success.value
