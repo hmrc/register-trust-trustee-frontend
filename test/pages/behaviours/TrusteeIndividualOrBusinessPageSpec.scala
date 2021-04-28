@@ -18,24 +18,18 @@ package pages.behaviours
 
 import models.Status.Completed
 import models.UserAnswers
+import models.core.pages.IndividualOrBusiness
 import models.core.pages.IndividualOrBusiness._
-import models.core.pages.{IndividualOrBusiness, InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.behaviours.SetUserAnswers.SetAnswers
 import pages.entitystatus.TrusteeStatus
 import pages.register.TrusteeIndividualOrBusinessPage
-import pages.register.leadtrustee.{organisation => ltorg}
-import pages.register.trustees.{organisation => torg}
+import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
+import pages.register.trustees.{individual => tind, organisation => torg}
 
 class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
 
   private val index: Int = 0
-  private val name: String = "Name"
-  private val utr: String = "utr"
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
-  private val country: String = "DE"
-  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, country)
-  private val email: String = "email"
-  private val tel: String = "tel"
 
   "TrusteeIndividualOrBusiness Page" must {
 
@@ -53,30 +47,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
           userAnswers =>
             val initial: UserAnswers = userAnswers
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-
-              .set(torg.NamePage(index), name).success.value
-              .set(torg.UtrYesNoPage(index), true).success.value
-              .set(torg.UtrPage(index), utr).success.value
-              .set(torg.mld5.CountryOfResidenceYesNoPage(index), true).success.value
-              .set(torg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-              .set(torg.mld5.CountryOfResidencePage(index), country).success.value
-              .set(torg.AddressYesNoPage(index), true).success.value
-              .set(torg.AddressUkYesNoPage(index), true).success.value
-              .set(torg.UkAddressPage(index), ukAddress).success.value
-              .set(torg.InternationalAddressPage(index), internationalAddress).success.value
-
-              .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
-              .set(ltorg.NamePage(index), name).success.value
-              .set(ltorg.UtrPage(index), utr).success.value
-              .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-              .set(ltorg.mld5.CountryOfResidencePage(index), country).success.value
-              .set(ltorg.AddressUkYesNoPage(index), true).success.value
-              .set(ltorg.UkAddressPage(index), ukAddress).success.value
-              .set(ltorg.InternationalAddressPage(index), internationalAddress).success.value
-              .set(ltorg.EmailAddressYesNoPage(index), true).success.value
-              .set(ltorg.EmailAddressPage(index), email).success.value
-              .set(ltorg.TelephoneNumberPage(index), tel).success.value
-
+              .setLeadBusinessAnswers(index)
+              .setBusinessAnswers(index)
               .set(TrusteeStatus(index), Completed).success.value
 
             val result: UserAnswers = initial
@@ -107,9 +79,62 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
             result.get(TrusteeStatus(index)) mustNot be(defined)
         }
       }
+
+      "BUSINESS selected and value changed" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val initial: UserAnswers = userAnswers
+              .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
+              .setLeadIndividualAnswers(index)
+              .setIndividualAnswers(index)
+              .set(TrusteeStatus(index), Completed).success.value
+
+            val result: UserAnswers = initial
+              .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+
+            result.get(tind.NamePage(index)) mustNot be(defined)
+            result.get(tind.DateOfBirthYesNoPage(index)) mustNot be(defined)
+            result.get(tind.DateOfBirthPage(index)) mustNot be(defined)
+            result.get(tind.mld5.CountryOfNationalityYesNoPage(index)) mustNot be(defined)
+            result.get(tind.mld5.CountryOfNationalityInTheUkYesNoPage(index)) mustNot be(defined)
+            result.get(tind.mld5.CountryOfNationalityPage(index)) mustNot be(defined)
+            result.get(tind.NinoYesNoPage(index)) mustNot be(defined)
+            result.get(tind.NinoPage(index)) mustNot be(defined)
+            result.get(tind.mld5.CountryOfResidenceYesNoPage(index)) mustNot be(defined)
+            result.get(tind.mld5.CountryOfResidenceInTheUkYesNoPage(index)) mustNot be(defined)
+            result.get(tind.mld5.CountryOfResidencePage(index)) mustNot be(defined)
+            result.get(tind.AddressYesNoPage(index)) mustNot be(defined)
+            result.get(tind.AddressUkYesNoPage(index)) mustNot be(defined)
+            result.get(tind.UkAddressPage(index)) mustNot be(defined)
+            result.get(tind.InternationalAddressPage(index)) mustNot be(defined)
+            result.get(tind.PassportDetailsYesNoPage(index)) mustNot be(defined)
+            result.get(tind.PassportDetailsPage(index)) mustNot be(defined)
+            result.get(tind.IDCardDetailsYesNoPage(index)) mustNot be(defined)
+            result.get(tind.IDCardDetailsPage(index)) mustNot be(defined)
+            result.get(tind.mld5.MentalCapacityYesNoPage(index)) mustNot be(defined)
+
+            result.get(ltind.TrusteesNamePage(index)) mustNot be(defined)
+            result.get(ltind.TrusteesDateOfBirthPage(index)) mustNot be(defined)
+            result.get(ltind.mld5.CountryOfNationalityInTheUkYesNoPage(index)) mustNot be(defined)
+            result.get(ltind.mld5.CountryOfNationalityPage(index)) mustNot be(defined)
+            result.get(ltind.TrusteeNinoYesNoPage(index)) mustNot be(defined)
+            result.get(ltind.TrusteesNinoPage(index)) mustNot be(defined)
+            result.get(ltind.TrusteeDetailsChoicePage(index)) mustNot be(defined)
+            result.get(ltind.PassportDetailsPage(index)) mustNot be(defined)
+            result.get(ltind.IDCardDetailsPage(index)) mustNot be(defined)
+            result.get(ltind.mld5.CountryOfResidenceInTheUkYesNoPage(index)) mustNot be(defined)
+            result.get(ltind.mld5.CountryOfResidencePage(index)) mustNot be(defined)
+            result.get(ltind.AddressUkYesNoPage(index)) mustNot be(defined)
+            result.get(ltind.UkAddressPage(index)) mustNot be(defined)
+            result.get(ltind.InternationalAddressPage(index)) mustNot be(defined)
+
+            result.get(TrusteeStatus(index)) mustNot be(defined)
+        }
+      }
     }
 
-    "don't implement cleanup logic" when {
+    "not implement cleanup logic" when {
 
       "BUSINESS selected and value unchanged" in {
 
@@ -117,30 +142,8 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
           userAnswers =>
             val initial: UserAnswers = userAnswers
               .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-
-              .set(torg.NamePage(index), name).success.value
-              .set(torg.UtrYesNoPage(index), true).success.value
-              .set(torg.UtrPage(index), utr).success.value
-              .set(torg.mld5.CountryOfResidenceYesNoPage(index), true).success.value
-              .set(torg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-              .set(torg.mld5.CountryOfResidencePage(index), country).success.value
-              .set(torg.AddressYesNoPage(index), true).success.value
-              .set(torg.AddressUkYesNoPage(index), true).success.value
-              .set(torg.UkAddressPage(index), ukAddress).success.value
-              .set(torg.InternationalAddressPage(index), internationalAddress).success.value
-
-              .set(ltorg.UkRegisteredYesNoPage(index), true).success.value
-              .set(ltorg.NamePage(index), name).success.value
-              .set(ltorg.UtrPage(index), utr).success.value
-              .set(ltorg.mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-              .set(ltorg.mld5.CountryOfResidencePage(index), country).success.value
-              .set(ltorg.AddressUkYesNoPage(index), true).success.value
-              .set(ltorg.UkAddressPage(index), ukAddress).success.value
-              .set(ltorg.InternationalAddressPage(index), internationalAddress).success.value
-              .set(ltorg.EmailAddressYesNoPage(index), true).success.value
-              .set(ltorg.EmailAddressPage(index), email).success.value
-              .set(ltorg.TelephoneNumberPage(index), tel).success.value
-
+              .setLeadBusinessAnswers(index)
+              .setBusinessAnswers(index)
               .set(TrusteeStatus(index), Completed).success.value
 
             val result: UserAnswers = initial
@@ -172,7 +175,60 @@ class TrusteeIndividualOrBusinessPageSpec extends PageBehaviours {
             result.get(TrusteeStatus(index)) must be(defined)
         }
       }
+
+      "INDIVIDUAL selected and value unchanged" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val initial: UserAnswers = userAnswers
+              .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
+              .setLeadIndividualAnswers(index)
+              .setIndividualAnswers(index)
+              .set(TrusteeStatus(index), Completed).success.value
+
+            val result: UserAnswers = initial
+              .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
+
+            result.get(tind.NamePage(index)) must be(defined)
+            result.get(tind.DateOfBirthYesNoPage(index)) must be(defined)
+            result.get(tind.DateOfBirthPage(index)) must be(defined)
+            result.get(tind.mld5.CountryOfNationalityYesNoPage(index)) must be(defined)
+            result.get(tind.mld5.CountryOfNationalityInTheUkYesNoPage(index)) must be(defined)
+            result.get(tind.mld5.CountryOfNationalityPage(index)) must be(defined)
+            result.get(tind.NinoYesNoPage(index)) must be(defined)
+            result.get(tind.NinoPage(index)) must be(defined)
+            result.get(tind.mld5.CountryOfResidenceYesNoPage(index)) must be(defined)
+            result.get(tind.mld5.CountryOfResidenceInTheUkYesNoPage(index)) must be(defined)
+            result.get(tind.mld5.CountryOfResidencePage(index)) must be(defined)
+            result.get(tind.AddressYesNoPage(index)) must be(defined)
+            result.get(tind.AddressUkYesNoPage(index)) must be(defined)
+            result.get(tind.UkAddressPage(index)) must be(defined)
+            result.get(tind.InternationalAddressPage(index)) must be(defined)
+            result.get(tind.PassportDetailsYesNoPage(index)) must be(defined)
+            result.get(tind.PassportDetailsPage(index)) must be(defined)
+            result.get(tind.IDCardDetailsYesNoPage(index)) must be(defined)
+            result.get(tind.IDCardDetailsPage(index)) must be(defined)
+            result.get(tind.mld5.MentalCapacityYesNoPage(index)) must be(defined)
+
+            result.get(ltind.TrusteesNamePage(index)) must be(defined)
+            result.get(ltind.TrusteesDateOfBirthPage(index)) must be(defined)
+            result.get(ltind.mld5.CountryOfNationalityInTheUkYesNoPage(index)) must be(defined)
+            result.get(ltind.mld5.CountryOfNationalityPage(index)) must be(defined)
+            result.get(ltind.TrusteeNinoYesNoPage(index)) must be(defined)
+            result.get(ltind.TrusteesNinoPage(index)) must be(defined)
+            result.get(ltind.MatchedYesNoPage(index)) must be(defined)
+            result.get(ltind.TrusteeDetailsChoicePage(index)) must be(defined)
+            result.get(ltind.PassportDetailsPage(index)) must be(defined)
+            result.get(ltind.IDCardDetailsPage(index)) must be(defined)
+            result.get(ltind.mld5.CountryOfResidenceInTheUkYesNoPage(index)) must be(defined)
+            result.get(ltind.mld5.CountryOfResidencePage(index)) must be(defined)
+            result.get(ltind.AddressUkYesNoPage(index)) must be(defined)
+            result.get(ltind.UkAddressPage(index)) must be(defined)
+            result.get(ltind.InternationalAddressPage(index)) must be(defined)
+
+            result.get(TrusteeStatus(index)) must be(defined)
+        }
+      }
     }
   }
-
 }

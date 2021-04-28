@@ -27,6 +27,7 @@ trait Cleanup {
     import pages.register.trustees.individual.mld5._
 
     userAnswers.remove(NamePage(index))
+      .flatMap(_.remove(DateOfBirthYesNoPage(index)))
       .flatMap(_.remove(DateOfBirthPage(index)))
       .flatMap(_.remove(CountryOfNationalityYesNoPage(index)))
       .flatMap(_.remove(CountryOfNationalityInTheUkYesNoPage(index)))
@@ -36,9 +37,14 @@ trait Cleanup {
       .flatMap(_.remove(CountryOfResidenceYesNoPage(index)))
       .flatMap(_.remove(CountryOfResidenceInTheUkYesNoPage(index)))
       .flatMap(_.remove(CountryOfResidencePage(index)))
+      .flatMap(_.remove(AddressYesNoPage(index)))
       .flatMap(_.remove(AddressUkYesNoPage(index)))
       .flatMap(_.remove(UkAddressPage(index)))
       .flatMap(_.remove(InternationalAddressPage(index)))
+      .flatMap(_.remove(PassportDetailsYesNoPage(index)))
+      .flatMap(_.remove(PassportDetailsPage(index)))
+      .flatMap(_.remove(IDCardDetailsYesNoPage(index)))
+      .flatMap(_.remove(IDCardDetailsPage(index)))
       .flatMap(_.remove(MentalCapacityYesNoPage(index)))
   }
 
