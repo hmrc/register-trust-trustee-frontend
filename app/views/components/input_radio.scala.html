@@ -26,7 +26,8 @@
     inputs: Seq[RadioOption],
     legendAsHeading: Boolean = false,
     legendAsH2Heading: Boolean = false,
-    additionalContent: Option[Html] = None
+    additionalContent: Option[Html] = None,
+    readOnly: Boolean = false
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -59,7 +60,10 @@
 
         @for(input <- inputs) {
             <div class="multiple-choice">
-                <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}" @if(field.value == Some(input.value)){checked="checked"} @if(trackGa){data-journey-click="trusts-frontend:click:@{input.id}"} />
+                <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}"
+                       @if(field.value == Some(input.value)){checked="checked"}else if(readOnly){disabled}
+                       @if(trackGa){data-journey-click="trusts-frontend:click:@{input.id}"}
+                />
 
                 <label class="block-label selection-button-radio" for="@{input.id}">
                     @messages(input.messageKey)

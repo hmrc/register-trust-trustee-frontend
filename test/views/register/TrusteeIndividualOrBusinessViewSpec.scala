@@ -14,39 +14,34 @@
  * limitations under the License.
  */
 
-package views.register.leadtrustee.individual
+package views.register
 
-import forms.YesNoFormProvider
-import models.core.pages.FullName
+import forms.IndividualOrBusinessFormProvider
+import models.core.pages.IndividualOrBusiness
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.register.leadtrustee.individual.NinoYesNoView
+import views.behaviours.ViewBehaviours
+import views.html.register.TrusteeIndividualOrBusinessView
 
-class NinoYesNoViewSpec extends YesNoViewBehaviours {
+class TrusteeIndividualOrBusinessViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "leadTrustee.individual.ninoYesNo"
+  private val messageKeyPrefix: String = "leadTrustee.individualOrBusiness"
+  private val form: Form[IndividualOrBusiness] = new IndividualOrBusinessFormProvider()(messageKeyPrefix)
+  private val index = 0
+  private val heading = messages(s"$messageKeyPrefix.heading")
 
-  val index = 0
-
-  val form: Form[Boolean] = new YesNoFormProvider().withPrefix("leadTrustee.individual.ninoYesNo")
-
-  val name: String = FullName("FirstName", None, "LastName").toString
-
-  "NinoYesNoView" when {
+  "TrusteeIndividualOrBusinessView" when {
 
     "not read-only" must {
 
-      val view = viewFor[NinoYesNoView](Some(emptyUserAnswers))
+      val view = viewFor[TrusteeIndividualOrBusinessView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, index, heading, readOnly = false)(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+      behave like normalPage(applyView(form), messageKeyPrefix)
 
       behave like pageWithBackLink(applyView(form))
-
-      behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(name))
 
       behave like pageWithASubmitButton(applyView(form))
 
@@ -55,16 +50,14 @@ class NinoYesNoViewSpec extends YesNoViewBehaviours {
 
     "read-only" must {
 
-      val view = viewFor[NinoYesNoView](Some(emptyUserAnswers))
+      val view = viewFor[TrusteeIndividualOrBusinessView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, index, heading, readOnly = true)(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+      behave like normalPage(applyView(form), messageKeyPrefix)
 
       behave like pageWithBackLink(applyView(form))
-
-      behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(name))
 
       behave like pageWithASubmitButton(applyView(form))
 

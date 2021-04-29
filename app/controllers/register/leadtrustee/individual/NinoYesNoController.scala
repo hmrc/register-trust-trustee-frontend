@@ -19,14 +19,16 @@ package controllers.register.leadtrustee.individual
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
+import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteeNinoYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.NinoYesNoView
@@ -47,8 +49,11 @@ class NinoYesNoController @Inject()(
 
   private val form = formProvider.withPrefix("leadTrustee.individual.ninoYesNo")
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
+
+  private def isLeadTrusteeMatched(index: Int)(implicit request: TrusteeNameRequest[_]) =
+    request.userAnswers.isLeadTrusteeMatched(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
@@ -58,7 +63,7 @@ class NinoYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -66,7 +71,7 @@ class NinoYesNoController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
 
         value => {
           for {

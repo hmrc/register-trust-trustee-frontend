@@ -29,9 +29,9 @@ class NinoViewSpec extends StringViewBehaviours {
 
   val index = 0
 
-  val form = new NinoFormProvider().apply("leadTrustee.individual.nino")
+  val form: Form[String] = new NinoFormProvider().apply("leadTrustee.individual.nino")
 
-  val name = FullName("FirstName", None, "LastName").toString
+  val name: String = FullName("FirstName", None, "LastName").toString
 
   "NinoView" when {
 

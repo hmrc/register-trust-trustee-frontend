@@ -21,6 +21,7 @@ import forms.IndividualOrBusinessFormProvider
 import models.core.pages.IndividualOrBusiness
 import models.core.pages.TrusteeOrLeadTrustee._
 import org.scalacheck.Arbitrary.arbitrary
+import pages.register.leadtrustee.individual.MatchedYesNoPage
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.i18n.Messages
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
@@ -32,7 +33,8 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
   val index = 0
 
-  lazy val trusteeIndividualOrBusinessRoute = routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeIndividualOrBusinessRoute: String =
+    routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
   val formProvider = new IndividualOrBusinessFormProvider()
 
@@ -62,7 +64,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, leadHeading)(request, messages).toString
+          view(form, fakeDraftId, index, leadHeading, readOnly = false)(request, messages).toString
 
         application.stop()
       }
@@ -90,14 +92,41 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, heading)(request, messages).toString
+          view(form, fakeDraftId, index, heading, readOnly = false)(request, messages).toString
 
         application.stop()
       }
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" when {
+    "return OK and the correct view for a GET when lead trustee matched" in {
 
+      val messageKeyPrefix = "leadTrustee.individualOrBusiness"
+
+      val leadHeading = Messages(s"$messageKeyPrefix.heading")
+
+      val userAnswers = emptyUserAnswers
+        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
+        .set(MatchedYesNoPage(index), true).success.value
+
+      val application = applicationBuilder(Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, trusteeIndividualOrBusinessRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[TrusteeIndividualOrBusinessView]
+
+      val form = formProvider(messageKeyPrefix)
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, fakeDraftId, index, leadHeading, readOnly = true)(request, messages).toString
+
+      application.stop()
+    }
+
+    "populate the view correctly on a GET when the question has previously been answered" when {
 
       "is lead trustee" in {
 
@@ -122,7 +151,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading)(request, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading, readOnly = false)(request, messages).toString
 
         application.stop()
       }
@@ -151,7 +180,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading)(request, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading, readOnly = false)(request, messages).toString
 
         application.stop()
       }
@@ -241,7 +270,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, heading)(request, messages).toString
+        view(boundForm, fakeDraftId, index, heading, readOnly = false)(request, messages).toString
 
       application.stop()
     }
