@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages.behaviours.leadtrustee.individual
 
-import play.twirl.api.Html
+import pages.behaviours.PageBehaviours
+import pages.register.leadtrustee.individual._
 
-case class AnswerRow(label: String, answer: Html, changeUrl: Option[String], labelArg: String = "", canEdit: Boolean = true, isVerified: Boolean = false)
+class MatchedYesNoPageSpec extends PageBehaviours {
+
+  val index = 0
+
+  "MatchedYesNoPage" must {
+
+    beRetrievable[Boolean](MatchedYesNoPage(index))
+
+    beSettable[Boolean](MatchedYesNoPage(index))
+
+    beRemovable[Boolean](MatchedYesNoPage(index))
+  }
+
+}

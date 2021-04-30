@@ -37,6 +37,7 @@ final case class TrusteeNinoYesNoPage(index : Int) extends QuestionPage[Boolean]
           .flatMap(_.remove(IDCardDetailsPage(index)))
       case Some(false) =>
         userAnswers.remove(TrusteesNinoPage(index))
+          .flatMap(_.remove(MatchedYesNoPage(index)))
       case _ =>
         super.cleanup(value, userAnswers)
     }

@@ -23,14 +23,18 @@
     <div class="cya-answer">
         @row.answer
     </div>
-    @if(row.canEdit) {
-        <div class="cya-change">
+    <div class="cya-change">
+        @if(row.canEdit) {
             @row.changeUrl.map { url =>
             <a href='@url'>
                 <span aria-hidden="true">@messages("site.edit")</span>
                 <span class="visually-hidden">@messages("site.hidden-edit", messages(row.label, row.labelArg))</span>
             </a>
             }
-        </div>
-    }
+        } else if (row.isVerified) {
+            <strong class="govuk-tag verified">
+                @messages("site.verified")
+            </strong>
+        }
+    </div>
 </li>

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.trustees.individual
+package pages.register.leadtrustee.individual
 
-import models.core.pages.Address
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class TrusteeAddressPage(index: Int) extends QuestionPage[Address] {
+final case class MatchedYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "matched"
 }

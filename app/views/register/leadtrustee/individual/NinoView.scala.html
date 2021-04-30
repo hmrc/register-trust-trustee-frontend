@@ -21,11 +21,11 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.individual.nino.title")}"
-    ) {
+) {
 
     @formHelper(action = NinoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
@@ -34,11 +34,12 @@
         @components.error_summary(form.errors)
 
         @components.input_nino(
-          field = form("value"),
-          label = messages("leadTrustee.individual.nino.heading", name),
-          labelClass = Some("heading-large"),
-          labelAsHeading = true,
-          hint = Some(messages(s"leadTrustee.individual.nino.hint"))
+            field = form("value"),
+            label = messages("leadTrustee.individual.nino.heading", name),
+            labelClass = Some("heading-large"),
+            labelAsHeading = true,
+            hint = Some(messages(s"leadTrustee.individual.nino.hint")),
+            readOnly = readOnly
         )
 
         @components.submit_button()

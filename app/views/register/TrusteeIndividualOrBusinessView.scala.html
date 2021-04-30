@@ -22,11 +22,11 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, heading: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, heading: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages(heading)}"
-    ) {
+) {
 
     @formHelper(action = TrusteeIndividualOrBusinessController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
@@ -40,7 +40,8 @@
             legendClass = Some("heading-large"),
             fieldSetClass = Some("inline"),
             inputs = IndividualOrBusiness.options.toSeq,
-            legendAsHeading = true
+            legendAsHeading = true,
+            readOnly = readOnly
         )
 
         @components.submit_button()

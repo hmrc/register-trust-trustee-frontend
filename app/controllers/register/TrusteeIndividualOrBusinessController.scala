@@ -70,7 +70,7 @@ class TrusteeIndividualOrBusinessController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, heading(index)))
+      Ok(view(preparedForm, draftId, index, heading(index), isLeadTrusteeMatched(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -80,7 +80,7 @@ class TrusteeIndividualOrBusinessController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, heading(index)))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, heading(index), isLeadTrusteeMatched(index)))),
 
         value => {
           for {
@@ -101,5 +101,8 @@ class TrusteeIndividualOrBusinessController @Inject()(
     val prefix = if (isLead) "leadTrustee" else "trustee"
     s"$prefix.individualOrBusiness"
   }
+
+  private def isLeadTrusteeMatched(index: Int)(implicit request: RegistrationDataRequest[_]) =
+    request.userAnswers.isLeadTrusteeMatched(index)
 
 }

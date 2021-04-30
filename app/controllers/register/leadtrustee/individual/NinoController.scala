@@ -25,7 +25,7 @@ import forms.NinoFormProvider
 import handlers.ErrorHandler
 import models._
 import navigation.Navigator
-import pages.register.leadtrustee.individual.TrusteesNinoPage
+import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesNinoPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -57,6 +57,9 @@ class NinoController @Inject()(
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
+  private def isLeadTrusteeMatched(index: Int)(implicit request: TrusteeNameRequest[_]) =
+    request.userAnswers.isLeadTrusteeMatched(index)
+
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
@@ -65,7 +68,7 @@ class NinoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
@@ -73,16 +76,17 @@ class NinoController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesNinoPage(index), value))
             matchingResponse <- service.matchLeadTrustee(updatedAnswers, index)
-            _ <- registrationsRepository.set(updatedAnswers)
+            updatedAnswersWithMatched <- Future.fromTry(updatedAnswers.set(MatchedYesNoPage(index), matchingResponse == SuccessfulMatchResponse))
+            _ <- registrationsRepository.set(updatedAnswersWithMatched)
           } yield matchingResponse match {
             case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
-              Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswers))
+              Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswersWithMatched))
             case UnsuccessfulMatchResponse =>
               Redirect(routes.MatchingFailedController.onPageLoad(index, draftId))
             case LockedMatchResponse =>

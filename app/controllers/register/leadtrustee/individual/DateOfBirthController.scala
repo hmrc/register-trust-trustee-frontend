@@ -16,15 +16,12 @@
 
 package controllers.register.leadtrustee.individual
 
-import java.time.LocalDate
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.DateFormProvider
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesDateOfBirthPage
 import play.api.data.Form
@@ -34,6 +31,8 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.leadtrustee.individual.DateOfBirthView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DateOfBirthController @Inject()(
@@ -54,6 +53,9 @@ class DateOfBirthController @Inject()(
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
+  private def isLeadTrusteeMatched(index: Int)(implicit request: TrusteeNameRequest[_]) =
+    request.userAnswers.isLeadTrusteeMatched(index)
+
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
@@ -62,7 +64,7 @@ class DateOfBirthController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -70,7 +72,7 @@ class DateOfBirthController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
 
         value => {
           for {

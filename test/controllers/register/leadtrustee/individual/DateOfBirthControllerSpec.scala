@@ -25,7 +25,7 @@ import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.leadtrustee.individual.{TrusteesDateOfBirthPage, TrusteesNamePage}
+import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesDateOfBirthPage, TrusteesNamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -51,13 +51,11 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       val is5mldEnabled = false
       val form = formProvider.withConfig(messagePrefix, is5mldEnabled)
       val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)
+        .set(TrusteesNamePage(index), name).success.value
       
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), name).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
         val request = FakeRequest(GET, trusteesDateOfBirthRoute)
 
@@ -68,7 +66,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, name.toString)(request, messages).toString
+          view(form, fakeDraftId, index, name.toString, readOnly = false)(request, messages).toString
 
         application.stop()
       }
@@ -76,7 +74,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       "populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
           .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -90,18 +87,15 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(validAnswer), fakeDraftId, index, name.toString)(request, messages).toString
+          view(form.fill(validAnswer), fakeDraftId, index, name.toString, readOnly = false)(request, messages).toString
 
         application.stop()
       }
 
       "redirect to the next page when valid data is submitted" in {
 
-        val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
             )
@@ -126,10 +120,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
 
       "return a Bad Request and errors when invalid data is submitted" in {
 
-        val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
         val request =
           FakeRequest(POST, trusteesDateOfBirthRoute)
@@ -144,7 +135,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, name.toString)(request, messages).toString
+          view(boundForm, fakeDraftId, index, name.toString, readOnly = false)(request, messages).toString
 
         application.stop()
       }
@@ -194,7 +185,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         }
 
         validateIndex(
-          Gen.const(LocalDate.of(2010, 10, 10)),
+          Gen.const(validAnswer),
           TrusteesDateOfBirthPage.apply,
           getForIndex
         )
@@ -216,7 +207,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         }
 
         validateIndex(
-          Gen.const(LocalDate.of(2010, 10, 10)),
+          Gen.const(validAnswer),
           TrusteesDateOfBirthPage.apply,
           postForIndex
         )
@@ -228,11 +219,30 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       val is5mldEnabled = true
       val form = formProvider.withConfig(messagePrefix, is5mldEnabled)
       val baseUserAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)
+        .set(TrusteesNamePage(index), name).success.value
 
       "return OK and the correct view for a GET" in {
 
+        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+
+        val request = FakeRequest(GET, trusteesDateOfBirthRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[DateOfBirthView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form, fakeDraftId, index, name.toString, readOnly = false)(request, messages).toString
+
+        application.stop()
+      }
+
+      "return OK and the correct view for a GET when lead trustee matched" in {
+
         val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+          .set(MatchedYesNoPage(index), true).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -245,7 +255,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, name.toString)(request, messages).toString
+          view(form, fakeDraftId, index, name.toString, readOnly = true)(request, messages).toString
 
         application.stop()
       }
@@ -253,7 +263,6 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
       "populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
           .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -267,18 +276,15 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(validAnswer), fakeDraftId, index, name.toString)(request, messages).toString
+          view(form.fill(validAnswer), fakeDraftId, index, name.toString, readOnly = false)(request, messages).toString
 
         application.stop()
       }
 
       "redirect to the next page when valid data is submitted" in {
 
-        val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
             )
@@ -303,10 +309,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
 
       "return a Bad Request and errors when invalid data is submitted" in {
 
-        val userAnswers = baseUserAnswers
-          .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
         val request =
           FakeRequest(POST, trusteesDateOfBirthRoute)
@@ -321,7 +324,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, name.toString)(request, messages).toString
+          view(boundForm, fakeDraftId, index, name.toString, readOnly = false)(request, messages).toString
 
         application.stop()
       }
@@ -371,7 +374,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         }
 
         validateIndex(
-          Gen.const(LocalDate.of(2010, 10, 10)),
+          Gen.const(validAnswer),
           TrusteesDateOfBirthPage.apply,
           getForIndex
         )
@@ -393,7 +396,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexVal
         }
 
         validateIndex(
-          Gen.const(LocalDate.of(2010, 10, 10)),
+          Gen.const(validAnswer),
           TrusteesDateOfBirthPage.apply,
           postForIndex
         )
