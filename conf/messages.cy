@@ -90,4 +90,3 @@ trustee.individual.5mld.countryOfResidence.error.required = Nodwch wlad
 #trustee.individual.5mld.mentalCapacityYesNo.heading =
 #trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel =
 #trustee.individual.5mld.mentalCapacityYesNo.error.required =
-#trustee.individual.5mld.mentalCapacityYesNo.hint =
