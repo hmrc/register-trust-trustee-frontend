@@ -93,6 +93,7 @@ leadTrustee.individual.dateOfBirth.checkYourAnswersLabel=Beth yw dyddiad geni {0
 leadTrustee.individual.dateOfBirth.error.future=Mae’n rhaid i’r dyddiad geni fod heddiw neu yn y gorffennol
 leadTrustee.individual.dateOfBirth.error.invalid=Nodwch ddyddiad geni go iawn
 leadTrustee.individual.dateOfBirth.error.past=Mae’n rhaid i’r dyddiad geni fod ar ôl 31 Rhagfyr 1499
+leadTrustee.individual.dateOfBirth.matching.error.past=Mae’n rhaid i’r dyddiad geni fod ar ôl 31 Rhagfyr 1899
 leadTrustee.individual.dateOfBirth.error.required=Mae’n rhaid i’r dyddiad geni gynnwys {0}
 leadTrustee.individual.dateOfBirth.error.required.all=Nodwch ddyddiad geni
 leadTrustee.individual.dateOfBirth.error.required.two=Mae’n rhaid i’r dyddiad geni gynnwys {0} a {1}
