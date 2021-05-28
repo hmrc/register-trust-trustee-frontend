@@ -163,6 +163,7 @@ addATrustee.title = Add a trustee
 addATrustee.heading = Add a trustee
 addATrustee.singular.heading = Add a trustee
 addATrustee.count.heading = You have added {0} trustees
+addATrustee.count.title = You have added {0} trustees
 
 addATrustee.additional-content = Do you need to add another trustee?
 addATrustee.add-them-now = Yes, I want to add them now
