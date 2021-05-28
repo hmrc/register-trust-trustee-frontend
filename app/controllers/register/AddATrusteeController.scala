@@ -19,15 +19,17 @@ package controllers.register
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddATrusteeFormProvider, YesNoFormProvider}
+
 import javax.inject.Inject
 import models.Enumerable
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.registration.pages.AddATrustee.{NoComplete, YesNow}
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.{AddATrusteePage, AddATrusteeYesNoPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -55,14 +57,13 @@ class AddATrusteeController @Inject()(
   private val addAnotherForm = addAnotherFormProvider()
   private val yesNoForm = yesNoFormProvider.withPrefix("addATrusteeYesNo")
 
-  private def actions(draftId: String) =
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen requireData
 
-  private def heading(count: Int)(implicit mp : MessagesProvider) = {
+  private def heading(count: Int)(implicit mp: MessagesProvider): String = {
     count match {
-      case 0 => Messages("addATrustee.heading")
-      case 1 => Messages("addATrustee.singular.heading")
-      case size => Messages("addATrustee.count.heading", size)
+      case x if x <= 1 => Messages("addATrustee.heading")
+      case _ => Messages("addATrustee.count.heading", count)
     }
   }
 

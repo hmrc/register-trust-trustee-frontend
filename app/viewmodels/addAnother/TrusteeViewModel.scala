@@ -23,18 +23,21 @@ import models.core.pages.{FullName, IndividualOrBusiness, TrusteeOrLeadTrustee}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-final case class TrusteeViewModel(isLead : Boolean,
-                                  name : Option[String],
-                                  `type` : Option[IndividualOrBusiness],
-                                  status : Status)
+final case class TrusteeViewModel(isLead: Boolean,
+                                  name: Option[String],
+                                  `type`: Option[IndividualOrBusiness],
+                                  status: Status) {
+
+  def isComplete: Boolean = status == Status.Completed
+}
 
 object TrusteeViewModel {
 
-  implicit class OptionString(s : String) {
-    def toOption : Option[String] = if(s.isEmpty) None else Some(s)
+  implicit class OptionString(s: String) {
+    def toOption: Option[String] = if(s.isEmpty) None else Some(s)
   }
 
-  val nameReads : Reads[Option[String]] =
+  val nameReads: Reads[Option[String]] =
     (__ \ "name").read[FullName].map(_.toString.toOption) orElse
       (__ \ "name").readNullable[String]
 
@@ -56,7 +59,7 @@ object TrusteeViewModel {
       }
     )
 
-  implicit lazy val reads : Reads[TrusteeViewModel] =
+  implicit lazy val reads: Reads[TrusteeViewModel] =
     (isLeadReads and
       (__ \ "individualOrBusiness").readNullable[IndividualOrBusiness] and
       nameReads and

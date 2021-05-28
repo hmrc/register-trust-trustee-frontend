@@ -52,7 +52,12 @@ class Navigator {
     case AddATrusteePage => ua => {
       def routeToTrusteeIndex: Call = {
         val trustees = ua.get(Trustees).getOrElse(List.empty)
-        TrusteeOrLeadTrusteeController.onPageLoad(trustees.size, draftId)
+        val index = trustees match {
+          case Nil => 0
+          case x if !x.last.isComplete => x.size - 1
+          case x => x.size
+        }
+        TrusteeOrLeadTrusteeController.onPageLoad(index, draftId)
       }
       ua.get(AddATrusteePage) match {
         case Some(AddATrustee.YesNow) => routeToTrusteeIndex

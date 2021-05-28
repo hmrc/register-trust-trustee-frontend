@@ -23,8 +23,8 @@ import viewmodels.RadioOption
 trait OptionsViewBehaviours extends ViewBehaviours {
 
   def pageWithOptions[T](form : Form[T],
-                      createView: Form[T] => HtmlFormat.Appendable,
-                      options : List[RadioOption]) : Unit = {
+                         createView: Form[T] => HtmlFormat.Appendable,
+                         options : List[RadioOption]) : Unit = {
 
     "behave like a page with radio options" when {
 

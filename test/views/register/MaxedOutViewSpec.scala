@@ -29,17 +29,20 @@ class MaxedOutViewSpec extends OptionsViewBehaviours with TabularDataViewBehavio
 
   private val fakeAddRow: AddRow = AddRow("name", "label", "change", "remove")
 
-  private val inProgressRows: List[AddRow] = List.fill(10)(fakeAddRow)
-  private val completeRows: List[AddRow] = List.fill(15)(fakeAddRow)
+  private val numberInProgress = 1
+  private val inProgressRows: List[AddRow] = List.fill(numberInProgress)(fakeAddRow)
+  private val numberComplete = 15
+  private val completeRows: List[AddRow] = List.fill(numberComplete)(fakeAddRow)
+  private val total = numberInProgress + numberComplete
 
   private def applyView(): HtmlFormat.Appendable =
-    view.apply(fakeDraftId, inProgressRows, completeRows, "Add a trustee")(fakeRequest, messages)
+    view.apply(fakeDraftId, inProgressRows, completeRows, s"You have added $total trustees")(fakeRequest, messages)
 
   "MaxedOutView" must {
 
     val view = applyView()
 
-    behave like normalPage(view, messageKeyPrefix)
+    behave like dynamicTitlePage(view, s"$messageKeyPrefix.count", total.toString)
 
     behave like pageWithBackLink(view)
 
