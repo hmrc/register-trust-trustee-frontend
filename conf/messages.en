@@ -161,7 +161,6 @@ leadTrusteesAnswerPage.heading = Check lead trustee details
 addATrustee.title = Add a trustee
 
 addATrustee.heading = Add a trustee
-addATrustee.singular.heading = Add a trustee
 addATrustee.count.heading = You have added {0} trustees
 addATrustee.count.title = You have added {0} trustees
 

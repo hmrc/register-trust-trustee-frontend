@@ -62,9 +62,8 @@ class AddATrusteeController @Inject()(
 
   private def heading(count: Int)(implicit mp: MessagesProvider): String = {
     count match {
-      case 0 => Messages("addATrustee.heading")
-      case 1 => Messages("addATrustee.singular.heading")
-      case size => Messages("addATrustee.count.heading", size)
+      case x if x <= 1 => Messages("addATrustee.heading")
+      case _ => Messages("addATrustee.count.heading", count)
     }
   }
 
