@@ -21,13 +21,16 @@ import config.FrontendAppConfig
 import controllers.register.routes
 import controllers.register.trustees.individual.routes._
 import generators.Generators
+import models.Status.Completed
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.{Business, Individual}
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.registration.pages.AddATrustee
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.entitystatus.TrusteeStatus
 import pages.register._
+import pages.register.trustees.organisation.NamePage
 import play.api.mvc.Call
 import sections.Trustees
 
@@ -87,10 +90,25 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
 
     "there is at least one trustee" must {
 
-      "go to the next trustee from AddATrusteePage when selected add them now" in {
+      "go to in-progress trustee from AddATrusteePage when selected add them now and last trustee is in progress" in {
 
         val answers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
+          .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+          .set(NamePage(index), "Name").success.value
+          .set(AddATrusteePage, AddATrustee.YesNow).success.value
+
+        navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
+          .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(0, fakeDraftId))
+      }
+
+      "go to the next trustee from AddATrusteePage when selected add them now and last trustee is complete" in {
+
+        val answers = emptyUserAnswers
+          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
+          .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+          .set(NamePage(index), "Name").success.value
+          .set(TrusteeStatus(index), Completed).success.value
           .set(AddATrusteePage, AddATrustee.YesNow).success.value
 
         navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
