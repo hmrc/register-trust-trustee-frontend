@@ -110,5 +110,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
     configuration.get[String](path)
   }
 
+  def registerTrustAsTrusteeUrl: String = configuration.get[String]("urls.registerTrustAsTrustee")
+
   val maxMatchingAttempts: Int = getInt("individual-match.max-attempts")
 }
