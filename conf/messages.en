@@ -1,3 +1,5 @@
+service.name = Register and Maintain a Trust
+
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 checkYourAnswers.guidance = Guidance for check your answers
@@ -45,7 +47,6 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.save.continue = Save and continue
-site.service_name = Register and Maintain a Trust
 site.service_section = Trustees
 site.textarea.char_limit = (Limit is {0} characters)
 site.inprogress = In Progress
