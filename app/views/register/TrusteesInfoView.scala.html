@@ -23,10 +23,9 @@
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trusteesInfo.title")
+    title = messages("trusteesInfo.title"),
+    showBackLink = true
 ) {
-
-    @components.back_link()
 
     @components.heading_with_caption("trusteesInfo")
 

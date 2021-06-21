@@ -33,12 +33,11 @@
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}$heading"
+    title = s"${errorPrefix(form)}$heading",
+    showBackLink = true
 ) {
 
     @formHelper(action = onSubmit, 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @components.error_summary(form.errors)
 

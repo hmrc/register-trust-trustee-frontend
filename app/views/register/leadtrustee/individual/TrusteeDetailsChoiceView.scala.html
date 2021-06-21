@@ -31,12 +31,11 @@
 }
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.trusteeDetailsChoice.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.trusteeDetailsChoice.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = TrusteeDetailsChoiceController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @components.error_summary(form.errors)
 
