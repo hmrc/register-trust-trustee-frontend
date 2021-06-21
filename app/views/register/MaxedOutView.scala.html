@@ -20,6 +20,7 @@
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
+    heading: Heading,
     formHelper: FormWithCSRF
 )
 
@@ -37,7 +38,7 @@
 
     @formHelper(action = AddATrusteeController.submitComplete(draftId), 'autoComplete -> "off") {
 
-        @components.heading(heading)
+        @heading(heading)
 
         @components.data_list(inProgressTrustees, "inprogress", "trustee")
 

@@ -17,6 +17,7 @@
 @import controllers.register.routes._
 
 @this(
+    heading: Heading,
     main_template: MainTemplate
 )
 
@@ -27,7 +28,7 @@
     showBackLink = true
 ) {
 
-    @components.heading_with_caption("trusteesInfo.5mld")
+    @heading_with_caption("trusteesInfo.5mld")
 
     <h2>@messages("trusteesInfo.5mld.subheading1")</h2>
 

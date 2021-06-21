@@ -22,6 +22,7 @@
     errorSummary: ErrorSummary,
     inputText: InputText,
     inputDate: InputDate,
+    heading: Heading,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -37,7 +38,7 @@
 
         @errorSummary(form.errors)
 
-        @components.heading("leadTrustee.individual.iDCardDetails.heading", Some(name))
+        @heading("leadTrustee.individual.iDCardDetails.heading", Some(name))
 
         @components.select(field = form("country"),
             label = messages("leadTrustee.individual.iDCardDetails.country"),

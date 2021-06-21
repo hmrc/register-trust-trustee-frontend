@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
+    heading: Heading,
     formHelper: FormWithCSRF
 )
 
@@ -37,7 +38,7 @@
         <fieldset>
 
             <legend>
-                @components.heading("leadTrustee.organisation.ukAddress.heading", optionalParam = Some(name))
+                @heading("leadTrustee.organisation.ukAddress.heading", optionalParam = Some(name))
             </legend>
 
             @components.uk_address(form)

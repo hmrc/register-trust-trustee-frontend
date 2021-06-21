@@ -21,6 +21,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    heading: Heading,
     appConfig: FrontendAppConfig
 )
 
@@ -43,7 +44,7 @@
     title = messages("leadTrustee.individual.matching.locked.title")
 ) {
 
-    @components.heading_with_caption(
+    @heading_with_caption(
         messagePrefix = "leadTrustee.individual.matching.locked",
         optionalParam = Some(name)
     )

@@ -20,6 +20,7 @@
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
+    heading: Heading,
     formHelper: FormWithCSRF
 )
 
@@ -32,7 +33,7 @@
 
     @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.heading("leadTrustee.individual.checkDetails.heading")
+        @heading("leadTrustee.individual.checkDetails.heading")
 
         @components.answer_section(answerSection)
 

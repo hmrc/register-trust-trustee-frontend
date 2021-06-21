@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     submitButton: SubmitButton,
     errorSummary: ErrorSummary,
+    heading: Heading,
     inputText: InputText,
     formHelper: FormWithCSRF
 )
@@ -38,7 +39,7 @@
         <fieldset>
 
             <legend>
-                @components.heading("trustee.individual.name.heading")
+                @heading("trustee.individual.name.heading")
             </legend>
 
             @inputText(

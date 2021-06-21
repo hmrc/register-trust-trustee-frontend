@@ -18,6 +18,7 @@
 
 @this(
     main_template: MainTemplate,
+    heading: Heading,
     formHelper: FormWithCSRF
 )
 
@@ -29,7 +30,7 @@
 
     @formHelper(action = MatchingFailedController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.heading_with_caption(
+        @heading_with_caption(
             messagePrefix = "leadTrustee.individual.matching.failed",
             captionParam = Some(numberOfFailedAttempts.toString)
         )

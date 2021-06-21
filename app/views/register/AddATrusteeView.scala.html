@@ -21,6 +21,7 @@
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
+    heading: Heading,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
@@ -43,7 +44,7 @@
 
         @errorSummary(form.errors)
 
-        @components.heading(heading)
+        @heading(heading)
 
         @components.data_list(inProgressTrustees, "inprogress", "trustee")
 

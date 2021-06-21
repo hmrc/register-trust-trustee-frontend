@@ -22,7 +22,8 @@
         main_template: MainTemplate,
         errorSummary: ErrorSummary,
         formHelper: FormWithCSRF,
-    submitButton: SubmitButton,
+        submitButton: SubmitButton,
+        heading: Heading,
         appConfig: FrontendAppConfig
 )
 
@@ -37,7 +38,7 @@
 
         @errorSummary(form.errors)
 
-        @components.heading("leadTrustee.individual.internationalAddress.heading", Some(name))
+        @heading("leadTrustee.individual.internationalAddress.heading", Some(name))
 
         @components.international_address(form, countryOptions)
 

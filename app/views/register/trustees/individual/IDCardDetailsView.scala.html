@@ -21,6 +21,7 @@
     main_template: MainTemplate,
     submitButton: SubmitButton,
     inputText: InputText,
+    heading: Heading,
     inputDate: InputDate,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
@@ -37,7 +38,7 @@
 
         @errorSummary(form.errors)
 
-        @components.heading("trustee.individual.idCardDetails.heading", Some(name))
+        @heading("trustee.individual.idCardDetails.heading", Some(name))
 
         @components.select(field = form("country"),
             label = messages("trustee.individual.idCardDetails.country"),

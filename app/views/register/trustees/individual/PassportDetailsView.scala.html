@@ -22,6 +22,7 @@
     main_template: MainTemplate,
     submitButton: SubmitButton,
     inputText: InputText,
+    heading: Heading,
     inputDate: InputDate,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
@@ -38,7 +39,7 @@
 
         @errorSummary(form.errors)
 
-        @components.heading("trustee.individual.passportDetails.heading", Some(name.toString))
+        @heading("trustee.individual.passportDetails.heading", Some(name.toString))
 
         @components.select(field = form("country"),
             label = messages("trustee.individual.passportDetails.country"),
