@@ -18,7 +18,8 @@
 
 @this(
         main_template: MainTemplate,
-    submitButton: SubmitButton,
+        submitButton: SubmitButton,
+        inputDate: InputDate,
         errorSummary: ErrorSummary,
         formHelper: FormWithCSRF
 )
@@ -34,7 +35,7 @@
 
         @errorSummary(form.errors)
 
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("trustee.individual.dateOfBirth.heading", trusteeName),
             legendClass = "heading-large",

@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
+    inputDate: InputDate,
     formHelper: FormWithCSRF
 )
 
@@ -34,7 +35,7 @@
 
         @errorSummary(form.errors)
 
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("leadTrustee.individual.dateOfBirth.heading", name),
             legendClass = "heading-large",

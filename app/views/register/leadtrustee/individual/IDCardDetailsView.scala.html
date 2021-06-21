@@ -21,6 +21,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputText: InputText,
+    inputDate: InputDate,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -52,7 +53,7 @@
             label = messages("leadTrustee.individual.iDCardDetails.number")
         )
 
-        @components.input_date(
+        @inputDate(
             field = form("expiryDate"),
             legend = messages("leadTrustee.individual.iDCardDetails.expiryDate.title"),
             legendClass = "bold",
