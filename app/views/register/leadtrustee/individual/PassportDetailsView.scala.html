@@ -22,6 +22,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputText: InputText,
+    select: InputSelect,
     heading: Heading,
     inputDate: InputDate,
     submitButton: SubmitButton,
@@ -41,7 +42,7 @@
 
         @heading("leadTrustee.individual.passportDetails.heading", Some(name))
 
-        @components.select(field = form("country"),
+        @select(field = form("country"),
             label = messages("leadTrustee.individual.passportDetails.country"),
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,

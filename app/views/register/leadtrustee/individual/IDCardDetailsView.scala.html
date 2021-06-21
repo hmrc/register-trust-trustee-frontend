@@ -21,6 +21,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputText: InputText,
+    select: InputSelect,
     inputDate: InputDate,
     heading: Heading,
     submitButton: SubmitButton,
@@ -40,7 +41,7 @@
 
         @heading("leadTrustee.individual.iDCardDetails.heading", Some(name))
 
-        @components.select(field = form("country"),
+        @select(field = form("country"),
             label = messages("leadTrustee.individual.iDCardDetails.country"),
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,

@@ -20,6 +20,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    select: InputSelect,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -35,7 +36,7 @@
 
         @errorSummary(form.errors)
 
-        @components.select(field = form("value"),
+        @select(field = form("value"),
             label = messages("trustee.individual.5mld.countryOfNationality.heading", trustName),
             labelClasses = Set("heading-large"),
             labelAsHeading = true,
