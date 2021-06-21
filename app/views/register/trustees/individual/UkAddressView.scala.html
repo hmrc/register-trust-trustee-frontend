@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
+    ukAddress: UkAddress,
     heading: Heading,
     formHelper: FormWithCSRF
 )
@@ -41,7 +42,7 @@
                 @heading("trustee.individual.ukAddress.heading", optionalParam = Some(trusteeName))
             </legend>
 
-            @components.uk_address(form)
+            @ukAddress(form, messages("site.address.uk.heading", name))
 
         </fieldset>
 

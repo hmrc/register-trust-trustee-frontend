@@ -22,6 +22,7 @@
         main_template: MainTemplate,
         errorSummary: ErrorSummary,
         formHelper: FormWithCSRF,
+        internationalAddress: InternationalAddress,
         submitButton: SubmitButton,
         heading: Heading,
         appConfig: FrontendAppConfig
@@ -40,7 +41,12 @@
 
         @heading("leadTrustee.individual.internationalAddress.heading", Some(name))
 
-        @components.international_address(form, countryOptions)
+        @internationalAddress(
+            form = form,
+            legend = messages("site.address.international.heading", name),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
         @submitButton()
 

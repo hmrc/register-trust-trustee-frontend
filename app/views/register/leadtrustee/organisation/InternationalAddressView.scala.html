@@ -20,6 +20,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    internationalAddress: InternationalAddress,
     heading: Heading,
     formHelper: FormWithCSRF
 )
@@ -41,7 +42,12 @@
                 @heading("leadTrustee.organisation.internationalAddress.heading", Some(name))
             </legend>
 
-            @components.international_address(form, countryOptions)
+            @internationalAddress(
+            form = form,
+            legend = messages("site.address.international.heading", name),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
         </fieldset>
 
