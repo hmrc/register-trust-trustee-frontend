@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     submitButton: SubmitButton,
     errorSummary: ErrorSummary,
+    inputText: InputText,
     formHelper: FormWithCSRF
 )
 
@@ -40,19 +41,19 @@
                 @components.heading("trustee.individual.name.heading")
             </legend>
 
-            @components.input_text(
+            @inputText(
             field = form("firstName"),
             label = messages("trustee.individual.name.firstName"),
             autocomplete = Some("given-name")
             )
 
-            @components.input_text(
+            @inputText(
             field = form("middleName"),
             label = messages("trustee.individual.name.middleName"),
             autocomplete = Some("additional-name")
             )
 
-            @components.input_text(
+            @inputText(
             field = form("lastName"),
             label = messages("trustee.individual.name.lastName"),
             autocomplete = Some("family-name")

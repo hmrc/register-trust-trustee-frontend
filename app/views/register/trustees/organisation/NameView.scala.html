@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
+    inputText: InputText,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
@@ -34,7 +35,7 @@
 
         @errorSummary(form.errors)
 
-        @components.input_text(
+        @inputText(
             field = form("value"),
             inputClass = Some("trustee-business-name"),
             label = messages("trustee.organisation.name.heading"),

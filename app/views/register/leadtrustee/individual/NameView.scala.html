@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    inputText: InputText,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -40,21 +41,21 @@
                 @components.heading("leadTrustee.individual.name.heading")
             </legend>
 
-            @components.input_text(
+            @inputText(
                 field = form("firstName"),
                 label = messages("leadTrustee.individual.name.firstName"),
                 autocomplete = Some("given-name"),
                 readOnly = readOnly
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("middleName"),
                 label = messages("leadTrustee.individual.name.middleName"),
                 autocomplete = Some("additional-name"),
                 readOnly = readOnly
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("lastName"),
                 label = messages("leadTrustee.individual.name.lastName"),
                 autocomplete = Some("family-name"),

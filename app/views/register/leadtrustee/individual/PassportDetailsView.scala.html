@@ -21,6 +21,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    inputText: InputText,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -47,7 +48,7 @@
             selectAttribute = Set("data-non-uk-countries")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("number"),
             label = messages("leadTrustee.individual.passportDetails.number"),
             hint = Some(messages("leadTrustee.individual.passportDetails.number.hint"))

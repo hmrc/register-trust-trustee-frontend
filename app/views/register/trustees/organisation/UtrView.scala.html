@@ -21,6 +21,7 @@
     main_template: MainTemplate,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF,
+    inputText: InputText,
     errorSummary: ErrorSummary,
     appConfig: FrontendAppConfig
 )
@@ -36,7 +37,7 @@
 
         @errorSummary(form.errors)
 
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("trustee.organisation.utr.heading", name),
             labelAsHeading = true,
