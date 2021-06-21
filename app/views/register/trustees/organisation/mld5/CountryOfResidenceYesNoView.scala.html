@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
     formHelper: FormWithCSRF
 )
 
@@ -33,7 +34,7 @@
 
         @errorSummary(form.errors)
 
-        @components.input_yes_no(
+        @inputYesNo(
              field = form("value"),
              label = messages("trustee.organisation.5mld.countryOfResidenceYesNo.heading", trusteeName),
              legendClass = Some("heading-large"),
