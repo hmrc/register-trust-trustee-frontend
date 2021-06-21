@@ -18,6 +18,7 @@
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
 
@@ -30,7 +31,7 @@
 
     @formHelper(action = NinoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @components.input_nino(
             field = form("value"),

@@ -20,6 +20,7 @@
 
 @this(
         main_template: MainTemplate,
+        errorSummary: ErrorSummary,
         formHelper: FormWithCSRF,
         appConfig: FrontendAppConfig
 )
@@ -33,7 +34,7 @@
 
     @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @components.heading("leadTrustee.individual.internationalAddress.heading", Some(name))
 

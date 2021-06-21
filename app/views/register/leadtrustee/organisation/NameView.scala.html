@@ -18,6 +18,7 @@
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
 
@@ -30,7 +31,7 @@
 
     @formHelper(action = NameController.onSubmit(index, draftId), 'autoComplete -> "on") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @components.input_text(
             field = form("value"),

@@ -19,6 +19,7 @@
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
 
@@ -31,7 +32,7 @@
 
     @formHelper(action = CountryOfResidenceController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @components.select(field = form("value"),
             label = messages("leadTrustee.organisation.5mld.countryOfResidence.heading", name),

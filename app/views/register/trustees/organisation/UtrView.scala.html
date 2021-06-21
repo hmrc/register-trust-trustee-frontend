@@ -20,6 +20,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
     appConfig: FrontendAppConfig
 )
 
@@ -32,7 +33,7 @@
 
     @formHelper(action = UtrController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @components.input_text(
             field = form("value"),
