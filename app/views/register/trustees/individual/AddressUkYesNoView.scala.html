@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -41,6 +42,6 @@ showBackLink = true
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

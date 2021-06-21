@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -42,6 +43,6 @@
             hint = Some(messages("leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

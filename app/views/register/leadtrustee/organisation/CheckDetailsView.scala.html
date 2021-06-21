@@ -19,6 +19,7 @@
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -35,6 +36,6 @@
 
         @components.answer_section(answerSection)
 
-        @components.submit_button()
+        @submitButton()
     }
 }

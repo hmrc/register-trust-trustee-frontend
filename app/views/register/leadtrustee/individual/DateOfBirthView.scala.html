@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -42,6 +43,6 @@
             readOnly = readOnly
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

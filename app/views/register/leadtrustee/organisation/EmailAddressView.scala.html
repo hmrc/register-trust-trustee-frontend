@@ -18,6 +18,7 @@
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
@@ -38,6 +39,6 @@
             label = messages("leadTrustee.organisation.email.heading", name)
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

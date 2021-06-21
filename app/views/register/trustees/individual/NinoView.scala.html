@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -41,6 +42,6 @@
           hint = Some(messages(s"trustee.individual.nino.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -22,6 +22,7 @@
         main_template: MainTemplate,
         errorSummary: ErrorSummary,
         formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
         appConfig: FrontendAppConfig
 )
 
@@ -40,7 +41,7 @@
 
         @components.international_address(form, countryOptions)
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }

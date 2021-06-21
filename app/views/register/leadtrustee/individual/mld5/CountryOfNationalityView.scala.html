@@ -20,6 +20,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -44,6 +45,6 @@
             selectAttribute = Set("data-non-uk-countries")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

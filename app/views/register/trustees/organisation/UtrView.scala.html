@@ -19,6 +19,7 @@
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF,
     errorSummary: ErrorSummary,
     appConfig: FrontendAppConfig
@@ -45,6 +46,6 @@
 
         <p>@messages("trustee.organisation.utr.p1") <a target="_blank" href="@appConfig.findLostUtrUrl">@messages("trustee.organisation.utr.link")</a>.</p>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

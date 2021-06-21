@@ -18,6 +18,7 @@
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
@@ -43,6 +44,6 @@
 
         </fieldset>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -19,6 +19,7 @@
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
@@ -58,6 +59,6 @@
             hint = Some(messages("trustee.individual.idCardDetails.expiryDate.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

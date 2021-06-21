@@ -21,6 +21,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF,
     appConfig: FrontendAppConfig
 )
@@ -50,7 +51,7 @@
             additionalContent = if (is5mldEnabled) Some(content) else None
         )
 
-        @components.submit_button()
+        @submitButton()
 
         @if(is5mldEnabled) {
             @components.reg_progress_link(appConfig, draftId)

@@ -19,6 +19,7 @@
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -47,6 +48,6 @@
             <li class="panel-indent"><p>@messages("addATrustee.maxedOut.p2")</p></li>
         </ul>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -20,6 +20,7 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -53,6 +54,6 @@
             additionalContent = Some(content)
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

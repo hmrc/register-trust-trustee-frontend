@@ -21,6 +21,7 @@
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -60,6 +61,6 @@
             hint = Some(messages("leadTrustee.individual.passportDetails.expiryDate.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

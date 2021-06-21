@@ -20,6 +20,7 @@
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
@@ -60,6 +61,6 @@
             legendAsH2Heading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
