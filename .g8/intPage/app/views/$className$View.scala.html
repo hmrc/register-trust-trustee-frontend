@@ -1,6 +1,8 @@
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+main_template: MainTemplate,
+errorSummary: ErrorSummary,
+submitButton: SubmitButton,
+formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -12,14 +14,14 @@
 
     @formHelper(action = $className$Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("$className;format="decap"$.heading"),
             headingIsLabel = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

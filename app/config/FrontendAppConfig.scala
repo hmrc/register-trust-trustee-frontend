@@ -35,7 +35,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   val repositoryKey: String = "trustees"
 
-  val analyticsToken: String = configuration.get[String](s"google-analytics.token")
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
@@ -70,8 +69,8 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   lazy val findLostUtrUrl: String = "https://www.gov.uk/find-lost-utr-number"
 
-  lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
-  lazy val timeoutLength: String = configuration.get[String]("timeout.length")
+  lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
+  lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),

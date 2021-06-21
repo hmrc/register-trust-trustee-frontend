@@ -32,7 +32,7 @@
     hmrcScripts: HmrcScripts,
     stylesheets: Stylesheets,
     govukBackLink: GovukBackLink,
-    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
     )
 
 @(title: String,
@@ -89,6 +89,7 @@
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(hmrcScripts()),
     footerBlock = Some(hmrcStandardFooter(
-    accessibilityStatementUrl = Some(appConfig.accessibilityLinkUrl)
+accessibilityStatementUrl = Some(appConfig.accessibilityLinkUrl)
 ))
+
 )(mainContentWithGetHelp)

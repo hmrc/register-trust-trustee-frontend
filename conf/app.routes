@@ -9,6 +9,7 @@ GET        /assets/*file                                          controllers.As
 GET        /language/:lang                                        controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
 GET        /this-service-has-been-reset                           controllers.SessionExpiredController.onPageLoad
+POST       /this-service-has-been-reset                           controllers.SessionExpiredController.onSubmit
 
 GET        /unauthorised                                          controllers.UnauthorisedController.onPageLoad
 
@@ -26,6 +27,7 @@ GET        /feature-not-available                                 controllers.Fe
 ->         /lead-trustee/individual                               leadTrusteeIndividual.Routes
 
 GET        /:draftId/information-you-need                         controllers.register.TrusteesInfoController.onPageLoad(draftId: String)
+POST       /:draftId/information-you-need                         controllers.register.TrusteesInfoController.onSubmit(draftId: String)
 
 GET        /:draftId/:index/trustee-or-lead-trustee               controllers.register.TrusteeOrLeadTrusteeController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/trustee-or-lead-trustee               controllers.register.TrusteeOrLeadTrusteeController.onSubmit(index: Int, draftId: String)
