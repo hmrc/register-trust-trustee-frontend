@@ -19,7 +19,7 @@ formHelper: FormWithCSRF
 
         @errorSummary(form.errors)
 
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("$className;format="decap"$.heading"),
             headingIsLegend = true,

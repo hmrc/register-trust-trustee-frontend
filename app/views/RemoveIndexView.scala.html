@@ -16,10 +16,14 @@
 
 @import controllers.register.routes._
 @import models.Mode
+@import views.html.components.{ErrorSummary, InputYesNo, SubmitButton}
 @import play.api.mvc.Call
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 

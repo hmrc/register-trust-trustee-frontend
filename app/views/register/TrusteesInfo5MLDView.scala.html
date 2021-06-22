@@ -15,6 +15,7 @@
  *@
 
 @import controllers.register.routes._
+@import views.html.components.Heading
 
 @this(
     heading: Heading,
@@ -106,6 +107,8 @@
 
     @components.warning("trusteesInfo.5mld")
 
-    @components.button_link(messages("site.onlyContinue"), TrusteeOrLeadTrusteeController.onPageLoad(0, draftId).url)
+    @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+    @submitButton(Some(messages("site.continue")))
+    }
 
 }

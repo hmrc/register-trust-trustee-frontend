@@ -16,6 +16,7 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{ErrorSummary, SubmitButton}
 @import models.registration.pages.DetailsChoice
 
 @this(
@@ -41,7 +42,7 @@
 
         @errorSummary(form.errors)
 
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("leadTrustee.individual.trusteeDetailsChoice.heading", name),
             legendClass = Some("heading-large"),

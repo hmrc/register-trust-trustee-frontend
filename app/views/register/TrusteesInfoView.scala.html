@@ -15,9 +15,12 @@
  *@
 
 @import controllers.register.routes._
+@import views.html.components.{HeadingWithCaption, BulletList, SubmitButton}
 
 @this(
-    heading: Heading,
+    headingWithCaption: HeadingWithCaption,
+    bulletList: BulletList,
+    submitButton: SubmitButton,
     main_template: MainTemplate
 )
 
@@ -28,7 +31,7 @@
     showBackLink = true
 ) {
 
-    @heading_with_caption("trusteesInfo")
+    @headingWithCaption("trusteesInfo")
 
     <h2>@messages("trusteesInfo.subheading1")</h2>
 
@@ -36,7 +39,7 @@
 
     <p>@messages("trusteesInfo.paragraph2")</p>
 
-    @components.bullet_list(
+    @bulletList(
         "trusteesInfo",
         List(
             "bulletpoint1",
@@ -53,7 +56,7 @@
 
     <p>@messages("trusteesInfo.paragraph5")</p>
 
-    @components.bullet_list(
+    @bulletList(
         "trusteesInfo",
         List(
             "bulletpoint4",
@@ -68,5 +71,7 @@
 
     @components.warning("trusteesInfo")
 
-    @components.button_link(messages("site.onlyContinue"), TrusteeOrLeadTrusteeController.onPageLoad(0, draftId).url)
+    @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+    @submitButton(Some(messages("site.continue")))
+    }
 }
