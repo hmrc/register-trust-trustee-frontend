@@ -16,13 +16,14 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.{ErrorSummary, SubmitButton}
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
 @import models.registration.pages.DetailsChoice
 
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF,
     appConfig: FrontendAppConfig
 )
@@ -45,10 +46,10 @@
         @inputRadio(
             field = form("value"),
             legend = messages("leadTrustee.individual.trusteeDetailsChoice.heading", name),
-            legendClass = Some("heading-large"),
-            legendAsHeading = true,
-            fieldSetClass = if (is5mldEnabled) None else Some("inline"),
-            inputs = DetailsChoice.options(is5mldEnabled).toSeq,
+            headingIsLegend = true,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, AddAProtector.options),
+            legendClass = Some("govuk-fieldset__legend--m"),
+            inline = false,
             additionalContent = if (is5mldEnabled) Some(content) else None
         )
 

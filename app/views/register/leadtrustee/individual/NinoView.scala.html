@@ -42,7 +42,8 @@
             labelClass = Some("govuk-label--l"),
             inputClass = Some("govuk-input govuk-input--width-10"),
             labelAsHeading = true,
-            hint = Some(messages(s"leadTrustee.individual.nino.hint"))
+            hint = Some(messages(s"leadTrustee.individual.nino.hint")),
+            readOnly = readOnly
         )
 
         @submitButton()
