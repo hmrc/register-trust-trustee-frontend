@@ -15,11 +15,11 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.{Heading, SubmitButton}
+@import views.html.components.{HeadingWithCaption, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    heading: Heading,
+    headingWithCaption: HeadingWithCaption,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -32,7 +32,7 @@
 
     @formHelper(action = MatchingFailedController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @heading_with_caption(
+        @headingWithCaption(
             messagePrefix = "leadTrustee.individual.matching.failed",
             captionParam = Some(numberOfFailedAttempts.toString)
         )

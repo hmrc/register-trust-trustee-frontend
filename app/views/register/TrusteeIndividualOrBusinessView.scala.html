@@ -26,7 +26,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, heading: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, heading: String, disabled: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages(heading)}",
@@ -44,7 +44,7 @@
             fieldSetClass = Some("inline"),
             inputs = IndividualOrBusiness.options.toSeq,
             legendAsHeading = true,
-            readOnly = readOnly
+            disabled = disabled
         )
 
         @submitButton()

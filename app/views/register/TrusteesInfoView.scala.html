@@ -15,13 +15,15 @@
  *@
 
 @import controllers.register.routes._
-@import views.html.components.{HeadingWithCaption, BulletList, SubmitButton}
+@import views.html.components.{HeadingWithCaption, BulletList, SubmitButton, Warning}
 
 @this(
     headingWithCaption: HeadingWithCaption,
     bulletList: BulletList,
     submitButton: SubmitButton,
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    warning: Warning,
+    formHelper: FormWithCSRF
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
@@ -69,7 +71,7 @@
 
     <p>@messages("trusteesInfo.paragraph6")</p>
 
-    @components.warning("trusteesInfo")
+    @warning("trusteesInfo")
 
     @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
     @submitButton(Some(messages("site.continue")))

@@ -25,7 +25,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, name: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String, disabled: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.individual.ninoYesNo.title")}",
@@ -41,7 +41,7 @@
             label = messages("leadTrustee.individual.ninoYesNo.heading", name),
             legendClass = Some("heading-large"),
             legendAsHeading = true,
-            readOnly = readOnly
+            disabled = disabled
         )
 
         @submitButton()

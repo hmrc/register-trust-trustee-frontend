@@ -14,15 +14,15 @@
  * limitations under the License.
  *@
 
+@import viewmodels.Link
+
 @this()
 
-@(
-prefix : String,
-keys : Seq[String]
-)(implicit messages: Messages)
-
-<ul class="govuk-list govuk-list--bullet">
- @keys.map { key =>
- <li>@messages(s"$prefix.$key")</li>
- }
-</ul>
+@(link: Link)(implicit messages: Messages)
+<li class="app-link-list__item" id="link-list__item--@{link.cssText}">
+    <span class="app-link-link">
+        <a class="app-link-list__link-name" id="link-list__link--@{link.cssText}" href="@{link.url}">
+            @messages(link.text)
+        </a>
+    </span>
+</li>

@@ -41,9 +41,8 @@
             field = form("value"),
             legend = messages("trusteeOrLeadTrustee.heading"),
             legendClass = Some("heading-large"),
-            fieldSetClass = Some("inline"),
             inputs = TrusteeOrLeadTrustee.options.toSeq,
-            legendAsHeading = true,
+            headingIsLegend = true,
             hint = Some(messages("trusteeOrLeadTrustee.hint"))
         )
 

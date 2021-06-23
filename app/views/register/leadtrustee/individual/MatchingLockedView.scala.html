@@ -16,12 +16,13 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.HeadingWithCaption
+@import views.html.components.{HeadingWithCaption, LinkList}
 @import viewmodels.Link
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    linkList: LinkList,
     headingWithCaption: HeadingWithCaption,
     appConfig: FrontendAppConfig
 )
@@ -58,7 +59,7 @@
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph3")</p>
 
-    @components.link_list(links)
+    @linkList(links)
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph4")</p>
 

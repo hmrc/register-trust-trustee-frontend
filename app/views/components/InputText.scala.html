@@ -30,7 +30,8 @@ hint: Option[String] = None,
 prefix: Option[String] = None,
 suffix: Option[String] = None,
 autocomplete: Option[String] = None,
-inputMode: Option[String] = None
+inputMode: Option[String] = None,
+readOnly: Boolean = false
 )(implicit messages: Messages)
 
 @govukInput(
@@ -38,7 +39,8 @@ inputMode: Option[String] = None
  label = Label(
  isPageHeading = labelAsHeading,
  classes = if(labelClass.isDefined) labelClass.get else "",
- content = Text(label)
+ content = Text(label),
+ attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty
 ),
  autocomplete = autocomplete,
  hint = hint.map(hint => Hint(content = Text(hint))),

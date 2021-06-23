@@ -15,12 +15,16 @@
  *@
 
 @import viewmodels.Link
-@import views.html._
+@import views.html.components.LinkListLink
+
+@this(
+ linkListLink: LinkListLink
+)
 
 @(links: List[Link])(implicit messages: Messages)
 
 <ul class="app-link-list__items">
     @for(link <- links){
-        @components.link_list_link(link)
+        @linkListLink(link)
     }
 </ul>

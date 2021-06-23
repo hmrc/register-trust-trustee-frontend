@@ -29,7 +29,8 @@ hint: Option[String] = None,
 readerHint: Option[String] = None,
 link: Option[Link] = None,
 legendAsHeading: Boolean = false,
-extraText: Option[String] = None
+extraText: Option[String] = None,
+readOnly: Boolean = false
 )(implicit messages: Messages)
 
 @govukDateInput(DateInput(
@@ -50,21 +51,27 @@ extraText: Option[String] = None
  name = s"${field.id}.day",
  label = Some(messages("date.day")),
  value = field("day").value,
- id = s"${field.id}.day"
+ id = s"${field.id}.day",
+ attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty,
+ inputMode = Some("numeric")
 ),
 InputItem(
  classes = s"govuk-input--width-2 ${addErrorClass(field.error, "month")}",
  name = s"${field.id}.month",
  label = Some(messages("date.month")),
  value = field("month").value,
- id = s"${field.id}.month"
+ id = s"${field.id}.month",
+ attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty,
+ inputMode = Some("numeric")
 ),
 InputItem(
  classes = s"govuk-input--width-4 ${addErrorClass(field.error, "year")}",
  name = s"${field.id}.year",
  label = Some(messages("date.year")),
  value = field("year").value,
- id = s"${field.id}.year"
+ id = s"${field.id}.year",
+ attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty,
+ inputMode = Some("numeric")
  )
 ),
 hint = hint.map(hint => Hint(content = Text(messages(hint)))),
