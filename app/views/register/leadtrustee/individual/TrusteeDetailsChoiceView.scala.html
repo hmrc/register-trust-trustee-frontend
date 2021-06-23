@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio, Heading}
 @import models.registration.pages.DetailsChoice
 
 @this(
@@ -24,15 +24,12 @@
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
     inputRadio: InputRadio,
+    heading: Heading,
     formHelper: FormWithCSRF,
     appConfig: FrontendAppConfig
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String, is5mldEnabled: Boolean)(implicit request: Request[_], messages: Messages)
-
-@content = {
-    <p>@messages("leadTrustee.individual.5mld.trusteeDetailsChoice.paragraph1")</p>
-}
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.individual.trusteeDetailsChoice.title")}",
@@ -41,16 +38,21 @@
 
     @formHelper(action = TrusteeDetailsChoiceController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, DetailsChoice.options(is5mldEnabled))
+
+        @heading("leadTrustee.individual.trusteeDetailsChoice.heading", Some(name))
+
+        @if(is5mldEnabled){
+            <p>@messages("leadTrustee.individual.5mld.trusteeDetailsChoice.paragraph1")</p>
+        }
 
         @inputRadio(
             field = form("value"),
             legend = messages("leadTrustee.individual.trusteeDetailsChoice.heading", name),
-            headingIsLegend = true,
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, AddAProtector.options),
-            legendClass = Some("govuk-fieldset__legend--m"),
-            inline = false,
-            additionalContent = if (is5mldEnabled) Some(content) else None
+            headingIsLegend = false,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, DetailsChoice.options(is5mldEnabled)),
+            legendClass = Some("govuk-fieldset__legend--m govuk-visually-hidden"),
+            inline = false
         )
 
         @submitButton()

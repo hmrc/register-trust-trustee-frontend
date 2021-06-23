@@ -16,13 +16,13 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.Heading
+@import views.html.components.HeadingWithCaption
 @import viewmodels.Link
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
-    heading: Heading,
+    headingWithCaption: HeadingWithCaption,
     appConfig: FrontendAppConfig
 )
 
@@ -45,7 +45,7 @@
     title = messages("leadTrustee.individual.matching.locked.title")
 ) {
 
-    @heading_with_caption(
+    @headingWithCaption(
         messagePrefix = "leadTrustee.individual.matching.locked",
         optionalParam = Some(name)
     )
