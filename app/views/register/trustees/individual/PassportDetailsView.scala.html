@@ -15,7 +15,7 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
-@import views.html.components.{ErrorSummary, InputText, InputYesNo, Heading, SubmitButton, InputDate}
+@import views.html.components.{ErrorSummary, InputText, InputYesNo, Heading, SubmitButton, InputDate, InputSelect}
 @import utils.InputOption
 @import models.core.pages.FullName
 
@@ -48,8 +48,8 @@
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
-            formGroupClasses = Set("autocomplete-wrapper form-control-2-1"),
-            selectAttribute = Set("data-non-uk-countries")
+            formGroupClasses = Set("autocomplete-wrapper"),
+            selectAttribute = Map("data-non-uk-countries" -> "")
         )
 
         @inputText(

@@ -15,38 +15,29 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
-@import views.html.components.{ErrorSummary, UkAddress, SubmitButton, Heading}
+@import views.html.components.{ErrorSummary, UKAddress, SubmitButton}
 
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
+    ukAddress: UKAddress,
     submitButton: SubmitButton,
-    ukAddress: UkAddress,
-    heading: Heading,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], name: String, index : Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.individual.ukAddress.title")}",
+    @main_template(
+    title = s"${errorPrefix(form)}${messages("site.address.uk.title")}",
     showBackLink = true
     ) {
 
     @formHelper(action = UkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+    @errorSummary(form.errors)
 
-        <fieldset>
+    @ukAddress(form, messages("site.address.uk.heading", name))
 
-            <legend>
-                @heading("trustee.individual.ukAddress.heading", optionalParam = Some(trusteeName))
-            </legend>
-
-            @ukAddress(form, messages("site.address.uk.heading", name))
-
-        </fieldset>
-
-        @submitButton()
+    @submitButton()
     }
 }

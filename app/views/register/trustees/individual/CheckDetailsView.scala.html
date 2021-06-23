@@ -14,18 +14,21 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
 @import controllers.register.trustees.individual.routes._
+@import utils.SectionFormatter.formatSections
+@import viewmodels.AnswerSection
+@import viewmodels.Section
 @import views.html.components.{Heading, SubmitButton}
 
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
+    govukSummaryList: GovukSummaryList,
     heading: Heading,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[Section], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("trustee.individual.checkDetails.title"),
@@ -36,7 +39,7 @@
 
         @heading("trustee.individual.checkDetails.heading")
 
-        @components.answer_section(answerSection)
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
         @submitButton()
     }
