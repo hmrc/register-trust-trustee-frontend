@@ -16,23 +16,23 @@
 
 @import controllers.register.routes._
 @import models.registration.pages.AddATrustee
-@import views.html.components.{Heading, InputRadio, SubmitButton}
+@import views.html.components.{ErrorSummary, Heading, InputRadio, SubmitButton, AddToList}
 @import viewmodels.AddRow
 
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
-    heading: Heading,
+    iHeading: Heading,
     errorSummary: ErrorSummary,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    inputRadio: InputRadio,
+    addToList: AddToList
 )
 
-@(
-    form: Form[_],
+@(form: Form[_],
     onSubmit: Call,
     inProgressTrustees: Seq[AddRow],
     completeTrustees: Seq[AddRow],
-    inputRadio: InputRadio,
     isLeadTrusteeDefined: Boolean,
     heading: String
 )(implicit request: Request[_], messages: Messages)
@@ -44,16 +44,18 @@
 
     @formHelper(action = onSubmit, 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, AddATrustee.options)
 
-        @heading(heading)
+        @iHeading(heading)
 
-        @components.data_list(inProgressTrustees, "inprogress", "trustee")
+        @addToList(inProgressTrustees, "inprogress", "trustee")
 
-        @components.data_list(completeTrustees, "complete", "trustee")
+        @addToList(completeTrustees, "complete", "trustee")
 
         @if(!isLeadTrusteeDefined) {
-            @components.inset_text("addATrustee.lead-trustee.required", "addATrustee")
+            <div id="inset-text--addATrustee" class="govuk-inset-text">
+                @messages("addATrustee.lead-trustee.required")
+            </div>
         }
 
         @inputRadio(
