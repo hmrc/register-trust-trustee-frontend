@@ -60,7 +60,7 @@ class AddATrusteeController @Inject()(
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen requireData
 
-  private def heading(count: Int)(implicit mp: MessagesProvider): String = {
+  private def dynamicHeading(count: Int)(implicit mp: MessagesProvider): String = {
     count match {
       case x if x <= 1 => Messages("addATrustee.heading")
       case _ => Messages("addATrustee.count.heading", count)
@@ -84,10 +84,10 @@ class AddATrusteeController @Inject()(
             trustees.inProgress,
             trustees.complete,
             isLeadTrusteeDefined,
-            heading(x)
+            dynamicHeading(x)
           ))
         case x @ 25 =>
-          Ok(maxedOutView(draftId, trustees.inProgress, trustees.complete, heading(x)))
+          Ok(maxedOutView(draftId, trustees.inProgress, trustees.complete, dynamicHeading(x)))
         case count =>
           Ok(addAnotherView(
             addAnotherForm,
@@ -95,7 +95,7 @@ class AddATrusteeController @Inject()(
             trustees.inProgress,
             trustees.complete,
             isLeadTrusteeDefined,
-            heading(count)
+            dynamicHeading(count)
           ))
       }
   }
@@ -133,7 +133,7 @@ class AddATrusteeController @Inject()(
               trustees.inProgress,
               trustees.complete,
               isLeadTrusteeDefined,
-              heading(trustees.count)
+              dynamicHeading(trustees.count)
             )
           ))
         },
@@ -163,7 +163,7 @@ class AddATrusteeController @Inject()(
               trustees.inProgress,
               trustees.complete,
               isLeadTrusteeDefined = false,
-              heading(trustees.count)
+              dynamicHeading(trustees.count)
             )
           ))
         },

@@ -16,11 +16,12 @@
 
 @import controllers.register.routes._
 @import viewmodels.AddRow
-@import views.html.components.{Heading, SubmitButton}
+@import views.html.components.{Heading, SubmitButton, AddToList}
 
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
+    addToList: AddToList,
     heading: Heading,
     formHelper: FormWithCSRF
 )
@@ -29,21 +30,21 @@
     draftId: String,
     inProgressTrustees: Seq[AddRow],
     completeTrustees: Seq[AddRow],
-    heading: String
+    dynamicHeading: String
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = heading,
+    title = dynamicHeading,
     showBackLink = true
 ) {
 
     @formHelper(action = AddATrusteeController.submitComplete(draftId), 'autoComplete -> "off") {
 
-        @heading(heading)
+        @heading(dynamicHeading)
 
-        @components.data_list(inProgressTrustees, "inprogress", "trustee")
+        @addToList(inProgressTrustees, "inprogress", "trustee")
 
-        @components.data_list(completeTrustees, "complete", "trustee")
+        @addToList(completeTrustees, "complete", "trustee")
 
         <ul>
             <li class="panel-indent"><p>@messages("addATrustee.maxedOut.p1")</p></li>

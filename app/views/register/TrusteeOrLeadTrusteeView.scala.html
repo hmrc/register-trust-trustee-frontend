@@ -41,9 +41,9 @@
             field = form("value"),
             legend = messages("trusteeOrLeadTrustee.heading"),
             legendClass = Some("heading-large"),
-            inputs = TrusteeOrLeadTrustee.options.toSeq,
+            hint = Some(messages("trusteeOrLeadTrustee.hint")),
             headingIsLegend = true,
-            hint = Some(messages("trusteeOrLeadTrustee.hint"))
+            inputs = TrusteeOrLeadTrustee.options.toSeq
         )
 
         @submitButton()

@@ -61,9 +61,10 @@
         @inputRadio(
             field = form("value"),
             legend = messages("addATrustee.additional-content"),
-            legendClass = Some("heading-medium"),
-            inputs = AddATrustee.options,
-            legendAsH2Heading = true
+            headingIsLegend = false,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, AddATrustee.options),
+            legendClass = Some("govuk-fieldset__legend--m"),
+            inline = false
         )
 
         @submitButton()
