@@ -10,15 +10,15 @@ $(document).ready(function() {
     //======================================================
 
     if(document.querySelectorAll('select[data-non-uk-countries]').length) {
-            accessibleAutocomplete.enhanceSelectElement({
+        accessibleAutocomplete.enhanceSelectElement({
             selectElement: document.querySelector("select[data-non-uk-countries]"),
             showAllValues: true,
             defaultValue: ''
         });
     }
 
-     if(document.querySelectorAll('select[data-all-countries]').length) {
-             accessibleAutocomplete.enhanceSelectElement({
+    if(document.querySelectorAll('select[data-all-countries]').length) {
+        accessibleAutocomplete.enhanceSelectElement({
             selectElement: document.querySelector("select[data-all-countries]"),
             showAllValues: true,
             defaultValue: ''
@@ -31,15 +31,15 @@ $(document).ready(function() {
     // allocates this to the created text input
     //======================================================
     if (document.querySelectorAll('select[data-all-countries]').length) {
-            var selectDescribedByValues = $('select[data-all-countries]').attr('aria-describedby');
-            $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
-        }
-
-        if (document.querySelectorAll('select[data-non-uk-countries]').length) {
-            var selectDescribedByValues = $('select[data-non-uk-countries]').attr('aria-describedby');
-            $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
-        }
+        var selectDescribedByValues = $('select[data-all-countries]').attr('aria-describedby');
+        $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
     }
+
+    if (document.querySelectorAll('select[data-non-uk-countries]').length) {
+        var selectDescribedByValues = $('select[data-non-uk-countries]').attr('aria-describedby');
+        $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
+    }
+
 
     //======================================================
     // Fix CSS styling of errors (red outline) around the country input dropdown
@@ -68,8 +68,8 @@ $(document).ready(function() {
     // temporary fix for the autocomplete holding onto the last matching country when a user then enters an invalid or blank country
     $('input[role="combobox"]').on('keydown', function(e){
         if (e.which != 13 && e.which != 9) {
-             var sel = document.querySelector('.autocomplete-wrapper select');
-             sel.value = "";
+            var sel = document.querySelector('.autocomplete-wrapper select');
+            sel.value = "";
         }
     })
 

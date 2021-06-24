@@ -50,7 +50,7 @@
             field = form("value"),
             legend = messages("leadTrustee.individual.trusteeDetailsChoice.heading", name),
             headingIsLegend = false,
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, DetailsChoice.options(is5mldEnabled)),
+            inputs = mapRadioOptionsToRadioItems(form("value"), DetailsChoice.options(is5mldEnabled)),
             legendClass = Some("govuk-fieldset__legend--m govuk-visually-hidden"),
             inline = false
         )

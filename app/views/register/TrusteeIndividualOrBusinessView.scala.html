@@ -35,16 +35,15 @@
 
     @formHelper(action = TrusteeIndividualOrBusinessController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, IndividualOrBusiness.options.toSeq)
 
         @inputRadio(
             field = form("value"),
             legend = messages(heading),
             legendClass = Some("heading-large"),
-            fieldSetClass = Some("inline"),
-            inputs = IndividualOrBusiness.options.toSeq,
-            headingIsLegend = true,
-            disabled = disabled
+            inline = true,
+            inputs = mapRadioOptionsToRadioItems(form("value"), IndividualOrBusiness.options.toSeq, disabled = disabled),
+            headingIsLegend = true
         )
 
         @submitButton()

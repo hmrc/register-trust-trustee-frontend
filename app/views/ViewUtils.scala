@@ -49,7 +49,7 @@ object ViewUtils {
     }
   }
 
-  def mapRadioOptionsToRadioItems(field: Field, trackGa: Boolean,
+  def mapRadioOptionsToRadioItems(field: Field,
                                   inputs: Seq[RadioOption], disabled: Boolean = false)(implicit messages: Messages): Seq[RadioItem] =
     inputs.map(
       a => {

@@ -43,7 +43,7 @@
             legendClass = Some("heading-large"),
             hint = Some(messages("trusteeOrLeadTrustee.hint")),
             headingIsLegend = true,
-            inputs = TrusteeOrLeadTrustee.options.toSeq
+            inputs = mapRadioOptionsToRadioItems(form("value"), TrusteeOrLeadTrustee.options.toSeq)
         )
 
         @submitButton()

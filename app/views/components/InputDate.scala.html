@@ -52,8 +52,7 @@ readOnly: Boolean = false
  label = Some(messages("date.day")),
  value = field("day").value,
  id = s"${field.id}.day",
- attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty,
- inputMode = Some("numeric")
+ attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty
 ),
 InputItem(
  classes = s"govuk-input--width-2 ${addErrorClass(field.error, "month")}",
@@ -61,8 +60,7 @@ InputItem(
  label = Some(messages("date.month")),
  value = field("month").value,
  id = s"${field.id}.month",
- attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty,
- inputMode = Some("numeric")
+ attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty
 ),
 InputItem(
  classes = s"govuk-input--width-4 ${addErrorClass(field.error, "year")}",
@@ -70,8 +68,7 @@ InputItem(
  label = Some(messages("date.year")),
  value = field("year").value,
  id = s"${field.id}.year",
- attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty,
- inputMode = Some("numeric")
+ attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty
  )
 ),
 hint = hint.map(hint => Hint(content = Text(messages(hint)))),

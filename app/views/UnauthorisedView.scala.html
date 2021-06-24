@@ -14,13 +14,12 @@
  * limitations under the License.
  *@
 
-@import views.html.components.{Heading, Link, BulletList}
+@import views.html.components.{Heading, BulletList}
 @import config.FrontendAppConfig
 
 @this(
         mainTemplate: MainTemplate,
         heading: Heading,
-        link: Link,
         bulletList: BulletList,
         config: FrontendAppConfig
 )
@@ -36,7 +35,7 @@ canSignOut = false
 
   <p class="govuk-body">@messages("unauthorised.p1")</p>
 
-  <p class="govuk-body">@messages("unauthorised.p2") @link(config.registerTrustAsTrusteeUrl, "help-link", messages("unauthorised.link"), openInNewWindow = true)</p>
+  <p class="govuk-body">@messages("unauthorised.p2") <a id="help-link" href="@{config.registerTrustAsTrusteeUrl}" target="_blank">@messages("unauthorised.link")</a></p>
 
   <p class="govuk-body">@messages("unauthorised.p3")</p>
 
