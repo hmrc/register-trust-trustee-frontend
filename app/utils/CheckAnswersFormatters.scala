@@ -19,7 +19,6 @@ package utils
 import models.UserAnswers
 import models.core.pages.{Address, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
-import org.joda.time.{LocalDate => JodaDate}
 import pages.register.trustees.individual.{NamePage => IndividualNamePage}
 import pages.register.trustees.organisation.{NamePage => OrganisationNamePage}
 import play.api.i18n.Messages
@@ -29,13 +28,13 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.language.LanguageUtils
 import utils.countryOptions.CountryOptions
 
-import java.time.{LocalDate => JavaDate}
+import java.time.LocalDate
 import javax.inject.Inject
 
 class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
                                        countryOptions: CountryOptions) {
 
-  def formatDate(date: JavaDate)(implicit messages: Messages): Html = {
+  def formatDate(date: LocalDate)(implicit messages: Messages): Html = {
     escape(languageUtils.Dates.formatDate(date))
   }
 
