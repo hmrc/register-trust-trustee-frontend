@@ -39,7 +39,8 @@
         @inputEmail(
             field = form("value"),
             label = messages("leadTrustee.organisation.email.heading", name),
-            labelAsHeading = true
+            labelAsHeading = true,
+            labelClass = Some("govuk-label--l"),
         )
 
         @submitButton()

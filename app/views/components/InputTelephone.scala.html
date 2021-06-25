@@ -40,8 +40,8 @@ govukInput: GovukInput
          classes = if(labelClass.isDefined) labelClass.get else "",
          content = Text(label)
     ),
-     inputType = "email",
-     autocomplete = Some("email"),
+     inputType = "tel",
+     autocomplete = Some("tel"),
      hint = hint.map(hint => Hint(content = Text(hint))),
      errorMessage = field.error match {
      case Some(e) => Some(ErrorMessage(content = Text(messages(e.message, e.args: _*))))
