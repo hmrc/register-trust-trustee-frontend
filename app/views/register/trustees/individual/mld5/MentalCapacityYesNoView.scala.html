@@ -15,33 +15,35 @@
  *@
 
 @import controllers.register.trustees.individual.mld5.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo, BulletList}
 
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputYesNo: InputYesNo,
     submitButton: SubmitButton,
+    bulletList: BulletList,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
-@content = {
-<p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p1")</p>
-
-<ul class="govuk-list trust-list--bullet">
-    <li class="inside">@messages("trustee.individual.5mld.mentalCapacityYesNo.bulletpoint1")</li>
-    <li class="inside">@messages("trustee.individual.5mld.mentalCapacityYesNo.bulletpoint2")</li>
-    <li class="inside">@messages("trustee.individual.5mld.mentalCapacityYesNo.bulletpoint3")</li>
-    <li class="inside">@messages("trustee.individual.5mld.mentalCapacityYesNo.bulletpoint4")</li>
-</ul>
-}
-
 @main_template(
     title = s"${errorPrefix(form)}${messages("trustee.individual.5mld.mentalCapacityYesNo.title")}",
     showBackLink = true
 ) {
+
+        <p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p1")</p>
+
+        @bulletList(
+        "trustee.individual.5mld.mentalCapacityYesNo",
+            List(
+            "bulletpoint1",
+            "bulletpoint2",
+            "bulletpoint3",
+            "bulletpoint4"
+            )
+        )
 
         @formHelper(action = MentalCapacityYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
