@@ -16,31 +16,17 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.{HeadingWithCaption, LinkList}
-@import viewmodels.Link
+@import views.html.components.{HeadingWithCaption, Link}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
-    linkList: LinkList,
+    link: Link,
     headingWithCaption: HeadingWithCaption,
     appConfig: FrontendAppConfig
 )
 
 @(draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
-
-@links = @{
-    List(
-        Link(
-            text = messages("leadTrustee.individual.matching.locked.link1"),
-            url = MatchingLockedController.continueWithPassport(index, draftId).url
-        ),
-        Link(
-            text = messages("leadTrustee.individual.matching.locked.link2"),
-            url = MatchingLockedController.continueWithIdCard(index, draftId).url
-        )
-    )
-}
 
 @main_template(
     title = messages("leadTrustee.individual.matching.locked.title")
@@ -59,12 +45,27 @@
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph3")</p>
 
-    @linkList(links)
+    <ul class="govuk-list govuk-list--spaced">
+        <li>
+            @link(
+                MatchingLockedController.continueWithPassport(index, draftId).url,
+                "passport-and-address",
+                messages("leadTrustee.individual.matching.locked.link1")
+            )
+        </li>
+        <li>
+            @link(
+                MatchingLockedController.continueWithIdCard(index, draftId).url,
+                "id-card-and-address",
+                messages("leadTrustee.individual.matching.locked.link2")
+            )
+        </li>
+    </ul>
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph4")</p>
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph5")</p>
 
-    @components.reg_progress_link(appConfig, draftId)
+    @link(appConfig.registrationProgressUrl(draftId), "reg-progress", messages("site.reg-progress"))
 
 }

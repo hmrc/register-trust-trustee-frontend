@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
+@this()
 
-@(appConfig: FrontendAppConfig, draftId: String)(implicit messages: Messages)
+@(href : String, id : String = "", key : String, openInNewWindow: Boolean = false)(implicit messages: Messages)
 
-<a href="@{appConfig.registrationProgressUrl(draftId)}" id="reg-progress"><p>@messages("site.reg-progress")</p></a>
+<a id="@id" href="@href" @if(openInNewWindow) {target="_blank"}>@messages(key)</a>

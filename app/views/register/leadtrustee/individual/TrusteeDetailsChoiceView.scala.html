@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputRadio, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio, Heading, Link}
 @import models.registration.pages.DetailsChoice
 
 @this(
@@ -26,6 +26,7 @@
     inputRadio: InputRadio,
     heading: Heading,
     formHelper: FormWithCSRF,
+    link: Link,
     appConfig: FrontendAppConfig
 )
 
@@ -58,7 +59,7 @@
         @submitButton()
 
         @if(is5mldEnabled) {
-            @components.reg_progress_link(appConfig, draftId)
+            @link(appConfig.registrationProgressUrl(draftId), "reg-progress", messages("site.reg-progress"))
         }
     }
 }
