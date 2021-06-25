@@ -33,7 +33,7 @@ class SessionExpiredController @Inject()(
     Ok(view())
   }
 
-  def onSubmit: Action[AnyContent] = Action { implicit request =>
+  def onSubmit: Action[AnyContent] = Action { _ =>
     Redirect(appConfig.loginUrl)
   }
 }

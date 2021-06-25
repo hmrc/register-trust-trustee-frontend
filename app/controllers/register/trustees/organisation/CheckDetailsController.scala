@@ -19,7 +19,6 @@ package controllers.register.trustees.organisation
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.trustees.organisation.NameRequiredActionImpl
-import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrusteeStatus
@@ -29,9 +28,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.TrusteeOrganisationPrintHelper
-import viewmodels.{AnswerSection, Section}
+import viewmodels.Section
 import views.html.register.trustees.organisation.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(
