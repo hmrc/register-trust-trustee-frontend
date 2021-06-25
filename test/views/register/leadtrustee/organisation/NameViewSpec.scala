@@ -39,7 +39,7 @@ class NameViewSpec extends StringViewBehaviours {
 
       behave like pageWithBackLink(applyView(form))
 
-      behave like stringPage(form, applyView, prefix)
+      behave like stringPage(form, applyView, prefix, None, controllers.register.leadtrustee.organisation.routes.NameController.onSubmit(index, fakeDraftId).url)
 
       behave like pageWithHint(form, applyView, s"$prefix.hint")
 
@@ -54,7 +54,7 @@ class NameViewSpec extends StringViewBehaviours {
 
       behave like pageWithBackLink(applyView(form))
 
-      behave like stringPage(form, applyView, prefix)
+      behave like stringPage(form, applyView, prefix, None, controllers.register.leadtrustee.organisation.routes.NameController.onSubmit(index, fakeDraftId).url)
 
       behave like pageWithASubmitButton(applyView(form))
     }

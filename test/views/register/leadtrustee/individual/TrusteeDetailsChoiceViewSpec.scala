@@ -55,8 +55,6 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
 
       behave like pageWithASubmitButton(applyView(form))
 
-      behave like pageWithoutRegProgressLink(applyView(form))
-
       "not show additional content" in {
         val doc = asDocument(applyView(form))
         assertDoesNotContainText(doc, additionalContent)
@@ -79,8 +77,6 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
       behave like pageWithOptions(form, applyView, DetailsChoice.options(is5mldEnabled))
 
       behave like pageWithASubmitButton(applyView(form))
-
-      behave like pageWithRegProgressLink(applyView(form))
 
       "show additional content" in {
         val doc = asDocument(applyView(form))

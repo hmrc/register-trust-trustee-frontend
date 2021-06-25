@@ -64,7 +64,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, leadHeading, readOnly = false)(request, messages).toString
+          view(form, fakeDraftId, index, leadHeading, disabled = false)(request, messages).toString
 
         application.stop()
       }
@@ -92,7 +92,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, heading, readOnly = false)(request, messages).toString
+          view(form, fakeDraftId, index, heading, disabled = false)(request, messages).toString
 
         application.stop()
       }
@@ -121,7 +121,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, leadHeading, readOnly = true)(request, messages).toString
+        view(form, fakeDraftId, index, leadHeading, disabled = true)(request, messages).toString
 
       application.stop()
     }
@@ -151,7 +151,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading, readOnly = false)(request, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading, disabled = false)(request, messages).toString
 
         application.stop()
       }
@@ -180,7 +180,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading, readOnly = false)(request, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading, disabled = false)(request, messages).toString
 
         application.stop()
       }
@@ -270,7 +270,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, heading, readOnly = false)(request, messages).toString
+        view(boundForm, fakeDraftId, index, heading, disabled = false)(request, messages).toString
 
       application.stop()
     }

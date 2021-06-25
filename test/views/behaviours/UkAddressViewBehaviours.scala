@@ -16,7 +16,7 @@
 
 package views.behaviours
 
-import models.UkAddress
+import models.core.pages.UKAddress
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 import views.ViewUtils
@@ -27,9 +27,9 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
   val errorMessage = "error.number"
   val error = FormError(errorKey, errorMessage)
 
-  val form: Form[UkAddress]
+  val form: Form[UKAddress]
 
-  def ukAddressPage(createView: Form[UkAddress] => HtmlFormat.Appendable,
+  def ukAddressPage(createView: Form[UKAddress] => HtmlFormat.Appendable,
                     messageKeyPrefix: Option[String],
                     args : String*) = {
 
