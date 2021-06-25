@@ -20,7 +20,7 @@
 @this(
     headingWithCaption: HeadingWithCaption,
     bulletList: BulletList,
-    submitButton: SubmitButton,
+    button: SubmitButton,
     main_template: MainTemplate,
     warning: Warning,
     formHelper: FormWithCSRF
@@ -74,6 +74,6 @@
     @warning("trusteesInfo")
 
     @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
-    @submitButton(Some(messages("site.continue")))
+        @button()
     }
 }

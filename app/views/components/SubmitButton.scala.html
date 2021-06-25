@@ -15,18 +15,18 @@
  *@
 
 @this(
-button: GovukButton,
+  button: GovukButton,
 )
 
 @(overrideMessage: Option[String] = None, submitClass: Option[String] = None)(implicit messages: Messages)
 
 @button(Button(
- attributes = Map("id"->"submit"),
- classes = s"button ${submitClass.getOrElse("")}",
- content = if(overrideMessage.isEmpty) {
- Text(messages("site.save.continue"))
- } else {
- Text(messages(overrideMessage.get))
- }
- )
+  attributes = Map("id"-> "submit"),
+  classes = s"button ${submitClass.getOrElse("")}",
+  content = if(overrideMessage.isEmpty) {
+    Text(messages("site.save.continue"))
+  } else {
+    Text(messages(overrideMessage.get))
+  }
+  )
 )
