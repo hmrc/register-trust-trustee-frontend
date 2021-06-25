@@ -16,6 +16,8 @@
 
 @import config.FrontendAppConfig
 
+@this()
+
 @(appConfig: FrontendAppConfig, draftId: String)(implicit messages: Messages)
 
 <a href="@{appConfig.registrationProgressUrl(draftId)}" id="reg-progress"><p>@messages("site.reg-progress")</p></a>

@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.{HeadingWithCaption, LinkList}
+@import views.html.components.{HeadingWithCaption, LinkList, RegProgressLink}
 @import viewmodels.Link
 
 @this(
@@ -24,7 +24,8 @@
     formHelper: FormWithCSRF,
     linkList: LinkList,
     headingWithCaption: HeadingWithCaption,
-    appConfig: FrontendAppConfig
+    appConfig: FrontendAppConfig,
+    regProgressLink: RegProgressLink
 )
 
 @(draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
@@ -65,6 +66,6 @@
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph5")</p>
 
-    @components.reg_progress_link(appConfig, draftId)
+    @regProgressLink(appConfig, draftId)
 
 }

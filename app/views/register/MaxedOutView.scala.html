@@ -46,10 +46,12 @@
 
         @addToList(completeTrustees, "complete", "trustee")
 
-        <ul>
-            <li class="panel-indent"><p>@messages("addATrustee.maxedOut.p1")</p></li>
-            <li class="panel-indent"><p>@messages("addATrustee.maxedOut.p2")</p></li>
-        </ul>
+        <div class="govuk-inset-text">
+            <ul class="govuk-list">
+                <li>@messages("addATrustee.maxedOut.p1")</li>
+                <li>@messages("addATrustee.maxedOut.p2")</li>
+            </ul>
+        </div>
 
         @submitButton()
     }
