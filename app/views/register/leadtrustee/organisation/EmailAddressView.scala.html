@@ -15,13 +15,14 @@
  *@
 
 @import controllers.register.leadtrustee.organisation.routes._
-@import views.html.components.{ErrorSummary, SubmitButton}
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
     errorSummary: ErrorSummary,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    inputText: InputText
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
@@ -35,9 +36,11 @@
 
         @errorSummary(form.errors)
 
-        @components.input_email(
+        @inputText(
             field = form("value"),
-            label = messages("leadTrustee.organisation.email.heading", name)
+            label = messages("leadTrustee.organisation.email.heading", name),
+            autocomplete = Some("email"),
+            inputType = Some("email")
         )
 
         @submitButton()

@@ -15,7 +15,7 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
-@import views.html.components.{ErrorSummary, InputDate, SubmitButton}
+@import views.html.components.{ErrorSummary, InputDate, SubmitButton, InputText}
 @import config.FrontendAppConfig
 
 @this(
@@ -23,7 +23,8 @@
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF,
-    appConfig: FrontendAppConfig
+    appConfig: FrontendAppConfig,
+    inputText: InputText
 )
 
 @(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
@@ -37,9 +38,11 @@
 
         @errorSummary(form.errors)
 
-        @components.input_email(
+        @inputText(
             field = form("value"),
-            label = messages("leadTrustee.individual.email.heading", name)
+            label = messages("leadTrustee.individual.email.heading", name),
+            autocomplete = Some("email"),
+            inputType = Some("email")
         )
 
         @submitButton()
