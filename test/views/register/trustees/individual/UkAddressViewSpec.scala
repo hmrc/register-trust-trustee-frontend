@@ -25,7 +25,7 @@ import views.html.register.trustees.individual.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val prefix = "trustee.individual.ukAddress"
+  val prefix = "site.address.uk"
   val index = 0
   val fakeName = FullName("Test", None, "Name").toString
 

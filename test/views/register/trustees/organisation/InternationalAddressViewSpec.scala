@@ -26,7 +26,7 @@ import views.html.register.trustees.organisation.InternationalAddressView
 
 class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
 
-  val prefix = "trustee.organisation.internationalAddress"
+  val prefix = "site.address.international"
   val fakeName = "Test"
 
   val index: Int = 0
