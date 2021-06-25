@@ -38,7 +38,6 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       behave like normalPageTitleWithCaption(
         view = applyView,
         messageKeyPrefix = prefix,
-        messageKeyParam = "",
         captionParam = numberOfFailedAttempts.toString,
         expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.singular"
       )
@@ -62,7 +61,6 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       behave like normalPageTitleWithCaption(
         view = applyView,
         messageKeyPrefix = prefix,
-        messageKeyParam = "",
         captionParam = numberOfFailedAttempts.toString,
         expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.plural"
       )

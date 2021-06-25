@@ -381,7 +381,7 @@ class AddATrusteeControllerSpec extends SpecBase {
             draftId = fakeDraftId,
             inProgressTrustees = trusteeRows.inProgress,
             completeTrustees = trusteeRows.complete,
-            heading = "You have added 25 trustees"
+            dynamicHeading = "You have added 25 trustees"
           )(request, messages).toString
 
         content must include("You cannot add another trustee as you have entered a maximum of 25.")

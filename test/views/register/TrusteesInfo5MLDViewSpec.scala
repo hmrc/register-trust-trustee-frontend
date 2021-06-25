@@ -31,7 +31,6 @@ class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
     behave like normalPageTitleWithCaption(
       view = applyView,
       messageKeyPrefix = "trusteesInfo.5mld",
-      messageKeyParam = "",
       captionParam = "",
       expectedGuidanceKeys = "subheading1",
       "paragraph1",

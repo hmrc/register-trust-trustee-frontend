@@ -17,6 +17,7 @@
 package views.register.leadtrustee.individual
 
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.accordion.Section
 import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
 import views.html.register.leadtrustee.individual.CheckDetailsView
@@ -31,7 +32,7 @@ class CheckDetailsViewSpec extends ViewBehaviours {
     val view = viewFor[CheckDetailsView](Some(emptyUserAnswers))
 
     def applyView(): HtmlFormat.Appendable =
-      view.apply(AnswerSection(None, Seq()), fakeDraftId, index)(fakeRequest, messages)
+      view.apply(Seq(AnswerSection(None, Seq())), fakeDraftId, index)(fakeRequest, messages)
 
     behave like normalPage(applyView(), messageKeyPrefix)
 

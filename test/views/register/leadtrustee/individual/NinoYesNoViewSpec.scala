@@ -40,7 +40,7 @@ class NinoYesNoViewSpec extends YesNoViewBehaviours {
       val view = viewFor[NinoYesNoView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, index, name, disabled = false)(fakeRequest, messages)
 
       behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
@@ -58,7 +58,7 @@ class NinoYesNoViewSpec extends YesNoViewBehaviours {
       val view = viewFor[NinoYesNoView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, index, name, disabled = true)(fakeRequest, messages)
 
       behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

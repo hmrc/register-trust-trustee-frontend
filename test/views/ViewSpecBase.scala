@@ -54,11 +54,7 @@ trait ViewSpecBase extends SpecBase {
     headers.first.text.replaceAll("\u00a0", " ") mustBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
   }
 
-  def assertPageTitleWithCaptionEqualsMessages(doc: Document,
-                                               expectedCaptionMessageKey: String,
-                                               captionParam: String,
-                                               expectedMessageKey: String,
-                                               messageKeyParam: String): Assertion = {
+  def assertPageTitleWithCaptionEqualsMessages(doc: Document, expectedCaptionMessageKey: String, captionParam: String, expectedMessageKey: String) = {
     val headers = doc.getElementsByTag("h1")
     headers.size mustBe 1
     val actual = headers.first.text.replaceAll("\u00a0", " ")

@@ -50,7 +50,6 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] {
 
       behave like pageWithASubmitButton(applyView(form))
 
-      behave like pageWithoutReadOnlyInput(applyView(form))
     }
 
     "read-only" must {
@@ -71,7 +70,6 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] {
 
       behave like pageWithASubmitButton(applyView(form))
 
-      behave like pageWithReadOnlyInput(applyView(form))
     }
   }
 }

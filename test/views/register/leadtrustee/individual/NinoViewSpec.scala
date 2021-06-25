@@ -49,8 +49,6 @@ class NinoViewSpec extends StringViewBehaviours {
       behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name, Some(s"$messageKeyPrefix.hint"))
 
       behave like pageWithASubmitButton(applyView(form))
-
-      behave like pageWithoutReadOnlyInput(applyView(form))
     }
 
     "read-only" must {
@@ -67,8 +65,6 @@ class NinoViewSpec extends StringViewBehaviours {
       behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name, Some(s"$messageKeyPrefix.hint"))
 
       behave like pageWithASubmitButton(applyView(form))
-
-      behave like pageWithReadOnlyInput(applyView(form))
     }
   }
 }

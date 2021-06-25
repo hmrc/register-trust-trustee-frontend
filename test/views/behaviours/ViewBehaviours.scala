@@ -253,4 +253,40 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithWarning(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with warning text" in {
+
+      val doc = asDocument(view)
+
+      assertContainsClass(doc, "govuk-warning-text")
+      assertContainsClass(doc, "govuk-warning-text__icon")
+      assertContainsClass(doc, "govuk-warning-text__text")
+      assertContainsClass(doc, "govuk-warning-text__assistive")
+    }
+  }
+
+  def pageWithoutDisabledInput(view: HtmlFormat.Appendable): Unit = {
+    "behave like a page without a disabled input" must {
+
+      "not have a disabled input" in {
+
+        val doc = asDocument(view)
+        val inputs = doc.getElementsByTag("input")
+        inputs.forEach(input => assertElementDoesNotHaveAttribute(input, "disabled"))
+      }
+    }
+  }
+
+  def pageWithDisabledInput(view: HtmlFormat.Appendable): Unit = {
+    "behave like a page with a disabled input" must {
+
+      "have a disabled input" in {
+
+        val doc = asDocument(view)
+        val inputs = doc.getElementsByTag("input")
+        inputs.forEach(input => assertElementHasAttribute(input, "disabled"))
+      }
+    }
+  }
 }

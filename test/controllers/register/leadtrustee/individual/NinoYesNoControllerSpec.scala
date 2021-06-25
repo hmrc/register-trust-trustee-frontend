@@ -62,7 +62,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
+        view(form, fakeDraftId, index, trusteeName.toString, disabled = false)(request, messages).toString
 
       application.stop()
     }
@@ -83,7 +83,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, trusteeName.toString, readOnly = true)(request, messages).toString
+        view(form, fakeDraftId, index, trusteeName.toString, disabled = true)(request, messages).toString
 
       application.stop()
     }
@@ -104,7 +104,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, trusteeName.toString, disabled = false)(request, messages).toString
 
       application.stop()
     }
@@ -150,7 +150,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
+        view(boundForm, fakeDraftId, index, trusteeName.toString, disabled = false)(request, messages).toString
 
       application.stop()
     }
