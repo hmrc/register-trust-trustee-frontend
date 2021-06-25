@@ -15,12 +15,13 @@
  *@
 
 @import controllers.register.leadtrustee.organisation.routes._
-@import views.html.components.ErrorSummary
+@import views.html.components.{ErrorSummary, InputText}
 
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    inputText: InputText
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
@@ -34,11 +35,13 @@
 
         @errorSummary(form.errors)
 
-        @components.input_tele(
+        @inputText(
             field = form("value"),
             label = messages("leadTrustee.organisation.telephoneNumber.heading", name),
-            labelClass = Some("heading-large"),
+            labelClass = Some("govuk-label--l"),
             labelAsHeading = true,
+            autocomplete = Some("tel"),
+            inputType = Some("tel"),
             hint = Some(messages("leadTrustee.organisation.telephoneNumber.hint"))
         )
 
