@@ -15,32 +15,36 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.individual.nino.title")}"
+    title = s"${errorPrefix(form)}${messages("trustee.individual.nino.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NinoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_nino(
+        @inputText(
           field = form("value"),
           label = messages("trustee.individual.nino.heading", trusteeName),
-          labelClass = Some("heading-large"),
+          labelClass = Some("govuk-label--l"),
+          inputClass = Some("govuk-input govuk-input--width-10"),
           labelAsHeading = true,
           hint = Some(messages(s"trustee.individual.nino.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

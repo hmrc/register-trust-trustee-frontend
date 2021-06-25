@@ -15,27 +15,30 @@
  *@
 
 @import controllers.register.trustees.organisation.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 @import config.FrontendAppConfig
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
     appConfig: FrontendAppConfig
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.organisation.utr.title")}"
+    title = s"${errorPrefix(form)}${messages("trustee.organisation.utr.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = UtrController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("trustee.organisation.utr.heading", name),
             labelAsHeading = true,
@@ -45,6 +48,6 @@
 
         <p>@messages("trustee.organisation.utr.p1") <a target="_blank" href="@appConfig.findLostUtrUrl">@messages("trustee.organisation.utr.link")</a>.</p>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

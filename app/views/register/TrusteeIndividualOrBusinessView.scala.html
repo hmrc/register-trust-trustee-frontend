@@ -16,34 +16,36 @@
 
 @import controllers.register.routes._
 @import models.core.pages.IndividualOrBusiness
+@import views.html.components.{ErrorSummary, InputRadio, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
+    inputRadio: InputRadio,
+    errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, heading: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, heading: String, disabled: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages(heading)}"
+    title = s"${errorPrefix(form)}${messages(heading)}",
+    showBackLink = true
 ) {
 
     @formHelper(action = TrusteeIndividualOrBusinessController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, IndividualOrBusiness.options.toSeq)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages(heading),
             legendClass = Some("heading-large"),
-            fieldSetClass = Some("inline"),
-            inputs = IndividualOrBusiness.options.toSeq,
-            legendAsHeading = true,
-            readOnly = readOnly
+            inline = true,
+            inputs = mapRadioOptionsToRadioItems(form("value"), IndividualOrBusiness.options.toSeq, disabled = disabled),
+            headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

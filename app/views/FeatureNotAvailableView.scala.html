@@ -15,24 +15,25 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components.Heading
 
 @this(
     main_template: MainTemplate,
+    heading: Heading,
     config: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("featureNotAvailable.title")
+    title = messages("featureNotAvailable.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
+    @heading("featureNotAvailable.heading")
 
-    @components.heading("featureNotAvailable.heading")
+    <p class="govuk-body">@messages("featureNotAvailable.p1") <a href="@config.helplineUrl" target="_blank">@messages("featureNotAvailable.link")</a></p>
 
-    <p>@messages("featureNotAvailable.p1") <a href="@config.helplineUrl" target="_blank">@messages("featureNotAvailable.link")</a></p>
-
-    <p>@messages("featureNotAvailable.p2")</p>
+    <p class="govuk-body">@messages("featureNotAvailable.p2")</p>
 
 }

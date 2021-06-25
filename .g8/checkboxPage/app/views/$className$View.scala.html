@@ -1,22 +1,24 @@
 @import controllers.routes.$className$Controller
 @import models.{Mode, $className$}
+@import views.html.components.{ErrorSummary, SubmitButton}
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+main_template: MainTemplate,
+errorSummary: ErrorSummary,
+submitButton: SubmitButton,
+formHelper: FormWithCSRF
 )
 
 @(form: Form[Set[$className$]], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"\${errorPrefix(form)} \${messages("$className;format="decap"$.title")}"
+    title = s"\${errorPrefix(form)} \${messages("$className;format="decap"$.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = $className$Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
-
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @components.input_checkboxes(
             field = form("value"),
@@ -25,6 +27,6 @@
             inputs = $className$.options
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -16,31 +16,34 @@
 
 @import controllers.register.routes._
 @import models.Mode
+@import views.html.components.{ErrorSummary, InputYesNo, SubmitButton}
 @import play.api.mvc.Call
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String, prefix: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages(s"$prefix.title")}"
+    title = s"${errorPrefix(form)}${messages(s"$prefix.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = RemoveIndexController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages(s"$prefix.heading", name),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

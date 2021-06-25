@@ -14,28 +14,33 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
 @import controllers.register.trustees.organisation.routes._
+@import utils.SectionFormatter.formatSections
+@import viewmodels.AnswerSection
+@import viewmodels.Section
+@import views.html.components.{Heading, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
+    govukSummaryList: GovukSummaryList,
+    heading: Heading,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[Section], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trustee.organisation.checkDetails.title")
+    title = messages("trustee.organisation.checkDetails.title"),
+    showBackLink = true
 ) {
 
     @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @heading("trustee.organisation.checkDetails.heading")
 
-        @components.heading("trustee.organisation.checkDetails.heading")
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
-        @components.answer_section(answerSection)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -15,45 +15,49 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{Heading, ErrorSummary, InputText, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.name.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.name.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = NameController.onSubmit(index, draftId),  'autoComplete -> "on") {
 
-        @components.back_link()
-
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         <fieldset>
 
             <legend>
-                @components.heading("leadTrustee.individual.name.heading")
+                @heading("leadTrustee.individual.name.heading")
             </legend>
 
-            @components.input_text(
+            @inputText(
                 field = form("firstName"),
                 label = messages("leadTrustee.individual.name.firstName"),
                 autocomplete = Some("given-name"),
                 readOnly = readOnly
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("middleName"),
                 label = messages("leadTrustee.individual.name.middleName"),
                 autocomplete = Some("additional-name"),
                 readOnly = readOnly
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("lastName"),
                 label = messages("leadTrustee.individual.name.lastName"),
                 autocomplete = Some("family-name"),
@@ -62,6 +66,6 @@
 
         </fieldset>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

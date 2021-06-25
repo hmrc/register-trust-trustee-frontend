@@ -15,49 +15,53 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
+@import views.html.components.{ErrorSummary, Heading, SubmitButton, InputText}
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
+    heading: Heading,
+    inputText: InputText,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index : Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.individual.name.title")}"
+    title = s"${errorPrefix(form)}${messages("trustee.individual.name.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NameController.onSubmit(index, draftId),  'autoComplete -> "on") {
 
-        @components.back_link()
-
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         <fieldset>
 
             <legend>
-                @components.heading("trustee.individual.name.heading")
+                @heading("trustee.individual.name.heading")
             </legend>
 
-            @components.input_text(
+            @inputText(
             field = form("firstName"),
             label = messages("trustee.individual.name.firstName"),
             autocomplete = Some("given-name")
             )
 
-            @components.input_text(
+            @inputText(
             field = form("middleName"),
             label = messages("trustee.individual.name.middleName"),
             autocomplete = Some("additional-name")
             )
 
-            @components.input_text(
+            @inputText(
             field = form("lastName"),
             label = messages("trustee.individual.name.lastName"),
             autocomplete = Some("family-name")
             )
         </fieldset>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

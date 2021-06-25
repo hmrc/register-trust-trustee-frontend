@@ -44,7 +44,7 @@ trait ViewSpecBase extends SpecBase {
 
     if (elements.isEmpty) throw new IllegalArgumentException(s"CSS Selector $cssSelector wasn't rendered.")
 
-    //<p> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
+    //<p class="govuk-body"> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
     assert(elements.first().html().replace("\n", "") == expectedValue)
   }
 
@@ -61,8 +61,12 @@ trait ViewSpecBase extends SpecBase {
                                                messageKeyParam: String): Assertion = {
     val headers = doc.getElementsByTag("h1")
     headers.size mustBe 1
-    headers.first.text.replaceAll("\u00a0", " ") mustBe
-      messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ") + messages(expectedMessageKey, messageKeyParam).replaceAll("&nbsp;", " ")
+    val actual = headers.first.text.replaceAll("\u00a0", " ")
+
+    val expectedCaption = messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ")
+    val expectedHeading = messages(expectedMessageKey).replaceAll("&nbsp;", " ")
+
+    actual mustBe s"$expectedCaption $expectedHeading"
   }
 
   def assertContainsText(doc: Document, text: String): Assertion =
@@ -95,6 +99,9 @@ trait ViewSpecBase extends SpecBase {
     assert(doc.getElementById(id) == null, "\n\nElement " + id + " was rendered on the page.\n")
   }
 
+  def assertRenderedByClass(doc: Document, cssClass: String) =
+    assert(doc.getElementsByClass(cssClass) != null, "\n\nElement " + cssClass + " was not rendered on the page.\n")
+
   def assertNotRenderedByClass(doc: Document, className: String): Assertion = {
     assert(doc.getElementsByClass(className).isEmpty, "\n\nElement " + className + " was rendered on the page.\n")
   }
@@ -123,7 +130,7 @@ trait ViewSpecBase extends SpecBase {
 
   def assertContainsHint(doc: Document, forElement: String, expectedHintText: Option[String]): Any = {
     if (expectedHintText.isDefined) {
-      assert(doc.getElementsByClass("form-hint").first.text == expectedHintText.get,
+      assert(doc.getElementsByClass("govuk-hint").first.text == expectedHintText.get,
         s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
     }
   }
@@ -149,10 +156,9 @@ trait ViewSpecBase extends SpecBase {
     val radio = doc.getElementById(id)
     assert(radio.attr("name") == name, s"\n\nElement $id does not have name $name")
     assert(radio.attr("value") == value, s"\n\nElement $id does not have value $value")
-    if (isChecked) {
-      assert(radio.attr("checked") == "checked", s"\n\nElement $id is not checked")
-    } else {
-      assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
+    isChecked match {
+      case true => assert(radio.hasAttr("checked"), s"\n\nElement $id is not checked")
+      case _ => assert(!radio.hasAttr("checked"), s"\n\nElement $id is checked")
     }
   }
 

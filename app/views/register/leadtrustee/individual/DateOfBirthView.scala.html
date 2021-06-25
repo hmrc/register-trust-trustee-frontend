@@ -15,25 +15,28 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{ErrorSummary, InputDate, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputDate: InputDate,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.dateOfBirth.title", name)}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.dateOfBirth.title", name)}",
+    showBackLink = true
 ) {
 
     @formHelper(action = DateOfBirthController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("leadTrustee.individual.dateOfBirth.heading", name),
             legendClass = "heading-large",
@@ -42,6 +45,6 @@
             readOnly = readOnly
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

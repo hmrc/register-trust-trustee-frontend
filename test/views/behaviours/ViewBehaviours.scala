@@ -33,9 +33,8 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.html() mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -52,13 +51,14 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "display the correct guidance" in {
 
-          for (key <- expectedGuidanceKeys) pageWithText(view, messages(s"$messageKeyPrefix.$key"))
+          val doc = asDocument(view)
+          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
         }
 
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
         }
 
       }
@@ -67,7 +67,6 @@ trait ViewBehaviours extends ViewSpecBase {
 
   def normalPageTitleWithCaption(view: HtmlFormat.Appendable,
                                  messageKeyPrefix: String,
-                                 messageKeyParam: String,
                                  captionParam: String,
                                  expectedGuidanceKeys: String*): Unit = {
 
@@ -78,32 +77,32 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.html() mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
 
           val doc = asDocument(view)
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title", messageKeyParam)
+          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
         }
 
         "display the correct page title with caption" in {
 
           val doc = asDocument(view)
-          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading", messageKeyParam)
+          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading")
         }
 
         "display the correct guidance" in {
 
-          for (key <- expectedGuidanceKeys) pageWithText(view, s"$messageKeyPrefix.$key")
+          val doc = asDocument(view)
+          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
         }
 
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
         }
       }
     }
@@ -121,9 +120,8 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.html() mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -140,13 +138,14 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "display the correct guidance" in {
 
-          for (key <- expectedGuidanceKeys) pageWithText(view, messages(s"$messageKeyPrefix.$key"))
+          val doc = asDocument(view)
+          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
         }
 
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
         }
 
       }
@@ -165,9 +164,8 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.html() mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -185,7 +183,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertNotRenderedById(doc, "cymraeg-switch")
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
         }
 
       }
@@ -252,90 +250,6 @@ trait ViewBehaviours extends ViewSpecBase {
 
       val doc = asDocument(createView(form))
       assertContainsHint(doc, "value", Some(messages(expectedHintKey)))
-    }
-  }
-
-  def pageWithWarning(view: HtmlFormat.Appendable): Unit = {
-
-    "behave like a page with warning text" in {
-
-      val doc = asDocument(view)
-
-      assertContainsClass(doc, "govuk-warning-text")
-      assertContainsClass(doc, "govuk-warning-text__icon")
-      assertContainsClass(doc, "govuk-warning-text__text")
-      assertContainsClass(doc, "govuk-warning-text__assistive")
-    }
-  }
-
-  def pageWithRegProgressLink[A](view: HtmlFormat.Appendable): Unit = {
-
-    "behave like a page with a reg progress link" in {
-
-      val doc = asDocument(view)
-      assertContainsRegProgressLink(doc)
-    }
-  }
-
-  def pageWithoutRegProgressLink[A](view: HtmlFormat.Appendable): Unit = {
-
-    "behave like a page without a reg progress link" in {
-
-      val doc = asDocument(view)
-      assertDoesNotContainRegProgressLink(doc)
-    }
-  }
-
-  def pageWithText(view: HtmlFormat.Appendable, messageKey: String, messageParam: String = ""): Unit = {
-    val doc = asDocument(view)
-    assertContainsText(doc, messages(messageKey, messageParam))
-  }
-
-  def pageWithReadOnlyInput(view: HtmlFormat.Appendable): Unit = {
-    "behave like a page with a read-only input" must {
-
-      "have a read-only input" in {
-
-        val doc = asDocument(view)
-        val inputs = doc.getElementsByTag("input")
-        inputs.forEach(input => assertElementHasAttribute(input, "readonly"))
-      }
-    }
-  }
-
-  def pageWithoutReadOnlyInput(view: HtmlFormat.Appendable): Unit = {
-    "behave like a page without a read-only input" must {
-
-      "not have a read-only input" in {
-
-        val doc = asDocument(view)
-        val inputs = doc.getElementsByTag("input")
-        inputs.forEach(input => assertElementDoesNotHaveAttribute(input, "readonly"))
-      }
-    }
-  }
-
-  def pageWithDisabledInput(view: HtmlFormat.Appendable): Unit = {
-    "behave like a page with a disabled input" must {
-
-      "have a disabled input" in {
-
-        val doc = asDocument(view)
-        val inputs = doc.getElementsByTag("input")
-        inputs.forEach(input => assertElementHasAttribute(input, "disabled"))
-      }
-    }
-  }
-
-  def pageWithoutDisabledInput(view: HtmlFormat.Appendable): Unit = {
-    "behave like a page without a disabled input" must {
-
-      "not have a disabled input" in {
-
-        val doc = asDocument(view)
-        val inputs = doc.getElementsByTag("input")
-        inputs.forEach(input => assertElementDoesNotHaveAttribute(input, "disabled"))
-      }
     }
   }
 

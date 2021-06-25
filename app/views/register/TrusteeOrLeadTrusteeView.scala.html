@@ -16,34 +16,36 @@
 
 @import controllers.register.routes._
 @import models.core.pages.TrusteeOrLeadTrustee
+@import views.html.components.{ErrorSummary, InputRadio, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
+    inputRadio: InputRadio,
+    errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trusteeOrLeadTrustee.title")}"
+    title = s"${errorPrefix(form)}${messages("trusteeOrLeadTrustee.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = TrusteeOrLeadTrusteeController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("trusteeOrLeadTrustee.heading"),
             legendClass = Some("heading-large"),
-            fieldSetClass = Some("inline"),
-            inputs = TrusteeOrLeadTrustee.options.toSeq,
-            legendAsHeading = true,
-            hint = Some(messages("trusteeOrLeadTrustee.hint"))
+            hint = Some(messages("trusteeOrLeadTrustee.hint")),
+            headingIsLegend = true,
+            inputs = mapRadioOptionsToRadioItems(form("value"), TrusteeOrLeadTrustee.options.toSeq)
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -15,42 +15,48 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{Heading, ErrorSummary, InputDate, InputText, SubmitButton, InputSelect}
 @import utils.InputOption
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    select: InputSelect,
+    inputDate: InputDate,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.iDCardDetails.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.iDCardDetails.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = IDCardDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("leadTrustee.individual.iDCardDetails.heading", Some(name))
 
-        @components.heading("leadTrustee.individual.iDCardDetails.heading", Some(name))
-
-        @components.select(field = form("country"),
+        @select(field = form("country"),
             label = messages("leadTrustee.individual.iDCardDetails.country"),
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
-            formGroupClasses = Set("autocomplete-wrapper form-control-2-1"),
-            selectAttribute = Set("data-non-uk-countries")
+            formGroupClasses = Set("autocomplete-wrapper"),
+            selectAttribute = Map("data-non-uk-countries" -> "")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("number"),
             label = messages("leadTrustee.individual.iDCardDetails.number")
         )
 
-        @components.input_date(
+        @inputDate(
             field = form("expiryDate"),
             legend = messages("leadTrustee.individual.iDCardDetails.expiryDate.title"),
             legendClass = "bold",
@@ -58,6 +64,6 @@
             hint = Some(messages("leadTrustee.individual.iDCardDetails.expiryDate.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

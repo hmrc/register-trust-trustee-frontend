@@ -15,10 +15,13 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{ErrorSummary, InputDate, SubmitButton}
 @import config.FrontendAppConfig
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF,
     appConfig: FrontendAppConfig
 )
@@ -26,21 +29,20 @@
 @(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.email.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.email.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = EmailAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
-
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @components.input_email(
             field = form("value"),
             label = messages("leadTrustee.individual.email.heading", name)
         )
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }

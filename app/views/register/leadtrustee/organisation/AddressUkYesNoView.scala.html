@@ -15,30 +15,33 @@
  *@
 
 @import controllers.register.leadtrustee.organisation.routes._
+@import views.html.components.{InputYesNo, ErrorSummary, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.organisation.addressUkYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.organisation.addressUkYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = AddressUkYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("leadTrustee.organisation.addressUkYesNo.heading", name),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
