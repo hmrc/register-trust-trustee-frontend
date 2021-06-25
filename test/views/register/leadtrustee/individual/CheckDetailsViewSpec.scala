@@ -17,7 +17,6 @@
 package views.register.leadtrustee.individual
 
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.accordion.Section
 import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
 import views.html.register.leadtrustee.individual.CheckDetailsView
