@@ -15,13 +15,14 @@
  *@
 
 @import controllers.register.leadtrustee.organisation.routes._
-@import views.html.components.{ErrorSummary, InputText}
+@import views.html.components.{ErrorSummary, InputText, SubmitButton}
 
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF,
-    inputText: InputText
+    inputText: InputText,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
@@ -45,6 +46,6 @@
             hint = Some(messages("leadTrustee.organisation.telephoneNumber.hint"))
         )
 
-        @components.submit_no_validate_button()
+        @submitButton()
     }
 }
