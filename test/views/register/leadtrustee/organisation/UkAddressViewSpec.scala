@@ -35,7 +35,7 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
     val view = viewFor[UkAddressView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, fakeName)(fakeRequest, messages)
+      view.apply(form, fakeName, index, fakeDraftId)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, fakeName)
 
