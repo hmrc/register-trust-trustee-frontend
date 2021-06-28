@@ -112,7 +112,7 @@
     @warning("trusteesInfo.5mld")
 
     @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
-        @button()
+        @button(Some(messages("site.onlyContinue")))
     }
 
 }
