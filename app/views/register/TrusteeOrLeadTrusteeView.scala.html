@@ -35,7 +35,7 @@
 
     @formHelper(action = TrusteeOrLeadTrusteeController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, TrusteeOrLeadTrustee.options.toSeq)
 
         @inputRadio(
             field = form("value"),
