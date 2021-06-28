@@ -42,11 +42,12 @@
             field = form("value"),
             label = messages("trustee.organisation.utr.heading", name),
             labelAsHeading = true,
+            labelClass = Some("govuk-label--l"),
             hint = Some(messages("trustee.organisation.utr.hint")),
             inputMode = Some("numeric")
         )
 
-        <p>@messages("trustee.organisation.utr.p1") <a target="_blank" href="@appConfig.findLostUtrUrl">@messages("trustee.organisation.utr.link")</a>.</p>
+        <p>@messages("trustee.organisation.utr.p1") <a class="govuk-link" target="_blank" href="@appConfig.findLostUtrUrl">@messages("trustee.organisation.utr.link")</a>.</p>
 
         @submitButton()
     }
