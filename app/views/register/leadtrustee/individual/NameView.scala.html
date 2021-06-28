@@ -37,9 +37,9 @@
 
         @errorSummary(form.errors)
 
-        <fieldset>
+        <fieldset class="govuk-fieldset">
 
-            <legend>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 @heading("leadTrustee.individual.name.heading")
             </legend>
 
@@ -47,6 +47,7 @@
                 field = form("firstName"),
                 label = messages("leadTrustee.individual.name.firstName"),
                 autocomplete = Some("given-name"),
+                inputClass = Some("govuk-!-width-one-half"),
                 readOnly = readOnly
             )
 
@@ -54,6 +55,7 @@
                 field = form("middleName"),
                 label = messages("leadTrustee.individual.name.middleName"),
                 autocomplete = Some("additional-name"),
+                inputClass = Some("govuk-!-width-one-half"),
                 readOnly = readOnly
             )
 
@@ -61,6 +63,7 @@
                 field = form("lastName"),
                 label = messages("leadTrustee.individual.name.lastName"),
                 autocomplete = Some("family-name"),
+                inputClass = Some("govuk-!-width-one-half"),
                 readOnly = readOnly
             )
 
