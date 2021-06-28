@@ -40,6 +40,7 @@
             field = form("value"),
             inputClass = Some("trustee-business-name"),
             label = messages("leadTrustee.organisation.name.heading"),
+            labelClass = Some("govuk-label--l"),
             labelAsHeading = true,
             autocomplete = Some("name"),
             hint = if(isUkRegistered) Some(messages("leadTrustee.organisation.name.hint")) else None
