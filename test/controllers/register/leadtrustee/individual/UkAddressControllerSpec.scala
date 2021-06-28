@@ -58,7 +58,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, fakeName.toString)(request, messages).toString
+        view(form, fakeName.toString, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -79,7 +79,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, fakeName.toString)(request, messages).toString
+        view(form.fill(validAnswer), fakeName.toString, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -128,7 +128,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, fakeName.toString)(request, messages).toString
+        view(boundForm, fakeName.toString, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
