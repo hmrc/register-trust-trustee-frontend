@@ -28,7 +28,8 @@ import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration,
                                    contactFrontendConfig: ContactFrontendConfig) {
-  val repositoryKey: String = "trustee"
+  
+  val repositoryKey: String = "trustees"
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
