@@ -84,6 +84,6 @@ class RemoveIndexController @Inject()(
   }
 
   private def prefix(trustee: TrusteeViewModel) = {
-    if (trustee.isLead) "removeLeadTrustee" else "removeTrustee"
+    if (trustee.isLead) "removeLeadTrusteeYesNo" else "removeTrusteeYesNo"
   }
 }

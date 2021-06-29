@@ -192,15 +192,15 @@ addATrustee.lead-trustee.required = You need to add or nominate a lead trustee.
 addATrustee.maxedOut.p1 = You cannot add another trustee as you have entered a maximum of 25.
 addATrustee.maxedOut.p2 = You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees.
 
-removeTrustee.title = Are you sure you want to remove the trustee?
-removeTrustee.heading = Are you sure you want to remove {0}?
-removeTrustee.error.required = Select yes if you want to remove the trustee
-removeTrustee.default = the trustee
+removeTrusteeYesNo.title = Are you sure you want to remove the trustee?
+removeTrusteeYesNo.heading = Are you sure you want to remove {0}?
+removeTrusteeYesNo.error.required = Select yes if you want to remove the trustee
+removeTrusteeYesNo.default = the trustee
 
-removeLeadTrustee.title = Are you sure you want to remove the lead trustee?
-removeLeadTrustee.heading = Are you sure you want to remove {0}?
-removeLeadTrustee.error.required = Select yes if you want to remove the lead trustee
-removeLeadTrustee.default = the lead trustee
+removeLeadTrusteeYesNo.title = Are you sure you want to remove the lead trustee?
+removeLeadTrusteeYesNo.heading = Are you sure you want to remove {0}?
+removeLeadTrusteeYesNo.error.required = Select yes if you want to remove the lead trustee
+removeLeadTrusteeYesNo.default = the lead trustee
 
 trustee.individual.ninoYesNo.title = Do you know the trustee’s National Insurance number?
 trustee.individual.ninoYesNo.heading = Do you know {0}’s National Insurance number?
