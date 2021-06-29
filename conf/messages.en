@@ -706,3 +706,35 @@ leadTrustee.individual.matching.locked.link1 = Passport and address
 leadTrustee.individual.matching.locked.link2 = ID card and address
 leadTrustee.individual.matching.locked.paragraph4 = If you do not have these details to hand, you can return to the registration progress page, to complete the other details for the trust until you have provided alternative information for your existing lead trustee, or have information for a new lead trustee.
 leadTrustee.individual.matching.locked.paragraph5 = When you have confirmed the accurate information, you’ll need to sign out and sign back in. You can complete the other sections in this registration without signing out and these details will be saved for 28 days.
+
+trustee.individual.ukAddress.title = What is the trustee’s address?
+trustee.individual.ukAddress.heading = What is {0}’s address?
+trustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.individual.internationalAddress.title = What is the trustee’s address?
+trustee.individual.internationalAddress.heading = What is {0}’s address?
+trustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.organisation.ukAddress.title = What is the trustee’s address?
+trustee.organisation.ukAddress.heading = What is {0}’s address?
+trustee.organisation.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.organisation.internationalAddress.title = What is the trustee’s address?
+trustee.organisation.internationalAddress.heading = What is {0}’s address?
+trustee.organisation.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.organisation.ukAddress.title = What is the lead trustee’s address?
+leadTrustee.organisation.ukAddress.heading = What is {0}’s address?
+leadTrustee.organisation.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.organisation.internationalAddress.title = What is the lead trustee’s address?
+leadTrustee.organisation.internationalAddress.heading = What is {0}’s address?
+leadTrustee.organisation.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.individual.ukAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.ukAddress.heading = What is {0}’s address?
+leadTrustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.individual.internationalAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.internationalAddress.heading = What is {0}’s address?
+leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?

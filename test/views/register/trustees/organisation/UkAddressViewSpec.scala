@@ -24,7 +24,7 @@ import views.html.register.trustees.organisation.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val prefix = "site.address.uk"
+  val prefix = "trustee.organisation.ukAddress"
   val index = 0
   val fakeName = "Test"
 

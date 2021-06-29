@@ -28,7 +28,7 @@
 @(form: Form[_], name: String, index : Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
     @main_template(
-    title = s"${errorPrefix(form)}${messages("site.address.uk.title")}",
+    title = s"${errorPrefix(form)}${messages("trustee.individual.ukAddress.title")}",
     showBackLink = true
     ) {
 
@@ -36,7 +36,7 @@
 
     @errorSummary(form.errors)
 
-    @ukAddress(form, messages("site.address.uk.heading", name))
+    @ukAddress(form, messages("trustee.individual.ukAddress.heading", name))
 
     @submitButton()
     }
