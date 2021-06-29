@@ -27,17 +27,17 @@
 
     @(form: Form[_], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
 
-    @main_template(
+@main_template(
     title = s"${errorPrefix(form)}${messages("trustee.organisation.ukAddress.title")}",
     showBackLink = true
-    ) {
+) {
 
-    @formHelper(action = UkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
+        @formHelper(action = UkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-    @errorSummary(form.errors)
+        @errorSummary(form.errors)
 
-    @ukAddress(form, messages("trustee.organisation.ukAddress.heading", name))
+        @ukAddress(form, messages("trustee.organisation.ukAddress.heading", name))
 
-    @submitButton()
+        @submitButton()
     }
 }
