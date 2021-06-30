@@ -16,15 +16,20 @@
 
 @import controllers.register.routes._
 @import models.registration.pages.AddATrustee
+@import views.html.components.{ErrorSummary, Heading, InputRadio, SubmitButton, AddToList}
 @import viewmodels.AddRow
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    submitButton: SubmitButton,
+    iHeading: Heading,
+    errorSummary: ErrorSummary,
+    formHelper: FormWithCSRF,
+    inputRadio: InputRadio,
+    addToList: AddToList
 )
 
-@(
-    form: Form[_],
+@(form: Form[_],
     onSubmit: Call,
     inProgressTrustees: Seq[AddRow],
     completeTrustees: Seq[AddRow],
@@ -33,33 +38,35 @@
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}$heading"
+    title = s"${errorPrefix(form)}$heading",
+    showBackLink = true
 ) {
 
     @formHelper(action = onSubmit, 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, AddATrustee.options)
 
-        @components.error_summary(form.errors)
+        @iHeading(heading)
 
-        @components.heading(heading)
+        @addToList(inProgressTrustees, "inprogress", "trustee")
 
-        @components.data_list(inProgressTrustees, "inprogress", "trustee")
-
-        @components.data_list(completeTrustees, "complete", "trustee")
+        @addToList(completeTrustees, "complete", "trustee")
 
         @if(!isLeadTrusteeDefined) {
-            @components.inset_text("addATrustee.lead-trustee.required", "addATrustee")
+            <div id="inset-text--addATrustee" class="govuk-inset-text">
+                @messages("addATrustee.lead-trustee.required")
+            </div>
         }
 
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("addATrustee.additional-content"),
-            legendClass = Some("heading-medium"),
-            inputs = AddATrustee.options,
-            legendAsH2Heading = true
+            headingIsLegend = false,
+            inputs = mapRadioOptionsToRadioItems(form("value"), AddATrustee.options),
+            legendClass = Some("govuk-fieldset__legend--m"),
+            inline = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

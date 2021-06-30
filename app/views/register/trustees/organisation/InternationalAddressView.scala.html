@@ -16,34 +16,37 @@
 
 @import controllers.register.trustees.organisation.routes._
 @import utils.InputOption
+@import views.html.components.{ErrorSummary, Heading, InternationalAddress, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    heading: Heading,
+    internationalAddress: InternationalAddress,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], index: Int, draftId: String, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index : Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.organisation.internationalAddress.title")}"
+    title = s"${errorPrefix(form)}${messages("trustee.organisation.internationalAddress.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("trustee.organisation.internationalAddress.heading", Some(name))
 
-        <fieldset>
+        @internationalAddress(
+            form = form,
+            legend = messages("trustee.organisation.internationalAddress.heading", name),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
-            <legend>
-                @components.heading("trustee.organisation.internationalAddress.heading", Some(name))
-            </legend>
-
-            @components.international_address(form, countryOptions)
-
-        </fieldset>
-
-        @components.submit_button(submitClass = Some("countryLookupHelper"))
+        @submitButton()
     }
 }

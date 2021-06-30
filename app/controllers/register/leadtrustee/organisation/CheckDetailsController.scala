@@ -19,7 +19,6 @@ package controllers.register.leadtrustee.organisation
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
-import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrusteeStatus
@@ -29,9 +28,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.LeadTrusteeOrganisationPrintHelper
-import viewmodels.AnswerSection
+import viewmodels.Section
 import views.html.register.leadtrustee.organisation.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(
@@ -53,9 +53,9 @@ class CheckDetailsController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.trusteeName, index, draftId)
+      val section: Section = printHelper.checkDetailsSection(request.userAnswers, request.trusteeName, index, draftId)
 
-      Ok(view(section, draftId, index))
+      Ok(view(Seq(section), draftId, index))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {

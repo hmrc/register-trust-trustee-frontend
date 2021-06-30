@@ -40,7 +40,7 @@ class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, index, fakeDraftId, fakeName)(fakeRequest, messages)
+      view.apply(form, countryOptions, fakeDraftId, index, fakeName)(fakeRequest, messages)
 
     behave like pageWithBackLink(applyView(form))
 

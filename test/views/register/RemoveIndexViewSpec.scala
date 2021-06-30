@@ -24,7 +24,7 @@ import views.html.RemoveIndexView
 
 class RemoveIndexViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "removeTrustee"
+  val prefix = "removeTrusteeYesNo"
   val fakeName = "Test"
   val index = 0
 

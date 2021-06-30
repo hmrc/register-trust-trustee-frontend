@@ -15,32 +15,39 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{Heading, ErrorSummary, InternationalAddress, SubmitButton}
 @import config.FrontendAppConfig
 @import utils.InputOption
 
 @this(
         main_template: MainTemplate,
+        errorSummary: ErrorSummary,
         formHelper: FormWithCSRF,
+        internationalAddress: InternationalAddress,
+        submitButton: SubmitButton,
+        heading: Heading,
         appConfig: FrontendAppConfig
 )
 
 @(form: Form[_], index: Int, draftId: String, countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.internationalAddress.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.internationalAddress.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @internationalAddress(
+            form = form,
+            legend = messages("leadTrustee.individual.internationalAddress.heading", name),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
-        @components.heading("leadTrustee.individual.internationalAddress.heading", Some(name))
-
-        @components.international_address(form, countryOptions)
-
-        @components.submit_button()
+        @submitButton()
 
     }
 }

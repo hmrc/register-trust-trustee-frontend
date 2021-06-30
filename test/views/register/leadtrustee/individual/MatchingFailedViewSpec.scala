@@ -38,7 +38,6 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       behave like normalPageTitleWithCaption(
         view = applyView,
         messageKeyPrefix = prefix,
-        messageKeyParam = "",
         captionParam = numberOfFailedAttempts.toString,
         expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.singular"
       )
@@ -46,7 +45,7 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       "show number of remaining attempts in bold" in {
         val doc = asDocument(applyView)
 
-        assertContainsText(doc, "<span class=\"bold\">1</span>")
+        assertAttributeValueForElement(doc.getElementById("remaining-attempts"), "class", "govuk-!-font-weight-bold")
       }
 
       behave like pageWithASubmitButton(applyView)
@@ -62,7 +61,6 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       behave like normalPageTitleWithCaption(
         view = applyView,
         messageKeyPrefix = prefix,
-        messageKeyParam = "",
         captionParam = numberOfFailedAttempts.toString,
         expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.plural"
       )
@@ -70,7 +68,7 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       "show number of remaining attempts in bold" in {
         val doc = asDocument(applyView)
 
-        assertContainsText(doc, "<span class=\"bold\">2</span>")
+        assertAttributeValueForElement(doc.getElementById("remaining-attempts"), "class", "govuk-!-font-weight-bold")
       }
 
       behave like pageWithASubmitButton(applyView)

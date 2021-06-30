@@ -16,34 +16,23 @@
 
 @import config.FrontendAppConfig
 @import controllers.register.leadtrustee.individual.routes._
-@import viewmodels.Link
+@import views.html.components.{HeadingWithCaption, Link}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
-    appConfig: FrontendAppConfig
+    headingWithCaption: HeadingWithCaption,
+    appConfig: FrontendAppConfig,
+    link: Link
 )
 
 @(draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
-
-@links = @{
-    List(
-        Link(
-            text = messages("leadTrustee.individual.matching.locked.link1"),
-            url = MatchingLockedController.continueWithPassport(index, draftId).url
-        ),
-        Link(
-            text = messages("leadTrustee.individual.matching.locked.link2"),
-            url = MatchingLockedController.continueWithIdCard(index, draftId).url
-        )
-    )
-}
 
 @main_template(
     title = messages("leadTrustee.individual.matching.locked.title")
 ) {
 
-    @components.heading_with_caption(
+    @headingWithCaption(
         messagePrefix = "leadTrustee.individual.matching.locked",
         optionalParam = Some(name)
     )
@@ -56,12 +45,33 @@
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph3")</p>
 
-    @components.link_list(links)
+    <ul class="govuk-list govuk-list--spaced">
+        <li class="app-link-list__item" id="link-list__item--passport-and-address">
+            <span class="app-link-link">
+            @link(
+                href = MatchingLockedController.continueWithPassport(index, draftId).url,
+                id = "link-list__link--passport-and-address",
+                key = "leadTrustee.individual.matching.locked.link1",
+                cssClasses = Some("app-link-list__link-name")
+            )
+            </span>
+        </li>
+        <li class="app-link-list__item" id="link-list__item--id-card-and-address">
+            <span class="app-link-link">
+            @link(
+                href = MatchingLockedController.continueWithIdCard(index, draftId).url,
+                id = "link-list__link--id-card-and-address",
+                key = "leadTrustee.individual.matching.locked.link2",
+                cssClasses = Some("app-link-list__link-name")
+            )
+            </span>
+        </li>
+    </ul>
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph4")</p>
 
     <p>@messages("leadTrustee.individual.matching.locked.paragraph5")</p>
 
-    @components.reg_progress_link(appConfig, draftId)
+    <p>@link(appConfig.registrationProgressUrl(draftId), "reg-progress", messages("site.reg-progress"))</p>
 
 }

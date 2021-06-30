@@ -17,15 +17,13 @@
 package controllers.register
 
 import controllers.actions.register.RegistrationIdentifierAction
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.TrusteesInfoView
-import views.html.register.TrusteesInfo5MLDView
+import views.html.register.{TrusteesInfo5MLDView, TrusteesInfoView}
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class TrusteesInfoController @Inject()(
@@ -47,4 +45,7 @@ class TrusteesInfoController @Inject()(
       }
   }
 
+  def onSubmit(draftId: String): Action[AnyContent] = identify { _ =>
+      Redirect(controllers.register.routes.TrusteeOrLeadTrusteeController.onPageLoad(0, draftId))
+  }
 }

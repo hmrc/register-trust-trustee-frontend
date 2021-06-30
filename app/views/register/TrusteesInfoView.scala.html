@@ -15,20 +15,25 @@
  *@
 
 @import controllers.register.routes._
+@import views.html.components.{HeadingWithCaption, BulletList, SubmitButton, Warning}
 
 @this(
-    main_template: MainTemplate
+    headingWithCaption: HeadingWithCaption,
+    bulletList: BulletList,
+    button: SubmitButton,
+    main_template: MainTemplate,
+    warning: Warning,
+    formHelper: FormWithCSRF
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trusteesInfo.title")
+    title = messages("trusteesInfo.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading_with_caption("trusteesInfo")
+    @headingWithCaption("trusteesInfo")
 
     <h2>@messages("trusteesInfo.subheading1")</h2>
 
@@ -36,7 +41,7 @@
 
     <p>@messages("trusteesInfo.paragraph2")</p>
 
-    @components.bullet_list(
+    @bulletList(
         "trusteesInfo",
         List(
             "bulletpoint1",
@@ -53,7 +58,7 @@
 
     <p>@messages("trusteesInfo.paragraph5")</p>
 
-    @components.bullet_list(
+    @bulletList(
         "trusteesInfo",
         List(
             "bulletpoint4",
@@ -66,7 +71,9 @@
 
     <p>@messages("trusteesInfo.paragraph6")</p>
 
-    @components.warning("trusteesInfo")
+    @warning("trusteesInfo")
 
-    @components.button_link(messages("site.onlyContinue"), TrusteeOrLeadTrusteeController.onPageLoad(0, draftId).url)
+    @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+        @button(Some(messages("site.onlyContinue")))
+    }
 }

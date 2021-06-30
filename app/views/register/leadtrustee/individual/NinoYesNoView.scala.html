@@ -15,32 +15,35 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{ErrorSummary, InputYesNo, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputYesNo: InputYesNo,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, index: Int, name: String, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String, disabled: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.ninoYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.ninoYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = NinoYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("leadTrustee.individual.ninoYesNo.heading", name),
-            legendClass = Some("heading-large"),
+            legendClass = Some("govuk-heading-l"),
             legendAsHeading = true,
-            readOnly = readOnly
+            disabled = disabled
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

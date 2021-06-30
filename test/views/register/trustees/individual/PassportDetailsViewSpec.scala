@@ -22,7 +22,7 @@ import models.registration.pages.PassportOrIdCardDetails
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
-import utils.countryOptions.CountryOptions
+import utils.countryOptions.{CountryOptions, CountryOptionsNonUK}
 import views.behaviours.QuestionViewBehaviours
 import views.html.register.trustees.individual.PassportDetailsView
 
@@ -40,25 +40,23 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
 
     val view = viewFor[PassportDetailsView](Some(emptyUserAnswers))
 
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, "draftId", 0, name.toString)(fakeRequest, messages)
+      view.apply(form, countryOptions, draftId, 0, name.toString)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 
     behave like pageWithBackLink(applyView(form))
 
-    "fields" must {
-
-      behave like pageWithPassportOrIDCardDetailsFields(
-        form,
-        applyView,
-        messageKeyPrefix,
-        controllers.register.trustees.individual.routes.PassportDetailsController.onSubmit(0, "draftId").url,
-        Seq(("country", None), ("number", None)),
-        "expiryDate",
-        name.toString
-      )
-    }
+    behave like pageWithPassportOrIDCardDetailsFields(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Seq(("country", None), ("number", None)),
+      "expiryDate",
+      name.toString
+    )
 
     behave like pageWithASubmitButton(applyView(form))
 

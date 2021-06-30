@@ -61,7 +61,7 @@ class UkAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+      Ok(view(preparedForm, request.trusteeName, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -69,7 +69,7 @@ class UkAddressController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
+          Future.successful(BadRequest(view(formWithErrors, request.trusteeName, index, draftId))),
 
         value => {
           for {

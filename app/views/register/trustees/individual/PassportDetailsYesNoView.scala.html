@@ -15,31 +15,34 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
+@import views.html.components.{ErrorSummary, InputYesNo, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index : Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.individual.passportDetailsYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("trustee.individual.passportDetailsYesNo.title")}",
+    showBackLink = true
 ) {
 
   @formHelper(action = PassportDetailsYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-     @components.back_link()
+     @errorSummary(form.errors)
 
-     @components.error_summary(form.errors)
-
-     @components.input_yes_no(
+     @inputYesNo(
         field = form("value"),
         label = messages("trustee.individual.passportDetailsYesNo.heading", trusteeName),
-        legendClass = Some("heading-large"),
+        legendClass = Some("govuk-heading-l"),
         legendAsHeading = true
      )
 
-     @components.submit_button()
+     @submitButton()
   }
 }

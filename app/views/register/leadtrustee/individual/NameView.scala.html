@@ -15,53 +15,60 @@
  *@
 
 @import controllers.register.leadtrustee.individual.routes._
+@import views.html.components.{Heading, ErrorSummary, InputText, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.name.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.individual.name.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = NameController.onSubmit(index, draftId),  'autoComplete -> "on") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        <fieldset class="govuk-fieldset">
 
-        <fieldset>
-
-            <legend>
-                @components.heading("leadTrustee.individual.name.heading")
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                @heading("leadTrustee.individual.name.heading")
             </legend>
 
-            @components.input_text(
+            @inputText(
                 field = form("firstName"),
                 label = messages("leadTrustee.individual.name.firstName"),
                 autocomplete = Some("given-name"),
+                inputClass = Some("govuk-!-width-one-half"),
                 readOnly = readOnly
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("middleName"),
                 label = messages("leadTrustee.individual.name.middleName"),
                 autocomplete = Some("additional-name"),
+                inputClass = Some("govuk-!-width-one-half"),
                 readOnly = readOnly
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("lastName"),
                 label = messages("leadTrustee.individual.name.lastName"),
                 autocomplete = Some("family-name"),
+                inputClass = Some("govuk-!-width-one-half"),
                 readOnly = readOnly
             )
 
         </fieldset>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

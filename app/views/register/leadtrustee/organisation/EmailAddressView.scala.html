@@ -15,29 +15,34 @@
  *@
 
 @import controllers.register.leadtrustee.organisation.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputEmail}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
+    formHelper: FormWithCSRF,
+    inputEmail: InputEmail
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("leadTrustee.organisation.email.title")}"
+    title = s"${errorPrefix(form)}${messages("leadTrustee.organisation.email.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = EmailAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_email(
+        @inputEmail(
             field = form("value"),
-            label = messages("leadTrustee.organisation.email.heading", name)
+            label = messages("leadTrustee.organisation.email.heading", name),
+            labelAsHeading = true,
+            labelClass = Some("govuk-label--l"),
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

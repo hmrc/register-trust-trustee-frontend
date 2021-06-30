@@ -24,6 +24,7 @@ import pages.register.trustees.organisation.NamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.print.TrusteeOrganisationPrintHelper
+import viewmodels.Section
 import views.html.register.trustees.organisation.CheckDetailsView
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
@@ -48,12 +49,12 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val view = application.injector.instanceOf[CheckDetailsView]
       val printHelper = application.injector.instanceOf[TrusteeOrganisationPrintHelper]
-      val answerSection = printHelper.checkDetailsSection(emptyUserAnswers, name, index, fakeDraftId)
+      val answerSection: Section = printHelper.checkDetailsSection(emptyUserAnswers, name, index, fakeDraftId)
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(answerSection, index, fakeDraftId)(request, messages).toString
+        view(Seq(answerSection), index, fakeDraftId)(request, messages).toString
     }
 
   }

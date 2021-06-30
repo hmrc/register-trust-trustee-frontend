@@ -41,7 +41,7 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
 
   "MatchingLockedView" must {
 
-    behave like normalPageTitleWithCaption(
+    behave like dynamicPageTitleWithCaption(
       view = applyView,
       messageKeyPrefix = prefix,
       messageKeyParam = name.toString,
@@ -49,11 +49,7 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
       expectedGuidanceKeys = "paragraph1", "subheading1", "paragraph3", "paragraph4", "paragraph5"
     )
 
-    behave like pageWithText(applyView, s"$prefix.paragraph2", name.toString)
-
     behave like linkList(applyView, links)
-
-    behave like pageWithRegProgressLink(applyView)
 
   }
 }

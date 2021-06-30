@@ -15,32 +15,36 @@
  *@
 
 @import controllers.register.trustees.organisation.routes._
+@import views.html.components.{ErrorSummary, InputText, Heading, SubmitButton}
 
 @this(
     main_template: MainTemplate,
+    submitButton: SubmitButton,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.organisation.name.title")}"
+    title = s"${errorPrefix(form)}${messages("trustee.organisation.name.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = NameController.onSubmit(index, draftId), 'autoComplete -> "on") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
             field = form("value"),
             inputClass = Some("trustee-business-name"),
             label = messages("trustee.organisation.name.heading"),
             labelAsHeading = true,
+            labelClass = Some("govuk-label--l"),
             autocomplete = Some("name")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

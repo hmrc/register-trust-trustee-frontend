@@ -36,34 +36,46 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     "not read-only" must {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val view = application.injector.instanceOf[DateOfBirthView]
-
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
-
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
-
-      behave like pageWithBackLink(applyView(form))
-
-      behave like pageWithoutReadOnlyInput(applyView(form))
-    }
-
-    "read-only" must {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val view = application.injector.instanceOf[DateOfBirthView]
+      val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+      val applyViewF = (form : Form[_]) => applyView(form)
+
+      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name, "hint")
 
       behave like pageWithBackLink(applyView(form))
 
-      behave like pageWithReadOnlyInput(applyView(form))
+      behave like pageWithDateFields(form, applyViewF,
+        messageKeyPrefix,
+        "value",
+        name
+      )
+
+      behave like pageWithASubmitButton(applyView(form))
+    }
+
+    "read-only" must {
+
+      val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
+
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
+
+      val applyViewF = (form : Form[_]) => applyView(form)
+
+      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name, "hint")
+
+      behave like pageWithBackLink(applyView(form))
+
+      behave like pageWithDateFields(form, applyViewF,
+        messageKeyPrefix,
+        "value",
+        name
+      )
+
+      behave like pageWithASubmitButton(applyView(form))
     }
   }
 }

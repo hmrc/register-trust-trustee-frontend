@@ -1,3 +1,5 @@
+service.name = Register and Maintain a Trust
+
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 checkYourAnswers.guidance = Guidance for check your answers
@@ -45,7 +47,6 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.save.continue = Save and continue
-site.service_name = Register and Maintain a Trust
 site.service_section = Trustees
 site.textarea.char_limit = (Limit is {0} characters)
 site.inprogress = In Progress
@@ -69,6 +70,14 @@ site.address.uk.line3 = Address line 3 (optional)
 site.address.uk.line4 = Address line 4 (optional)
 site.address.uk.postcode = Postcode
 site.address.uk.postcode.hint = For example AB1 1AB.
+
+site.address.uk.title = What is the trustee’s address?
+site.address.uk.heading = What is {0}’s address?
+site.address.uk.checkYourAnswersLabel = What is {0}’s address?
+
+site.address.international.title = What is the trustee’s address?
+site.address.international.heading = What is {0}’s address?
+site.address.international.checkYourAnswersLabel = What is {0}’s address?
 
 ukAddress.error.line1.required = Enter address line 1
 ukAddress.error.line2.required = Enter address line 2
@@ -183,15 +192,15 @@ addATrustee.lead-trustee.required = You need to add or nominate a lead trustee.
 addATrustee.maxedOut.p1 = You cannot add another trustee as you have entered a maximum of 25.
 addATrustee.maxedOut.p2 = You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees.
 
-removeTrustee.title = Are you sure you want to remove the trustee?
-removeTrustee.heading = Are you sure you want to remove {0}?
-removeTrustee.error.required = Select yes if you want to remove the trustee
-removeTrustee.default = the trustee
+removeTrusteeYesNo.title = Are you sure you want to remove the trustee?
+removeTrusteeYesNo.heading = Are you sure you want to remove {0}?
+removeTrusteeYesNo.error.required = Select yes if you want to remove the trustee
+removeTrusteeYesNo.default = the trustee
 
-removeLeadTrustee.title = Are you sure you want to remove the lead trustee?
-removeLeadTrustee.heading = Are you sure you want to remove {0}?
-removeLeadTrustee.error.required = Select yes if you want to remove the lead trustee
-removeLeadTrustee.default = the lead trustee
+removeLeadTrusteeYesNo.title = Are you sure you want to remove the lead trustee?
+removeLeadTrusteeYesNo.heading = Are you sure you want to remove {0}?
+removeLeadTrusteeYesNo.error.required = Select yes if you want to remove the lead trustee
+removeLeadTrusteeYesNo.default = the lead trustee
 
 trustee.individual.ninoYesNo.title = Do you know the trustee’s National Insurance number?
 trustee.individual.ninoYesNo.heading = Do you know {0}’s National Insurance number?
@@ -230,14 +239,6 @@ trustee.individual.addressUkYesNo.title = Does the trustee live in the UK?
 trustee.individual.addressUkYesNo.heading = Does {0} live in the UK?
 trustee.individual.addressUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 trustee.individual.addressUkYesNo.error.required = Select yes if the trustee lives in the UK
-
-trustee.individual.ukAddress.title = What is the trustee’s address?
-trustee.individual.ukAddress.heading = What is {0}’s address?
-trustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-
-trustee.individual.internationalAddress.title = What is the trustee’s address?
-trustee.individual.internationalAddress.heading = What is {0}’s address?
-trustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
 trustee.individual.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
 trustee.individual.passportDetailsYesNo.title = Do you know the trustee’s passport details?
@@ -439,14 +440,6 @@ trustee.organisation.addressUkYesNo.heading = Is {0}’s address in the UK?
 trustee.organisation.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 trustee.organisation.addressUkYesNo.error.required = Select yes if the trustee’s address is in the UK
 
-trustee.organisation.ukAddress.title = What is the trustee’s address?
-trustee.organisation.ukAddress.heading = What is {0}’s address?
-trustee.organisation.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-
-trustee.organisation.internationalAddress.title = What is the trustee’s address?
-trustee.organisation.internationalAddress.heading = What is {0}’s address?
-trustee.organisation.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
-
 trustee.organisation.checkDetails.title = Check trustee details
 trustee.organisation.checkDetails.heading = Check trustee details
 
@@ -502,14 +495,6 @@ leadTrustee.organisation.addressUkYesNo.heading = Is {0}’s address in the UK?
 leadTrustee.organisation.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 leadTrustee.organisation.addressUkYesNo.error.required = Select yes if the lead trustee’s address is in the UK
 
-leadTrustee.organisation.ukAddress.title = What is the lead trustee’s address?
-leadTrustee.organisation.ukAddress.heading = What is {0}’s address?
-leadTrustee.organisation.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-
-leadTrustee.organisation.internationalAddress.title = What is the lead trustee’s address?
-leadTrustee.organisation.internationalAddress.heading = What is {0}’s address?
-leadTrustee.organisation.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
-
 leadTrustee.organisation.emailYesNo.checkYourAnswersLabel = Do you know {0}’s email address?
 leadTrustee.organisation.emailYesNo.title = Do you know the lead trustee’s email address?
 leadTrustee.organisation.emailYesNo.heading = Do you know {0}’s email address?
@@ -538,14 +523,6 @@ leadTrustee.individual.ninoYesNo.title = Does the lead trustee have a National I
 leadTrustee.individual.ninoYesNo.heading = Does {0} have a National Insurance number?
 leadTrustee.individual.ninoYesNo.checkYourAnswersLabel = Does {0} have a National Insurance number?
 leadTrustee.individual.ninoYesNo.error.required = Select yes if the lead trustee has a National Insurance number
-
-leadTrustee.individual.ukAddress.title = What is the lead trustee’s address?
-leadTrustee.individual.ukAddress.heading = What is {0}’s address?
-leadTrustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-
-leadTrustee.individual.internationalAddress.title = What is the lead trustee’s address?
-leadTrustee.individual.internationalAddress.heading = What is {0}’s address?
-leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
 leadTrustee.individual.trusteeDetailsChoice.title = Which of the lead trustees’s details can you provide?
 leadTrustee.individual.trusteeDetailsChoice.heading = Which of {0}’s details can you provide?
@@ -729,3 +706,35 @@ leadTrustee.individual.matching.locked.link1 = Passport and address
 leadTrustee.individual.matching.locked.link2 = ID card and address
 leadTrustee.individual.matching.locked.paragraph4 = If you do not have these details to hand, you can return to the registration progress page, to complete the other details for the trust until you have provided alternative information for your existing lead trustee, or have information for a new lead trustee.
 leadTrustee.individual.matching.locked.paragraph5 = When you have confirmed the accurate information, you’ll need to sign out and sign back in. You can complete the other sections in this registration without signing out and these details will be saved for 28 days.
+
+trustee.individual.ukAddress.title = What is the trustee’s address?
+trustee.individual.ukAddress.heading = What is {0}’s address?
+trustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.individual.internationalAddress.title = What is the trustee’s address?
+trustee.individual.internationalAddress.heading = What is {0}’s address?
+trustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.organisation.ukAddress.title = What is the trustee’s address?
+trustee.organisation.ukAddress.heading = What is {0}’s address?
+trustee.organisation.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustee.organisation.internationalAddress.title = What is the trustee’s address?
+trustee.organisation.internationalAddress.heading = What is {0}’s address?
+trustee.organisation.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.organisation.ukAddress.title = What is the lead trustee’s address?
+leadTrustee.organisation.ukAddress.heading = What is {0}’s address?
+leadTrustee.organisation.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.organisation.internationalAddress.title = What is the lead trustee’s address?
+leadTrustee.organisation.internationalAddress.heading = What is {0}’s address?
+leadTrustee.organisation.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.individual.ukAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.ukAddress.heading = What is {0}’s address?
+leadTrustee.individual.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+leadTrustee.individual.internationalAddress.title = What is the lead trustee’s address?
+leadTrustee.individual.internationalAddress.heading = What is {0}’s address?
+leadTrustee.individual.internationalAddress.checkYourAnswersLabel = What is {0}’s address?

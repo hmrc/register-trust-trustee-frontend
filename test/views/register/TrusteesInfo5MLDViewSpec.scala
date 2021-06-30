@@ -16,7 +16,6 @@
 
 package views.register
 
-import controllers.register.routes
 import views.behaviours.ViewBehaviours
 import views.html.register.TrusteesInfo5MLDView
 
@@ -31,7 +30,6 @@ class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
     behave like normalPageTitleWithCaption(
       view = applyView,
       messageKeyPrefix = "trusteesInfo.5mld",
-      messageKeyParam = "",
       captionParam = "",
       expectedGuidanceKeys = "subheading1",
       "paragraph1",
@@ -74,6 +72,6 @@ class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
 
     behave like pageWithWarning(applyView)
 
-    behave like pageWithContinueButton(applyView, routes.TrusteeOrLeadTrusteeController.onPageLoad(0, draftId).url )
+    behave like pageWithASubmitButton(applyView)
   }
 }

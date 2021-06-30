@@ -15,32 +15,35 @@
  *@
 
 @import controllers.register.trustees.organisation.mld5.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
     main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputYesNo: InputYesNo,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustee.organisation.5mld.countryOfResidenceYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("trustee.organisation.5mld.countryOfResidenceYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = CountryOfResidenceYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
              field = form("value"),
              label = messages("trustee.organisation.5mld.countryOfResidenceYesNo.heading", trusteeName),
-             legendClass = Some("heading-large"),
+             legendClass = Some("govuk-heading-l"),
              legendAsHeading = true,
              hint = Some(messages("trustee.organisation.5mld.countryOfResidenceYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -47,6 +47,8 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
   private val fakeFullName: FullName = FullName("John", None, "Doe")
   private val defaultTrusteeName = "the trustee"
   private val defaultLeadTrusteeName = "the lead trustee"
+  private val trusteePrefix = "removeTrusteeYesNo"
+  private val leadPrefix = "removeLeadTrusteeYesNo"
 
   private lazy val removeRoute: String = routes.RemoveIndexController.onPageLoad(index, fakeDraftId).url
 
@@ -56,7 +58,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       "trustee but type unknown" in {
 
-        val prefix = "removeTrustee"
+        val prefix = trusteePrefix
 
         val userAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
@@ -80,7 +82,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       "lead trustee but type unknown" in {
 
-        val prefix = "removeLeadTrustee"
+        val prefix = leadPrefix
 
         val userAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
@@ -104,7 +106,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       "trustee ind" when {
 
-        val prefix = "removeTrustee"
+        val prefix = trusteePrefix
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
@@ -153,7 +155,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       "trustee org" when {
 
-        val prefix = "removeTrustee"
+        val prefix = trusteePrefix
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
@@ -202,7 +204,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       "lead trustee ind" when {
 
-        val prefix = "removeLeadTrustee"
+        val prefix = leadPrefix
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
@@ -251,7 +253,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
       "lead trustee org" when {
 
-        val prefix = "removeLeadTrustee"
+        val prefix = leadPrefix
 
         val baseAnswers: UserAnswers = emptyUserAnswers
           .set(TrusteeStatus(index), InProgress).success.value
@@ -363,7 +365,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val prefix = "removeTrustee"
+      val prefix = trusteePrefix
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(TrusteeStatus(index), InProgress).success.value
