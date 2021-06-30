@@ -1,5 +1,5 @@
-addATrustee.add-them-later=Iawn
-addATrustee.add-them-now=Iawn
+addATrustee.add-them-later=Iawn, rwyf am ei ychwanegu yn nes ymlaen
+addATrustee.add-them-now=Iawn, rwyf am ei ychwanegu nawr
 addATrustee.additional-content=A oes angen i chi ychwanegu ymddiriedolwr arall?
 addATrustee.business=Cwmni ymddiriedol
 addATrustee.checkYourAnswersLabel=Ychwanegu Ymddiriedolwr
@@ -11,7 +11,7 @@ addATrustee.individual=Ymddiriedolwr sy’n unigolyn
 addATrustee.lead-trustee.required=Mae’n rhaid i chi ychwanegu neu enwebu prif ymddiriedolwr.
 addATrustee.maxedOut.p1=Ni allwch ychwanegu ymddiriedolwr arall gan eich bod wedi nodi uchafswm o 25.
 addATrustee.maxedOut.p2=Gallwch ychwanegu ymddiriedolwr arall drwy dynnu un presennol
-addATrustee.no-complete=Na
+addATrustee.no-complete=Na, rwyf wedi ychwanegu’r holl ymddiriedolwyr
 addATrustee.title=Ychwanegu ymddiriedolwr
 addATrusteeYesNo.error.required=Dewiswch ‘Iawn’ os ydych am ychwanegu ymddiriedolwr
 addATrusteeYesNo.heading=A ydych am ychwanegu ymddiriedolwr?
