@@ -47,7 +47,7 @@ class CountryOfResidenceController @Inject()(
                                               val countryOptions: CountryOptionsNonUK
                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider.withPrefix("trustee.organisation.5mld.CountryOfResidence")
+  private val form: Form[String] = formProvider.withPrefix("trustee.organisation.5mld.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     actions.identifiedUserWithData(draftId).andThen(requireName(index)) {
