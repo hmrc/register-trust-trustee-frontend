@@ -40,7 +40,9 @@ class NinoViewSpec extends StringViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+    behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 

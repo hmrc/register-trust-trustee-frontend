@@ -42,7 +42,9 @@ class NinoYesNoViewSpec extends YesNoViewBehaviours {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name, disabled = false)(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
       behave like pageWithBackLink(applyView(form))
 
@@ -60,7 +62,9 @@ class NinoYesNoViewSpec extends YesNoViewBehaviours {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name, disabled = true)(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
       behave like pageWithBackLink(applyView(form))
 

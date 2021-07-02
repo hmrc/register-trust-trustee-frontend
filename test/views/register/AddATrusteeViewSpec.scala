@@ -29,7 +29,7 @@ import views.html.register.AddATrusteeView
 class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBehaviours {
 
   private val form: Form[AddATrustee] = new AddATrusteeFormProvider()()
-  private val messageKeyPrefix: String = "addATrustee"
+  private val messageKeyPrefix: String = "addATrustee.count"
 
   private val fakeAddRow: AddRow = AddRow("name", "label", "change", "remove")
   private val fakeOnSubmit: Call = Call(POST, "redirectUrl")
@@ -51,7 +51,9 @@ class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
       val view = applyView(form)
 
-      behave like dynamicTitlePage(view, s"$messageKeyPrefix.count", total.toString)
+      behave like normalPage(view, messageKeyPrefix, total.toString)
+
+      behave like pageWithTitle(view, messageKeyPrefix, total.toString)
 
       behave like pageWithBackLink(view)
 
@@ -64,7 +66,7 @@ class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
       "not show lead trustee required content" in {
         val doc = asDocument(view)
 
-        assertDoesNotContainText(doc, messages(s"$messageKeyPrefix.lead-trustee.required"))
+        assertDoesNotContainText(doc, messages(s"addATrustee.lead-trustee.required"))
       }
     }
 
@@ -77,7 +79,9 @@ class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
       val view = applyView(form)
 
-      behave like dynamicTitlePage(view, s"$messageKeyPrefix.count", total.toString)
+      behave like normalPage(view, messageKeyPrefix, total.toString)
+
+      behave like pageWithTitle(view, messageKeyPrefix, total.toString)
 
       behave like pageWithBackLink(view)
 
@@ -90,7 +94,7 @@ class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
       "show lead trustee required content" in {
         val doc = asDocument(view)
 
-        assertContainsText(doc, messages(s"$messageKeyPrefix.lead-trustee.required"))
+        assertContainsText(doc, messages(s"addATrustee.lead-trustee.required"))
       }
     }
   }

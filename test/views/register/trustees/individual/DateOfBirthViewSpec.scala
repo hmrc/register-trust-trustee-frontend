@@ -40,7 +40,9 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, "TrusteeName")(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, "TrusteeName")
+    behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like pageWithTitle(applyView(form), messageKeyPrefix, "TrusteeName")
 
     behave like pageWithBackLink(applyView(form))
   }

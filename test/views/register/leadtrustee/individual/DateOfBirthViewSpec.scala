@@ -43,7 +43,11 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
       val applyViewF = (form : Form[_]) => applyView(form)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name, "hint")
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
+
+      behave like pageWithGuidance(applyView(form), messageKeyPrefix, "hint")
 
       behave like pageWithBackLink(applyView(form))
 
@@ -65,7 +69,11 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
       val applyViewF = (form : Form[_]) => applyView(form)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name, "hint")
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
+
+      behave like pageWithGuidance(applyView(form), messageKeyPrefix, "hint")
 
       behave like pageWithBackLink(applyView(form))
 

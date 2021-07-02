@@ -27,11 +27,11 @@ class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(
-      view = applyView,
-      messageKeyPrefix = "trusteesInfo.5mld",
-      captionParam = "",
-      expectedGuidanceKeys = "subheading1",
+    behave like normalPage(applyView, "trusteesInfo.5mld")
+
+    behave like pageWithTitleAndSectionSubheading(applyView, "trusteesInfo.5mld")
+
+    behave like pageWithGuidance(applyView, "trusteesInfo.5mld", "subheading1",
       "paragraph1",
       "paragraph2",
       "subheading2",
@@ -65,8 +65,7 @@ class TrusteesInfo5MLDViewSpec extends ViewBehaviours {
       "details.subheading1",
       "details.paragraph1",
       "details.subheading2",
-      "details.paragraph2"
-    )
+      "details.paragraph2")
 
     behave like pageWithBackLink(applyView)
 

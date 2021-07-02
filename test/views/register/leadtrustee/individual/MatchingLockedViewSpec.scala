@@ -41,13 +41,11 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
 
   "MatchingLockedView" must {
 
-    behave like dynamicPageTitleWithCaption(
-      view = applyView,
-      messageKeyPrefix = prefix,
-      messageKeyParam = name.toString,
-      captionParam = "",
-      expectedGuidanceKeys = "paragraph1", "subheading1", "paragraph3", "paragraph4", "paragraph5"
-    )
+    behave like normalPage(applyView, prefix)
+
+    behave like pageWithTitleAndCaption(applyView, prefix, captionParam = "", args = name.toString)
+
+    behave like pageWithGuidance(applyView, prefix, "paragraph1", "subheading1", "paragraph3", "paragraph4", "paragraph5")
 
     behave like linkList(applyView, links)
 

@@ -35,12 +35,11 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       def applyView: HtmlFormat.Appendable =
         view.apply(fakeDraftId, index, numberOfFailedAttempts, frontendAppConfig.maxMatchingAttempts - numberOfFailedAttempts)(fakeRequest, messages)
 
-      behave like normalPageTitleWithCaption(
-        view = applyView,
-        messageKeyPrefix = prefix,
-        captionParam = numberOfFailedAttempts.toString,
-        expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.singular"
-      )
+      behave like normalPage(applyView, prefix)
+
+      behave like pageWithTitleAndCaption(applyView, prefix, numberOfFailedAttempts.toString)
+
+      behave like pageWithGuidance(applyView, prefix, expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.singular")
 
       "show number of remaining attempts in bold" in {
         val doc = asDocument(applyView)
@@ -58,12 +57,11 @@ class MatchingFailedViewSpec extends ViewBehaviours {
       def applyView: HtmlFormat.Appendable =
         view.apply(fakeDraftId, index, numberOfFailedAttempts, frontendAppConfig.maxMatchingAttempts - numberOfFailedAttempts)(fakeRequest, messages)
 
-      behave like normalPageTitleWithCaption(
-        view = applyView,
-        messageKeyPrefix = prefix,
-        captionParam = numberOfFailedAttempts.toString,
-        expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.plural"
-      )
+      behave like normalPage(applyView, prefix)
+
+      behave like pageWithTitleAndCaption(applyView, prefix, numberOfFailedAttempts.toString)
+
+      behave like pageWithGuidance(applyView, prefix, expectedGuidanceKeys = "paragraph1", "paragraph2.part1", "paragraph2.part2.plural")
 
       "show number of remaining attempts in bold" in {
         val doc = asDocument(applyView)

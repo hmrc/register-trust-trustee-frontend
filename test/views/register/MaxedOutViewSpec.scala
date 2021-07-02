@@ -42,7 +42,9 @@ class MaxedOutViewSpec extends OptionsViewBehaviours with TabularDataViewBehavio
 
     val view = applyView()
 
-    behave like dynamicTitlePage(view, s"$messageKeyPrefix.count", total.toString)
+    behave like normalPage(view, s"$messageKeyPrefix.count", total.toString)
+
+    behave like pageWithTitle(view, s"$messageKeyPrefix.count", total.toString)
 
     behave like pageWithBackLink(view)
 

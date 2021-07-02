@@ -24,7 +24,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
   def normalPage(view: HtmlFormat.Appendable,
                  messageKeyPrefix: String,
-                 expectedGuidanceKeys: String*): Unit = {
+                 args: Any*): Unit = {
 
     "behave like a normal page" when {
 
@@ -40,19 +40,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display the correct browser title" in {
 
           val doc = asDocument(view)
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
-        }
-
-        "display the correct page title" in {
-
-          val doc = asDocument(view)
-          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading")
-        }
-
-        "display the correct guidance" in {
-
-          val doc = asDocument(view)
-          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title", args: _*)
         }
 
         "display language toggles" in {
@@ -65,134 +53,35 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def normalPageTitleWithCaption(view: HtmlFormat.Appendable,
-                                 messageKeyPrefix: String,
-                                 captionParam: String,
-                                 expectedGuidanceKeys: String*): Unit = {
+  def pageWithTitle(view: HtmlFormat.Appendable, messageKeyPrefix: String, args: Any*) : Unit = {
+    "display the correct page title" in {
 
-    "behave like a normal page" when {
-
-      "rendered" must {
-
-        "have the correct banner title" in {
-
-          val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
-          bannerTitle.html() mustBe messages("service.name")
-        }
-
-        "display the correct browser title" in {
-
-          val doc = asDocument(view)
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
-        }
-
-        "display the correct page title with caption" in {
-
-          val doc = asDocument(view)
-          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading")
-        }
-
-        "display the correct guidance" in {
-
-          val doc = asDocument(view)
-          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
-        }
-
-        "display language toggles" in {
-
-          val doc = asDocument(view)
-          assertRenderedByCssSelector(doc, "a[lang=cy]")
-        }
-      }
+      val doc = asDocument(view)
+      assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading", args: _*)
     }
   }
 
-  def dynamicPageTitleWithCaption(view: HtmlFormat.Appendable,
-                                  messageKeyPrefix: String,
-                                  messageKeyParam: String,
-                                  captionParam: String,
-                                  expectedGuidanceKeys: String*): Unit = {
+  def pageWithTitleAndSectionSubheading(view: HtmlFormat.Appendable, messageKeyPrefix: String) : Unit = {
+    "display the correct page title with section" in {
 
-    "behave like a normal page" when {
-
-      "rendered" must {
-
-        "have the correct banner title" in {
-
-          val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
-          bannerTitle.html() mustBe messages("service.name")
-        }
-
-        "display the correct browser title" in {
-
-          val doc = asDocument(view)
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
-        }
-
-        "display the correct page title with caption" in {
-
-          val doc = asDocument(view)
-          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading", messageKeyParam = messageKeyParam)
-        }
-
-        "display the correct guidance" in {
-
-          val doc = asDocument(view)
-          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
-        }
-
-        "display language toggles" in {
-
-          val doc = asDocument(view)
-          assertRenderedByCssSelector(doc, "a[lang=cy]")
-        }
-      }
+      val doc = asDocument(view)
+      assertPageTitleWithSectionSubheading(doc, s"$messageKeyPrefix", captionParam = "")
     }
   }
 
-  def dynamicTitlePage(view: HtmlFormat.Appendable,
-                       messageKeyPrefix: String,
-                       messageKeyParam: String,
-                       expectedGuidanceKeys: String*): Unit = {
+  def pageWithTitleAndCaption(view: HtmlFormat.Appendable, messageKeyPrefix: String, captionParam: String, args: Any*) : Unit = {
+    "display the correct page title with caption" in {
 
-    "behave like a dynamic title page" when {
+      val doc = asDocument(view)
+      assertPageTitleWithCaptionEqualsMessage(doc, messageKeyPrefix,  captionParam, args: _*)
+    }
+  }
 
-      "rendered" must {
+  def pageWithGuidance(view: HtmlFormat.Appendable, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit = {
+    "display the correct guidance" in {
 
-        "have the correct banner title" in {
-
-          val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
-          bannerTitle.html() mustBe messages("service.name")
-        }
-
-        "display the correct browser title" in {
-
-          val doc = asDocument(view)
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title", messageKeyParam)
-        }
-
-        "display the correct page title" in {
-
-          val doc = asDocument(view)
-          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading", messageKeyParam)
-        }
-
-        "display the correct guidance" in {
-
-          val doc = asDocument(view)
-          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
-        }
-
-        "display language toggles" in {
-
-          val doc = asDocument(view)
-          assertRenderedByCssSelector(doc, "a[lang=cy]")
-        }
-
-      }
+      val doc = asDocument(view)
+      for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
     }
   }
 
