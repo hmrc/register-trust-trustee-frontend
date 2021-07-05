@@ -47,7 +47,9 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name.toString, is5mldEnabled)(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
       behave like pageWithBackLink(applyView(form))
 
@@ -70,7 +72,9 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name.toString, is5mldEnabled)(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
       behave like pageWithBackLink(applyView(form))
 

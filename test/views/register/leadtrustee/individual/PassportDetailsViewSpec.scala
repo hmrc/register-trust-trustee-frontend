@@ -45,7 +45,9 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, draftId, 0, name.toString)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+    behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 

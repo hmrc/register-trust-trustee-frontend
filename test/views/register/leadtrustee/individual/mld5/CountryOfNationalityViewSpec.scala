@@ -42,7 +42,9 @@ class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, fakeDraftId, index, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), prefix, name)
+    behave like normalPage(applyView(form), prefix)
+
+    behave like pageWithTitle(applyView(form), prefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
