@@ -86,7 +86,7 @@ class AddATrusteeController @Inject()(
             isLeadTrusteeDefined,
             dynamicHeading(x)
           ))
-        case x @ 25 =>
+        case x if x >= 25 =>
           Ok(maxedOutView(draftId, trustees.inProgress, trustees.complete, dynamicHeading(x)))
         case count =>
           Ok(addAnotherView(
