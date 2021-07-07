@@ -199,6 +199,29 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithReadOnlyInput(view: HtmlFormat.Appendable): Unit = {
+    "behave like a page with a read-only input" must {
+
+      "have a read-only input" in {
+
+        val doc = asDocument(view)
+        val inputs = doc.getElementsByTag("input")
+        inputs.forEach(input => assertElementHasAttribute(input, "readonly"))
+      }
+    }
+  }
+
+  def pageWithoutReadOnlyInput(view: HtmlFormat.Appendable): Unit = {
+    "behave like a page without a read-only input" must {
+
+      "not have a read-only input" in {
+
+        val doc = asDocument(view)
+        val inputs = doc.getElementsByTag("input")
+        inputs.forEach(input => assertElementDoesNotHaveAttribute(input, "readonly"))
+      }
+    }
+  }
   def pageWithoutDisabledInput(view: HtmlFormat.Appendable): Unit = {
     "behave like a page without a disabled input" must {
 
