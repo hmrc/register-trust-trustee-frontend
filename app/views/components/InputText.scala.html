@@ -36,22 +36,22 @@ govukInput: GovukInput
 
 @govukInput(
  Input(
- label = Label(
- isPageHeading = labelAsHeading,
- classes = if(labelClass.isDefined) labelClass.get else "",
- content = Text(label),
- attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty
-),
- autocomplete = autocomplete,
- hint = hint.map(hint => Hint(content = Text(hint))),
- errorMessage = field.error match {
- case Some(e) => Some(ErrorMessage(content = Text(messages(e.message, e.args: _*))))
- case None => None
-},
- spellcheck = Some(false),
- inputmode = inputMode,
- prefix = prefix.map(prefix => PrefixOrSuffix(content = Text(prefix))),
- suffix = suffix.map(suffix => PrefixOrSuffix(content = Text(suffix))),
- classes = if(inputClass.isDefined) inputClass.get else ""
+    label = Label(
+         isPageHeading = labelAsHeading,
+         classes = if(labelClass.isDefined) labelClass.get else "",
+         content = Text(label)
+    ),
+    autocomplete = autocomplete,
+    hint = hint.map(hint => Hint(content = Text(hint))),
+    errorMessage = field.error match {
+         case Some(e) => Some(ErrorMessage(content = Text(messages(e.message, e.args: _*))))
+         case None => None
+    },
+    spellcheck = Some(false),
+    inputmode = inputMode,
+    prefix = prefix.map(prefix => PrefixOrSuffix(content = Text(prefix))),
+    suffix = suffix.map(suffix => PrefixOrSuffix(content = Text(suffix))),
+    classes = if(inputClass.isDefined) inputClass.get else "",
+    attributes = if(readOnly) Map("readonly" -> "readonly") else Map.empty
  ).withFormField(field)
 )
