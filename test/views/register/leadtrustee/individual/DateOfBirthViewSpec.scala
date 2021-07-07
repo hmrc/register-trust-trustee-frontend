@@ -39,32 +39,6 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
       val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
-
-      val applyViewF = (form : Form[_]) => applyView(form)
-
-      behave like normalPage(applyView(form), messageKeyPrefix)
-
-      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
-
-      behave like pageWithGuidance(applyView(form), messageKeyPrefix, "hint")
-
-      behave like pageWithBackLink(applyView(form))
-
-      behave like pageWithDateFields(form, applyViewF,
-        messageKeyPrefix,
-        "value",
-        name
-      )
-
-      behave like pageWithASubmitButton(applyView(form))
-    }
-
-    "read-only" must {
-
-      val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
-
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
 
       val applyViewF = (form : Form[_]) => applyView(form)
@@ -84,6 +58,36 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
       )
 
       behave like pageWithASubmitButton(applyView(form))
+
+      behave like pageWithoutReadOnlyInput(applyView(form))
+    }
+
+    "read-only" must {
+
+      val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
+
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
+
+      val applyViewF = (form : Form[_]) => applyView(form)
+
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
+
+      behave like pageWithGuidance(applyView(form), messageKeyPrefix, "hint")
+
+      behave like pageWithBackLink(applyView(form))
+
+      behave like pageWithDateFields(form, applyViewF,
+        messageKeyPrefix,
+        "value",
+        name
+      )
+
+      behave like pageWithASubmitButton(applyView(form))
+
+      behave like pageWithReadOnlyInput(applyView(form))
     }
   }
 }
