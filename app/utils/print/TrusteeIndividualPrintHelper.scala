@@ -17,9 +17,9 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.register.trustees.individual.routes._
-import controllers.register.trustees.individual.mld5.{routes => mld5Rts}
 import controllers.register.routes.TrusteeIndividualOrBusinessController
+import controllers.register.trustees.individual.mld5.{routes => mld5Rts}
+import controllers.register.trustees.individual.routes._
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import pages.register.TrusteeIndividualOrBusinessPage
@@ -32,8 +32,7 @@ class TrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowConver
   def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                          (implicit messages: Messages): AnswerSection = {
     AnswerSection(
-      None,
-      answers(userAnswers, name, index, draftId)
+      rows = answers(userAnswers, name, index, draftId)
     )
   }
 

@@ -18,8 +18,8 @@ package utils.print
 
 import com.google.inject.Inject
 import controllers.register.routes.TrusteeIndividualOrBusinessController
-import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.routes._
+import controllers.register.trustees.organisation.routes._
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness
 import pages.register.TrusteeIndividualOrBusinessPage
@@ -32,8 +32,7 @@ class TrusteeOrganisationPrintHelper @Inject()(answerRowConverter: AnswerRowConv
   def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                          (implicit messages: Messages): AnswerSection = {
     AnswerSection(
-      None,
-      answers(userAnswers, name, index, draftId)
+      rows = answers(userAnswers, name, index, draftId)
     )
   }
 

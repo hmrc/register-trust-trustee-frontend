@@ -93,10 +93,10 @@ class SubmissionSetFactorySpec extends SpecBase {
       "there are no trustees or lead trustees" must {
         "return a valid empty data set" in {
           factory.createFrom(emptyUserAnswers) mustBe RegistrationSubmission.DataSet(
-            Json.toJson(emptyUserAnswers),
-            None,
-            List.empty,
-            List.empty
+            data = Json.toJson(emptyUserAnswers),
+            status = None,
+            registrationPieces = List.empty,
+            answerSections = List.empty
           )
         }
       }
@@ -109,10 +109,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             .set(TrusteeStatus(1), Status.Completed).success.value
 
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
-            Json.toJson(userAnswers),
-            Some(InProgress),
-            List.empty,
-            List.empty
+            data = Json.toJson(userAnswers),
+            status = Some(InProgress),
+            registrationPieces = List.empty,
+            answerSections = List.empty
           )
         }
       }
@@ -127,10 +127,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             .set(AddATrusteePage, AddATrustee.YesLater).success.value
 
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
-            Json.toJson(userAnswers),
-            Some(InProgress),
-            List.empty,
-            List.empty
+            data = Json.toJson(userAnswers),
+            status = Some(InProgress),
+            registrationPieces = List.empty,
+            answerSections = List.empty
           )
         }
       }
@@ -145,10 +145,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
-            Json.toJson(userAnswers),
-            Some(InProgress),
-            List.empty,
-            List.empty
+            data = Json.toJson(userAnswers),
+            status = Some(InProgress),
+            registrationPieces = List.empty,
+            answerSections = List.empty
           )
         }
       }
@@ -157,8 +157,8 @@ class SubmissionSetFactorySpec extends SpecBase {
         "return Completed with mapped data" in {
           val leadTrusteeOnlySections = List(
             AnswerSection(
-              Some("Trustee 1"),
-              List(
+              headingKey = Some("answersPage.section.trustee.subheading"),
+              rows = List(
                 AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
                 AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 2000", "first name Last Name"),
@@ -169,7 +169,8 @@ class SubmissionSetFactorySpec extends SpecBase {
                 AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
-              Some("Trustees")
+              sectionKey = Some("answersPage.section.trustees.heading"),
+              headingArgs = Seq("1")
             )
           )
           val userAnswers = addLeadTrustee(0, emptyUserAnswers)
@@ -194,8 +195,8 @@ class SubmissionSetFactorySpec extends SpecBase {
         "return Completed with mapped data" in {
           val answerSections = List(
             AnswerSection(
-              Some("Trustee 1"),
-              List(
+              headingKey = Some("answersPage.section.trustee.subheading"),
+              rows = List(
                 AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
                 AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 2000", "first name Last Name"),
@@ -206,14 +207,16 @@ class SubmissionSetFactorySpec extends SpecBase {
                 AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
               ),
-              Some("Trustees")
+              sectionKey = Some("answersPage.section.trustees.heading"),
+              headingArgs = Seq("1")
             ),
             AnswerSection(
-              Some("Trustee 2"),
-              List(
+              headingKey = Some("answersPage.section.trustee.subheading"),
+              rows = List(
                 AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", "Business", "Org Name1"),
                 AnswerRow("trustee.organisation.name.checkYourAnswersLabel", "Org Name1", "Org Name1")),
-              None
+              sectionKey = None,
+              headingArgs = Seq("2")
             )
           )
           val userAnswers =
@@ -222,9 +225,9 @@ class SubmissionSetFactorySpec extends SpecBase {
               .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 
           factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
-            Json.toJson(userAnswers),
-            Some(Completed),
-            List(
+            data = Json.toJson(userAnswers),
+            status = Some(Completed),
+            registrationPieces = List(
               RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
               RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson),
               RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
@@ -233,7 +236,7 @@ class SubmissionSetFactorySpec extends SpecBase {
               RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
 
             ),
-            answerSections
+            answerSections = answerSections
           )
         }
       }
