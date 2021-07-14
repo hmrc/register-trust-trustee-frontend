@@ -57,7 +57,7 @@ class IndexController @Inject()(
       userAnswers <- repository.get(draftId)
       ua = userAnswers match {
         case Some(value) => value.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable, utr = utr)
-        case None => UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable)
+        case None => UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable, utr)
       }
       result <- redirect(ua)
     } yield result

@@ -126,9 +126,10 @@ trait StringFieldBehaviours extends FieldBehaviours {
                notUniqueError: FormError,
                sameAsTrustUtrError: FormError): Unit = {
 
+    val regex = Validation.utrRegex.replace("*", s"{$length}")
+    val utrGenerator = RegexpGen.from(regex)
+
     "not bind UTRs that have been used for other business lead trustees" in {
-      val regex = Validation.utrRegex.replace("*", s"{$length}")
-      val utrGenerator = RegexpGen.from(regex)
       forAll(utrGenerator) {
         utr =>
           val updatedUserAnswers = emptyUserAnswers.set(ltorg.UtrPage(0), utr).success.value
@@ -138,8 +139,6 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
 
     "not bind UTRs that have been used for other business trustees" in {
-      val regex = Validation.utrRegex.replace("*", s"{$length}")
-      val utrGenerator = RegexpGen.from(regex)
       val intGenerator = Gen.choose(1, 25)
       forAll(utrGenerator, intGenerator) {
         (utr, size) =>
@@ -150,12 +149,30 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
 
     "not bind UTR if it is the same as the trust UTR" in {
-      val regex = Validation.utrRegex.replace("*", s"{$length}")
-      val utrGenerator = RegexpGen.from(regex)
       forAll(utrGenerator) {
         utr =>
           val result = form.withPrefix(prefix, emptyUserAnswers.copy(utr = Some(utr))).bind(Map(fieldName -> utr)).apply(fieldName)
           result.errors mustEqual Seq(sameAsTrustUtrError)
+      }
+    }
+
+    "bind valid UTRs when no businesses" in {
+      forAll(utrGenerator) {
+        utr =>
+          val result = form.withPrefix(prefix, emptyUserAnswers).bind(Map(fieldName -> utr)).apply(fieldName)
+          result.errors mustEqual Nil
+          result.value.value mustBe utr
+      }
+    }
+
+    "bind valid UTRs when no other businesses have that UTR" in {
+      val value: String = "1234567890"
+      val updatedUserAnswers = emptyUserAnswers.set(ltorg.UtrPage(0), value).success.value
+      forAll(utrGenerator.suchThat(_ != value)) {
+        utr =>
+          val result = form.withPrefix(prefix, updatedUserAnswers).bind(Map(fieldName -> utr)).apply(fieldName)
+          result.errors mustEqual Nil
+          result.value.value mustBe utr
       }
     }
   }
