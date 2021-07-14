@@ -112,7 +112,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
       beforeTest(is5mldEnabled = true, utr = Some(utr))
 
-      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = false, utr = None)
+      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = false, existingTrustUtr = None)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -130,7 +130,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         uaCaptor.getValue.is5mldEnabled mustBe true
         uaCaptor.getValue.isTaxable mustBe true
-        uaCaptor.getValue.utr.get mustBe utr
+        uaCaptor.getValue.existingTrustUtr.get mustBe utr
 
         application.stop()
       }
@@ -160,7 +160,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
             uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
             uaCaptor.getValue.isTaxable mustBe isTrustTaxable
-            uaCaptor.getValue.utr mustBe utr
+            uaCaptor.getValue.existingTrustUtr mustBe utr
             uaCaptor.getValue.draftId mustBe fakeDraftId
             uaCaptor.getValue.internalAuthId mustBe "id"
 

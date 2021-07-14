@@ -30,7 +30,7 @@ trait ReadableUserAnswers {
 
   val is5mldEnabled: Boolean = false
   val isTaxable: Boolean = true
-  val utr: Option[String] = None
+  val existingTrustUtr: Option[String] = None
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     getAtPath(page.path)
@@ -55,7 +55,7 @@ final case class UserAnswers(draftId: String,
                              internalAuthId :String,
                              override val is5mldEnabled: Boolean = false,
                              override val isTaxable: Boolean = true,
-                             override val utr: Option[String] = None) extends ReadableUserAnswers with Logging {
+                             override val existingTrustUtr: Option[String] = None) extends ReadableUserAnswers with Logging {
 
   def isLeadTrusteeMatched(index: Int): Boolean = this.get(MatchedYesNoPage(index)).contains(true)
 
@@ -111,7 +111,7 @@ object UserAnswers {
       (__ \ "internalId").read[String] and
       (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
       (__ \ "isTaxable").readWithDefault[Boolean](true) and
-      (__ \ "utr").readNullable[String]
+      (__ \ "existingTrustUtr").readNullable[String]
     ) (UserAnswers.apply _)
 
   implicit lazy val writes: OWrites[UserAnswers] = (
@@ -120,6 +120,6 @@ object UserAnswers {
       (__ \ "internalId").write[String] and
       (__ \ "is5mldEnabled").write[Boolean] and
       (__ \ "isTaxable").write[Boolean] and
-      (__ \ "utr").writeNullable[String]
+      (__ \ "existingTrustUtr").writeNullable[String]
     ) (unlift(UserAnswers.unapply))
 }
