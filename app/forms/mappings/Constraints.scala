@@ -16,13 +16,15 @@
 
 package forms.mappings
 
-import java.time.LocalDate
-
 import forms.Validation
+import models.UserAnswers
 import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.libs.json.{JsString, JsSuccess}
+import sections.Trustees
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.emailaddress.EmailAddress
 
+import java.time.LocalDate
 import scala.util.matching.Regex
 
 trait Constraints {
@@ -155,5 +157,18 @@ trait Constraints {
         Valid
       case _ =>
         Invalid(errorKey, value)
+    }
+
+  protected def uniqueUtr(userAnswers: UserAnswers, notUniqueKey: String, sameAsTrustUtrKey: String): Constraint[String] =
+    Constraint {
+      utr =>
+        if (userAnswers.utr.contains(utr)) {
+          Invalid(sameAsTrustUtrKey)
+        } else {
+          userAnswers.data.transform(Trustees.path.json.pick) match {
+            case JsSuccess(trustees, _) => if ((trustees \\ "utr").contains(JsString(utr))) Invalid(notUniqueKey) else Valid
+            case _ => Valid
+          }
+        }
     }
 }

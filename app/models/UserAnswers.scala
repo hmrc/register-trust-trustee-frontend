@@ -29,6 +29,7 @@ trait ReadableUserAnswers {
 
   val is5mldEnabled: Boolean = false
   val isTaxable: Boolean = true
+  val utr: Option[String] = None
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     getAtPath(page.path)
@@ -52,7 +53,8 @@ final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
                              internalAuthId :String,
                              override val is5mldEnabled: Boolean = false,
-                             override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
+                             override val isTaxable: Boolean = true,
+                             override val utr: Option[String] = None) extends ReadableUserAnswers with Logging {
 
   def isLeadTrusteeMatched(index: Int): Boolean = this.get(MatchedYesNoPage(index)).contains(true)
 
@@ -111,7 +113,8 @@ object UserAnswers {
         (__ \ "data").read[JsObject] and
         (__ \ "internalId").read[String] and
         (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
-        (__ \ "isTaxable").readWithDefault[Boolean](true)
+        (__ \ "isTaxable").readWithDefault[Boolean](true) and
+        (__ \ "utr").readNullable[String]
       ) (UserAnswers.apply _)
   }
 
@@ -124,7 +127,8 @@ object UserAnswers {
         (__ \ "data").write[JsObject] and
         (__ \ "internalId").write[String] and
         (__ \ "is5mldEnabled").write[Boolean] and
-        (__ \ "isTaxable").write[Boolean]
+        (__ \ "isTaxable").write[Boolean] and
+        (__ \ "utr").writeNullable[String]
       ) (unlift(UserAnswers.unapply))
   }
 }

@@ -25,7 +25,7 @@ import views.html.register.leadtrustee.organisation.UtrView
 class UtrViewSpec extends StringViewBehaviours {
 
   val prefix = "leadTrustee.organisation.utr"
-  override val form: Form[String] = new UtrFormProvider().withPrefix(prefix)
+  override val form: Form[String] = new UtrFormProvider().withPrefix(prefix, emptyUserAnswers)
   val view: UtrView = viewFor[UtrView](Some(emptyUserAnswers))
   val fakeName = "Test"
   val index = 0

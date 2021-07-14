@@ -31,9 +31,6 @@ import views.html.register.leadtrustee.organisation.UtrView
 
 class UtrControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new UtrFormProvider()
-  val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.utr")
-
   val fakeName = "Test"
   val index = 0
   val validAnswer = "1234567890"
@@ -42,6 +39,9 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
 
   override val emptyUserAnswers: UserAnswers = super
     .emptyUserAnswers.set(NamePage(index), fakeName).success.value
+
+  val formProvider = new UtrFormProvider()
+  val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.utr", emptyUserAnswers)
 
   "Utr Controller" must {
 

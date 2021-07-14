@@ -19,18 +19,19 @@ package controllers.register.trustees.organisation
 import config.FrontendAppConfig
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
+import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.trustees.organisation.NameRequiredActionImpl
 import forms.UtrFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.organisation.UtrPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.trustees.organisation.UtrView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UtrController @Inject()(
@@ -45,9 +46,10 @@ class UtrController @Inject()(
                                view: UtrView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("trustee.organisation.utr")
+  private def form(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
+    formProvider.withPrefix("trustee.organisation.utr", request.userAnswers)
 
-  private def actions(index : Int, draftId: String) =
+  private def actions(index : Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {

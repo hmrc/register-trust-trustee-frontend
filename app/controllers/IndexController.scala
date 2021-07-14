@@ -18,7 +18,6 @@ package controllers
 
 import connectors.SubmissionDraftConnector
 import controllers.actions.register.RegistrationIdentifierAction
-import javax.inject.Inject
 import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
@@ -27,6 +26,7 @@ import repositories.RegistrationsRepository
 import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
@@ -50,18 +50,16 @@ class IndexController @Inject()(
       }
     }
 
-    featureFlagService.is5mldEnabled() flatMap {
-      is5mldEnabled =>
-        submissionDraftConnector.getIsTrustTaxable(draftId) flatMap {
-          isTaxable =>
-            repository.get(draftId) flatMap {
-              case Some(userAnswers) =>
-                redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable))
-              case _ =>
-                val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable)
-                redirect(userAnswers)
-            }
-        }
-    }
+    for {
+      is5mldEnabled <- featureFlagService.is5mldEnabled()
+      isTaxable <- submissionDraftConnector.getIsTrustTaxable(draftId)
+      utr <- submissionDraftConnector.getTrustUtr(draftId)
+      userAnswers <- repository.get(draftId)
+      ua = userAnswers match {
+        case Some(value) => value.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable)
+        case None => UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable)
+      }
+      result <- redirect(ua)
+    } yield result
   }
 }
