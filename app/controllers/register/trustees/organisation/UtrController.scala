@@ -49,7 +49,7 @@ class UtrController @Inject()(
   private def form(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
     formProvider.withPrefix("trustee.organisation.utr", request.userAnswers)
 
-  private def actions(index : Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
+  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
