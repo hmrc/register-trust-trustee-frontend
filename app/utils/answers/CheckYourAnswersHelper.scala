@@ -16,13 +16,14 @@
 
 package utils.answers
 
-import javax.inject.Inject
 import mapping.reads._
 import models.UserAnswers
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import utils.print._
 import viewmodels.AnswerSection
+
+import javax.inject.Inject
 
 class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions,
                                        printHelpers: PrintHelpers)
@@ -49,12 +50,13 @@ class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions,
             printHelpers.leadTrusteeOrganisation(userAnswers, x.name, index, draftId)
         }
 
-        val sectionKey = if (index == 0) Some(messages("Trustees")) else None
+        val sectionKey = if (index == 0) Some("answersPage.section.trustees.heading") else None
 
         AnswerSection(
-          headingKey = Some(Messages("Trustee") + " " + (index + 1)),
+          headingKey = Some("answersPage.section.trustee.subheading"),
           rows = questions.rows,
-          sectionKey = sectionKey
+          sectionKey = sectionKey,
+          headingArgs = Seq(index + 1)
         )
     }
   }

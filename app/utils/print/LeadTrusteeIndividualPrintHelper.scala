@@ -33,8 +33,7 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
   def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                          (implicit messages: Messages): AnswerSection = {
     AnswerSection(
-      None,
-      answers(userAnswers, name, index, draftId)
+      rows = answers(userAnswers, name, index, draftId)
     )
   }
 

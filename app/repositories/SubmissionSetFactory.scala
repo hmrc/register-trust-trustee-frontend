@@ -16,7 +16,6 @@
 
 package repositories
 
-import javax.inject.Inject
 import mapping.registration.{CorrespondenceMapper, LeadTrusteeMapper, TrusteeMapper}
 import models.Status.{Completed, InProgress}
 import models._
@@ -30,6 +29,8 @@ import utils.countryOptions.CountryOptions
 import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
 
+import javax.inject.Inject
+
 class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      leadTrusteeMapper: LeadTrusteeMapper,
                                      correspondenceMapper: CorrespondenceMapper,
@@ -40,10 +41,10 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
     val status = trusteesStatus(userAnswers)
 
     RegistrationSubmission.DataSet(
-      Json.toJson(userAnswers),
-      status,
-      mappedDataIfCompleted(userAnswers, status),
-      answerSectionsIfCompleted(userAnswers, status)
+      data = Json.toJson(userAnswers),
+      status = status,
+      registrationPieces = mappedDataIfCompleted(userAnswers, status),
+      answerSections = answerSectionsIfCompleted(userAnswers, status)
     )
   }
 
@@ -120,11 +121,16 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
     }
   }
 
-  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
-    RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+    RegistrationSubmission.AnswerSection(
+      headingKey = section.headingKey,
+      rows = section.rows.map(convertForSubmission),
+      sectionKey = section.sectionKey,
+      headingArgs = section.headingArgs.map(_.toString)
+    )
   }
 
-  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
-    RegistrationSubmission.AnswerSection(section.headingKey, section.rows.map(convertForSubmission), section.sectionKey)
+  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
+    RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
   }
 }
