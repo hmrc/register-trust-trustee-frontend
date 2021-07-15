@@ -24,11 +24,11 @@ import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsBoolean, Json}
+import play.api.libs.json.{JsBoolean, JsString, Json}
 import play.api.test.Helpers.CONTENT_TYPE
 import utils.WireMockHelper
-import java.time.LocalDateTime
 
+import java.time.LocalDateTime
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
@@ -162,5 +162,38 @@ class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with Optio
         result.booleanValue() mustBe true
       }
     }
+
+    "getTrustUtr" must {
+
+      val utr = "1234567890"
+
+      "return utr if utr found in submission data" in {
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/trust-utr"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(JsString(utr).toString)
+            )
+        )
+
+        val result: Option[String] = Await.result(connector.getTrustUtr(testDraftId), Duration.Inf)
+        result mustBe Some(utr)
+      }
+
+      "return None if utr not found in submission data" in {
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/trust-utr"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.NOT_FOUND)
+            )
+        )
+
+        val result: Option[String] = Await.result(connector.getTrustUtr(testDraftId), Duration.Inf)
+        result mustBe None
+      }
+    }
+
   }
 }

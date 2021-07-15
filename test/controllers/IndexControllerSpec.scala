@@ -38,7 +38,9 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
   private val featureFlagService: FeatureFlagService = mock[FeatureFlagService]
   private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
 
-  def beforeTest(is5mldEnabled: Boolean = false, isTaxable: Boolean = true): Unit = {
+  private val utr: String = "1234567890"
+
+  def beforeTest(is5mldEnabled: Boolean = false, isTaxable: Boolean = true, utr: Option[String] = None): Unit = {
     reset(registrationsRepository)
     when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
@@ -47,6 +49,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
     reset(submissionDraftConnector)
     when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(isTaxable))
+    when(submissionDraftConnector.getTrustUtr(any())(any(), any())).thenReturn(Future.successful(utr))
   }
 
   "Index Controller" when {
@@ -105,11 +108,11 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
     }
 
-    "update value of is5mldEnabled and isTaxable in user answers" in {
+    "update value of is5mldEnabled, isTaxable and utr in user answers" in {
 
-      beforeTest(is5mldEnabled = true)
+      beforeTest(is5mldEnabled = true, utr = Some(utr))
 
-      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
+      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = false, existingTrustUtr = None)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -127,6 +130,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         uaCaptor.getValue.is5mldEnabled mustBe true
         uaCaptor.getValue.isTaxable mustBe true
+        uaCaptor.getValue.existingTrustUtr.get mustBe utr
 
         application.stop()
       }
@@ -136,9 +140,9 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
   "no pre-existing user answers" must {
     "instantiate new set of user answers" in {
 
-      forAll(arbitrary[Boolean], arbitrary[Boolean]) {
-        (is5mldEnabled, isTrustTaxable) =>
-          beforeTest(is5mldEnabled = is5mldEnabled, isTaxable = isTrustTaxable)
+      forAll(arbitrary[Boolean], arbitrary[Boolean], arbitrary[Option[String]]) {
+        (is5mldEnabled, isTrustTaxable, utr) =>
+          beforeTest(is5mldEnabled = is5mldEnabled, isTaxable = isTrustTaxable, utr = utr)
 
           val application = applicationBuilder(userAnswers = None)
             .overrides(
@@ -156,6 +160,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
             uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
             uaCaptor.getValue.isTaxable mustBe isTrustTaxable
+            uaCaptor.getValue.existingTrustUtr mustBe utr
             uaCaptor.getValue.draftId mustBe fakeDraftId
             uaCaptor.getValue.internalAuthId mustBe "id"
 

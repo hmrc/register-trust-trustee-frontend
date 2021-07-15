@@ -19,18 +19,19 @@ package controllers.register.trustees.organisation
 import config.FrontendAppConfig
 import config.annotations.TrusteeOrganisation
 import controllers.actions._
+import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.trustees.organisation.NameRequiredActionImpl
 import forms.UtrFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.organisation.UtrPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.trustees.organisation.UtrView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UtrController @Inject()(
@@ -45,17 +46,18 @@ class UtrController @Inject()(
                                view: UtrView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("trustee.organisation.utr")
+  private def form(index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
+    formProvider.withConfig("trustee.organisation.utr", request.userAnswers, index)
 
-  private def actions(index : Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(UtrPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(index)
+        case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, request.trusteeName))
@@ -64,7 +66,7 @@ class UtrController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
+      form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 

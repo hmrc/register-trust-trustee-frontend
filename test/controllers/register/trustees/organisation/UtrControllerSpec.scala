@@ -31,9 +31,6 @@ import views.html.register.trustees.organisation.UtrView
 
 class UtrControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new UtrFormProvider()
-  val form: Form[String] = formProvider.withPrefix("trustee.organisation.utr")
-
   val index = 0
   val fakeName = "Test"
   val validAnswer = "1234567890"
@@ -41,6 +38,9 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
   lazy val utrRoute: String = routes.UtrController.onPageLoad(index, fakeDraftId).url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
+
+  val formProvider = new UtrFormProvider()
+  val form: Form[String] = formProvider.withConfig("trustee.organisation.utr", emptyUserAnswers, index)
 
   "Utr Controller" must {
 
