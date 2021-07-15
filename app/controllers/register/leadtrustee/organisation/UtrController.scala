@@ -46,8 +46,8 @@ class UtrController @Inject()(
                                view: UtrView
                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def form(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
-    formProvider.withPrefix("leadTrustee.organisation.utr", request.userAnswers)
+  private def form(index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
+    formProvider.withConfig("leadTrustee.organisation.utr", request.userAnswers, index)
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
@@ -56,8 +56,8 @@ class UtrController @Inject()(
     implicit request =>
 
       val preparedForm = request.userAnswers.get(UtrPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(index)
+        case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, request.trusteeName))
@@ -66,7 +66,7 @@ class UtrController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
+      form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 

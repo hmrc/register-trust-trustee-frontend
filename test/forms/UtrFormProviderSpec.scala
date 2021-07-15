@@ -29,7 +29,7 @@ class UtrFormProviderSpec extends StringFieldBehaviours {
   val sameAsTrustUtrKey = s"$prefix.error.sameAsTrustUtr"
   val utrLength = 10
 
-  val form: Form[String] = new UtrFormProvider().withPrefix(prefix, emptyUserAnswers)
+  val form: Form[String] = new UtrFormProvider().withConfig(prefix, emptyUserAnswers, 0)
 
   ".value" must {
 

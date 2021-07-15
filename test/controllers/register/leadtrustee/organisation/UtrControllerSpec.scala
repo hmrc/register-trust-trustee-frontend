@@ -41,7 +41,7 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     .emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
   val formProvider = new UtrFormProvider()
-  val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.utr", emptyUserAnswers)
+  val form: Form[String] = formProvider.withConfig("leadTrustee.organisation.utr", emptyUserAnswers, index)
 
   "Utr Controller" must {
 

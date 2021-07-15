@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class UtrFormProvider @Inject() extends Mappings {
 
-  def withPrefix(messagePrefix: String, userAnswers: UserAnswers): Form[String] =
+  def withConfig(messagePrefix: String, userAnswers: UserAnswers, index: Int): Form[String] =
     Form(
       "value" -> text(s"$messagePrefix.error.required")
         .verifying(
@@ -33,7 +33,7 @@ class UtrFormProvider @Inject() extends Mappings {
             minLength(10, s"$messagePrefix.error.length"),
             regexp(Validation.utrRegex, s"$messagePrefix.error.invalidCharacters"),
             nonEmptyString("value", s"$messagePrefix.error.required"),
-            uniqueUtr(userAnswers, s"$messagePrefix.error.notUnique", s"$messagePrefix.error.sameAsTrustUtr")
+            uniqueUtr(userAnswers, index, s"$messagePrefix.error.notUnique", s"$messagePrefix.error.sameAsTrustUtr")
           )
         )
     )
