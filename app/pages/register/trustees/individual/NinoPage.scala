@@ -24,5 +24,9 @@ final case class NinoPage(index : Int) extends QuestionPage[String] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
-  override def toString: String = "nino"
+  override def toString: String = NinoPage.key
+}
+
+object NinoPage {
+  val key = "nino"
 }

@@ -229,6 +229,7 @@ trustee.individual.nino.checkYourAnswersLabel = What is {0}’s National Insuran
 trustee.individual.nino.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
 trustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 trustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
+trustee.individual.nino.error.duplicate = Enter a National Insurance number that has not already been used to add a Trustee
 
 trustee.individual.addressYesNo.title = Do you know the trustee’s address?
 trustee.individual.addressYesNo.heading = Do you know {0}’s address?
@@ -590,6 +591,7 @@ leadTrustee.individual.nino.p1 = Providing this information will help verify the
 leadTrustee.individual.nino.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
 leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
+leadTrustee.individual.nino.error.duplicate = Enter a National Insurance number that has not already been used to add a Trustee
 
 leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.title = Does the lead trustee have UK nationality?
 leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.heading = Does {0} have UK nationality?

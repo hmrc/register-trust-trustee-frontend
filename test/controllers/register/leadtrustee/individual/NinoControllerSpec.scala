@@ -42,9 +42,9 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
   val messagePrefix = "leadTrustee.individual.nino"
 
-  val form = new NinoFormProvider()(messagePrefix)
-
   val index = 0
+
+  val form = new NinoFormProvider()(messagePrefix, emptyUserAnswers, index)
 
   val trusteeName: FullName = FullName("FirstName", None, "LastName")
   val validAnswer = "NH111111A"

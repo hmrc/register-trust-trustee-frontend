@@ -18,6 +18,7 @@ package forms.mappings
 
 import forms.Validation
 import models.UserAnswers
+import pages.register.trustees.individual.NinoPage
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.libs.json.{JsArray, JsString, JsSuccess}
 import sections.Trustees
@@ -115,6 +116,26 @@ trait Constraints {
         Valid
       case _ =>
         Invalid(errorKey, value)
+    }
+
+  protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint {
+      nino =>
+        userAnswers.data.transform(Trustees.path.json.pick[JsArray]) match {
+          case JsSuccess(trustees, _) =>
+
+            val uniqueNino = trustees.value.zipWithIndex.forall( trustee =>
+              !((trustee._1 \\ NinoPage.key).contains(JsString(nino)) && trustee._2 != index)
+            )
+
+            if (uniqueNino) {
+              Valid
+            } else {
+              Invalid(errorKey)
+            }
+          case _ =>
+            Valid
+        }
     }
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
