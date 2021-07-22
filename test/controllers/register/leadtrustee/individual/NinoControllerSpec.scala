@@ -350,28 +350,56 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       }
     }
 
-    "return a Bad Request and errors when invalid data is submitted" in {
+    "return a Bad Request and errors" when {
+      "invalid data is submitted" in {
 
-      val userAnswers = baseAnswers
-        .set(TrusteesNinoPage(index), validAnswer).success.value
+        val userAnswers = baseAnswers
+          .set(TrusteesNinoPage(index), validAnswer).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(POST, ninoRoute)
-        .withFormUrlEncodedBody(("value", "invalid value"))
+        val request = FakeRequest(POST, ninoRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[NinoView]
+        val view = application.injector.instanceOf[NinoView]
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual BAD_REQUEST
+        status(result) mustEqual BAD_REQUEST
 
-      contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(boundForm, fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
 
-      application.stop()
+        application.stop()
+      }
+
+      "duplicate nino is submitted" in {
+
+        val userAnswers = baseAnswers
+          .set(TrusteesNinoPage(index + 1), validAnswer).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(POST, ninoRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
+
+        val boundForm = form
+          .bind(Map("value" -> validAnswer))
+          .withError("value", "leadTrustee.individual.nino.error.duplicate")
+
+        val view = application.injector.instanceOf[NinoView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, fakeDraftId, index, trusteeName.toString, readOnly = false)(request, messages).toString
+
+        application.stop()
+      }
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

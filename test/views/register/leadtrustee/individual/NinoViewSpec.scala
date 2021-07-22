@@ -18,6 +18,7 @@ package views.register.leadtrustee.individual
 
 import forms.NinoFormProvider
 import models.core.pages.FullName
+import pages.register.leadtrustee.individual.TrusteesNinoPage
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
