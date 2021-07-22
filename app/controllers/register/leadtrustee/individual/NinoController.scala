@@ -52,7 +52,8 @@ class NinoController @Inject()(
                                 errorHandler: ErrorHandler
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val form: Form[String] = formProvider("leadTrustee.individual.nino")
+  def form(index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
+    formProvider("leadTrustee.individual.nino", request.userAnswers, index)
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
@@ -64,8 +65,8 @@ class NinoController @Inject()(
     implicit request =>
 
       val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(index)
+        case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
@@ -74,7 +75,7 @@ class NinoController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index,draftId).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
+      form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
 

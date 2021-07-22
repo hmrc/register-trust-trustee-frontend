@@ -23,6 +23,7 @@ import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.register.leadtrustee.individual.TrusteesNinoPage
 import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
@@ -34,9 +35,9 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
   val trusteeMessagePrefix = "trustee.individual.nino"
   val formProvider = new NinoFormProvider()
-  val form = formProvider(trusteeMessagePrefix)
-
   val index = 0
+
+  val form = formProvider(trusteeMessagePrefix, emptyUserAnswers, index)
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
   val validAnswer = "NH111111A"
@@ -113,29 +114,61 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-    "return a Bad Request and errors when invalid data is submitted" in {
+    "return a Bad Request and errors" when {
+      "invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        val userAnswers = emptyUserAnswers
+          .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request =
-        FakeRequest(POST, trusteesNinoRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        val request =
+          FakeRequest(POST, trusteesNinoRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[NinoView]
+        val view = application.injector.instanceOf[NinoView]
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual BAD_REQUEST
+        status(result) mustEqual BAD_REQUEST
 
-      contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, trusteeName)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(boundForm, fakeDraftId, index, trusteeName)(request, messages).toString
 
-      application.stop()
+        application.stop()
+      }
+
+      "duplicate nino is submitted" when {
+        "trustee" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+            .set(NinoPage(index + 1), validAnswer).success.value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          val request =
+            FakeRequest(POST, trusteesNinoRoute)
+              .withFormUrlEncodedBody(("value", validAnswer))
+
+          val boundForm = form
+            .bind(Map("value" -> validAnswer))
+            .withError("value", "trustee.individual.nino.error.duplicate")
+
+          val view = application.injector.instanceOf[NinoView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+
+          contentAsString(result) mustEqual
+            view(boundForm, fakeDraftId, index, trusteeName)(request, messages).toString
+
+          application.stop()
+        }
+      }
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

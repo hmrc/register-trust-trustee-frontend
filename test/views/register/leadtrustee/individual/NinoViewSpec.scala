@@ -18,6 +18,7 @@ package views.register.leadtrustee.individual
 
 import forms.NinoFormProvider
 import models.core.pages.FullName
+import pages.register.leadtrustee.individual.TrusteesNinoPage
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
@@ -29,7 +30,7 @@ class NinoViewSpec extends StringViewBehaviours {
 
   val index = 0
 
-  val form: Form[String] = new NinoFormProvider().apply("leadTrustee.individual.nino")
+  val form: Form[String] = new NinoFormProvider().apply("leadTrustee.individual.nino", emptyUserAnswers, index)
 
   val name: String = FullName("FirstName", None, "LastName").toString
 

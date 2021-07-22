@@ -18,6 +18,7 @@ package forms.mappings
 
 import forms.Validation
 import models.UserAnswers
+import pages.register.trustees.individual.NinoPage
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.libs.json.{JsArray, JsString, JsSuccess}
 import sections.Trustees
@@ -111,10 +112,35 @@ trait Constraints {
 
   protected def isNinoValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
-      case str if Nino.isValid(str)=>
+      case str if Nino.isValid(str) =>
         Valid
       case _ =>
         Invalid(errorKey, value)
+    }
+
+  protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint {
+      nino =>
+        userAnswers.data.transform(Trustees.path.json.pick[JsArray]) match {
+          case JsSuccess(trustees, _) =>
+
+            val uniqueNino = trustees.value.zipWithIndex.forall { trustee =>
+
+              val isNinoFoundInTrustees = (trustee._1 \\ NinoPage.key).contains(JsString(nino))
+              val isNotThisNino = trustee._2 != index
+
+              !(isNinoFoundInTrustees && isNotThisNino)
+
+            }
+
+            if (uniqueNino) {
+              Valid
+            } else {
+              Invalid(errorKey)
+            }
+          case _ =>
+            Valid
+        }
     }
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
@@ -133,19 +159,19 @@ trait Constraints {
         Valid
     }
 
-  protected def wholeNumber(errorKey: String) : Constraint[String] = {
+  protected def wholeNumber(errorKey: String): Constraint[String] = {
 
     val regex: Regex = Validation.decimalCheck.r
 
     Constraint {
       case regex(_*) => Valid
-      case _ =>  Invalid(errorKey)
+      case _ => Invalid(errorKey)
     }
   }
 
   protected def isTelephoneNumberValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
-      case str if TelephoneNumber.isValid(str)=>
+      case str if TelephoneNumber.isValid(str) =>
         Valid
       case _ =>
         Invalid(errorKey, value)
@@ -153,7 +179,7 @@ trait Constraints {
 
   protected def isEmailValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
-      case str if EmailAddress.isValid(str)=>
+      case str if EmailAddress.isValid(str) =>
         Valid
       case _ =>
         Invalid(errorKey, value)

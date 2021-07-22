@@ -19,11 +19,14 @@ package controllers.register.trustees.individual
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
+import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
 import forms.NinoFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
+import pages.QuestionPage
 import pages.register.trustees.individual.NinoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -31,6 +34,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.addAnother.TrusteeViewModel
 import views.html.register.trustees.individual.NinoView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,14 +55,15 @@ class NinoController @Inject()(
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
+  def form(index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
+    formProvider("trustee.individual.nino", request.userAnswers, index)
+
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val form = formProvider("trustee.individual.nino")
-
       val preparedForm = request.userAnswers.get(NinoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(index)
+        case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, request.trusteeName))
@@ -67,9 +72,7 @@ class NinoController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val form = formProvider("trustee.individual.nino")
-
-      form.bindFromRequest().fold(
+      form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
