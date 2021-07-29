@@ -44,7 +44,8 @@
             labelAsHeading = true,
             labelClass = Some("govuk-label--l"),
             hint = Some(messages("trustee.organisation.utr.hint")),
-            inputMode = Some("numeric")
+            inputMode = Some("numeric"),
+            inputClass = Some("govuk-input--width-10")
         )
 
         <p>@messages("trustee.organisation.utr.p1") <a class="govuk-link" target="_blank" href="@appConfig.findLostUtrUrl">@messages("trustee.organisation.utr.link")</a>.</p>
