@@ -43,9 +43,9 @@
             label = messages("leadTrustee.organisation.utr.heading", name),
             labelAsHeading = true,
             labelClass = Some("govuk-label--l"),
+            inputClass = Some("govuk-input--width-10"),
             inputMode = Some("numeric"),
             hint = Some(messages("leadTrustee.organisation.utr.hint"))
-
         )
 
         <p>@messages("leadTrustee.organisation.utr.p1") <a class="govuk-link" target="_blank" href="@appConfig.findLostUtrUrl">@messages("leadTrustee.organisation.utr.link")</a>.</p>

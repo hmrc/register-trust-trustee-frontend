@@ -36,14 +36,14 @@ showBackLink = true
 
 @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-@errorSummary(form.errors)
+        @errorSummary(form.errors)
 
-@internationalAddress(
-    form = form,
-    legend = messages("leadTrustee.organisation.internationalAddress.heading", name),
-    legendAsHeading = true,
-    countryOptions = countryOptions
-)
+        @internationalAddress(
+            form = form,
+            legend = messages("leadTrustee.organisation.internationalAddress.heading", name),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
         @submitButton()
     }
