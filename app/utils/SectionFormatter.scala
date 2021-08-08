@@ -23,8 +23,8 @@ import viewmodels.{AnswerRow, AnswerSection, RepeaterAnswerSection, Section}
 
 object SectionFormatter {
 
-  def formatSections(answerSection: Section)(implicit messages: Messages): Seq[SummaryListRow] = {
-    answerSection match {
+  def formatSection(section: Section)(implicit messages: Messages): Seq[SummaryListRow] = {
+    section match {
       case a: AnswerSection => formatAnswerSection(a)
       case _: RepeaterAnswerSection => throw new NotImplementedError("Not used anywhere in code.")
     }
