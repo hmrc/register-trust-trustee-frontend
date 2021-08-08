@@ -43,24 +43,26 @@ class CheckDetailsViewSpec extends ViewBehaviours {
 
       val verifiedAnswerSection = AnswerSection(
         None,
-        Seq(AnswerRow("Label", Html("Answer"), None, canEdit = false))
+        Seq(AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("Answer"), None, "Name", canEdit = false))
       )
 
       val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
 
       assertContainsText(doc, messages("site.verified"))
+      assertContainsText(doc, messages("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Name"))
     }
 
     "not render Verified tag when row can be edited" in {
 
       val verifiedAnswerSection = AnswerSection(
         None,
-        Seq(AnswerRow("Label", Html("Answer"), None))
+        Seq(AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("Answer"), None, "Name"))
       )
 
       val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
 
       assertDoesNotContainText(doc, messages("site.verified"))
+      assertContainsText(doc, messages("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Name"))
     }
   }
 }

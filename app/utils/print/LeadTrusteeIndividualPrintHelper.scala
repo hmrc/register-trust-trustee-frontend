@@ -58,8 +58,10 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
       bound.countryQuestion(mld5.CountryOfNationalityInTheUkYesNoPage(index), mld5.CountryOfNationalityPage(index), s"$prefix.5mld.countryOfNationality", mld5Rts.CountryOfNationalityController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(TrusteeNinoYesNoPage(index), s"$prefix.ninoYesNo", rts.NinoYesNoController.onPageLoad(index, draftId).url, canEdit = !isLeadTrusteeMatched),
       bound.ninoQuestion(TrusteesNinoPage(index), s"$prefix.nino", rts.NinoController.onPageLoad(index, draftId).url, canEdit = !isLeadTrusteeMatched),
-      bound.enumQuestion(TrusteeDetailsChoicePage(index),
-        s"$prefix.trusteeDetailsChoice", rts.TrusteeDetailsChoiceController.onPageLoad(index, draftId).url,
+      bound.enumQuestion(
+        TrusteeDetailsChoicePage(index),
+        s"$prefix.trusteeDetailsChoice",
+        rts.TrusteeDetailsChoiceController.onPageLoad(index, draftId).url,
         s"$prefix.trusteeDetailsChoice"
       ),
       bound.passportDetailsQuestion(IDCardDetailsPage(index), s"$prefix.iDCardDetails", rts.IDCardDetailsController.onPageLoad(index, draftId).url),
