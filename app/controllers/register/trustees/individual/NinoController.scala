@@ -23,10 +23,7 @@ import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
 import forms.NinoFormProvider
-
-import javax.inject.Inject
 import navigation.Navigator
-import pages.QuestionPage
 import pages.register.trustees.individual.NinoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,9 +31,9 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.addAnother.TrusteeViewModel
 import views.html.register.trustees.individual.NinoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NinoController @Inject()(

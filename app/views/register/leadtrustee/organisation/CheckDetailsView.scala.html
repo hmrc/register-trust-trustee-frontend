@@ -28,7 +28,7 @@
     formHelper: FormWithCSRF
 )
 
-@(answerSection: Seq[Section], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(answerSection: Section, draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("leadTrustee.organisation.checkDetails.title"),

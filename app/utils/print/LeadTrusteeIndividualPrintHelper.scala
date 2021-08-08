@@ -42,7 +42,7 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
     val prefix: String = "leadTrustee.individual"
-    val isVerified = userAnswers.isLeadTrusteeMatched(index)
+    val isLeadTrusteeMatched = userAnswers.isLeadTrusteeMatched(index)
 
     Seq(
       bound.enumQuestion[IndividualOrBusiness](
@@ -50,14 +50,14 @@ class LeadTrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowCo
         "leadTrustee.individualOrBusiness",
         regRts.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId).url,
         "individualOrBusiness",
-        canEdit = !isVerified
+        canEdit = !isLeadTrusteeMatched
       ),
-      bound.nameQuestion(TrusteesNamePage(index), s"$prefix.name", rts.NameController.onPageLoad(index, draftId).url, canEdit = !isVerified, isVerified = isVerified),
-      bound.dateQuestion(DateOfBirthPage(index), s"$prefix.dateOfBirth", rts.DateOfBirthController.onPageLoad(index, draftId).url, canEdit = !isVerified, isVerified = isVerified),
+      bound.nameQuestion(TrusteesNamePage(index), s"$prefix.name", rts.NameController.onPageLoad(index, draftId).url, canEdit = !isLeadTrusteeMatched, isVerified = isLeadTrusteeMatched),
+      bound.dateQuestion(DateOfBirthPage(index), s"$prefix.dateOfBirth", rts.DateOfBirthController.onPageLoad(index, draftId).url, canEdit = !isLeadTrusteeMatched, isVerified = isLeadTrusteeMatched),
       bound.yesNoQuestion(mld5.CountryOfNationalityInTheUkYesNoPage(index), s"$prefix.5mld.countryOfNationalityInTheUkYesNo", mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId).url),
       bound.countryQuestion(mld5.CountryOfNationalityInTheUkYesNoPage(index), mld5.CountryOfNationalityPage(index), s"$prefix.5mld.countryOfNationality", mld5Rts.CountryOfNationalityController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(TrusteeNinoYesNoPage(index), s"$prefix.ninoYesNo", rts.NinoYesNoController.onPageLoad(index, draftId).url, canEdit = !isVerified),
-      bound.ninoQuestion(TrusteesNinoPage(index), s"$prefix.nino", rts.NinoController.onPageLoad(index, draftId).url, canEdit = !isVerified, isVerified = isVerified),
+      bound.yesNoQuestion(TrusteeNinoYesNoPage(index), s"$prefix.ninoYesNo", rts.NinoYesNoController.onPageLoad(index, draftId).url, canEdit = !isLeadTrusteeMatched),
+      bound.ninoQuestion(TrusteesNinoPage(index), s"$prefix.nino", rts.NinoController.onPageLoad(index, draftId).url, canEdit = !isLeadTrusteeMatched, isVerified = isLeadTrusteeMatched),
       bound.enumQuestion(TrusteeDetailsChoicePage(index),
         s"$prefix.trusteeDetailsChoice", rts.TrusteeDetailsChoiceController.onPageLoad(index, draftId).url,
         s"$prefix.trusteeDetailsChoice"

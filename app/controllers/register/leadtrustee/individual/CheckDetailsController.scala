@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.LeadTrusteeIndividualPrintHelper
-import viewmodels.Section
+import viewmodels.AnswerSection
 import views.html.register.leadtrustee.individual.CheckDetailsView
 
 import javax.inject.Inject
@@ -53,9 +53,9 @@ class CheckDetailsController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val section: Section = printHelper.checkDetailsSection(request.userAnswers, request.trusteeName, index, draftId)
+      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.trusteeName, index, draftId)
 
-      Ok(view(Seq(section), draftId, index))
+      Ok(view(section, draftId, index))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {

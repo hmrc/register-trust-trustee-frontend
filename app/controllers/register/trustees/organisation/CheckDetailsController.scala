@@ -55,7 +55,7 @@ class CheckDetailsController @Inject()(
 
       val section: Section = printHelper.checkDetailsSection(request.userAnswers, request.trusteeName, index, draftId)
 
-      Ok(view(Seq(section), index, draftId))
+      Ok(view(section, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
