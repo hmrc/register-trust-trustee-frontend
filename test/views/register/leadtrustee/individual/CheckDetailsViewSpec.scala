@@ -39,11 +39,11 @@ class CheckDetailsViewSpec extends ViewBehaviours {
 
     behave like pageWithASubmitButton(applyView())
 
-    "render Verified tag when lead trustee matched" in {
+    "render Verified tag when row cannot be edited" in {
 
       val verifiedAnswerSection = AnswerSection(
         None,
-        Seq(AnswerRow("Label", Html("Answer"), None, canEdit = false, isVerified = true))
+        Seq(AnswerRow("Label", Html("Answer"), None, canEdit = false))
       )
 
       val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
@@ -51,7 +51,7 @@ class CheckDetailsViewSpec extends ViewBehaviours {
       assertContainsText(doc, messages("site.verified"))
     }
 
-    "not render Verified tag when lead trustee not matched" in {
+    "not render Verified tag when row can be edited" in {
 
       val verifiedAnswerSection = AnswerSection(
         None,
