@@ -75,9 +75,10 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
     def yesNoQuestion(query: Gettable[Boolean],
                       labelKey: String,
                       changeUrl: String,
-                      canEdit: Boolean = true): Option[AnswerRow] = {
+                      canEdit: Boolean = true,
+                      isVerified: Boolean = false): Option[AnswerRow] = {
       val format = (x: Boolean) => checkAnswersFormatters.yesOrNo(x)
-      question(query, labelKey, format, changeUrl, name, canEdit)
+      question(query, labelKey, format, changeUrl, name, canEdit, isVerified)
     }
 
     def dateQuestion(query: Gettable[LocalDate],
@@ -117,10 +118,11 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                         labelKey: String,
                         changeUrl: String,
                         enumPrefix: String,
-                        canEdit: Boolean = true)
+                        canEdit: Boolean = true,
+                        isVerified: Boolean = false)
                        (implicit messages:Messages, rds: Reads[T]): Option[AnswerRow] = {
       val format = (x: T) => checkAnswersFormatters.formatEnum(enumPrefix, x)
-      question(query, labelKey, format, changeUrl, name, canEdit)
+      question(query, labelKey, format, changeUrl, name, canEdit, isVerified)
     }
 
     private def question[T](query: Gettable[T],
