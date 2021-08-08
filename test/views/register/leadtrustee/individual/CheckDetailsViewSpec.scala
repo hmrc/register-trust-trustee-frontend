@@ -16,8 +16,8 @@
 
 package views.register.leadtrustee.individual
 
-import play.twirl.api.HtmlFormat
-import viewmodels.AnswerSection
+import play.twirl.api.{Html, HtmlFormat}
+import viewmodels.{AnswerRow, AnswerSection}
 import views.behaviours.ViewBehaviours
 import views.html.register.leadtrustee.individual.CheckDetailsView
 
@@ -26,9 +26,9 @@ class CheckDetailsViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "leadTrustee.individual.checkDetails"
   val index = 0
 
-  "CheckDetails view" must {
+  val view: CheckDetailsView = viewFor[CheckDetailsView](Some(emptyUserAnswers))
 
-    val view = viewFor[CheckDetailsView](Some(emptyUserAnswers))
+  "CheckDetails view" must {
 
     def applyView(): HtmlFormat.Appendable =
       view.apply(AnswerSection(None, Seq()), fakeDraftId, index)(fakeRequest, messages)
@@ -38,5 +38,29 @@ class CheckDetailsViewSpec extends ViewBehaviours {
     behave like pageWithBackLink(applyView())
 
     behave like pageWithASubmitButton(applyView())
+
+    "render Verified tag when lead trustee matched" in {
+
+      val verifiedAnswerSection = AnswerSection(
+        None,
+        Seq(AnswerRow("Label", Html("Answer"), None, canEdit = false, isVerified = true))
+      )
+
+      val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
+
+      assertContainsText(doc, messages("site.verified"))
+    }
+
+    "not render Verified tag when lead trustee not matched" in {
+
+      val verifiedAnswerSection = AnswerSection(
+        None,
+        Seq(AnswerRow("Label", Html("Answer"), None))
+      )
+
+      val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
+
+      assertDoesNotContainText(doc, messages("site.verified"))
+    }
   }
 }
