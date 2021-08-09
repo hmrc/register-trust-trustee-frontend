@@ -18,7 +18,6 @@ package views.register.trustees.individual
 
 import forms.NinoFormProvider
 import models.core.pages.FullName
-import pages.register.trustees.individual.NinoPage
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
