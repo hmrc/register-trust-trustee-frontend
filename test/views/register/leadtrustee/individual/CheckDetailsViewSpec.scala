@@ -16,8 +16,8 @@
 
 package views.register.leadtrustee.individual
 
-import play.twirl.api.HtmlFormat
-import viewmodels.AnswerSection
+import play.twirl.api.{Html, HtmlFormat}
+import viewmodels.{AnswerRow, AnswerSection}
 import views.behaviours.ViewBehaviours
 import views.html.register.leadtrustee.individual.CheckDetailsView
 
@@ -26,17 +26,43 @@ class CheckDetailsViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "leadTrustee.individual.checkDetails"
   val index = 0
 
+  val view: CheckDetailsView = viewFor[CheckDetailsView](Some(emptyUserAnswers))
+
   "CheckDetails view" must {
 
-    val view = viewFor[CheckDetailsView](Some(emptyUserAnswers))
-
     def applyView(): HtmlFormat.Appendable =
-      view.apply(Seq(AnswerSection(None, Seq())), fakeDraftId, index)(fakeRequest, messages)
+      view.apply(AnswerSection(None, Seq()), fakeDraftId, index)(fakeRequest, messages)
 
     behave like normalPage(applyView(), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView())
 
     behave like pageWithASubmitButton(applyView())
+
+    "render Verified tag when row cannot be edited" in {
+
+      val verifiedAnswerSection = AnswerSection(
+        None,
+        Seq(AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("Answer"), None, "Name", canEdit = false))
+      )
+
+      val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
+
+      assertContainsText(doc, messages("site.verified"))
+      assertContainsText(doc, messages("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Name"))
+    }
+
+    "not render Verified tag when row can be edited" in {
+
+      val verifiedAnswerSection = AnswerSection(
+        None,
+        Seq(AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("Answer"), None, "Name"))
+      )
+
+      val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
+
+      assertDoesNotContainText(doc, messages("site.verified"))
+      assertContainsText(doc, messages("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Name"))
+    }
   }
 }

@@ -15,7 +15,7 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
-@import utils.SectionFormatter.formatSections
+@import utils.SectionFormatter.formatSection
 @import viewmodels.AnswerSection
 @import viewmodels.Section
 @import views.html.components.{Heading, SubmitButton}
@@ -28,7 +28,7 @@
     formHelper: FormWithCSRF
 )
 
-@(answerSection: Seq[Section], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(answerSection: Section, draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("trustee.individual.checkDetails.title"),
@@ -39,7 +39,7 @@
 
         @heading("trustee.individual.checkDetails.heading")
 
-        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
+        @govukSummaryList(SummaryList(rows = formatSection(answerSection)))
 
         @submitButton()
     }

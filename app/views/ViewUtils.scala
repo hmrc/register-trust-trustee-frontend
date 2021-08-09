@@ -37,7 +37,7 @@ object ViewUtils {
         s"${error.key}.${error.args.head}"
       case _ if error.message.toLowerCase.contains("yesno") =>
         s"${error.key}-yes"
-      case _ if radioOptions.size != 0 =>
+      case _ if radioOptions.nonEmpty =>
         radioOptions.head.id
       case _ =>
         val isSingleDateField = error.message.toLowerCase.contains("date") && !error.message.toLowerCase.contains("yesno")
@@ -50,15 +50,17 @@ object ViewUtils {
   }
 
   def mapRadioOptionsToRadioItems(field: Field,
-                                  inputs: Seq[RadioOption], disabled: Boolean = false)(implicit messages: Messages): Seq[RadioItem] =
+                                  inputs: Seq[RadioOption],
+                                  disabled: Boolean = false)(implicit messages: Messages): Seq[RadioItem] =
     inputs.map(
       a => {
+        val checked: Boolean = field.value.contains(a.value)
         RadioItem(
           id = Some(a.id),
           value = Some(a.value),
-          checked = field.value.contains(a.value),
+          checked = checked,
           content = Text(messages(a.messageKey)),
-          attributes = if(disabled) Map("disabled" -> "disabled") else Map.empty
+          attributes = if (disabled && !checked) Map("disabled" -> "disabled") else Map.empty
         )
       }
     )

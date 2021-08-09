@@ -39,10 +39,9 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
     def nameQuestion(query: Gettable[FullName],
                      labelKey: String,
                      changeUrl: String,
-                     canEdit: Boolean = true,
-                     isVerified: Boolean = false): Option[AnswerRow] = {
+                     canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: FullName) => HtmlFormat.escape(x.fullName)
-      question(query, labelKey, format, changeUrl, canEdit = canEdit, isVerified = isVerified)
+      question(query, labelKey, format, changeUrl, canEdit = canEdit)
     }
 
     def stringQuestion(query: Gettable[String],
@@ -83,19 +82,17 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
     def dateQuestion(query: Gettable[LocalDate],
                      labelKey: String,
                      changeUrl: String,
-                     canEdit: Boolean = true,
-                     isVerified: Boolean = false): Option[AnswerRow] = {
+                     canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: LocalDate) => checkAnswersFormatters.formatDate(x)
-      question(query, labelKey, format, changeUrl, name, canEdit, isVerified)
+      question(query, labelKey, format, changeUrl, name, canEdit)
     }
 
     def ninoQuestion(query: Gettable[String],
                      labelKey: String,
                      changeUrl: String,
-                     canEdit: Boolean = true,
-                     isVerified: Boolean = false): Option[AnswerRow] = {
+                     canEdit: Boolean = true): Option[AnswerRow] = {
       val format = (x: String) => checkAnswersFormatters.formatNino(x)
-      question(query, labelKey, format, changeUrl, name, canEdit, isVerified)
+      question(query, labelKey, format, changeUrl, name, canEdit)
     }
 
     def addressQuestion[T <: Address](query: Gettable[T],
@@ -128,8 +125,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                             format: T => Html,
                             changeUrl: String,
                             labelArg: String = "",
-                            canEdit: Boolean = true,
-                            isVerified: Boolean = false)
+                            canEdit: Boolean = true)
                            (implicit rds: Reads[T]): Option[AnswerRow] = {
       userAnswers.get(query) map { x =>
         AnswerRow(
@@ -137,8 +133,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
           answer = format(x),
           changeUrl = Some(changeUrl),
           labelArg = labelArg,
-          canEdit = canEdit,
-          isVerified = isVerified
+          canEdit = canEdit
         )
       }
     }
