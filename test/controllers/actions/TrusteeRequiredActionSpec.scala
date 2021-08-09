@@ -17,7 +17,7 @@
 package controllers.actions
 
 import base.SpecBase
-import controllers.Assets.SEE_OTHER
+import play.api.http.Status.SEE_OTHER
 import controllers.actions.register.{RemoveIndexRequest, TrusteeRequiredAction}
 import models.Status.Completed
 import models.UserAnswers
