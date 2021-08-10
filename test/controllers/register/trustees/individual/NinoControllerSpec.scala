@@ -23,7 +23,6 @@ import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.leadtrustee.individual.TrusteesNinoPage
 import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}

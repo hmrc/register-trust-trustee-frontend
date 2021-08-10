@@ -16,7 +16,7 @@
 
 package controllers.actions.register.leadtrustee.organisation
 
-import controllers.Assets.Redirect
+import play.api.mvc.Results.Redirect
 import controllers.actions.register.UkRegisteredYesNoRequest
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest

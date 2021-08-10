@@ -16,7 +16,7 @@
 
 package controllers.actions.register
 
-import controllers.Assets.Redirect
+import play.api.mvc.Results.Redirect
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import play.api.Logging
