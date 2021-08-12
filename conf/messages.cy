@@ -161,6 +161,8 @@ leadTrustee.individual.ninoYesNo.checkYourAnswersLabel=A oes gan {0} rif Yswiria
 leadTrustee.individual.ninoYesNo.error.required=Dewiswch ‘Iawn’ os oes gan y prif ymddiriedolwr rif Yswiriant Gwladol
 leadTrustee.individual.ninoYesNo.heading=A oes gan {0} rif Yswiriant Gwladol?
 leadTrustee.individual.ninoYesNo.title=A oes gan y prif ymddiriedolwr rif Yswiriant Gwladol?
+leadTrustee.individual.nino.error.duplicate = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) nad yw wedi’i ddefnyddio eisoes i ychwanegu ymddiriedolwr busnes neu brif ymddiriedolwr
+
 leadTrustee.individual.passportDetails.checkYourAnswersLabel=Beth yw manylion pasbort {0}?
 leadTrustee.individual.passportDetails.country=Gwlad cyhoeddi’r pasbort
 leadTrustee.individual.passportDetails.country.error.length=Mae’n rhaid i wlad pasbort yr ymddiriedolwr fod yn 100 o gymeriadau neu lai
@@ -436,6 +438,7 @@ trustee.individual.ninoYesNo.checkYourAnswersLabel=A ydych yn gwybod rhif Yswiri
 trustee.individual.ninoYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod rhif Yswiriant Gwladol yr ymddiriedolwr
 trustee.individual.ninoYesNo.heading=A ydych yn gwybod rhif Yswiriant Gwladol {0}?
 trustee.individual.ninoYesNo.title=A ydych yn gwybod rhif Yswiriant Gwladol yr ymddiriedolwr?
+trustee.individual.nino.error.duplicate = Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) nad yw wedi’i ddefnyddio eisoes i ychwanegu ymddiriedolwr busnes neu brif ymddiriedolwr
 trustee.individual.passportDetails.checkYourAnswersLabel=Beth yw manylion pasbort {0}?
 trustee.individual.passportDetails.country=Gwlad cyhoeddi’r pasbort
 trustee.individual.passportDetails.country.error.length=Mae’n rhaid i wlad pasbort yr ymddiriedolwr fod yn 100 o gymeriadau neu lai
