@@ -17,12 +17,15 @@
 package controllers.register
 
 import config.FrontendAppConfig
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.StandardActionSets
 import forms.{AddATrusteeFormProvider, YesNoFormProvider}
-import models.Enumerable
+import models.Status.Completed
+import models.TaskStatus.TaskStatus
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
+import models.registration.pages.AddATrustee
 import models.registration.pages.AddATrustee.{NoComplete, YesNow}
 import models.requests.RegistrationDataRequest
+import models.{Enumerable, TaskStatus, UserAnswers}
 import navigation.Navigator
 import pages.register.{AddATrusteePage, AddATrusteeYesNoPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
@@ -30,9 +33,11 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
+import services.TrustsStoreService
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.AddATrusteeViewHelper
 import utils.Constants.MAX
+import utils.{AddATrusteeViewHelper, RegistrationProgress}
 import views.html.register.{AddATrusteeView, AddATrusteeYesNoView, MaxedOutView}
 
 import javax.inject.Inject
@@ -43,22 +48,22 @@ class AddATrusteeController @Inject()(
                                        implicit val frontendAppConfig: FrontendAppConfig,
                                        registrationsRepository: RegistrationsRepository,
                                        navigator: Navigator,
-                                       identify: RegistrationIdentifierAction,
-                                       getData: DraftIdRetrievalActionProvider,
-                                       requireData: RegistrationDataRequiredAction,
+                                       standardActionSets: StandardActionSets,
                                        addAnotherFormProvider: AddATrusteeFormProvider,
                                        yesNoFormProvider: YesNoFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        addAnotherView: AddATrusteeView,
                                        yesNoView: AddATrusteeYesNoView,
-                                       maxedOutView: MaxedOutView
+                                       maxedOutView: MaxedOutView,
+                                       trustsStoreService: TrustsStoreService,
+                                       registrationProgress: RegistrationProgress
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   private val addAnotherForm = addAnotherFormProvider()
   private val yesNoForm = yesNoFormProvider.withPrefix("addATrusteeYesNo")
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
-    identify andThen getData(draftId) andThen requireData
+    standardActionSets.identifiedUserWithData(draftId)
 
   private def dynamicHeading(count: Int)(implicit mp: MessagesProvider): String = {
     count match {
@@ -72,7 +77,7 @@ class AddATrusteeController @Inject()(
 
       val trustees = new AddATrusteeViewHelper(request.userAnswers, draftId).rows
 
-      val isLeadTrusteeDefined = request.userAnswers.get(Trustees).toList.flatten.exists(trustee => trustee.isLead)
+      val isLeadTrusteeDefined = request.userAnswers.get(Trustees).toList.flatten.exists(_.isLead)
 
       trustees.count match {
         case 0 =>
@@ -110,7 +115,8 @@ class AddATrusteeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteeYesNoPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _ <- registrationsRepository.set(updatedAnswers)
+            _ <- setTaskStatus(draftId, TaskStatus.InProgress)
           } yield Redirect(navigator.nextPage(AddATrusteeYesNoPage, draftId, updatedAnswers))
         }
       )
@@ -140,7 +146,8 @@ class AddATrusteeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteePage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _ <- registrationsRepository.set(updatedAnswers)
+            _ <- setTaskStatus(updatedAnswers, draftId, value)
           } yield Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
         }
       )
@@ -174,6 +181,7 @@ class AddATrusteeController @Inject()(
               .flatMap(_.set(TrusteeOrLeadTrusteePage(index), LeadTrustee))
             )
             _ <- registrationsRepository.set(updatedAnswers)
+            _ <- setTaskStatus(updatedAnswers, draftId, value)
           } yield {
             if (value == YesNow) {
               Redirect(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId))
@@ -188,9 +196,27 @@ class AddATrusteeController @Inject()(
   def submitComplete(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
+      val status = NoComplete
+
       for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteePage, NoComplete))
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteePage, status))
         _ <- registrationsRepository.set(updatedAnswers)
+        _ <- setTaskStatus(updatedAnswers, draftId, status)
       } yield Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
+  }
+
+  private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddATrustee)
+                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    val status = (selection, registrationProgress.trusteesStatus(userAnswers)) match {
+      case (NoComplete, Some(Completed)) => TaskStatus.Completed
+      case _ => TaskStatus.InProgress
+    }
+
+    setTaskStatus(draftId, status)
+  }
+
+  private def setTaskStatus(draftId: String, taskStatus: TaskStatus)
+                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    trustsStoreService.updateTaskStatus(draftId, taskStatus)
   }
 }

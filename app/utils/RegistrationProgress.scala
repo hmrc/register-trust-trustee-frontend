@@ -27,15 +27,14 @@ class RegistrationProgress extends Logging {
 
   def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
 
-    val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
-
     userAnswers.get(Trustees) match {
       case Some(Nil) =>
         logger.info(s"[trusteesStatus] no trustees to determine a status")
         None
-      case Some(l) =>
-        val hasLeadTrustee = l.exists(_.isLead)
-        val isComplete = !l.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
+      case Some(trustees) =>
+        val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
+        val hasLeadTrustee = trustees.exists(_.isLead)
+        val isComplete = !trustees.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
 
         if (isComplete) {
           logger.info(s"[trusteesStatus] trustee status is completed")

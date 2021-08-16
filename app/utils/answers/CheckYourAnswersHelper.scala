@@ -19,14 +19,12 @@ package utils.answers
 import mapping.reads._
 import models.UserAnswers
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import utils.print._
 import viewmodels.AnswerSection
 
 import javax.inject.Inject
 
-class CheckYourAnswersHelper @Inject()(val countryOptions: CountryOptions,
-                                       printHelpers: PrintHelpers)
+class CheckYourAnswersHelper @Inject()(printHelpers: PrintHelpers)
                                       (val userAnswers: UserAnswers,
                                        val draftId: String,
                                        val canEdit: Boolean)

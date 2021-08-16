@@ -23,7 +23,6 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.RegistrationProgress
 import utils.answers.CheckYourAnswersHelper
-import utils.countryOptions.CountryOptions
 import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -32,7 +31,6 @@ import javax.inject.Inject
 class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      leadTrusteeMapper: LeadTrusteeMapper,
                                      correspondenceMapper: CorrespondenceMapper,
-                                     countryOptions: CountryOptions,
                                      printHelpers: PrintHelpers,
                                      registrationProgress: RegistrationProgress) extends Logging {
 
@@ -81,14 +79,14 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
   }
 
   private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
-                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+                                       (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
     if (status.contains(Status.Completed)) {
-        val helper = new CheckYourAnswersHelper(countryOptions, printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
+      val helper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
 
-        helper.trustees match {
-          case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
-          case None => List.empty
-        }
+      helper.trustees match {
+        case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
+        case None => List.empty
+      }
     } else {
       List.empty
     }

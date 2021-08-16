@@ -18,6 +18,7 @@ package controllers
 
 import connectors.SubmissionDraftConnector
 import controllers.actions.register.RegistrationIdentifierAction
+import models.TaskStatus.InProgress
 import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
@@ -33,7 +34,7 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
-                                 featureFlagService: TrustsStoreService,
+                                 trustsStoreService: TrustsStoreService,
                                  submissionDraftConnector: SubmissionDraftConnector
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -51,7 +52,7 @@ class IndexController @Inject()(
     }
 
     for {
-      is5mldEnabled <- featureFlagService.is5mldEnabled()
+      is5mldEnabled <- trustsStoreService.is5mldEnabled()
       isTaxable <- submissionDraftConnector.getIsTrustTaxable(draftId)
       utr <- submissionDraftConnector.getTrustUtr(draftId)
       userAnswers <- repository.get(draftId)
@@ -60,6 +61,7 @@ class IndexController @Inject()(
         case None => UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable, utr)
       }
       result <- redirect(ua)
+      _ <- trustsStoreService.updateTaskStatus(draftId, InProgress)
     } yield result
   }
 }
