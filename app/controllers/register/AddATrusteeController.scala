@@ -77,7 +77,7 @@ class AddATrusteeController @Inject()(
       trustees.count match {
         case 0 =>
           Ok(yesNoView(yesNoForm, draftId))
-        case x @ MAX - 1 if !isLeadTrusteeDefined =>
+        case x if (x == MAX - 1) && !isLeadTrusteeDefined =>
           Ok(addAnotherView(
             addAnotherForm,
             routes.AddATrusteeController.submitLead(draftId),
