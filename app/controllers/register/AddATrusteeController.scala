@@ -19,8 +19,6 @@ package controllers.register
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddATrusteeFormProvider, YesNoFormProvider}
-
-import javax.inject.Inject
 import models.Enumerable
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.registration.pages.AddATrustee.{NoComplete, YesNow}
@@ -34,8 +32,10 @@ import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddATrusteeViewHelper
+import utils.Constants.MAX
 import views.html.register.{AddATrusteeView, AddATrusteeYesNoView, MaxedOutView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddATrusteeController @Inject()(
@@ -77,7 +77,7 @@ class AddATrusteeController @Inject()(
       trustees.count match {
         case 0 =>
           Ok(yesNoView(yesNoForm, draftId))
-        case x @ 24 if !isLeadTrusteeDefined =>
+        case x @ MAX - 1 if !isLeadTrusteeDefined =>
           Ok(addAnotherView(
             addAnotherForm,
             routes.AddATrusteeController.submitLead(draftId),
@@ -86,7 +86,7 @@ class AddATrusteeController @Inject()(
             isLeadTrusteeDefined,
             dynamicHeading(x)
           ))
-        case x if x >= 25 =>
+        case x if x >= MAX =>
           Ok(maxedOutView(draftId, trustees.inProgress, trustees.complete, dynamicHeading(x)))
         case count =>
           Ok(addAnotherView(
@@ -149,7 +149,7 @@ class AddATrusteeController @Inject()(
   def submitLead(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
-      val index: Int = 24
+      val index: Int = MAX - 1
 
       addAnotherForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {

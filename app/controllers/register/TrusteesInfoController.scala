@@ -19,7 +19,7 @@ package controllers.register
 import controllers.actions.register.RegistrationIdentifierAction
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.FeatureFlagService
+import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.{TrusteesInfo5MLDView, TrusteesInfoView}
 
@@ -29,7 +29,7 @@ import scala.concurrent.ExecutionContext
 class TrusteesInfoController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         identify: RegistrationIdentifierAction,
-                                        featureFlagService: FeatureFlagService,
+                                        featureFlagService: TrustsStoreService,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: TrusteesInfoView,
                                         view5mld: TrusteesInfo5MLDView

@@ -23,7 +23,7 @@ import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
+import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
-                                 featureFlagService: FeatureFlagService,
+                                 featureFlagService: TrustsStoreService,
                                  submissionDraftConnector: SubmissionDraftConnector
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 

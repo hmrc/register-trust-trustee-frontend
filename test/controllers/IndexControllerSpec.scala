@@ -29,13 +29,13 @@ import pages.register.TrusteeOrLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
+import services.TrustsStoreService
 
 import scala.concurrent.Future
 
 class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  private val featureFlagService: FeatureFlagService = mock[FeatureFlagService]
+  private val featureFlagService: TrustsStoreService = mock[TrustsStoreService]
   private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
 
   private val utr: String = "1234567890"
@@ -64,7 +64,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[FeatureFlagService].toInstance(featureFlagService),
+            bind[TrustsStoreService].toInstance(featureFlagService),
             bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
           ).build()
 
@@ -90,7 +90,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[FeatureFlagService].toInstance(featureFlagService),
+            bind[TrustsStoreService].toInstance(featureFlagService),
             bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
           ).build()
 
@@ -116,7 +116,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[FeatureFlagService].toInstance(featureFlagService),
+          bind[TrustsStoreService].toInstance(featureFlagService),
           bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
         ).build()
 
@@ -146,7 +146,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
           val application = applicationBuilder(userAnswers = None)
             .overrides(
-              bind[FeatureFlagService].toInstance(featureFlagService),
+              bind[TrustsStoreService].toInstance(featureFlagService),
               bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
             ).build()
 
