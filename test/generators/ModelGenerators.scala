@@ -16,8 +16,9 @@
 
 package generators
 
-import java.time.LocalDate
+import models.Status
 
+import java.time.LocalDate
 import models.core.pages._
 import models.registration.pages._
 import org.scalacheck.Arbitrary.arbitrary
@@ -71,6 +72,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryLocalDate : Arbitrary[LocalDate] =
     Arbitrary {
       Gen.const(LocalDate.of(2010, 10, 10))
+    }
+
+  implicit lazy val arbitraryStatus: Arbitrary[Status] =
+    Arbitrary {
+      Gen.oneOf(Status.values.toList)
     }
 
 }

@@ -20,35 +20,42 @@ import base.SpecBase
 import controllers.register.routes.RemoveIndexController
 import controllers.register.trustees.individual.routes.CheckDetailsController
 import forms.{AddATrusteeFormProvider, YesNoFormProvider}
+import generators.ModelGenerators
 import models.Status.Completed
-import models.UserAnswers
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness}
 import models.registration.pages.AddATrustee
-import models.registration.pages.AddATrustee.YesNow
+import models.registration.pages.AddATrustee.{NoComplete, YesNow}
+import models.{Status, TaskStatus, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatest.BeforeAndAfterEach
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.entitystatus.TrusteeStatus
 import pages.register.leadtrustee.{individual => ltind}
 import pages.register.trustees.individual.NamePage
 import pages.register.{AddATrusteePage, TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.AddATrusteeViewHelper
+import services.TrustsStoreService
+import uk.gov.hmrc.http.HttpResponse
+import utils.{AddATrusteeViewHelper, RegistrationProgress}
 import viewmodels.AddRow
 import views.html.register.{AddATrusteeView, AddATrusteeYesNoView, MaxedOutView}
 
 import scala.concurrent.Future
 
-class AddATrusteeControllerSpec extends SpecBase {
+class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
 
-  private lazy val getRoute : String = routes.AddATrusteeController.onPageLoad(fakeDraftId).url
-  private lazy val submitAnotherRoute : String = routes.AddATrusteeController.submitAnother(fakeDraftId).url
-  private lazy val submitLeadRoute : String = routes.AddATrusteeController.submitLead(fakeDraftId).url
-  private lazy val submitYesNoRoute : String = routes.AddATrusteeController.submitOne(fakeDraftId).url
-  private lazy val submitCompleteRoute : String = routes.AddATrusteeController.submitComplete(fakeDraftId).url
+  private lazy val getRoute: String = routes.AddATrusteeController.onPageLoad(fakeDraftId).url
+  private lazy val submitAnotherRoute: String = routes.AddATrusteeController.submitAnother(fakeDraftId).url
+  private lazy val submitLeadRoute: String = routes.AddATrusteeController.submitLead(fakeDraftId).url
+  private lazy val submitYesNoRoute: String = routes.AddATrusteeController.submitOne(fakeDraftId).url
+  private lazy val submitCompleteRoute: String = routes.AddATrusteeController.submitComplete(fakeDraftId).url
 
   private def changeLink(index: Int): String = CheckDetailsController.onPageLoad(index, fakeDraftId).url
   private def removeLink(index: Int): String = RemoveIndexController.onPageLoad(index, fakeDraftId).url
@@ -83,6 +90,20 @@ class AddATrusteeControllerSpec extends SpecBase {
       )
   }
 
+  private val mockTrustsStoreService: TrustsStoreService = mock[TrustsStoreService]
+  private val mockRegistrationProgress: RegistrationProgress = mock[RegistrationProgress]
+
+  override def beforeEach(): Unit = {
+    reset(mockTrustsStoreService, mockRegistrationProgress, registrationsRepository)
+
+    when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+
+    when(mockRegistrationProgress.trusteesStatus(any())).thenReturn(Some(Status.Completed))
+
+    when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+  }
+
   "AddATrustee Controller" when {
 
     "no data" must {
@@ -105,9 +126,8 @@ class AddATrusteeControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val request =
-          FakeRequest(POST, submitAnotherRoute)
-            .withFormUrlEncodedBody(("value", AddATrustee.values.head.toString))
+        val request = FakeRequest(POST, submitAnotherRoute)
+          .withFormUrlEncodedBody(("value", AddATrustee.values.head.toString))
 
         val result = route(application, request).value
 
@@ -141,18 +161,20 @@ class AddATrusteeControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+          .build()
 
-        val request =
-          FakeRequest(POST, submitYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        val request = FakeRequest(POST, submitYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
 
         application.stop()
       }
@@ -161,9 +183,8 @@ class AddATrusteeControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-        val request =
-          FakeRequest(POST, submitYesNoRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+        val request = FakeRequest(POST, submitYesNoRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = yesNoForm.bind(Map("value" -> "invalid value"))
 
@@ -207,31 +228,61 @@ class AddATrusteeControllerSpec extends SpecBase {
         application.stop()
       }
 
-      "redirect to the next page when valid data is submitted" in {
+      "redirect to the next page when valid data is submitted" when {
 
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswersWithTrusteesComplete)).build()
+        "YesNow / YesLater selected" in {
 
-        val request =
-          FakeRequest(POST, submitAnotherRoute)
-            .withFormUrlEncodedBody(("value", AddATrustee.options.head.value))
+          forAll(arbitrary[AddATrustee].suchThat(_ != NoComplete)) { selection =>
+            beforeEach()
 
-        val result = route(application, request).value
+            val application = applicationBuilder(userAnswers = Some(userAnswersWithTrusteesComplete))
+              .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+              .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+              .build()
 
-        status(result) mustEqual SEE_OTHER
+            val request = FakeRequest(POST, submitAnotherRoute)
+              .withFormUrlEncodedBody(("value", selection.toString))
 
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+            val result = route(application, request).value
 
-        application.stop()
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+
+            application.stop()
+          }
+        }
+
+        "NoComplete selected" in {
+
+          val application = applicationBuilder(userAnswers = Some(userAnswersWithTrusteesComplete))
+            .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+            .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+            .build()
+
+          val request = FakeRequest(POST, submitAnotherRoute)
+            .withFormUrlEncodedBody(("value", NoComplete.toString))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
+
+          application.stop()
+        }
       }
 
       "return a Bad Request and errors when invalid data is submitted" in {
 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithTrusteesComplete)).build()
 
-        val request =
-          FakeRequest(POST, submitAnotherRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+        val request = FakeRequest(POST, submitAnotherRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = addTrusteeForm.bind(Map("value" -> "invalid value"))
 
@@ -291,17 +342,15 @@ class AddATrusteeControllerSpec extends SpecBase {
 
       "redirect to Is Lead Trustee an Individual or Business page when YesNow is submitted" in {
 
-        reset(registrationsRepository)
-        when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-
         val index = 24
 
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+          .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+          .build()
 
-        val request =
-          FakeRequest(POST, submitLeadRoute)
-            .withFormUrlEncodedBody(("value", AddATrustee.YesNow.toString))
+        val request = FakeRequest(POST, submitLeadRoute)
+          .withFormUrlEncodedBody(("value", AddATrustee.YesNow.toString))
 
         val result = route(application, request).value
 
@@ -314,6 +363,8 @@ class AddATrusteeControllerSpec extends SpecBase {
         uaCaptor.getValue.get(AddATrusteePage).get mustBe YesNow
         uaCaptor.getValue.get(TrusteeOrLeadTrusteePage(index)).get mustBe LeadTrustee
 
+        verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+
         application.stop()
       }
 
@@ -321,9 +372,8 @@ class AddATrusteeControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request =
-          FakeRequest(POST, submitLeadRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+        val request = FakeRequest(POST, submitLeadRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = addTrusteeForm.bind(Map("value" -> "invalid value"))
 
@@ -390,22 +440,57 @@ class AddATrusteeControllerSpec extends SpecBase {
         application.stop()
       }
 
-      "redirect to the next page when valid data is submitted" in {
+      "redirect to the next page when valid data is submitted" when {
 
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
+        "registration progress is completed" in {
 
-        val request =
-          FakeRequest(POST, submitCompleteRoute)
-            .withFormUrlEncodedBody(("value", AddATrustee.YesNow.toString))
+          when(mockRegistrationProgress.trusteesStatus(any())).thenReturn(Some(Completed))
 
-        val result = route(application, request).value
+          val application = applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+            .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+            .build()
 
-        status(result) mustEqual SEE_OTHER
+          val request = FakeRequest(POST, submitCompleteRoute)
 
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+          val result = route(application, request).value
 
-        application.stop()
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
+          verify(mockRegistrationProgress).trusteesStatus(eqTo(userAnswers.set(AddATrusteePage, NoComplete).success.value))
+
+          application.stop()
+        }
+
+        "registration progress is not completed" in {
+
+          forAll(arbitrary[Option[Status]].suchThat(!_.contains(Completed))) { regProgressStatus =>
+            beforeEach()
+
+            when(mockRegistrationProgress.trusteesStatus(any())).thenReturn(regProgressStatus)
+
+            val application = applicationBuilder(userAnswers = Some(userAnswers))
+              .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+              .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+              .build()
+
+            val request = FakeRequest(POST, submitCompleteRoute)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+            verify(mockRegistrationProgress).trusteesStatus(eqTo(userAnswers.set(AddATrusteePage, NoComplete).success.value))
+
+            application.stop()
+          }
+        }
       }
     }
   }

@@ -22,7 +22,7 @@ import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
+import services.TrustsStoreService
 import views.html.register.TrusteesInfoView
 import views.html.register.TrusteesInfo5MLDView
 
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class TrusteesInfoControllerSpec extends SpecBase {
 
-  lazy val mockFeatureFlagService: FeatureFlagService = mock[FeatureFlagService]
+  lazy val mockFeatureFlagService: TrustsStoreService = mock[TrustsStoreService]
 
   "TrusteesInfo Controller" must {
 
@@ -41,7 +41,7 @@ class TrusteesInfoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+          bind[TrustsStoreService].toInstance(mockFeatureFlagService)
         ).build()
 
       val request = FakeRequest(GET, routes.TrusteesInfoController.onPageLoad(fakeDraftId).url)
@@ -65,7 +65,7 @@ class TrusteesInfoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+          bind[TrustsStoreService].toInstance(mockFeatureFlagService)
         ).build()
 
       val request = FakeRequest(GET, routes.TrusteesInfoController.onPageLoad(fakeDraftId).url)

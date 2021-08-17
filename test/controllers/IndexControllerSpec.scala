@@ -18,10 +18,11 @@ package controllers
 
 import base.SpecBase
 import connectors.SubmissionDraftConnector
+import models.TaskStatus.InProgress
 import models.UserAnswers
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -29,13 +30,14 @@ import pages.register.TrusteeOrLeadTrusteePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
+import services.TrustsStoreService
+import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.Future
 
 class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  private val featureFlagService: FeatureFlagService = mock[FeatureFlagService]
+  private val trustsStoreService: TrustsStoreService = mock[TrustsStoreService]
   private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
 
   private val utr: String = "1234567890"
@@ -44,8 +46,9 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
     reset(registrationsRepository)
     when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
-    reset(featureFlagService)
-    when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(is5mldEnabled))
+    reset(trustsStoreService)
+    when(trustsStoreService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(is5mldEnabled))
+    when(trustsStoreService.updateTaskStatus(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
     reset(submissionDraftConnector)
     when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(isTaxable))
@@ -64,7 +67,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[FeatureFlagService].toInstance(featureFlagService),
+            bind[TrustsStoreService].toInstance(trustsStoreService),
             bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
           ).build()
 
@@ -78,6 +81,8 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         redirectLocation(result).value mustEqual controllers.register.routes.TrusteesInfoController.onPageLoad(fakeDraftId).url
 
+        verify(trustsStoreService).updateTaskStatus(any(), eqTo(InProgress))(any(), any())
+
         application.stop()
       }
 
@@ -90,7 +95,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[FeatureFlagService].toInstance(featureFlagService),
+            bind[TrustsStoreService].toInstance(trustsStoreService),
             bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
           ).build()
 
@@ -104,6 +109,8 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         redirectLocation(result).value mustEqual controllers.register.routes.AddATrusteeController.onPageLoad(fakeDraftId).url
 
+        verify(trustsStoreService).updateTaskStatus(any(), eqTo(InProgress))(any(), any())
+
         application.stop()
       }
     }
@@ -116,7 +123,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[FeatureFlagService].toInstance(featureFlagService),
+          bind[TrustsStoreService].toInstance(trustsStoreService),
           bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
         ).build()
 
@@ -146,7 +153,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
           val application = applicationBuilder(userAnswers = None)
             .overrides(
-              bind[FeatureFlagService].toInstance(featureFlagService),
+              bind[TrustsStoreService].toInstance(trustsStoreService),
               bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
             ).build()
 

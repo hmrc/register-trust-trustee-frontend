@@ -17,15 +17,12 @@
 package repositories
 
 import mapping.registration.{CorrespondenceMapper, LeadTrusteeMapper, TrusteeMapper}
-import models.Status.{Completed, InProgress}
 import models._
-import models.registration.pages.AddATrustee
-import pages.register.AddATrusteePage
 import play.api.Logging
 import play.api.i18n.Messages
 import play.api.libs.json.Json
+import utils.RegistrationProgress
 import utils.answers.CheckYourAnswersHelper
-import utils.countryOptions.CountryOptions
 import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -34,11 +31,11 @@ import javax.inject.Inject
 class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      leadTrusteeMapper: LeadTrusteeMapper,
                                      correspondenceMapper: CorrespondenceMapper,
-                                     countryOptions: CountryOptions,
-                                     printHelpers: PrintHelpers) extends Logging {
+                                     printHelpers: PrintHelpers,
+                                     registrationProgress: RegistrationProgress) extends Logging {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
-    val status = trusteesStatus(userAnswers)
+    val status = registrationProgress.trusteesStatus(userAnswers)
 
     RegistrationSubmission.DataSet(
       data = Json.toJson(userAnswers),
@@ -46,32 +43,6 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
       registrationPieces = mappedDataIfCompleted(userAnswers, status),
       answerSections = answerSectionsIfCompleted(userAnswers, status)
     )
-  }
-
-  private def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
-    val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
-
-    userAnswers.get(_root_.sections.Trustees) match {
-      case Some(l) =>
-        if (l.isEmpty) {
-          logger.info(s"[trusteesStatus] no trustees to determine a status")
-          None
-        } else {
-          val hasLeadTrustee = l.exists(_.isLead)
-          val isComplete = !l.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
-
-          if (isComplete) {
-            logger.info(s"[trusteesStatus] trustee status is completed")
-            Some(Completed)
-          } else {
-            logger.info(s"[trusteesStatus] trustee status is in progress")
-            Some(InProgress)
-          }
-        }
-      case None =>
-        logger.info(s"[trusteesStatus] no trustees to determine a status")
-        None
-    }
   }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
@@ -108,14 +79,14 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
   }
 
   private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
-                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+                                       (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
     if (status.contains(Status.Completed)) {
-        val helper = new CheckYourAnswersHelper(countryOptions, printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
+      val helper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
 
-        helper.trustees match {
-          case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
-          case None => List.empty
-        }
+      helper.trustees match {
+        case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
+        case None => List.empty
+      }
     } else {
       List.empty
     }

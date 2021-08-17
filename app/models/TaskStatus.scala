@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package utils
+package models
 
-object Constants {
+import play.api.libs.json.Writes
 
-  final val GB = "GB"
-  final val ES = "ES"
-  final val MAX = 25
+object TaskStatus extends Enumeration {
+
+  type TaskStatus = Value
+
+  val Completed: Value = Value("completed")
+  val InProgress: Value = Value("in-progress")
+
+  implicit val writes: Writes[Value] = Writes.enumNameWrites
+
 }
