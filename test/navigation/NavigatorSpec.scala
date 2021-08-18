@@ -90,19 +90,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
 
     "there is at least one trustee" must {
 
-      "go to in-progress trustee from AddATrusteePage when selected add them now and last trustee is in progress" in {
-
-        val answers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-          .set(NamePage(index), "Name").success.value
-          .set(AddATrusteePage, AddATrustee.YesNow).success.value
-
-        navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
-          .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(0, fakeDraftId))
-      }
-
-      "go to the next trustee from AddATrusteePage when selected add them now and last trustee is complete" in {
+      "go to the next trustee from AddATrusteePage when selected add them now" in {
 
         val answers = emptyUserAnswers
           .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
