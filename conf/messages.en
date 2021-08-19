@@ -71,14 +71,6 @@ site.address.uk.line4 = Address line 4 (optional)
 site.address.uk.postcode = Postcode
 site.address.uk.postcode.hint = For example AB1 1AB.
 
-site.address.uk.title = What is the trustee’s address?
-site.address.uk.heading = What is {0}’s address?
-site.address.uk.checkYourAnswersLabel = What is {0}’s address?
-
-site.address.international.title = What is the trustee’s address?
-site.address.international.heading = What is {0}’s address?
-site.address.international.checkYourAnswersLabel = What is {0}’s address?
-
 ukAddress.error.line1.required = Enter address line 1
 ukAddress.error.line2.required = Enter address line 2
 ukAddress.error.postcode.required = Enter a postcode
