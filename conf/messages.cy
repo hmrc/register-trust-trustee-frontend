@@ -362,7 +362,6 @@ trustee.individual.5mld.mentalCapacityYesNo.bulletpoint4=methu â chyfathrebu
 trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
 trustee.individual.5mld.mentalCapacityYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod bod gan yr ymddiriedolwr alluedd meddyliol
 trustee.individual.5mld.mentalCapacityYesNo.heading=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-trustee.individual.5mld.mentalCapacityYesNo.hint=Nid oes gan ymddiriedolwr alluedd meddyliol os na all ddeall gwybodaeth na gwneud penderfyniadau am yr ymddiriedolaeth oherwydd salwch meddwl
 trustee.individual.5mld.mentalCapacityYesNo.p1=Nid oes gan ymddiriedolwr alluedd meddyliol os nad yw’n gallu deall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
 trustee.individual.5mld.mentalCapacityYesNo.title=A oes gan yr ymddiriedolwr alluedd meddyliol ar adeg y cofrestru?
 trustee.individual.addressUkYesNo.checkYourAnswersLabel=A yw {0} yn byw yn y DU?
