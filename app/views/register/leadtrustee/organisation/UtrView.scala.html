@@ -48,7 +48,7 @@
             hint = Some(messages("leadTrustee.organisation.utr.hint"))
         )
 
-        <p>@messages("leadTrustee.organisation.utr.p1") <a class="govuk-link" target="_blank" href="@appConfig.findLostUtrUrl">@messages("leadTrustee.organisation.utr.link")</a>.</p>
+        <p>@messages("leadTrustee.organisation.utr.p1") <a class="govuk-link" target="_blank" rel="noopener noreferrer" href="@appConfig.findLostUtrUrl">@messages("leadTrustee.organisation.utr.link")</a>.</p>
 
         @submitButton()
     }
