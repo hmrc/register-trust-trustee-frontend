@@ -31,7 +31,7 @@
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="@row.changeUrl">
                 <span aria-hidden="true">@messages("site.edit")</span>
-                <span class="govuk-visually-hidden">@messages("site.hidden-edit", row.label)</span>
+                <span class="govuk-visually-hidden">@messages("site.hidden-edit", messages(row.label, row.labelArg))</span>
             </a>
         </dd>
     } else {
