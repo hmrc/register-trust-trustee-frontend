@@ -17,7 +17,8 @@
 package mapping.reads
 
 import mapping.registration.IdentificationMapper.{buildAddress, buildPassport}
-import models.IdentificationType
+import models.YesNoDontKnow.{DontKnow, No, Yes}
+import models.{IdentificationType, YesNoDontKnow}
 import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.{Address, FullName, IndividualOrBusiness}
 import models.registration.pages.PassportOrIdCardDetails
@@ -34,7 +35,7 @@ final case class TrusteeIndividual(override val isLead: Boolean,
                                    passportOrIdCard: Option[PassportOrIdCardDetails],
                                    countryOfResidence: Option[String],
                                    nationality: Option[String],
-                                   mentalCapacityYesNo: Option[Boolean]) extends Trustee {
+                                   mentalCapacityYesNo: Option[YesNoDontKnow]) extends Trustee {
 
   val identification: Option[IdentificationType] = (nino, passportOrIdCard, address) match {
     case (None, None, None) => None
@@ -48,6 +49,13 @@ object TrusteeIndividual extends TrusteeReads[TrusteeIndividual] {
   override val individualOrBusiness: IndividualOrBusiness = Individual
 
   override def trusteeReads: Reads[TrusteeIndividual] = {
+
+    val yesNoDontKnowReads: Reads[YesNoDontKnow] =
+      (__ \ "mentalCapacityYesNo").readNullable[Boolean] map {
+        case Some(true) => Yes
+        case Some(false) => No
+        case _  => DontKnow
+      }
 
     val passportOrIdCardReads: Reads[Option[PassportOrIdCardDetails]] = (
       (__ \ "passportDetailsYesNo").readNullable[Boolean] and
@@ -74,7 +82,7 @@ object TrusteeIndividual extends TrusteeReads[TrusteeIndividual] {
         passportOrIdCardReads and
         (__ \ "countryOfResidence").readNullable[String] and
         (__ \ "nationality").readNullable[String] and
-        (__ \ "mentalCapacityYesNo").readNullable[Boolean]
+        (__ \ "mentalCapacityYesNo").readNullable[YesNoDontKnow]
       )(TrusteeIndividual.apply _)
 
   }

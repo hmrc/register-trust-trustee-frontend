@@ -19,10 +19,12 @@ package controllers.register.trustees.individual.mld5
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
-import forms.YesNoFormProvider
+import forms.{YesNoDontKnowFormProvider, YesNoFormProvider}
+
 import javax.inject.Inject
 import navigation.Navigator
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
+import models.YesNoDontKnow
 import pages.register.trustees.individual.mld5.MentalCapacityYesNoPage
 import play.api.data.Form
 import play.api.i18n._
@@ -34,17 +36,17 @@ import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class MentalCapacityYesNoController @Inject()(
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   implicit val frontendAppConfig: FrontendAppConfig,
-                                                   repository: RegistrationsRepository,
-                                                   @TrusteeIndividual navigator: Navigator,
-                                                   standardActionSets: StandardActionSets,
-                                                   nameAction: NameRequiredActionImpl,
-                                                   formProvider: YesNoFormProvider,
-                                                   view: MentalCapacityYesNoView
+                                               val controllerComponents: MessagesControllerComponents,
+                                               implicit val frontendAppConfig: FrontendAppConfig,
+                                               repository: RegistrationsRepository,
+                                               @TrusteeIndividual navigator: Navigator,
+                                               standardActionSets: StandardActionSets,
+                                               nameAction: NameRequiredActionImpl,
+                                               formProvider: YesNoDontKnowFormProvider,
+                                               view: MentalCapacityYesNoView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
+  private val form: Form[YesNoDontKnow] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {

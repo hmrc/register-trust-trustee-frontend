@@ -23,11 +23,11 @@ class MentalCapacityYesNoPageSpec extends PageBehaviours {
 
   "MentalCapacityYesNoPage" must {
 
-    beRetrievable[Boolean](MentalCapacityYesNoPage(0))
-
-    beSettable[Boolean](MentalCapacityYesNoPage(0))
-
-    beRemovable[Boolean](MentalCapacityYesNoPage(0))
+//    beRetrievable[Boolean](MentalCapacityYesNoPage(0))
+//
+//    beSettable[Boolean](MentalCapacityYesNoPage(0))
+//
+//    beRemovable[Boolean](MentalCapacityYesNoPage(0))
   }
 
 }

@@ -17,6 +17,7 @@
 package mapping.registration
 
 import mapping.reads.{Trustee, TrusteeIndividual, TrusteeOrganisation, Trustees}
+import models.YesNoDontKnow.{No, Yes}
 import models.{TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers}
 
 class TrusteeMapper {
@@ -40,7 +41,11 @@ class TrusteeMapper {
             identification = indTrustee.identification,
             countryOfResidence = indTrustee.countryOfResidence,
             nationality = indTrustee.nationality,
-            legallyIncapable = indTrustee.mentalCapacityYesNo.map(!_)
+            legallyIncapable = indTrustee.mentalCapacityYesNo.flatMap {
+              case Yes => Some(false)
+              case No => Some(true)
+              case _ => None
+            }
           )
         )
       )

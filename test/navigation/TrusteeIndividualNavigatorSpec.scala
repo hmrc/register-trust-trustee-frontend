@@ -21,6 +21,7 @@ import config.FrontendAppConfig
 import controllers.register.trustees.individual.routes._
 import controllers.register.trustees.individual.mld5.routes._
 import generators.Generators
+import models.YesNoDontKnow
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.trustees.individual._
 import pages.register.trustees.individual.mld5._
@@ -409,14 +410,14 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       "LegallyIncapablePage"  when {
 
         "5MLD=Y, taxable=N -> TrusteeAnswersPage when answer is yes" in {
-          val answers = noneTaxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = true).success.value
+          val answers = noneTaxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = YesNoDontKnow.Yes).success.value
 
           navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=N -> TrusteeAnswersPage when answer is no" in {
-          val answers = noneTaxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = false).success.value
+          val answers = noneTaxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = YesNoDontKnow.No).success.value
 
           navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
@@ -668,14 +669,14 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
       "LegallyIncapablePage"  when {
 
         "5MLD=Y, taxable=Y -> TrusteeAnswersPage when answer is yes" in {
-          val answers = taxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = true).success.value
+          val answers = taxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = YesNoDontKnow.Yes).success.value
 
           navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
         }
 
         "5MLD=Y, taxable=Y -> TrusteeAnswersPage when answer is no" in {
-          val answers = taxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = false).success.value
+          val answers = taxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = YesNoDontKnow.No).success.value
 
           navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))

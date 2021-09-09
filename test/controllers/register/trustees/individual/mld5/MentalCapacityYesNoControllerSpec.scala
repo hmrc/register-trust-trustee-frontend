@@ -19,6 +19,7 @@ package controllers.register.trustees.individual.mld5
 import base.SpecBase
 import forms.YesNoFormProvider
 import config.annotations.TrusteeIndividual
+import models.YesNoDontKnow
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -65,7 +66,7 @@ class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index), trusteeName).success.value
-        .set(MentalCapacityYesNoPage(index), true).success.value
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

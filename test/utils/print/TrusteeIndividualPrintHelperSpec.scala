@@ -17,12 +17,11 @@
 package utils.print
 
 import java.time.LocalDate
-
 import base.SpecBase
 import controllers.register.routes.TrusteeIndividualOrBusinessController
 import controllers.register.trustees.individual.routes._
 import controllers.register.trustees.individual.mld5.routes._
-import models.UserAnswers
+import models.{UserAnswers, YesNoDontKnow}
 import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.TrusteeOrLeadTrustee.Trustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
@@ -168,7 +167,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
 
       "trustee has mentalCapacity" in {
         val userAnswers: UserAnswers = baseAnswers
-          .set(MentalCapacityYesNoPage(index), true).success.value
+          .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
 
         val result = helper.checkDetailsSection(userAnswers, displayName, index, fakeDraftId)
 

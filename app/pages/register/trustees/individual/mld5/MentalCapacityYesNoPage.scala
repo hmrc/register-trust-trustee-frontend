@@ -16,11 +16,12 @@
 
 package pages.register.trustees.individual.mld5
 
+import models.YesNoDontKnow
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class MentalCapacityYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class MentalCapacityYesNoPage(index : Int) extends QuestionPage[YesNoDontKnow] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
