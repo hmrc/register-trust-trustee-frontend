@@ -17,7 +17,7 @@
 package controllers.register.trustees.individual.mld5
 
 import base.SpecBase
-import forms.YesNoFormProvider
+import forms.{YesNoDontKnowFormProvider, YesNoFormProvider}
 import config.annotations.TrusteeIndividual
 import models.YesNoDontKnow
 import models.core.pages.FullName
@@ -33,8 +33,8 @@ import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
 class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
+  val formProvider = new YesNoDontKnowFormProvider()
+  val form: Form[YesNoDontKnow] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
   val index: Int = 0
   val trusteeName = FullName("FirstName", None, "LastName")
 
@@ -65,11 +65,13 @@ class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), trusteeName).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trusteeName).success.value
         .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
 
-
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      println(Some(userAnswers))
 
       val request = FakeRequest(GET, mentalCapacityYesNo)
 
@@ -80,7 +82,7 @@ class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), draftId, index, trusteeName.toString)(request, messages).toString
+        view(form.fill(YesNoDontKnow.Yes), draftId, index, trusteeName.toString)(request, messages).toString
 
       application.stop()
     }
@@ -97,7 +99,7 @@ class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, mentalCapacityYesNo)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(("value", "yes"))
 
       val result = route(application, request).value
 

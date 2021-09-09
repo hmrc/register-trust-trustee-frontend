@@ -44,17 +44,17 @@
     items = Seq(
         RadioItem(
             id = Some(field.id + "-yes"),
-            value = Some("true"),
-            checked = field.value.contains("true"),
+            value = Some("yes"),
+            checked = field.value.contains("yes"),
             content = Text(messages("site.yes")),
-            attributes = if(disabled && !field.value.contains("true")) Map("disabled" -> "disabled") else Map.empty
+            attributes = if(disabled && !field.value.contains("yes")) Map("disabled" -> "disabled") else Map.empty
         ),
         RadioItem(
             id = Some(field.id + "-no"),
-            value = Some("false"),
-            checked = field.value.contains("false"),
+            value = Some("no"),
+            checked = field.value.contains("no"),
             content = Text(messages("site.no")),
-            attributes = if(disabled && !field.value.contains("false")) Map("disabled" -> "disabled") else Map.empty
+            attributes = if(disabled && !field.value.contains("no")) Map("disabled" -> "disabled") else Map.empty
        ),
         RadioItem(
             id = Some(field.id + "-dontKnow"),

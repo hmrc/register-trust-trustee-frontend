@@ -17,13 +17,14 @@
 package mapping.registration
 
 import mapping.reads.{Trustee, TrusteeIndividual, TrusteeOrganisation, Trustees}
-import models.YesNoDontKnow.{No, Yes}
+import models.YesNoDontKnow.{DontKnow, No, Yes}
 import models.{TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers}
 
 class TrusteeMapper {
 
   def build(userAnswers: UserAnswers): Option[List[TrusteeType]] = {
     val trustees: List[Trustee] = userAnswers.get(Trustees).getOrElse(Nil).filter(!_.isLead)
+
     trustees match {
       case Nil => None
       case _ => Some(trustees.map(buildTrusteeType))
@@ -41,10 +42,12 @@ class TrusteeMapper {
             identification = indTrustee.identification,
             countryOfResidence = indTrustee.countryOfResidence,
             nationality = indTrustee.nationality,
-            legallyIncapable = indTrustee.mentalCapacityYesNo.flatMap {
-              case Yes => Some(false)
-              case No => Some(true)
-              case _ => None
+            legallyIncapable = {
+              indTrustee.mentalCapacityYesNo match {
+                case Yes => Some(false)
+                case No => Some(true)
+                case DontKnow => None
+              }
             }
           )
         )

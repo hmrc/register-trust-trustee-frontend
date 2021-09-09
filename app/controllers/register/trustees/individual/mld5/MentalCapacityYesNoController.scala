@@ -44,7 +44,7 @@ class MentalCapacityYesNoController @Inject()(
                                                nameAction: NameRequiredActionImpl,
                                                formProvider: YesNoDontKnowFormProvider,
                                                view: MentalCapacityYesNoView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[YesNoDontKnow] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
 

@@ -67,8 +67,8 @@ class TrusteeIndividualPrintHelper @Inject()(answerRowConverter: AnswerRowConver
       bound.yesNoQuestion(PassportDetailsYesNoPage(index), s"$prefix.passportDetailsYesNo", PassportDetailsYesNoController.onPageLoad(index, draftId).url),
       bound.passportDetailsQuestion(PassportDetailsPage(index), s"$prefix.passportDetails", PassportDetailsController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(IDCardDetailsYesNoPage(index), s"$prefix.idCardDetailsYesNo", IDCardDetailsYesNoController.onPageLoad(index, draftId).url),
-      bound.passportDetailsQuestion(IDCardDetailsPage(index), s"$prefix.idCardDetails", IDCardDetailsController.onPageLoad(index, draftId).url)
-//      bound.yesNoQuestion(mld5.MentalCapacityYesNoPage(index), s"$prefix.5mld.mentalCapacityYesNo", mld5Rts.MentalCapacityYesNoController.onPageLoad(index, draftId).url)
+      bound.passportDetailsQuestion(IDCardDetailsPage(index), s"$prefix.idCardDetails", IDCardDetailsController.onPageLoad(index, draftId).url),
+      bound.enumQuestion(mld5.MentalCapacityYesNoPage(index), s"$prefix.5mld.mentalCapacityYesNo", mld5Rts.MentalCapacityYesNoController.onPageLoad(index, draftId).url, "site")
     ).flatten
 
   }

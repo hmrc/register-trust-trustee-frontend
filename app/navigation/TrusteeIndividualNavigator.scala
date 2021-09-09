@@ -110,13 +110,8 @@ class TrusteeIndividualNavigator extends Navigator {
         yesCall = IDCardDetailsController.onPageLoad(index, draftId),
         noCall = navigateToFinalPages(index, draftId, ua)
       )
-//    case page @ MentalCapacityYesNoPage(index) => ua =>
-//      yesNoNav(
-//        ua = ua,
-//        fromPage = page,
-//        yesCall = CheckDetailsController.onPageLoad(index, draftId),
-//        noCall = CheckDetailsController.onPageLoad(index, draftId)
-//      )
+    case _ @ MentalCapacityYesNoPage(index) => _ =>
+      CheckDetailsController.onPageLoad(index, draftId)
   }
 
 

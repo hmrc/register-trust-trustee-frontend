@@ -16,32 +16,19 @@
 
 package models
 
-import play.api.libs.json.{JsBoolean, JsError, JsNull, JsPath, JsString, JsSuccess, Reads, Writes}
-
 sealed trait YesNoDontKnow
 
-object YesNoDontKnow {
+object YesNoDontKnow extends Enumerable.Implicits {
 
-  case object Yes extends YesNoDontKnow
+  case object Yes extends WithName("yes") with YesNoDontKnow
+  case object No extends WithName("no") with YesNoDontKnow
+  case object DontKnow extends  WithName("dontKnow") with YesNoDontKnow
 
-  case object No extends YesNoDontKnow
-
-  case object DontKnow extends  YesNoDontKnow
-
-  val values: Set[YesNoDontKnow] = Set(
+  val values: Seq[YesNoDontKnow] = Seq(
     Yes, No, DontKnow
   )
 
   implicit val enumerable: Enumerable[YesNoDontKnow] =
-    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v): _*)
 
-  implicit val reads: Reads[YesNoDontKnow] = {
-    (JsPath \ "mentalCapacityYesNo").readNullable[Boolean] map {
-      case Some(true) => Yes
-      case Some(false) => No
-      case None  => DontKnow
-    }
-  }
-
-  implicit val writes: Writes[YesNoDontKnow] = Writes(value => JsString(value.toString))
 }

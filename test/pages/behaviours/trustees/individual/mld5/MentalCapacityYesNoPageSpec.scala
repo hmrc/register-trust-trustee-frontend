@@ -16,6 +16,7 @@
 
 package pages.behaviours.trustees.individual.mld5
 
+import models.YesNoDontKnow
 import pages.behaviours.PageBehaviours
 import pages.register.trustees.individual.mld5.MentalCapacityYesNoPage
 
@@ -23,11 +24,11 @@ class MentalCapacityYesNoPageSpec extends PageBehaviours {
 
   "MentalCapacityYesNoPage" must {
 
-//    beRetrievable[Boolean](MentalCapacityYesNoPage(0))
-//
-//    beSettable[Boolean](MentalCapacityYesNoPage(0))
-//
-//    beRemovable[Boolean](MentalCapacityYesNoPage(0))
+    beRetrievable[YesNoDontKnow](MentalCapacityYesNoPage(0))
+
+    beSettable[YesNoDontKnow](MentalCapacityYesNoPage(0))
+
+    beRemovable[YesNoDontKnow](MentalCapacityYesNoPage(0))
   }
 
 }
