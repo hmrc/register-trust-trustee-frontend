@@ -44,7 +44,7 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
 
     behave like pageWithTitle(applyView(form), prefix, name)
 
-    behave like pageWithGuidance(applyView(form), prefix, "p1", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4")
+    behave like pageWithGuidance(applyView(form), prefix, "p1", "p2", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4", "p3", "p4", "heading2", "p5", "p6")
 
     behave like pageWithBackLink(applyView(form))
 
