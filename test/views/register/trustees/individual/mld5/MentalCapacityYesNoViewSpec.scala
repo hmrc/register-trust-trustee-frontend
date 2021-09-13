@@ -16,15 +16,16 @@
 
 package views.register.trustees.individual.mld5
 
-import forms.{YesNoDontKnowFormProvider, YesNoFormProvider}
+import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.{QuestionViewBehaviours, YesNoViewBehaviours}
+import viewmodels.RadioOption
+import views.behaviours.{OptionsViewBehaviours, QuestionViewBehaviours}
 import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
-class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] {
+class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] with OptionsViewBehaviours {
 
   val prefix = "trustee.individual.5mld.mentalCapacityYesNo"
   val index = 0
@@ -47,7 +48,13 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
 
     behave like pageWithBackLink(applyView(form))
 
-//    behave like yesNoPage(form, applyView, prefix, None, Seq(name))
+    val options = List(
+      RadioOption(id = "value-yes", value = YesNoDontKnow.Yes.toString, messageKey = "site.yes"),
+      RadioOption(id = "value-no", value = YesNoDontKnow.No.toString, messageKey = "site.no"),
+      RadioOption(id = "value-dontKnow", value = YesNoDontKnow.DontKnow.toString, messageKey = "site.dontKnow")
+    )
+
+    behave like pageWithOptions[YesNoDontKnow](form, applyView, options)
 
     behave like pageWithASubmitButton(applyView(form))
   }

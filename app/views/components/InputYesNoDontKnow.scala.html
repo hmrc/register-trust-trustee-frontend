@@ -28,7 +28,6 @@
 @govukRadios(Radios(
     idPrefix = Some("yes-no"),
     name = field.name,
-    classes = "govuk-radios--inline",
     errorMessage = field.error match {
         case Some(e) => Some(ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args: _*))))
         case None => None
@@ -56,6 +55,9 @@
             content = Text(messages("site.no")),
             attributes = if(disabled && !field.value.contains("no")) Map("disabled" -> "disabled") else Map.empty
        ),
+        RadioItem(
+            divider = Some(messages("site.or"))
+        ),
         RadioItem(
             id = Some(field.id + "-dontKnow"),
             value = Some("dontKnow"),
