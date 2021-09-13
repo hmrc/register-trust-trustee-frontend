@@ -22,11 +22,16 @@ object YesNoDontKnow extends Enumerable.Implicits {
 
   case object Yes extends WithName("yes") with YesNoDontKnow
   case object No extends WithName("no") with YesNoDontKnow
-  case object DontKnow extends  WithName("dontKnow") with YesNoDontKnow
+  case object DontKnow extends WithName("dontKnow") with YesNoDontKnow
 
   val values: Seq[YesNoDontKnow] = Seq(
     Yes, No, DontKnow
   )
+
+  def fromBoolean(v: Option[Boolean]): Option[YesNoDontKnow] = v match {
+    case Some(value) => if (value) Some(Yes) else Some(No)
+    case None => Some(DontKnow)
+  }
 
   implicit val enumerable: Enumerable[YesNoDontKnow] =
     Enumerable(values.map(v => v.toString -> v): _*)

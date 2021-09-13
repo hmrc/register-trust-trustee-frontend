@@ -16,6 +16,7 @@
 
 package mapping.reads
 
+import models.YesNoDontKnow
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.core.pages._
 import play.api.libs.functional.syntax._
@@ -85,5 +86,12 @@ abstract class TrusteeReads[A : ClassTag] {
         Reads(_ => JsError(s"answers at $yesNoPath and $valuePath are in an invalid state"))
     }
   }
+
+  def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
+    (__ \ 'mentalCapacityYesNo).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+      Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
+    }.orElse {
+      (__ \ 'mentalCapacityYesNo).readNullable[YesNoDontKnow]
+    }
 
 }

@@ -17,7 +17,6 @@
 package mapping.reads
 
 import mapping.registration.IdentificationMapper.{buildAddress, buildPassport}
-import models.YesNoDontKnow.{No, Yes}
 import models.{IdentificationType, YesNoDontKnow}
 import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.{Address, FullName, IndividualOrBusiness}
@@ -35,7 +34,7 @@ final case class TrusteeIndividual(override val isLead: Boolean,
                                    passportOrIdCard: Option[PassportOrIdCardDetails],
                                    countryOfResidence: Option[String],
                                    nationality: Option[String],
-                                   mentalCapacityYesNo: YesNoDontKnow) extends Trustee {
+                                   mentalCapacityYesNo: Option[YesNoDontKnow]) extends Trustee {
 
   val identification: Option[IdentificationType] = (nino, passportOrIdCard, address) match {
     case (None, None, None) => None
@@ -75,7 +74,7 @@ object TrusteeIndividual extends TrusteeReads[TrusteeIndividual] {
         passportOrIdCardReads and
         (__ \ "countryOfResidence").readNullable[String] and
         (__ \ "nationality").readNullable[String] and
-        (__ \ "mentalCapacityYesNo").read[YesNoDontKnow]
+        readMentalCapacity
       )(TrusteeIndividual.apply _)
 
   }

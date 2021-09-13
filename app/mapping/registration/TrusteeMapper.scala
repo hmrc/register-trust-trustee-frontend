@@ -43,7 +43,7 @@ class TrusteeMapper {
             countryOfResidence = indTrustee.countryOfResidence,
             nationality = indTrustee.nationality,
             legallyIncapable = {
-              indTrustee.mentalCapacityYesNo match {
+              indTrustee.mentalCapacityYesNo.flatMap {
                 case Yes => Some(false)
                 case No => Some(true)
                 case DontKnow => None
