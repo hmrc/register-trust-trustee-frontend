@@ -422,6 +422,13 @@ class TrusteeIndividualNavigatorSpec extends SpecBase with ScalaCheckPropertyChe
           navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
             .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
         }
+
+        "5MLD=Y, taxable=N -> TrusteeAnswersPage when answer is don't know" in {
+          val answers = noneTaxableAnswers5mld.set(MentalCapacityYesNoPage(index), value = YesNoDontKnow.DontKnow).success.value
+
+          navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, answers)
+            .mustBe(CheckDetailsController.onPageLoad(index, fakeDraftId))
+        }
       }
     }
 
