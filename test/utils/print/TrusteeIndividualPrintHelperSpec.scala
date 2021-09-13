@@ -165,7 +165,7 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
         )
       }
 
-      "trustee has mentalCapacity" in {
+      "trustee has mentalCapacity Yes" in {
         val userAnswers: UserAnswers = baseAnswers
           .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
 
@@ -177,6 +177,38 @@ class TrusteeIndividualPrintHelperSpec extends SpecBase {
             AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
             AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
             AnswerRow("trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), displayName)
+          )
+        )
+      }
+
+      "trustee has mentalCapacity No" in {
+        val userAnswers: UserAnswers = baseAnswers
+          .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
+
+        val result = helper.checkDetailsSection(userAnswers, displayName, index, fakeDraftId)
+
+        result mustBe AnswerSection(
+          None,
+          Seq(
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
+            AnswerRow("trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("No"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), displayName)
+          )
+        )
+      }
+
+      "trustee has mentalCapacity Don't know" in {
+        val userAnswers: UserAnswers = baseAnswers
+          .set(MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).success.value
+
+        val result = helper.checkDetailsSection(userAnswers, displayName, index, fakeDraftId)
+
+        result mustBe AnswerSection(
+          None,
+          Seq(
+            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Individual"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), displayName),
+            AnswerRow("trustee.individual.name.checkYourAnswersLabel", Html("John Doe"), Some(NameController.onPageLoad(index, fakeDraftId).url)),
+            AnswerRow("trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("I don’t know"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), displayName)
           )
         )
       }
