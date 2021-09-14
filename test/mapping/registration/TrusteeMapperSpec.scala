@@ -20,7 +20,7 @@ import base.SpecBase
 import generators.Generators
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
-import models.{AddressType, IdentificationOrgType, IdentificationType, TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers}
+import models.{AddressType, IdentificationOrgType, IdentificationType, TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers, YesNoDontKnow}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.trustees.individual._
 import pages.register.trustees.{individual => ind, organisation => org}
@@ -28,8 +28,7 @@ import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage
 
 import java.time.LocalDate
 
-class TrusteeMapperSpec extends SpecBase with MustMatchers
-  with OptionValues with Generators {
+class TrusteeMapperSpec extends SpecBase with MustMatchers with OptionValues with Generators {
 
   val trusteeMapper: TrusteeMapper = injector.instanceOf[TrusteeMapper]
 
@@ -53,6 +52,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
               .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
               .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
               .set(ind.NamePage(index), FullName("first name", None, "last name")).success.value
+              .set(ind.mld5.MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
@@ -78,6 +78,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             .set(ind.DateOfBirthPage(index), LocalDate.of(1500, 10, 10)).success.value
             .set(ind.NinoYesNoPage(index), true).success.value
             .set(ind.NinoPage(index), "AB123456C").success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).success.value
 
           trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
             trusteeInd = Some(TrusteeIndividualType(
@@ -158,10 +159,12 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             .set(TrusteeOrLeadTrusteePage(index0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Individual).success.value
             .set(ind.NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index0), YesNoDontKnow.DontKnow).success.value
 
             .set(TrusteeOrLeadTrusteePage(index1), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Individual).success.value
             .set(ind.NamePage(index1), FullName("second name", None, "second name")).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index1), YesNoDontKnow.DontKnow).success.value
 
         trusteeMapper.build(userAnswers).value mustBe List(
           TrusteeType(
@@ -249,7 +252,7 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
           .set(ind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
           .set(ind.PassportDetailsYesNoPage(index), false).success.value
           .set(ind.IDCardDetailsYesNoPage(index), false).success.value
-          .set(ind.mld5.MentalCapacityYesNoPage(index), true).success.value
+          .set(ind.mld5.MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
 
         trusteeMapper.build(userAnswers).value.head mustBe TrusteeType(
           trusteeInd = Some(TrusteeIndividualType(
@@ -279,12 +282,12 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
             .set(TrusteeOrLeadTrusteePage(index0), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index0), IndividualOrBusiness.Individual).success.value
             .set(ind.NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(ind.mld5.MentalCapacityYesNoPage(index0), true).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index0), YesNoDontKnow.Yes).success.value
 
             .set(TrusteeOrLeadTrusteePage(index1), Trustee).success.value
             .set(TrusteeIndividualOrBusinessPage(index1), IndividualOrBusiness.Individual).success.value
             .set(ind.NamePage(index1), FullName("second name", None, "second name")).success.value
-            .set(ind.mld5.MentalCapacityYesNoPage(index1), false).success.value
+            .set(ind.mld5.MentalCapacityYesNoPage(index1), YesNoDontKnow.No).success.value
 
         trusteeMapper.build(userAnswers).value mustBe List(
           TrusteeType(
@@ -508,9 +511,6 @@ class TrusteeMapperSpec extends SpecBase with MustMatchers
       }
 
     }
-
-
-
 
   }
 

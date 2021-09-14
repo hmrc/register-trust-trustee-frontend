@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
+import forms.mappings.Mappings
 import models.YesNoDontKnow
-import queries.{Gettable, Settable}
+import play.api.data.Form
 
-trait QuestionPage[A] extends Page with Gettable[A] with Settable[A]
+import javax.inject.Inject
+
+class YesNoDontKnowFormProvider @Inject() extends Mappings {
+
+  def withPrefix(prefix: String): Form[YesNoDontKnow] =
+    Form(
+      "value" -> enumerable[YesNoDontKnow](requiredKey = s"$prefix.error.required")
+    )
+}

@@ -16,7 +16,7 @@
 
 package generators
 
-import models.Status
+import models.{Status, YesNoDontKnow}
 
 import java.time.LocalDate
 import models.core.pages._
@@ -57,6 +57,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryAddATrustee: Arbitrary[AddATrustee] =
     Arbitrary {
       Gen.oneOf(AddATrustee.values)
+    }
+
+  implicit lazy val arbitraryYesNoDontKnow: Arbitrary[YesNoDontKnow] =
+    Arbitrary {
+      Gen.oneOf(YesNoDontKnow.values)
     }
 
   implicit lazy val arbitraryTrusteeOrIndividual: Arbitrary[IndividualOrBusiness] =

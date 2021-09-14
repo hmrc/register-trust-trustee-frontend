@@ -15,12 +15,12 @@
  *@
 
 @import controllers.register.trustees.individual.mld5.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo, BulletList, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNoDontKnow, BulletList, Heading}
 
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
-    inputYesNo: InputYesNo,
+    inputYesNoDontKnow: InputYesNoDontKnow,
     submitButton: SubmitButton,
     bulletList: BulletList,
     formHelper: FormWithCSRF,
@@ -31,6 +31,7 @@
 
 @content = {
     <p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p1")</p>
+    <p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p2")</p>
 
     @bulletList(
         "trustee.individual.5mld.mentalCapacityYesNo",
@@ -41,6 +42,13 @@
             "bulletpoint4"
         )
     )
+
+    <p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p3")</p>
+    <p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p4")</p>
+
+    <h2>@messages("trustee.individual.5mld.mentalCapacityYesNo.heading2")</h2>
+    <p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p5")</p>
+    <p>@messages("trustee.individual.5mld.mentalCapacityYesNo.p6")</p>
 }
 
 @main_template(
@@ -56,7 +64,7 @@
 
         @content
 
-        @inputYesNo(
+        @inputYesNoDontKnow(
             field = form("value"),
             label = messages("trustee.individual.5mld.mentalCapacityYesNo.heading", name),
             legendClass = Some("govuk-visually-hidden"),

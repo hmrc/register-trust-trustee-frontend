@@ -16,7 +16,7 @@
 
 package pages.behaviours
 
-import models.UserAnswers
+import models.{UserAnswers, YesNoDontKnow}
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.DetailsChoice.Passport
 import models.registration.pages.PassportOrIdCardDetails
@@ -82,7 +82,7 @@ object SetUserAnswers {
         .set(tind.PassportDetailsPage(index), passportOrIdCardDetails).success.value
         .set(tind.IDCardDetailsYesNoPage(index), true).success.value
         .set(tind.IDCardDetailsPage(index), passportOrIdCardDetails).success.value
-        .set(tind.mld5.MentalCapacityYesNoPage(index), true).success.value
+        .set(tind.mld5.MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
     }
 
     def setLeadBusinessAnswers(index: Int): UserAnswers = {
