@@ -17,8 +17,8 @@
 package controllers.register.trustees.individual.mld5
 
 import base.SpecBase
-import forms.{YesNoDontKnowFormProvider, YesNoFormProvider}
 import config.annotations.TrusteeIndividual
+import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
