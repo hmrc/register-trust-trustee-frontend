@@ -29,8 +29,8 @@ class LeadTrusteeOrganisationNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case UkRegisteredYesNoPage(index) => _ => rts.NameController.onPageLoad(index, draftId)
-    case NamePage(index) => ua => navigateAwayFromNameQuestion(ua, index, draftId, ua.is5mldEnabled)
-    case UtrPage(index) => ua => navigateAwayFromUtrQuestions(draftId, index, ua.is5mldEnabled)
+    case NamePage(index) => ua => navigateAwayFromNameQuestion(ua, index, draftId)
+    case UtrPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
@@ -62,19 +62,11 @@ class LeadTrusteeOrganisationNavigator extends Navigator {
       )
   }
 
-  private def navigateAwayFromNameQuestion(ua: ReadableUserAnswers, index: Int, draftId: String, is5mldEnabled: Boolean): Call = {
+  private def navigateAwayFromNameQuestion(ua: ReadableUserAnswers, index: Int, draftId: String): Call = {
     ua.get(UkRegisteredYesNoPage(index)) match {
       case Some(true) => rts.UtrController.onPageLoad(index, draftId)
-      case Some(false) => navigateAwayFromUtrQuestions(draftId, index, is5mldEnabled)
+      case Some(false) => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
-
-  private def navigateAwayFromUtrQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
-    } else {
-      rts.AddressUkYesNoController.onPageLoad(index, draftId)
     }
   }
 

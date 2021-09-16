@@ -30,37 +30,33 @@ class TrustsIndividualCheckService @Inject()(connector: TrustsIndividualCheckCon
   def matchLeadTrustee(userAnswers: UserAnswers, index: Int)
                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustsIndividualCheckServiceResponse] = {
 
-    if (userAnswers.is5mldEnabled) {
-      val body: Option[IdMatchRequest] = for {
-        id <- generateId(userAnswers.draftId)
-        nino <- userAnswers.get(TrusteesNinoPage(index))
-        name <- userAnswers.get(TrusteesNamePage(index))
-        dob <- userAnswers.get(TrusteesDateOfBirthPage(index))
-      } yield {
-        IdMatchRequest(
-          id = id,
-          nino = nino.toUpperCase,
-          surname = name.lastName.capitalize,
-          forename = name.firstName.capitalize,
-          birthDate = dob.toString
-        )
-      }
+    val body: Option[IdMatchRequest] = for {
+      id <- generateId(userAnswers.draftId)
+      nino <- userAnswers.get(TrusteesNinoPage(index))
+      name <- userAnswers.get(TrusteesNamePage(index))
+      dob <- userAnswers.get(TrusteesDateOfBirthPage(index))
+    } yield {
+      IdMatchRequest(
+        id = id,
+        nino = nino.toUpperCase,
+        surname = name.lastName.capitalize,
+        forename = name.firstName.capitalize,
+        birthDate = dob.toString
+      )
+    }
 
-      body match {
-        case Some(idMatchRequest) =>
-          connector.matchLeadTrustee(idMatchRequest) map {
-            case SuccessfulOrUnsuccessfulMatchResponse(_, true) => SuccessfulMatchResponse
-            case SuccessfulOrUnsuccessfulMatchResponse(_, false) | NinoNotFoundResponse => UnsuccessfulMatchResponse
-            case AttemptLimitExceededResponse => LockedMatchResponse
-            case ServiceUnavailableResponse => ServiceUnavailableErrorResponse
-            case _ => TechnicalDifficultiesErrorResponse
-          }
-        case _ =>
-          logger.error(s"[matchLeadTrustee] Unable to build request body.")
-          Future.successful(IssueBuildingPayloadResponse)
-      }
-    } else {
-      Future.successful(ServiceNotIn5mldModeResponse)
+    body match {
+      case Some(idMatchRequest) =>
+        connector.matchLeadTrustee(idMatchRequest) map {
+          case SuccessfulOrUnsuccessfulMatchResponse(_, true) => SuccessfulMatchResponse
+          case SuccessfulOrUnsuccessfulMatchResponse(_, false) | NinoNotFoundResponse => UnsuccessfulMatchResponse
+          case AttemptLimitExceededResponse => LockedMatchResponse
+          case ServiceUnavailableResponse => ServiceUnavailableErrorResponse
+          case _ => TechnicalDifficultiesErrorResponse
+        }
+      case _ =>
+        logger.error(s"[matchLeadTrustee] Unable to build request body.")
+        Future.successful(IssueBuildingPayloadResponse)
     }
   }
 

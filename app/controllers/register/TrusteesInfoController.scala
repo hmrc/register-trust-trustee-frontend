@@ -19,33 +19,24 @@ package controllers.register
 import controllers.actions.register.RegistrationIdentifierAction
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.{TrusteesInfo5MLDView, TrusteesInfoView}
+import views.html.register.TrusteesInfoView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class TrusteesInfoController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         identify: RegistrationIdentifierAction,
-                                        featureFlagService: TrustsStoreService,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: TrusteesInfoView,
-                                        view5mld: TrusteesInfo5MLDView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        view: TrusteesInfoView
+                                      ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(draftId: String): Action[AnyContent] = identify.async {
+  def onPageLoad(draftId: String): Action[AnyContent] = identify {
     implicit request =>
-      featureFlagService.is5mldEnabled().map {
-        case true =>
-          Ok(view5mld(draftId))
-        case _ =>
-          Ok(view(draftId))
-      }
+      Ok(view(draftId))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = identify { _ =>
-      Redirect(controllers.register.routes.TrusteeOrLeadTrusteeController.onPageLoad(0, draftId))
+    Redirect(controllers.register.routes.TrusteeOrLeadTrusteeController.onPageLoad(0, draftId))
   }
 }

@@ -28,7 +28,7 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
 
   private val messageKeyPrefix = "leadTrustee.individual.trusteeDetailsChoice"
 
-  private val name: FullName = FullName("First", None ,"last")
+  private val name: FullName = FullName("First", None, "last")
   val index = 0
 
   lazy val form: Form[DetailsChoice] = injector.instanceOf[DetailsChoiceFormProvider].withPrefix(messageKeyPrefix)
@@ -38,54 +38,24 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
 
   "TrusteeDetailsChoiceView" when {
 
-    "4mld" must {
+    val view = viewFor[TrusteeDetailsChoiceView](Some(emptyUserAnswers))
 
-      val is5mldEnabled: Boolean = false
+    def applyView(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(form, fakeDraftId, index, name.toString)(fakeRequest, messages)
 
-      val view = viewFor[TrusteeDetailsChoiceView](Some(emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)))
+    behave like normalPage(applyView(form), messageKeyPrefix)
 
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name.toString, is5mldEnabled)(fakeRequest, messages)
+    behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
-      behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like pageWithBackLink(applyView(form))
 
-      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
+    behave like pageWithOptions(form, applyView, DetailsChoice.options)
 
-      behave like pageWithBackLink(applyView(form))
+    behave like pageWithASubmitButton(applyView(form))
 
-      behave like pageWithOptions(form, applyView, DetailsChoice.options(is5mldEnabled))
-
-      behave like pageWithASubmitButton(applyView(form))
-
-      "not show additional content" in {
-        val doc = asDocument(applyView(form))
-        assertDoesNotContainText(doc, additionalContent)
-      }
-    }
-
-    "5mld" must {
-
-      val is5mldEnabled: Boolean = true
-
-      val view = viewFor[TrusteeDetailsChoiceView](Some(emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)))
-
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, name.toString, is5mldEnabled)(fakeRequest, messages)
-
-      behave like normalPage(applyView(form), messageKeyPrefix)
-
-      behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
-
-      behave like pageWithBackLink(applyView(form))
-
-      behave like pageWithOptions(form, applyView, DetailsChoice.options(is5mldEnabled))
-
-      behave like pageWithASubmitButton(applyView(form))
-
-      "show additional content" in {
-        val doc = asDocument(applyView(form))
-        assertContainsText(doc, additionalContent)
-      }
+    "show additional content" in {
+      val doc = asDocument(applyView(form))
+      assertContainsText(doc, additionalContent)
     }
   }
 }

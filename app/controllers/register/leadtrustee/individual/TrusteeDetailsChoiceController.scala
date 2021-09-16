@@ -60,7 +60,7 @@ class TrusteeDetailsChoiceController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName, request.userAnswers.is5mldEnabled))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
 
@@ -69,7 +69,7 @@ class TrusteeDetailsChoiceController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, request.userAnswers.is5mldEnabled))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
           for {
