@@ -17,8 +17,8 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.register.leadtrustee.individual.{routes => rts}
 import controllers.register.leadtrustee.individual.mld5.{routes => mld5Rts}
+import controllers.register.leadtrustee.individual.{routes => rts}
 import models.ReadableUserAnswers
 import models.registration.pages.DetailsChoice.{IdCard, Passport}
 import pages.Page
@@ -30,12 +30,12 @@ class LeadTrusteeIndividualNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteesNamePage(index) => _ => rts.DateOfBirthController.onPageLoad(index, draftId)
-    case TrusteesDateOfBirthPage(index) => ua => navigateAwayFromDateOfBirthPage(draftId, index, ua.is5mldEnabled)
+    case TrusteesDateOfBirthPage(index) => _ => mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId)
     case CountryOfNationalityPage(index) => _ => rts.NinoYesNoController.onPageLoad(index, draftId)
-    case TrusteesNinoPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
+    case TrusteesNinoPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
-    case IDCardDetailsPage(index) => ua => navigateAwayFromNinoOrIdPages(draftId, index, ua.is5mldEnabled)
+    case PassportDetailsPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    case IDCardDetailsPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
     case EmailAddressPage(index) => _ => rts.TelephoneNumberController.onPageLoad(index, draftId)
@@ -90,19 +90,4 @@ class LeadTrusteeIndividualNavigator extends Navigator {
     }
   }
 
-  private def navigateAwayFromDateOfBirthPage(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId)
-    } else {
-      rts.NinoYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
-  private def navigateAwayFromNinoOrIdPages(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
-    } else {
-      rts.LiveInTheUKYesNoController.onPageLoad(index, draftId)
-    }
-  }
 }

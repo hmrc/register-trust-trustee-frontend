@@ -33,8 +33,8 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.{routes => mld5}
+import controllers.register.trustees.organisation.routes._
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.trustees.organisation._
@@ -45,7 +45,7 @@ class TrusteeOrganisationNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => ua => navigateAwayFromNamePage(draftId, index, ua)
-    case UtrPage(index) => ua => navigateAwayFromUTRQuestions(draftId, index, ua)
+    case UtrPage(index) => _ => mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case UkAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => CheckDetailsController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua => addressOrCheckAnswersRoute(draftId, index, ua)
@@ -57,7 +57,7 @@ class TrusteeOrganisationNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = UtrController.onPageLoad(index, draftId),
-        noCall = navigateAwayFromUTRQuestions(draftId, index, ua)
+        noCall = mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
@@ -94,14 +94,6 @@ class TrusteeOrganisationNavigator extends Navigator {
       UtrYesNoController.onPageLoad(index, draftId)
     } else {
       mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
-  private def navigateAwayFromUTRQuestions(draftId: String, index: Int, userAnswers: ReadableUserAnswers): Call = {
-    if (userAnswers.is5mldEnabled) {
-      mld5.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      addressOrCheckAnswersRoute(draftId, index, userAnswers)
     }
   }
 

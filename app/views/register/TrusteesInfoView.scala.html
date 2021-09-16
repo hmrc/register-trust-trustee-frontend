@@ -15,52 +15,42 @@
  *@
 
 @import controllers.register.routes._
-@import views.html.components.{HeadingWithCaption, BulletList, SubmitButton, Warning}
+@import views.html.components.{HeadingWithCaption, SubmitButton, BulletList, Warning}
 
 @this(
+    main_template: MainTemplate,
     headingWithCaption: HeadingWithCaption,
     bulletList: BulletList,
-    button: SubmitButton,
-    main_template: MainTemplate,
     warning: Warning,
+    button: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trusteesInfo.title"),
+    title = messages("trusteesInfo.5mld.title"),
     showBackLink = true
 ) {
 
-    @headingWithCaption("trusteesInfo")
+    @headingWithCaption("trusteesInfo.5mld")
 
-    <h2>@messages("trusteesInfo.subheading1")</h2>
+    <h2>@messages("trusteesInfo.5mld.subheading1")</h2>
 
-    <p>@messages("trusteesInfo.paragraph1")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph1")</p>
 
-    <p>@messages("trusteesInfo.paragraph2")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph2")</p>
+
+    <h2>@messages("trusteesInfo.5mld.subheading2")</h2>
+
+    <p>@messages("trusteesInfo.5mld.paragraph3")</p>
 
     @bulletList(
-        "trusteesInfo",
+        "trusteesInfo.5mld",
         List(
             "bulletpoint1",
             "bulletpoint2",
-            "bulletpoint3"
-        )
-    )
-
-    <p>@messages("trusteesInfo.paragraph3")</p>
-
-    <p>@messages("trusteesInfo.paragraph4")</p>
-
-    <h2>@messages("trusteesInfo.subheading2")</h2>
-
-    <p>@messages("trusteesInfo.paragraph5")</p>
-
-    @bulletList(
-        "trusteesInfo",
-        List(
+            "bulletpoint3",
             "bulletpoint4",
             "bulletpoint5",
             "bulletpoint6",
@@ -69,11 +59,60 @@
         )
     )
 
-    <p>@messages("trusteesInfo.paragraph6")</p>
+    <p>@messages("trusteesInfo.5mld.paragraph4")</p>
 
-    @warning("trusteesInfo")
+    <p>@messages("trusteesInfo.5mld.paragraph5")</p>
+
+    <p>@messages("trusteesInfo.5mld.paragraph6")</p>
+
+    <p>@messages("trusteesInfo.5mld.paragraph7")</p>
+
+    @bulletList(
+        "trusteesInfo.5mld",
+        List(
+            "bulletpoint9",
+            "bulletpoint10",
+            "bulletpoint11",
+            "bulletpoint12"
+        )
+    )
+
+    <h2>@messages("trusteesInfo.5mld.subheading3")</h2>
+
+    <p>@messages("trusteesInfo.5mld.paragraph8")</p>
+
+    @bulletList(
+        "trusteesInfo.5mld",
+        List(
+            "bulletpoint13",
+            "bulletpoint14",
+            "bulletpoint15",
+            "bulletpoint16",
+            "bulletpoint17",
+            "bulletpoint18"
+        )
+    )
+
+    <p>@messages("trusteesInfo.5mld.paragraph9")</p>
+
+    <details class="govuk-details section" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+                @messages("trusteesInfo.5mld.details")
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            <h3>@messages("trusteesInfo.5mld.details.subheading1")</h3>
+            <p>@messages("trusteesInfo.5mld.details.paragraph1")</p>
+            <h3>@messages("trusteesInfo.5mld.details.subheading2")</h3>
+            <p>@messages("trusteesInfo.5mld.details.paragraph2")</p>
+        </div>
+    </details>
+
+    @warning("trusteesInfo.5mld")
 
     @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
         @button(Some(messages("site.onlyContinue")))
     }
+
 }

@@ -30,7 +30,7 @@
     link: Link
 )
 
-@(form: Form[_], draftId: String, index: Int, name: String, is5mldEnabled: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("leadTrustee.individual.trusteeDetailsChoice.title")}",
@@ -39,27 +39,23 @@
 
     @formHelper(action = TrusteeDetailsChoiceController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors, DetailsChoice.options(is5mldEnabled))
+        @errorSummary(form.errors, DetailsChoice.options)
 
         @heading("leadTrustee.individual.trusteeDetailsChoice.heading", Some(name))
 
-        @if(is5mldEnabled){
-            <p>@messages("leadTrustee.individual.5mld.trusteeDetailsChoice.paragraph1")</p>
-        }
+        <p>@messages("leadTrustee.individual.5mld.trusteeDetailsChoice.paragraph1")</p>
 
         @inputRadio(
             field = form("value"),
             legend = messages("leadTrustee.individual.trusteeDetailsChoice.heading", name),
             headingIsLegend = false,
-            inputs = mapRadioOptionsToRadioItems(form("value"), DetailsChoice.options(is5mldEnabled)),
+            inputs = mapRadioOptionsToRadioItems(form("value"), DetailsChoice.options),
             legendClass = Some("govuk-fieldset__legend--m govuk-visually-hidden"),
             inline = false
         )
 
         @submitButton()
 
-        @if(is5mldEnabled) {
-            <p>@link(appConfig.registrationProgressUrl(draftId), "reg-progress", messages("site.reg-progress"))</p>
-        }
+        <p>@link(appConfig.registrationProgressUrl(draftId), "reg-progress", messages("site.reg-progress"))</p>
     }
 }

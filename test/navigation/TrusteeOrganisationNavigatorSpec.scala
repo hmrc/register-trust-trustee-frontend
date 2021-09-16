@@ -17,16 +17,14 @@
 package navigation
 
 import base.SpecBase
-import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.{routes => mld5Rts}
+import controllers.register.trustees.organisation.routes._
 import generators.Generators
 import models._
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.trustees.organisation.mld5.CountryOfResidencePage
-import pages.register.trustees.organisation.mld5.CountryOfResidenceInTheUkYesNoPage
-import pages.register.trustees.organisation.mld5.CountryOfResidenceYesNoPage
-import pages.register.trustees.organisation._
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.register.trustees.organisation._
+import pages.register.trustees.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -37,85 +35,9 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
 
   "TrusteeOrganisation Navigator" when {
 
-    "A 4mld Trust" must {
+    "A taxable Trust" must {
 
-      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
-
-      "Name page -> UTR yes no page" in {
-        navigator.nextPage(NamePage(index), fakeDraftId, baseAnswers)
-          .mustBe(UtrYesNoController.onPageLoad(index, fakeDraftId))
-      }
-
-      "UTR yes no page -> YES -> UTR page" in {
-        val answers = baseAnswers
-          .set(UtrYesNoPage(index), true).success.value
-
-        navigator.nextPage(UtrYesNoPage(index), fakeDraftId, answers)
-          .mustBe(UtrController.onPageLoad(index, fakeDraftId))
-      }
-
-      "UTR yes no page -> NO -> Do you know address page" in {
-        val answers = baseAnswers
-          .set(UtrYesNoPage(index), false).success.value
-
-        navigator.nextPage(UtrYesNoPage(index), fakeDraftId, answers)
-          .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
-      }
-
-      "UTR page -> Check your answers page" in {
-        val answers = baseAnswers
-          .set(UtrYesNoPage(index), true).success.value
-
-        navigator.nextPage(UtrPage(index), fakeDraftId, answers)
-          .mustBe(CheckDetailsController.onPageLoad(index, draftId))
-      }
-
-      "Do you know address page -> YES -> Is address in UK page" in {
-        val answers = baseAnswers
-          .set(AddressYesNoPage(index), true).success.value
-
-        navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
-          .mustBe(AddressUkYesNoController.onPageLoad(index, fakeDraftId))
-      }
-
-      "Do you know address page -> NO -> Check your answers page" in {
-        val answers = baseAnswers
-          .set(AddressYesNoPage(index), false).success.value
-
-        navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
-          .mustBe(CheckDetailsController.onPageLoad(index, draftId))
-      }
-
-      "Is address in UK page -> YES -> UK address page" in {
-        val answers = baseAnswers
-          .set(AddressUkYesNoPage(index), true).success.value
-
-        navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
-          .mustBe(UkAddressController.onPageLoad(index, fakeDraftId))
-      }
-
-      "Is address in UK page -> NO -> International address page" in {
-        val answers = baseAnswers
-          .set(AddressUkYesNoPage(index), false).success.value
-
-        navigator.nextPage(AddressUkYesNoPage(index), fakeDraftId, answers)
-          .mustBe(InternationalAddressController.onPageLoad(index, fakeDraftId))
-      }
-
-      "UK address page -> Check your answers page" in {
-        navigator.nextPage(UkAddressPage(index), fakeDraftId, baseAnswers)
-          .mustBe(CheckDetailsController.onPageLoad(index, draftId))
-      }
-
-      "International address page -> Check your answers page" in {
-        navigator.nextPage(InternationalAddressPage(index), fakeDraftId, baseAnswers)
-          .mustBe(CheckDetailsController.onPageLoad(index, draftId))
-      }
-
-    }
-    "A 5mld taxable Trust" must {
-
-      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+      val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
 
       "Name page -> UTR yes no page" in {
         navigator.nextPage(NamePage(index), fakeDraftId, baseAnswers)
@@ -200,7 +122,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         forAll(arbitrary[UserAnswers]) {
           baseAnswers =>
 
-            val mld5Answers = baseAnswers.copy(is5mldEnabled = true, isTaxable = true)
+            val mld5Answers = baseAnswers.copy(isTaxable = true)
               .set(UtrYesNoPage(index), true).success.value
               .set(CountryOfResidencePage(index), "FR").success.value
 
@@ -213,7 +135,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         forAll(arbitrary[UserAnswers]) {
           baseAnswers =>
 
-            val mld5Answers = baseAnswers.copy(is5mldEnabled = true, isTaxable = true)
+            val mld5Answers = baseAnswers.copy(isTaxable = true)
               .set(UtrYesNoPage(index), false).success.value
               .set(CountryOfResidencePage(index), "FR").success.value
 
@@ -265,9 +187,9 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
 
     }
 
-    "A 5mld none taxable Trust" must {
+    "A none taxable Trust" must {
 
-      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+      val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
       "Name page -> Country Of Residence page" in {
         navigator.nextPage(NamePage(index), fakeDraftId, baseAnswers)

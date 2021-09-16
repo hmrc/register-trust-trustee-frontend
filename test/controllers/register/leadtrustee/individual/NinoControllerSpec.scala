@@ -122,40 +122,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
     }
 
     "redirect to the next page when valid data is submitted" when {
-
-      "in 4mld mode" in {
-
-        val mockService = mock[TrustsIndividualCheckService]
-
-        when(mockService.matchLeadTrustee(any(), any())(any(), any()))
-          .thenReturn(Future.successful(ServiceNotIn5mldModeResponse))
-
-        val userAnswers = baseAnswers
-          .set(TrusteesNinoPage(index), validAnswer).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator()),
-            bind[TrustsIndividualCheckService].toInstance(mockService)
-          ).build()
-
-        val request = FakeRequest(POST, ninoRoute)
-          .withFormUrlEncodedBody(("value", validAnswer))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
-
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
-        uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
-
-        application.stop()
-      }
-
-      "in 5mld mode and SuccessfulMatchResponse" in {
+      "SuccessfulMatchResponse" in {
 
         val mockService = mock[TrustsIndividualCheckService]
 

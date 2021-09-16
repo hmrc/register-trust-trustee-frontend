@@ -19,12 +19,10 @@ package controllers.register.trustees.individual.mld5
 import config.FrontendAppConfig
 import config.annotations.TrusteeIndividual
 import controllers.actions._
-import forms.{YesNoDontKnowFormProvider, YesNoFormProvider}
-
-import javax.inject.Inject
-import navigation.Navigator
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
+import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
+import navigation.Navigator
 import pages.register.trustees.individual.mld5.MentalCapacityYesNoPage
 import play.api.data.Form
 import play.api.i18n._
@@ -33,6 +31,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class MentalCapacityYesNoController @Inject()(

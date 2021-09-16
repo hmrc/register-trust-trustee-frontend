@@ -47,136 +47,66 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
   "TrusteeDetailsChoice Controller" when {
 
-    "4mld" must {
+    val baseAnswers = answersWithName
 
-      val is5mldEnabled = false
-      val baseAnswers = answersWithName.copy(is5mldEnabled = is5mldEnabled)
+    "return OK and the correct view for a GET" in {
 
-      "return OK and the correct view for a GET" in {
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-        val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
 
-        val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val result = route(application, request).value
 
-        val result = route(application, request).value
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
-        val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      status(result) mustEqual OK
 
-        status(result) mustEqual OK
+      contentAsString(result) mustEqual
+        view(form, fakeDraftId, index, trusteeName.toString)(request, messages).toString
 
-        contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, trusteeName.toString, is5mldEnabled)(request, messages).toString
-
-        application.stop()
-      }
-
-      "populate the view correctly on a GET when the question has previously been answered" in {
-
-        val userAnswers = baseAnswers
-          .set(TrusteeDetailsChoicePage(index), validAnswer).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
-
-        val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(form.fill(validAnswer), fakeDraftId, index, trusteeName.toString, is5mldEnabled)(request, messages).toString
-
-        application.stop()
-      }
-
-      "return a Bad Request and errors when invalid data is submitted" in {
-
-        val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
-
-        val request = FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", ""))
-
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-
-        contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, trusteeName.toString, is5mldEnabled)(request, messages).toString
-
-        application.stop()
-      }
+      application.stop()
     }
 
-    "5mld" must {
+    "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val is5mldEnabled = true
-      val baseAnswers = answersWithName.copy(is5mldEnabled = is5mldEnabled)
+      val userAnswers = baseAnswers
+        .set(TrusteeDetailsChoicePage(index), validAnswer).success.value
 
-      "return OK and the correct view for a GET" in {
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
 
-        val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
-        val result = route(application, request).value
+      val result = route(application, request).value
 
-        val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      status(result) mustEqual OK
 
-        status(result) mustEqual OK
+      contentAsString(result) mustEqual
+        view(form.fill(validAnswer), fakeDraftId, index, trusteeName.toString)(request, messages).toString
 
-        contentAsString(result) mustEqual
-          view(form, fakeDraftId, index, trusteeName.toString, is5mldEnabled)(request, messages).toString
+      application.stop()
+    }
 
-        application.stop()
-      }
+    "return a Bad Request and errors when invalid data is submitted" in {
 
-      "populate the view correctly on a GET when the question has previously been answered" in {
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-        val userAnswers = baseAnswers
-          .set(TrusteeDetailsChoicePage(index), validAnswer).success.value
+      val request = FakeRequest(POST, trusteeDetailsChoiceUKRoute)
+        .withFormUrlEncodedBody(("value", ""))
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val boundForm = form.bind(Map("value" -> ""))
 
-        val request = FakeRequest(GET, trusteeDetailsChoiceUKRoute)
+      val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
 
-        val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
+      val result = route(application, request).value
 
-        val result = route(application, request).value
+      status(result) mustEqual BAD_REQUEST
 
-        status(result) mustEqual OK
+      contentAsString(result) mustEqual
+        view(boundForm, fakeDraftId, index, trusteeName.toString)(request, messages).toString
 
-        contentAsString(result) mustEqual
-          view(form.fill(validAnswer), fakeDraftId, index, trusteeName.toString, is5mldEnabled)(request, messages).toString
-
-        application.stop()
-      }
-
-      "return a Bad Request and errors when invalid data is submitted" in {
-
-        val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
-
-        val request = FakeRequest(POST, trusteeDetailsChoiceUKRoute)
-          .withFormUrlEncodedBody(("value", ""))
-
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[TrusteeDetailsChoiceView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-
-        contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, index, trusteeName.toString, is5mldEnabled)(request, messages).toString
-
-        application.stop()
-      }
+      application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
