@@ -384,21 +384,18 @@ trustee.individual.5mld.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad br
 trustee.individual.5mld.mentalCapacityYesNo.title=A oes gan yr ymddiriedolwr alluedd meddyliol ar adeg y cofrestru?
 trustee.individual.5mld.mentalCapacityYesNo.heading=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
 trustee.individual.5mld.mentalCapacityYesNo.checkYourAnswersLabel=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
+trustee.individual.5mld.mentalCapacityYesNo.error.required=Dewiswch ‘Iawn’ os oes gan yr ymddiriedolwr alluedd meddyliol ar adeg y cofrestru
+trustee.individual.5mld.mentalCapacityYesNo.p1=Nid oes gan ymddiriedolwr alluedd meddyliol os yw’n analluog yn ôl y gyfraith i ddeall gwybodaeth am yr ymddiriedolaeth
+trustee.individual.5mld.mentalCapacityYesNo.p2=Er enghraifft, gall hyn fod oherwydd
 trustee.individual.5mld.mentalCapacityYesNo.bulletpoint1=salwch meddwl
 trustee.individual.5mld.mentalCapacityYesNo.bulletpoint2=anabledd dysgu
 trustee.individual.5mld.mentalCapacityYesNo.bulletpoint3=dementia neu gyflwr cysylltiedig
 trustee.individual.5mld.mentalCapacityYesNo.bulletpoint4=methu â chyfathrebu
-trustee.individual.5mld.mentalCapacityYesNo.p3= Bydd CThEM yn cymryd bod gan yr ymddiriedolwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
-trustee.individual.5mld.mentalCapacityYesNo.p4= Os nad ydych yn siŵr a oes gan yr ymddiriedolwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
-trustee.individual.5mld.mentalCapacityYesNo.p5= Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
-trustee.individual.5mld.mentalCapacityYesNo.p6= Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
-
-# Needs welsh changed (translations on 15/09)
-trustee.individual.5mld.mentalCapacityYesNo.error.required=CHANGE ME: Dewiswch ‘Iawn’ os ydych yn gwybod bod gan yr ymddiriedolwr alluedd meddyliol
-trustee.individual.5mld.mentalCapacityYesNo.p1= CHANGE ME: Nid oes gan ymddiriedolwr alluedd meddyliol os nad yw’n gallu deall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
-trustee.individual.5mld.mentalCapacityYesNo.p2= CHANGE ME NEW LINE
-trustee.individual.5mld.mentalCapacityYesNo.heading2 = CHANGE ME NEW HEADING
-
+trustee.individual.5mld.mentalCapacityYesNo.heading2=Pam mae CThEM yn gofyn y cwestiwn hwn
+trustee.individual.5mld.mentalCapacityYesNo.p3=Bydd CThEM yn cymryd bod gan yr ymddiriedolwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
+trustee.individual.5mld.mentalCapacityYesNo.p4=Os nad ydych yn siŵr a oes gan yr ymddiriedolwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
+trustee.individual.5mld.mentalCapacityYesNo.p5=Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
+trustee.individual.5mld.mentalCapacityYesNo.p6=Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
 
 trustee.individual.addressUkYesNo.checkYourAnswersLabel=A yw {0} yn byw yn y DU?
 trustee.individual.addressUkYesNo.error.required=Dewiswch ‘Iawn’ os yw’r ymddiriedolwr yn byw yn y DU

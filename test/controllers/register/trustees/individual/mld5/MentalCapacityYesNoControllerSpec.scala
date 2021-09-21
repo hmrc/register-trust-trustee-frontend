@@ -71,8 +71,6 @@ class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      println(Some(userAnswers))
-
       val request = FakeRequest(GET, mentalCapacityYesNo)
 
       val view = application.injector.instanceOf[MentalCapacityYesNoView]
