@@ -18,7 +18,6 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.Status.InProgress
 import models.{RegistrationSubmission, SubmissionDraftResponse}
 import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
@@ -62,11 +61,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with Optio
             |}
             |""".stripMargin)
 
-        val submissionDraftSetData = RegistrationSubmission.DataSet(
-          sectionData,
-          Some(InProgress),
-          List.empty,
-          List.empty)
+        val submissionDraftSetData = RegistrationSubmission.DataSet(sectionData, List.empty, List.empty)
 
         server.stubFor(
           post(urlEqualTo(setSubmissionUrl))
