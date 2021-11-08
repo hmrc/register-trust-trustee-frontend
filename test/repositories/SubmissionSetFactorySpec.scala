@@ -18,7 +18,6 @@ package repositories
 
 import base.SpecBase
 import models.RegistrationSubmission.{AnswerRow, AnswerSection}
-import models.Status.Completed
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, UKAddress}
 import models.registration.pages.AddATrustee
@@ -94,15 +93,13 @@ class SubmissionSetFactorySpec extends SpecBase {
         "return a valid empty data set" in {
           factory.createFrom(emptyUserAnswers) mustBe RegistrationSubmission.DataSet(
             data = Json.toJson(emptyUserAnswers),
-            status = None,
             registrationPieces = List.empty,
-            answerSections = List.empty
-          )
+            answerSections = List.empty)
         }
       }
 
-      "there is a completed lead trustee, and section flagged as complete" must {
-        "return Completed with mapped data" in {
+      "there is a lead trustee" must {
+        "return with mapped data" in {
           val leadTrusteeOnlySections = List(
             AnswerSection(
               headingKey = Some("answersPage.section.trustee.subheading"),
@@ -124,23 +121,18 @@ class SubmissionSetFactorySpec extends SpecBase {
           val userAnswers = addLeadTrustee(0, emptyUserAnswers)
             .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 
-          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
-            Json.toJson(userAnswers),
-            Some(Completed),
-            List(
-              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
-              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
-              RegistrationSubmission.MappedPiece("correspondence/address",
-                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
-              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
-            ),
-            leadTrusteeOnlySections
-          )
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(Json.toJson(userAnswers), List(
+                        RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
+                        RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+                        RegistrationSubmission.MappedPiece("correspondence/address",
+                          Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
+                        RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
+                      ), leadTrusteeOnlySections)
         }
       }
 
-      "there is a completed lead trustee and trustee, and section flagged as complete" must {
-        "return Completed with mapped data" in {
+      "there is a lead trustee and trustee" must {
+        "return  with mapped data" in {
           val answerSections = List(
             AnswerSection(
               headingKey = Some("answersPage.section.trustee.subheading"),
@@ -172,20 +164,15 @@ class SubmissionSetFactorySpec extends SpecBase {
               addLeadTrustee(0, emptyUserAnswers))
               .set(AddATrusteePage, AddATrustee.NoComplete).success.value
 
-          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
-            data = Json.toJson(userAnswers),
-            status = Some(Completed),
-            registrationPieces = List(
-              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
-              RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson),
-              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
-              RegistrationSubmission.MappedPiece("correspondence/address",
-                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
-              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(data = Json.toJson(userAnswers), registrationPieces = List(
+                        RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
+                        RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson),
+                        RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+                        RegistrationSubmission.MappedPiece("correspondence/address",
+                          Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
+                        RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
 
-            ),
-            answerSections = answerSections
-          )
+                      ), answerSections = answerSections)
         }
       }
     }

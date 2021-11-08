@@ -21,7 +21,6 @@ import models._
 import play.api.Logging
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.RegistrationProgress
 import utils.answers.CheckYourAnswersHelper
 import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
@@ -31,25 +30,20 @@ import javax.inject.Inject
 class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
                                      leadTrusteeMapper: LeadTrusteeMapper,
                                      correspondenceMapper: CorrespondenceMapper,
-                                     printHelpers: PrintHelpers,
-                                     registrationProgress: RegistrationProgress) extends Logging {
+                                     printHelpers: PrintHelpers) extends Logging {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
-    val status = registrationProgress.trusteesStatus(userAnswers)
 
     RegistrationSubmission.DataSet(
       data = Json.toJson(userAnswers),
-      status = status,
-      registrationPieces = mappedDataIfCompleted(userAnswers, status),
-      answerSections = answerSectionsIfCompleted(userAnswers, status)
+      registrationPieces = mappedData(userAnswers),
+      answerSections = answerSections(userAnswers)
     )
   }
 
-  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
+  private def mappedData(userAnswers: UserAnswers) = {
 
-    logger.info(s"[mappedDataIfCompleted] attempting to generate mapped data, status is $status")
-
-    if (status.contains(Status.Completed)) {
+    logger.info(s"[mappedData] attempting to generate mapped data")
 
       val result: Option[List[RegistrationSubmission.MappedPiece]] = leadTrusteeMapper.build(userAnswers) match {
         case Some(x) =>
@@ -73,23 +67,16 @@ class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
           logger.warn(s"[mappedDataIfCompleted] lead trustee status is complete, no data to map")
           List.empty
       }
-    } else {
-      List.empty
-    }
   }
 
-  private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+  private def answerSections(userAnswers: UserAnswers)
                                        (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
-    if (status.contains(Status.Completed)) {
       val helper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
 
       helper.trustees match {
         case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
         case None => List.empty
       }
-    } else {
-      List.empty
-    }
   }
 
   private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {

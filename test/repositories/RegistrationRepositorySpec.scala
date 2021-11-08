@@ -16,11 +16,8 @@
 
 package repositories
 
-import java.time.LocalDateTime
-
 import base.SpecBase
 import connectors.SubmissionDraftConnector
-import models.Status.InProgress
 import models._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{verify, when}
@@ -30,6 +27,7 @@ import play.api.http
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.time.LocalDateTime
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
@@ -106,12 +104,7 @@ class RegistrationRepositorySpec extends SpecBase with MustMatchers with Mockito
 
         val mockConnector = mock[SubmissionDraftConnector]
 
-        val submissionSet = RegistrationSubmission.DataSet(
-          Json.obj(),
-          Some(InProgress),
-          List.empty,
-          List.empty
-        )
+        val submissionSet = RegistrationSubmission.DataSet(Json.obj(), List.empty, List.empty)
 
         val mockSubmissionSetFactory = mock[SubmissionSetFactory]
         when(mockSubmissionSetFactory.createFrom(any())(any())).thenReturn(submissionSet)
