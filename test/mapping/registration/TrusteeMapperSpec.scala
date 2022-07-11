@@ -21,14 +21,15 @@ import generators.Generators
 import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.{AddressType, IdentificationOrgType, IdentificationType, TrusteeIndividualType, TrusteeOrgType, TrusteeType, UserAnswers, YesNoDontKnow}
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.{OptionValues}
+import org.scalatest.matchers.must.Matchers
 import pages.register.trustees.individual._
 import pages.register.trustees.{individual => ind, organisation => org}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 
 import java.time.LocalDate
 
-class TrusteeMapperSpec extends SpecBase with MustMatchers with OptionValues with Generators {
+class TrusteeMapperSpec extends SpecBase with Matchers with OptionValues with Generators {
 
   val trusteeMapper: TrusteeMapper = injector.instanceOf[TrusteeMapper]
 

@@ -380,7 +380,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual
-        controllers.routes.SessionExpiredController.onPageLoad().url
+        controllers.routes.SessionExpiredController.onPageLoad.url
 
       application.stop()
     }
@@ -397,7 +397,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual
-        controllers.routes.SessionExpiredController.onPageLoad().url
+        controllers.routes.SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

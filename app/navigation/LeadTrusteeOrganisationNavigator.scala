@@ -66,7 +66,7 @@ class LeadTrusteeOrganisationNavigator extends Navigator {
     ua.get(UkRegisteredYesNoPage(index)) match {
       case Some(true) => rts.UtrController.onPageLoad(index, draftId)
       case Some(false) => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 

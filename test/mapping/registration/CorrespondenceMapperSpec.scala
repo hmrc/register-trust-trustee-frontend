@@ -23,14 +23,15 @@ import models.RegistrationSubmission
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.{OptionValues}
+import org.scalatest.matchers.must.Matchers
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.api.libs.json.{JsBoolean, JsString, Json}
 
 import java.time.LocalDate
 
-class CorrespondenceMapperSpec extends SpecBase with MustMatchers
+class CorrespondenceMapperSpec extends SpecBase with Matchers
   with OptionValues with Generators {
 
   private val correspondenceMapper = injector.instanceOf[CorrespondenceMapper]

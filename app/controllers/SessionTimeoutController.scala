@@ -43,7 +43,7 @@ class SessionTimeoutController @Inject()(val appConfig: FrontendAppConfig,
     implicit request =>
       logger.info(s"[Trustee][Session ID: ${Session.id(hc)}]" +
         s" user remained inactive on the service, user has been signed out")
-      Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad().url).withNewSession)
+      Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad.url).withNewSession)
   }
 
 }

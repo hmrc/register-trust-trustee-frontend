@@ -117,7 +117,7 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
 
         application.stop()
       }
@@ -133,7 +133,7 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
 
         application.stop()
       }
