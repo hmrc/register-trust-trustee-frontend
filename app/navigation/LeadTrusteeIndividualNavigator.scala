@@ -86,7 +86,7 @@ class LeadTrusteeIndividualNavigator extends Navigator {
     answers.get(TrusteeDetailsChoicePage(index)) match {
       case Some(IdCard) => rts.IDCardDetailsController.onPageLoad(index, draftId)
       case Some(Passport) => rts.PassportDetailsController.onPageLoad(index, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 

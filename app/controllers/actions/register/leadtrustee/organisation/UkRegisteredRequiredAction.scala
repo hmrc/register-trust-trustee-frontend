@@ -35,7 +35,7 @@ class UkRegisteredRequiredAction(index: Int)(implicit val executionContext: Exec
       request.userAnswers.get(UkRegisteredYesNoPage(index)) match {
         case None =>
           Left(
-            Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+            Redirect(controllers.routes.SessionExpiredController.onPageLoad)
           )
         case Some(value) =>
           Right(

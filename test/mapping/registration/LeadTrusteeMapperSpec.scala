@@ -22,14 +22,15 @@ import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
 import models.{AddressType, IdentificationOrgType, IdentificationType, LeadTrusteeIndType, LeadTrusteeOrgType, LeadTrusteeType, PassportType}
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.{OptionValues}
+import org.scalatest.matchers.must.Matchers
 import pages.register
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 
 import java.time.LocalDate
 
-class LeadTrusteeMapperSpec extends SpecBase with MustMatchers
+class LeadTrusteeMapperSpec extends SpecBase with Matchers
   with OptionValues with Generators {
 
   val leadTrusteeMapper: LeadTrusteeMapper = injector.instanceOf[LeadTrusteeMapper]

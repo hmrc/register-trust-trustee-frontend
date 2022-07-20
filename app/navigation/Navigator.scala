@@ -57,7 +57,7 @@ class Navigator {
       ua.get(AddATrusteePage) match {
         case Some(AddATrustee.YesNow) => routeToTrusteeIndex
         case Some(AddATrustee.YesLater) | Some(AddATrustee.NoComplete) => registrationTaskList(draftId)
-        case _ => controllers.routes.SessionExpiredController.onPageLoad()
+        case _ => controllers.routes.SessionExpiredController.onPageLoad
       }
     }
   }
@@ -65,7 +65,7 @@ class Navigator {
   def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
       .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad)
   }
 
   private def registrationTaskList(draftId: String)(implicit config: FrontendAppConfig): Call = {
@@ -83,7 +83,7 @@ class Navigator {
       case (Some(LeadTrustee), Some(IndividualOrBusiness.Business)) =>
         controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, draftId)
       case _ =>
-        controllers.routes.SessionExpiredController.onPageLoad()
+        controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 }
