@@ -30,13 +30,13 @@ import views.html.register.leadtrustee.individual.EmailAddressView
 
 class EmailAddressControllerSpec extends SpecBase {
 
-  lazy val emailAddressRoute: String = routes.EmailAddressController.onPageLoad(index, fakeDraftId).url
-  val index = 0
-  val formProvider = new EmailAddressFormProvider()
-  val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.email")
-  val name = FullName("FirstName", None, "LastName").toString
+  private lazy val emailAddressRoute: String = routes.EmailAddressController.onPageLoad(index, fakeDraftId).url
+  private val index = 0
+  private val formProvider = new EmailAddressFormProvider()
+  private val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.email")
+  private val name = FullName("FirstName", None, "LastName").toString
 
-  val validAnswer: String = "email@example.com"
+  private val validAnswer: String = "email@example.com"
 
   "EmailAddress Controller" must {
 

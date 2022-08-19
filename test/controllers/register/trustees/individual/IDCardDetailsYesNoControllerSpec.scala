@@ -29,15 +29,14 @@ import views.html.register.trustees.individual.IDCardDetailsYesNoView
 
 class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trustee.individual.idCardDetailsYesNo"
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  private val trusteeMessagePrefix = "trustee.individual.idCardDetailsYesNo"
+  private val formProvider = new YesNoFormProvider()
+  private val form = formProvider.withPrefix(trusteeMessagePrefix)
 
-  val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  private val index = 0
+  private val trusteeName = "FirstName LastName"
 
-  lazy val idCardDetailsYesNoRoute = routes.IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val idCardDetailsYesNoRoute = routes.IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IDCardDetailsYesNo Controller" must {
 
@@ -167,6 +166,7 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
       application.stop()
     }
+
   }
 }
 

@@ -32,11 +32,11 @@ import views.html.register.trustees.individual.NameView
 
 class NameControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new NameFormProvider()
+  private val formProvider = new NameFormProvider()
 
-  val index = 0
+  private val index = 0
 
-  lazy val trusteesNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
+  private lazy val trusteesNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   "TrusteesName Controller" must {
 

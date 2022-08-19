@@ -24,15 +24,18 @@ import controllers.actions.register.trustees.organisation.NameRequiredActionImpl
 import forms.UtrFormProvider
 import navigation.Navigator
 import pages.register.trustees.organisation.UtrPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.organisation.UtrView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class UtrController @Inject()(
                                override val messagesApi: MessagesApi,
@@ -43,8 +46,9 @@ class UtrController @Inject()(
                                nameAction: NameRequiredActionImpl,
                                formProvider: UtrFormProvider,
                                val controllerComponents: MessagesControllerComponents,
-                               view: UtrView
-                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                               view: UtrView,
+                               errorPageView: InternalServerErrorPageView
+                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
     formProvider.withConfig("trustee.organisation.utr", request.userAnswers, index)
@@ -71,10 +75,15 @@ class UtrController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UtrPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UtrPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(UtrPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(UtrPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[UtrController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

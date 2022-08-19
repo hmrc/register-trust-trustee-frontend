@@ -21,17 +21,21 @@ import config.annotations.LeadTrusteeOrganisation
 import controllers.actions.StandardActionSets
 import controllers.actions.register.leadtrustee.organisation.NameRequiredActionImpl
 import forms.EmailAddressFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.organisation.EmailAddressPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.organisation.EmailAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class EmailAddressController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
@@ -41,8 +45,9 @@ class EmailAddressController @Inject()(
                                         standardActionSets: StandardActionSets,
                                         nameAction: NameRequiredActionImpl,
                                         formProvider: EmailAddressFormProvider,
-                                        view: EmailAddressView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        view: EmailAddressView,
+                                        errorPageView: InternalServerErrorPageView
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
@@ -68,10 +73,15 @@ class EmailAddressController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EmailAddressPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(EmailAddressPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(EmailAddressPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(EmailAddressPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[EmailAddressController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
       )
   }
 }

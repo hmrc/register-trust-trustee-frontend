@@ -22,18 +22,22 @@ import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.individual.DateOfBirthYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.DateOfBirthYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class DateOfBirthYesNoController @Inject()(
                                               override val messagesApi: MessagesApi,
@@ -45,8 +49,9 @@ class DateOfBirthYesNoController @Inject()(
                                               validateIndex: IndexActionFilterProvider,
                                               yesNoFormProvider: YesNoFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: DateOfBirthYesNoView
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              view: DateOfBirthYesNoView,
+                                              errorPageView: InternalServerErrorPageView
+                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = yesNoFormProvider.withPrefix("trustee.individual.dateOfBirthYesNo")
 
@@ -72,10 +77,15 @@ class DateOfBirthYesNoController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthYesNoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DateOfBirthYesNoPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(DateOfBirthYesNoPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(DateOfBirthYesNoPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[DateOfBirthYesNoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

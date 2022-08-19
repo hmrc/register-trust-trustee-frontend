@@ -19,25 +19,31 @@ package controllers.register.leadtrustee.individual
 import controllers.actions.StandardActionSets
 import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
+import models.UserAnswers
 import models.registration.pages.DetailsChoice
 import models.registration.pages.DetailsChoice._
 import pages.register.leadtrustee.individual.{TrusteeDetailsChoicePage, TrusteeNinoYesNoPage}
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.RegistrationsRepository
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.MatchingLockedView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class MatchingLockedController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           standardActionSets: StandardActionSets,
                                           nameAction: NameRequiredActionImpl,
                                           view: MatchingLockedView,
-                                          registrationsRepository: RegistrationsRepository
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                          registrationsRepository: RegistrationsRepository,
+                                          errorPageView: InternalServerErrorPageView
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
@@ -59,13 +65,25 @@ class MatchingLockedController @Inject()(
                                           detailsChoice: DetailsChoice,
                                           call: Call): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      for {
-        ninoYesNoSet <- Future.fromTry(request.userAnswers.set(TrusteeNinoYesNoPage(index), false))
-        detailsChoiceSet <- Future.fromTry(ninoYesNoSet.set(TrusteeDetailsChoicePage(index), detailsChoice))
-        _ <- registrationsRepository.set(detailsChoiceSet)
-      } yield {
-        Redirect(call)
+      request.userAnswers.set(TrusteeNinoYesNoPage(index), false) match {
+        case Success(ninoYesNoSet) =>
+          handleDetailsChoiceSet(ninoYesNoSet, index, detailsChoice, call)
+        case Failure(_) =>
+          logger.error("[MatchingLockedController][amendUserAnswersAndRedirect] Error while storing user answers")
+         Future.successful(InternalServerError(errorPageView()))
       }
+  }
+
+  private def handleDetailsChoiceSet(ninoYesNoSet: UserAnswers, index: Int, detailsChoice: DetailsChoice, call: Call)
+                                    (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Future[Result] = {
+    ninoYesNoSet.set(TrusteeDetailsChoicePage(index), detailsChoice) match {
+      case Success(detailsChoiceSet) =>
+        registrationsRepository.set(detailsChoiceSet)
+        Future.successful(Redirect(call))
+      case Failure(_) =>
+        logger.error("[MatchingLockedController][handleDetailsChoiceSet] Error while storing user answers")
+        Future.successful(InternalServerError(errorPageView()))
+
+    }
   }
 }

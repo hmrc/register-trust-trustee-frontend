@@ -21,17 +21,21 @@ import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.AddressUkYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class LiveInTheUKYesNoController @Inject()(
                                             override val messagesApi: MessagesApi,
@@ -42,8 +46,9 @@ class LiveInTheUKYesNoController @Inject()(
                                             nameAction: NameRequiredActionImpl,
                                             formProvider: YesNoFormProvider,
                                             val controllerComponents: MessagesControllerComponents,
-                                            view: LiveInTheUKYesNoView
-                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                            view: LiveInTheUKYesNoView,
+                                            errorPageView: InternalServerErrorPageView
+                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
@@ -71,10 +76,15 @@ class LiveInTheUKYesNoController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUkYesNoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUkYesNoPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(AddressUkYesNoPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(AddressUkYesNoPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[LiveInTheUKYesNoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

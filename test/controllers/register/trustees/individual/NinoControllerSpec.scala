@@ -32,16 +32,15 @@ import views.html.register.trustees.individual.NinoView
 
 class NinoControllerSpec extends SpecBase with IndexValidation {
 
-  val trusteeMessagePrefix = "trustee.individual.nino"
-  val formProvider = new NinoFormProvider()
-  val index = 0
+  private val trusteeMessagePrefix = "trustee.individual.nino"
+  private val formProvider = new NinoFormProvider()
+  private val index = 0
 
-  val form = formProvider(trusteeMessagePrefix, emptyUserAnswers, index)
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
-  val validAnswer = "NH111111A"
+  private val form = formProvider(trusteeMessagePrefix, emptyUserAnswers, index)
+  private val trusteeName = "FirstName LastName"
+  private val validAnswer = "NH111111A"
 
-  lazy val trusteesNinoRoute = routes.NinoController.onPageLoad(index, fakeDraftId).url
+  private lazy val trusteesNinoRoute = routes.NinoController.onPageLoad(index, fakeDraftId).url
 
   "TrusteesNino Controller" must {
 

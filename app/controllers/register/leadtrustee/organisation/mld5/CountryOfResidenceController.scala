@@ -23,16 +23,19 @@ import controllers.actions.register.leadtrustee.organisation.NameRequiredActionI
 import forms.CountryFormProvider
 import navigation.Navigator
 import pages.register.leadtrustee.organisation.mld5.CountryOfResidencePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.organisation.mld5.CountryOfResidenceView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class CountryOfResidenceController @Inject()(
                                               override val messagesApi: MessagesApi,
@@ -43,8 +46,10 @@ class CountryOfResidenceController @Inject()(
                                               formProvider: CountryFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: CountryOfResidenceView,
-                                              val countryOptions: CountryOptionsNonUK
-                                            )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
+                                              val countryOptions: CountryOptionsNonUK,
+                                              errorPageView: InternalServerErrorPageView
+                                            )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig)
+  extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = formProvider.withPrefix("leadTrustee.organisation.5mld.countryOfResidence")
 
@@ -69,10 +74,15 @@ class CountryOfResidenceController @Inject()(
             Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.trusteeName))),
 
           value => {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage(index), value))
-              _              <- registrationsRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
+            request.userAnswers.set(CountryOfResidencePage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map{ _ =>
+                  Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
+                }
+              case Failure(_) =>
+                logger.error("[CountryOfResidenceController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(errorPageView()))
+            }
           }
         )
     }

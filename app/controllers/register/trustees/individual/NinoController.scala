@@ -25,16 +25,19 @@ import controllers.filters.IndexActionFilterProvider
 import forms.NinoFormProvider
 import navigation.Navigator
 import pages.register.trustees.individual.NinoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.NinoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class NinoController @Inject()(
                                 override val messagesApi: MessagesApi,
@@ -46,8 +49,9 @@ class NinoController @Inject()(
                                 validateIndex: IndexActionFilterProvider,
                                 formProvider: NinoFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: NinoView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                view: NinoView,
+                                errorPageView: InternalServerErrorPageView
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
@@ -74,10 +78,15 @@ class NinoController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NinoPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NinoPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(NinoPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(NinoPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[NinoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

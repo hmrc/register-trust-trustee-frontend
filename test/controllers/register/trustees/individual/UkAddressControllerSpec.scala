@@ -33,14 +33,13 @@ import views.html.register.trustees.individual.UkAddressView
 
 class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
-  val trusteeMessagePrefix = "ukAddress"
-  val formProvider = new UKAddressFormProvider()
-  val form: Form[UKAddress] = formProvider()
-  val index = 0
-  val trusteeName = "FirstName LastName"
-  val validAnswer = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
+  private val formProvider = new UKAddressFormProvider()
+  private val form: Form[UKAddress] = formProvider()
+  private val index = 0
+  private val trusteeName = "FirstName LastName"
+  private val validAnswer = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
 
-  lazy val trusteesUkAddressRoute: String = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
+  private lazy val trusteesUkAddressRoute: String = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
   "TrusteesUkAddress Controller" must {
 
@@ -201,7 +200,6 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
         postForIndex
       )
     }
-
 
   }
 }

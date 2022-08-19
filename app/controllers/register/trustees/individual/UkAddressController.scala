@@ -22,18 +22,23 @@ import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import controllers.filters.IndexActionFilterProvider
 import forms.UKAddressFormProvider
+import models.core.pages.UKAddress
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.individual.UkAddressPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.UkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class UkAddressController @Inject()(
                                      override val messagesApi: MessagesApi,
@@ -45,10 +50,11 @@ class UkAddressController @Inject()(
                                      validateIndex: IndexActionFilterProvider,
                                      formProvider: UKAddressFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
-                                     view: UkAddressView
-                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     view: UkAddressView,
+                                     errorPageView: InternalServerErrorPageView
+                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  val form = formProvider()
+ private val form: Form[UKAddress] = formProvider()
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
@@ -72,10 +78,15 @@ class UkAddressController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, request.trusteeName, index, draftId))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkAddressPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(UkAddressPage(index), value) match {
+            case Success(updatedAnswers) =>
+            registrationsRepository.set(updatedAnswers).map { _ =>
+              Redirect(navigator.nextPage(UkAddressPage(index), draftId, updatedAnswers))
+            }
+            case Failure(_) =>
+              logger.error("[UkAddressController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

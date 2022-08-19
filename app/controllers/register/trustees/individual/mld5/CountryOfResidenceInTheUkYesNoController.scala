@@ -21,17 +21,21 @@ import config.annotations.TrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.trustees.individual.NameRequiredActionImpl
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.mld5.CountryOfResidenceInTheUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                             val controllerComponents: MessagesControllerComponents,
@@ -41,8 +45,9 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                             formProvider: YesNoFormProvider,
                                                             view: CountryOfResidenceInTheUkYesNoView,
                                                             repository: RegistrationsRepository,
-                                                            nameAction: NameRequiredActionImpl
-                                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                            nameAction: NameRequiredActionImpl,
+                                                            errorPageView: InternalServerErrorPageView
+                                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfResidenceInTheUkYesNo")
 
@@ -67,10 +72,15 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
             Future.successful(BadRequest(view(formWithErrors, draftId , index, request.trusteeName))),
 
           value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
-              _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
+            request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value) match {
+              case Success(updatedAnswers) =>
+                repository.set(updatedAnswers).map{ _ =>
+                  Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
+                }
+              case Failure(_) =>
+                logger.error("[CountryOfResidenceInTheUkYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(errorPageView()))
+            }
         )
     }
 }

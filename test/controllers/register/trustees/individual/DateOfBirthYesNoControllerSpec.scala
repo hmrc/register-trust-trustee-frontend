@@ -29,15 +29,14 @@ import views.html.register.trustees.individual.DateOfBirthYesNoView
 
 class DateOfBirthYesNoControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trustee.individual.dateOfBirthYesNo"
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  private val trusteeMessagePrefix = "trustee.individual.dateOfBirthYesNo"
+  private val formProvider = new YesNoFormProvider()
+  private val form = formProvider.withPrefix(trusteeMessagePrefix)
 
-  val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  private val index = 0
+  private val trusteeName = "FirstName LastName"
 
-  lazy val dateOfBirthYesNoRoute = routes.DateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val dateOfBirthYesNoRoute = routes.DateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url
 
   "DateOfBirthYesNo Controller" must {
 

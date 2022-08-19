@@ -27,17 +27,18 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.organisation.AddressUkYesNoView
 
 class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressUkYesNo")
+  private val formProvider = new YesNoFormProvider()
+  private val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressUkYesNo")
 
-  val index = 0
-  val fakeName = "Test"
+  private val index = 0
+  private val fakeName = "Test"
 
-  lazy val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId).url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
@@ -152,6 +153,36 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error and redirect to error page when set user answers operation fails" in {
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), fakeName).success.value
+        .set(AddressUkYesNoPage(index), true).success.value
+
+      val differentIndex: Int = index + 2
+      val onSubmitPath = routes.AddressUkYesNoController.onSubmit(differentIndex, draftId).url
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
+          )
+          .build()
+
+      val errorPage = application.injector.instanceOf[InternalServerErrorPageView]
+
+      val request =
+        FakeRequest(POST, onSubmitPath)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

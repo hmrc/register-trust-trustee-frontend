@@ -17,14 +17,18 @@
 package controllers.register.trustees.individual
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import models.UserAnswers
+import navigation.{FakeNavigator, Navigator}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.organisation.NamePage
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.print.TrusteeIndividualPrintHelper
 import viewmodels.Section
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.CheckDetailsView
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
@@ -55,7 +59,54 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       contentAsString(result) mustEqual
         view(answerSection, fakeDraftId, index)(request, messages).toString
+
+      application.stop()
     }
 
+    "redirect to the next page when valid data is submitted" in {
+
+      val onSubmitPath = routes.CheckDetailsController.onSubmit(index, draftId).url
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[TrusteeIndividual]).toInstance(new FakeNavigator)
+        )
+        .build()
+
+      val request =
+        FakeRequest(POST, onSubmitPath)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error and redirect to error page when set user answers operation fails" in {
+
+      val differentIndex: Int = index + 2
+      val onSubmitPath = routes.CheckDetailsController.onSubmit(differentIndex, draftId).url
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[TrusteeIndividual]).toInstance(new FakeNavigator)
+        )
+        .build()
+
+      val errorPage = application.injector.instanceOf[InternalServerErrorPageView]
+
+      val request =
+        FakeRequest(POST, onSubmitPath)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
+    }
   }
 }

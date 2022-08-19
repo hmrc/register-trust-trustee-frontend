@@ -25,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.individual.{NamePage, NinoYesNoPage}
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.individual.NinoYesNoView
@@ -33,17 +33,14 @@ import views.html.register.trustees.individual.NinoYesNoView
 
 class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  def onwardRoute = Call("GET", "/foo")
+  private val trusteeMessagePrefix = "trustee.individual.ninoYesNo"
+  private val formProvider = new YesNoFormProvider()
+  private val form = formProvider.withPrefix(trusteeMessagePrefix)
 
-  val trusteeMessagePrefix = "trustee.individual.ninoYesNo"
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  private val index = 0
+  private val trusteeName = "FirstName LastName"
 
-  val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
-
-  lazy val trusteeAUKCitizenRoute = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val trusteeAUKCitizenRoute = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
 
   "trusteeAUKCitizen Controller" must {
 

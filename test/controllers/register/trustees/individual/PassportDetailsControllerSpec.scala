@@ -17,7 +17,6 @@
 package controllers.register.trustees.individual
 
 import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import forms.PassportOrIdCardFormProvider
@@ -34,19 +33,18 @@ import views.html.register.trustees.individual.PassportDetailsView
 
 class PassportDetailsControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trustee.individual.passportDetails"
-  val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  val form = formProvider(trusteeMessagePrefix)
+  private val trusteeMessagePrefix = "trustee.individual.passportDetails"
+  private val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
+  private val form = formProvider(trusteeMessagePrefix)
 
-  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
-  val passportDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
+  private val passportDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
 
-  val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = FullName("FirstName", None, "LastName")
+  private val index = 0
+  private val trusteeName = FullName("FirstName", None, "LastName")
 
-  lazy val passportDetailsRoute = routes.PassportDetailsController.onPageLoad(index, fakeDraftId).url
+  private lazy val passportDetailsRoute = routes.PassportDetailsController.onPageLoad(index, fakeDraftId).url
 
   "PassportDetailsYes Controller" must {
 
