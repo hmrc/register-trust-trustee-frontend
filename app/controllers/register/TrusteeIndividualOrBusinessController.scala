@@ -26,16 +26,19 @@ import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.TrusteeIndividualOrBusinessView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class TrusteeIndividualOrBusinessController @Inject()(
                                                        override val messagesApi: MessagesApi,
@@ -49,8 +52,10 @@ class TrusteeIndividualOrBusinessController @Inject()(
                                                        formProvider: IndividualOrBusinessFormProvider,
                                                        requiredAnswer: RequiredAnswerActionProvider,
                                                        val controllerComponents: MessagesControllerComponents,
-                                                       view: TrusteeIndividualOrBusinessView
+                                                       view: TrusteeIndividualOrBusinessView,
+                                                       errorPageView: InternalServerErrorPageView
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController
+  with Logging
   with I18nSupport
   with Enumerable.Implicits {
 
@@ -83,10 +88,15 @@ class TrusteeIndividualOrBusinessController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, heading(index), isLeadTrusteeMatched(index)))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeIndividualOrBusinessPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeIndividualOrBusinessPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(TrusteeIndividualOrBusinessPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(TrusteeIndividualOrBusinessPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[TrusteeIndividualOrBusinessController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

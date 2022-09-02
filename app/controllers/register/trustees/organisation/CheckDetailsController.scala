@@ -23,16 +23,19 @@ import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrusteeStatus
 import pages.register.TrusteesAnswerPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.TrusteeOrganisationPrintHelper
 import viewmodels.Section
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.organisation.CheckDetailsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,
@@ -44,8 +47,9 @@ class CheckDetailsController @Inject()(
                                         view: CheckDetailsView,
                                         val appConfig: FrontendAppConfig,
                                         printHelper: TrusteeOrganisationPrintHelper,
-                                        nameAction: NameRequiredActionImpl
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        nameAction: NameRequiredActionImpl,
+                                        errorPageView: InternalServerErrorPageView
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
@@ -61,11 +65,14 @@ class CheckDetailsController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(TrusteeStatus(index), Completed)
-
-      for {
-        updatedAnswers <- Future.fromTry(answers)
-        _ <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(navigator.nextPage(TrusteesAnswerPage, draftId, request.userAnswers))
+      request.userAnswers.set(TrusteeStatus(index), Completed) match {
+        case Success(updatedAnswers) =>
+          registrationsRepository.set(updatedAnswers).map{ _ =>
+            Redirect(navigator.nextPage(TrusteesAnswerPage, draftId, request.userAnswers))
+          }
+        case Failure(_) =>
+          logger.error("[CheckDetailsController][onSubmit] Error while storing user answers")
+          Future.successful(InternalServerError(errorPageView()))
+      }
   }
 }

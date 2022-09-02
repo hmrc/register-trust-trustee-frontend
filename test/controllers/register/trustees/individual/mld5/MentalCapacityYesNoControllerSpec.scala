@@ -29,16 +29,17 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
 class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoDontKnowFormProvider()
-  val form: Form[YesNoDontKnow] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
-  val index: Int = 0
-  val trusteeName = FullName("FirstName", None, "LastName")
+  private val formProvider = new YesNoDontKnowFormProvider()
+  private val form: Form[YesNoDontKnow] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
+  private val index: Int = 0
+  private val trusteeName = FullName("FirstName", None, "LastName")
 
-  lazy val mentalCapacityYesNo: String = routes.MentalCapacityYesNoController.onPageLoad(index, draftId).url
+  private lazy val mentalCapacityYesNo: String = routes.MentalCapacityYesNoController.onPageLoad(index, draftId).url
 
   "MentalCapacityYesNo Controller" must {
 
@@ -161,6 +162,32 @@ class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error and redirect to error page when set user answers operation fails" in {
+      val userAnswers = emptyUserAnswers.set(NamePage(index), trusteeName).success.value
+      val differentIndex: Int = index + 2
+      val onSubmitPath = routes.MentalCapacityYesNoController.onSubmit(differentIndex, draftId).url
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[TrusteeIndividual]).toInstance(new FakeNavigator)
+        )
+        .build()
+
+      val errorPage = application.injector.instanceOf[InternalServerErrorPageView]
+
+      val request =
+        FakeRequest(POST, onSubmitPath)
+          .withFormUrlEncodedBody(("value", "yes"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

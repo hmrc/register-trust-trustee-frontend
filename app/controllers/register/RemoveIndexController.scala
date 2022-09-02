@@ -19,6 +19,8 @@ package controllers.register
 import controllers.actions._
 import controllers.actions.register.{RemoveIndexRequest, TrusteeRequiredActionImpl}
 import forms.RemoveIndexFormProvider
+import play.api.Logging
+
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -27,9 +29,10 @@ import repositories.RegistrationsRepository
 import sections.Trustee
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.addAnother.TrusteeViewModel
-import views.html.RemoveIndexView
+import views.html.{InternalServerErrorPageView, RemoveIndexView}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class RemoveIndexController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -38,8 +41,9 @@ class RemoveIndexController @Inject()(
                                        trusteeAction: TrusteeRequiredActionImpl,
                                        formProvider: RemoveIndexFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: RemoveIndexView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                       view: RemoveIndexView,
+                                       errorPageView: InternalServerErrorPageView
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen trusteeAction(index, draftId)
@@ -65,10 +69,14 @@ class RemoveIndexController @Inject()(
 
         remove => {
           if (remove) {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(Trustee(index).path))
-              _ <- registrationsRepository.set(updatedAnswers)
-            } yield redirect(draftId)
+            request.userAnswers.deleteAtPath(Trustee(index).path) match {
+              case Success(updatedAnswers) => registrationsRepository.set(updatedAnswers).map{ _ =>
+                redirect(draftId)
+              }
+              case Failure(_) =>
+                logger.error("[RemoveIndexController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(errorPageView()))
+            }
           } else {
             Future.successful(redirect(draftId))
           }

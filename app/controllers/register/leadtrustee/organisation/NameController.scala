@@ -25,14 +25,17 @@ import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.organisation.NamePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.organisation.NameView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class NameController @Inject()(
                                 override val messagesApi: MessagesApi,
@@ -43,8 +46,9 @@ class NameController @Inject()(
                                 ukRegisteredAction: UkRegisteredRequiredActionImpl,
                                 formProvider: StringFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: NameView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                view: NameView,
+                                errorPageView: InternalServerErrorPageView
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = formProvider.withConfig("leadTrustee.organisation.name", 56)
 
@@ -70,10 +74,15 @@ class NameController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.isUkRegistered))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
+          request.userAnswers.set(NamePage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[NameController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

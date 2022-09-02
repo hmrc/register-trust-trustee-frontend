@@ -25,15 +25,18 @@ import forms.DetailsChoiceFormProvider
 import models.registration.pages.DetailsChoice
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteeDetailsChoicePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.TrusteeDetailsChoiceView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class TrusteeDetailsChoiceController @Inject()(
                                                 override val messagesApi: MessagesApi,
@@ -44,8 +47,9 @@ class TrusteeDetailsChoiceController @Inject()(
                                                 nameAction: NameRequiredActionImpl,
                                                 formProvider: DetailsChoiceFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
-                                                view: TrusteeDetailsChoiceView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                view: TrusteeDetailsChoiceView,
+                                                errorPageView: InternalServerErrorPageView
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[DetailsChoice] = formProvider.withPrefix("leadTrustee.individual.trusteeDetailsChoice")
 
@@ -72,10 +76,15 @@ class TrusteeDetailsChoiceController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeDetailsChoicePage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeDetailsChoicePage(index), draftId, updatedAnswers))
+          request.userAnswers.set(TrusteeDetailsChoicePage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(TrusteeDetailsChoicePage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[TrusteeDetailsChoiceController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

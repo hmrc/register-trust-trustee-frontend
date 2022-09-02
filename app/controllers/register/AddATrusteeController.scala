@@ -28,6 +28,7 @@ import models.requests.RegistrationDataRequest
 import models.{Enumerable, TaskStatus, UserAnswers}
 import navigation.Navigator
 import pages.register.{AddATrusteePage, AddATrusteeYesNoPage, TrusteeOrLeadTrusteePage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
@@ -38,10 +39,12 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Constants.MAX
 import utils.{AddATrusteeViewHelper, RegistrationProgress}
+import views.html.InternalServerErrorPageView
 import views.html.register.{AddATrusteeView, AddATrusteeYesNoView, MaxedOutView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class AddATrusteeController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -56,8 +59,10 @@ class AddATrusteeController @Inject()(
                                        yesNoView: AddATrusteeYesNoView,
                                        maxedOutView: MaxedOutView,
                                        trustsStoreService: TrustsStoreService,
-                                       registrationProgress: RegistrationProgress
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                       registrationProgress: RegistrationProgress,
+                                       errorPageView: InternalServerErrorPageView
+                                     )(implicit ec: ExecutionContext)
+  extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private val addAnotherForm = addAnotherFormProvider()
   private val yesNoForm = yesNoFormProvider.withPrefix("addATrusteeYesNo")
@@ -113,11 +118,16 @@ class AddATrusteeController @Inject()(
           Future.successful(BadRequest(yesNoView(formWithErrors, draftId)))
         },
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteeYesNoPage, value))
-            _ <- registrationsRepository.set(updatedAnswers)
-            _ <- setTaskStatus(draftId, TaskStatus.InProgress)
-          } yield Redirect(navigator.nextPage(AddATrusteeYesNoPage, draftId, updatedAnswers))
+          request.userAnswers.set(AddATrusteeYesNoPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                setTaskStatus(draftId, TaskStatus.InProgress)
+                Redirect(navigator.nextPage(AddATrusteeYesNoPage, draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[AddATrusteeController][submitOne] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }
@@ -144,11 +154,16 @@ class AddATrusteeController @Inject()(
           ))
         },
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteePage, value))
-            _ <- registrationsRepository.set(updatedAnswers)
-            _ <- setTaskStatus(updatedAnswers, draftId, value)
-          } yield Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
+          request.userAnswers.set(AddATrusteePage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                setTaskStatus(updatedAnswers, draftId, value)
+                Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[AddATrusteeController][submitAnother] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }
@@ -175,19 +190,20 @@ class AddATrusteeController @Inject()(
           ))
         },
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers
-              .set(AddATrusteePage, value)
-              .flatMap(_.set(TrusteeOrLeadTrusteePage(index), LeadTrustee))
-            )
-            _ <- registrationsRepository.set(updatedAnswers)
-            _ <- setTaskStatus(updatedAnswers, draftId, value)
-          } yield {
-            if (value == YesNow) {
-              Redirect(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId))
-            } else {
-              Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
-            }
+          request.userAnswers.set(AddATrusteePage, value).flatMap(_.set(TrusteeOrLeadTrusteePage(index), LeadTrustee)) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                setTaskStatus(updatedAnswers, draftId, value)
+                if (value == YesNow ) {
+                  Redirect(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, draftId))
+                }
+                else {
+                  Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
+                }
+              }
+            case Failure(_) =>
+              logger.error("[AddATrusteeController][submitLead] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
           }
         }
       )
@@ -198,11 +214,16 @@ class AddATrusteeController @Inject()(
 
       val status = NoComplete
 
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddATrusteePage, status))
-        _ <- registrationsRepository.set(updatedAnswers)
-        _ <- setTaskStatus(updatedAnswers, draftId, status)
-      } yield Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
+      request.userAnswers.set(AddATrusteePage, status) match {
+        case Success(updatedAnswers) =>
+          registrationsRepository.set(updatedAnswers).map{ _ =>
+            setTaskStatus(updatedAnswers, draftId, status)
+            Redirect(navigator.nextPage(AddATrusteePage, draftId, updatedAnswers))
+          }
+        case Failure(_) =>
+          logger.error("[AddATrusteeController][submitComplete] Error while storing user answers")
+          Future.successful(InternalServerError(errorPageView()))
+      }
   }
 
   private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddATrustee)

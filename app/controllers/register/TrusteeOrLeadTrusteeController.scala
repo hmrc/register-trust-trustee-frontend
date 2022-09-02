@@ -20,10 +20,12 @@ import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.TrusteeOrLeadTrusteeFormProvider
+
 import javax.inject.Inject
 import models.core.pages.TrusteeOrLeadTrustee.Trustee
 import navigation.Navigator
 import pages.register.TrusteeOrLeadTrusteePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,9 +33,11 @@ import repositories.RegistrationsRepository
 import sections.Trustees
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.addAnother.TrusteeViewModel
+import views.html.InternalServerErrorPageView
 import views.html.register.TrusteeOrLeadTrusteeView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class TrusteeOrLeadTrusteeController @Inject()(
                                                 override val messagesApi: MessagesApi,
@@ -46,8 +50,9 @@ class TrusteeOrLeadTrusteeController @Inject()(
                                                 validateIndex : IndexActionFilterProvider,
                                                 formProvider: TrusteeOrLeadTrusteeFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
-                                                view: TrusteeOrLeadTrusteeView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                view: TrusteeOrLeadTrusteeView,
+                                                errorPageView: InternalServerErrorPageView
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider()
 
@@ -82,10 +87,15 @@ class TrusteeOrLeadTrusteeController @Inject()(
           // A lead trustee has already been added, if the current index is not the lead trustee
           // answer the question on behalf of the user and redirect to next page
           if (currentIndexIsNotTheLeadTrustee) {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrLeadTrusteePage(index), Trustee))
-              _              <- registrationsRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
+            request.userAnswers.set(TrusteeOrLeadTrusteePage(index), Trustee) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map{ _ =>
+                  Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
+                }
+              case Failure(_) =>
+                logger.error("[TrusteeOrLeadTrusteeController][onPageLoad] Error while storing user answers")
+                Future.successful(InternalServerError(errorPageView()))
+            }
           } else {
             renderView
           }
@@ -102,10 +112,15 @@ class TrusteeOrLeadTrusteeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteeOrLeadTrusteePage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
+          request.userAnswers.set(TrusteeOrLeadTrusteePage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[TrusteeOrLeadTrusteeController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

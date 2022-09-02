@@ -24,15 +24,18 @@ import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
 import navigation.Navigator
 import pages.register.trustees.individual.mld5.MentalCapacityYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class MentalCapacityYesNoController @Inject()(
                                                val controllerComponents: MessagesControllerComponents,
@@ -42,8 +45,9 @@ class MentalCapacityYesNoController @Inject()(
                                                standardActionSets: StandardActionSets,
                                                nameAction: NameRequiredActionImpl,
                                                formProvider: YesNoDontKnowFormProvider,
-                                               view: MentalCapacityYesNoView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               view: MentalCapacityYesNoView,
+                                               errorPageView: InternalServerErrorPageView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[YesNoDontKnow] = formProvider.withPrefix("trustee.individual.5mld.mentalCapacityYesNo")
 
@@ -68,10 +72,15 @@ class MentalCapacityYesNoController @Inject()(
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
           value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(MentalCapacityYesNoPage(index), value))
-              _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), draftId, updatedAnswers))
+            request.userAnswers.set(MentalCapacityYesNoPage(index), value) match {
+              case Success(updatedAnswers) =>
+                repository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), draftId, updatedAnswers))
+                }
+              case Failure(_) =>
+                logger.error("[MentalCapacityYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(errorPageView()))
+            }
         )
     }
 }

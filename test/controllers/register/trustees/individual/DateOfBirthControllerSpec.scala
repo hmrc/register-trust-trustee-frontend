@@ -17,7 +17,6 @@
 package controllers.register.trustees.individual
 
 import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
@@ -35,17 +34,16 @@ import views.html.register.trustees.individual.DateOfBirthView
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
 
-  val trusteeMessagePrefix = "trustee.individual.dateOfBirth"
-  val formProvider = new DateFormProvider(frontendAppConfig)
-  val form = formProvider.withConfig(trusteeMessagePrefix)
+  private val trusteeMessagePrefix = "trustee.individual.dateOfBirth"
+  private val formProvider = new DateFormProvider(frontendAppConfig)
+  private val form = formProvider.withConfig(trusteeMessagePrefix)
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  private val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
-  val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  private val index = 0
+  private val trusteeName = "FirstName LastName"
 
-  lazy val trusteesDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+  private lazy val trusteesDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
   "TrusteesDateOfBirth Controller" must {
 

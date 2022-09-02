@@ -21,17 +21,21 @@ import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.TelephoneNumberFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TelephoneNumberPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.TelephoneNumberView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class TelephoneNumberController @Inject()(
                                            override val messagesApi: MessagesApi,
@@ -42,8 +46,9 @@ class TelephoneNumberController @Inject()(
                                            nameAction: NameRequiredActionImpl,
                                            formProvider: TelephoneNumberFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: TelephoneNumberView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           view: TelephoneNumberView,
+                                           errorPageView: InternalServerErrorPageView
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider("leadTrustee.individual.telephoneNumber")
 
@@ -69,12 +74,15 @@ class TelephoneNumberController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
 
         value => {
-          val answers = request.userAnswers.set(TelephoneNumberPage(index), value)
-
-          for {
-            updatedAnswers <- Future.fromTry(answers)
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TelephoneNumberPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(TelephoneNumberPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(TelephoneNumberPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[TelephoneNumberController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }

@@ -17,7 +17,6 @@
 package controllers.register.trustees.individual
 
 import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import forms.PassportOrIdCardFormProvider
@@ -34,18 +33,17 @@ import views.html.register.trustees.individual.IDCardDetailsView
 
 class IDCardDetailsControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trustee.individual.idCardDetails"
-  val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  val form = formProvider(trusteeMessagePrefix)
-  val cardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
+  private val trusteeMessagePrefix = "trustee.individual.idCardDetails"
+  private val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
+  private val form = formProvider(trusteeMessagePrefix)
+  private val cardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
 
-  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
-  val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = FullName("FirstName", None, "LastName")
+  private val index = 0
+  private val trusteeName = FullName("FirstName", None, "LastName")
 
-  lazy val idCardDetailsRoute = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
+  private lazy val idCardDetailsRoute = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
 
   "IDCardDetails Controller" must {
 

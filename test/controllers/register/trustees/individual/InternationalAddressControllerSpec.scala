@@ -34,13 +34,13 @@ import views.html.register.trustees.individual.InternationalAddressView
 
 class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new InternationalAddressFormProvider()
-  val form: Form[InternationalAddress] = formProvider()
+  private val formProvider = new InternationalAddressFormProvider()
+  private val form: Form[InternationalAddress] = formProvider()
 
-  val index = 0
-  val fakeName = FullName("Test", None, "Name")
+  private val index = 0
+  private val fakeName = FullName("Test", None, "Name")
 
-  val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
+  private val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
 
   private lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(index, fakeDraftId).url
 
@@ -173,5 +173,6 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       application.stop()
     }
+
   }
 }

@@ -65,8 +65,7 @@ final case class UserAnswers(draftId: String,
       case JsSuccess(jsValue, _) =>
         Success(jsValue)
       case JsError(errors) =>
-        val errorPaths = errors.collectFirst{ case (path, e) => s"$path $e"}
-        logger.warn(s"Unable to set path ${page.path} due to errors $errorPaths")
+        logger.warn(s"Unable to set path ${page.path} due to errors")
         Failure(JsResultException(errors))
     }
 

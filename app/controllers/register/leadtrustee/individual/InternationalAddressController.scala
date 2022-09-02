@@ -21,19 +21,23 @@ import config.annotations.LeadTrusteeIndividual
 import controllers.actions.StandardActionSets
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.InternationalAddressFormProvider
+
 import javax.inject.Inject
 import models.core.pages.InternationalAddress
 import navigation.Navigator
 import pages.register.leadtrustee.individual.InternationalAddressPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.InternationalAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class InternationalAddressController @Inject()(override val messagesApi: MessagesApi,
                                                implicit val frontendAppConfig: FrontendAppConfig,
@@ -44,8 +48,9 @@ class InternationalAddressController @Inject()(override val messagesApi: Message
                                                formProvider: InternationalAddressFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                val countryOptions: CountryOptionsNonUK,
-                                               view: InternationalAddressView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               view: InternationalAddressView,
+                                               errorPageView: InternalServerErrorPageView
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[InternationalAddress] = formProvider()
 
@@ -71,10 +76,15 @@ class InternationalAddressController @Inject()(override val messagesApi: Message
           Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options, request.trusteeName))),
 
         value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(InternationalAddressPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[InternationalAddressController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
       )
   }
 }

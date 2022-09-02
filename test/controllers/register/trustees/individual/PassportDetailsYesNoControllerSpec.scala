@@ -29,15 +29,14 @@ import views.html.register.trustees.individual.PassportDetailsYesNoView
 
 class PassportDetailsYesNoControllerSpec extends SpecBase {
 
-  val trusteeMessagePrefix = "trustee.individual.passportDetailsYesNo"
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(trusteeMessagePrefix)
+  private val trusteeMessagePrefix = "trustee.individual.passportDetailsYesNo"
+  private val formProvider = new YesNoFormProvider()
+  private val form = formProvider.withPrefix(trusteeMessagePrefix)
 
-  val index = 0
-  val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  private val index = 0
+  private val trusteeName = "FirstName LastName"
 
-  lazy val passportDetailsYesNoRoute = routes.PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val passportDetailsYesNoRoute = routes.PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url
 
   "PassportDetailsYesNo Controller" must {
 

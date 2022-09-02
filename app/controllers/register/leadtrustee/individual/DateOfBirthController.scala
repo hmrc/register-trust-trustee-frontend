@@ -24,16 +24,19 @@ import controllers.actions.register.leadtrustee.individual.NameRequiredActionImp
 import forms.DateFormProvider
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesDateOfBirthPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.DateOfBirthView
 
 import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class DateOfBirthController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -44,8 +47,9 @@ class DateOfBirthController @Inject()(
                                        nameAction: NameRequiredActionImpl,
                                        formProvider: DateFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: DateOfBirthView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                       view: DateOfBirthView,
+                                       errorPageView: InternalServerErrorPageView
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def form: Form[LocalDate] =
     formProvider.withConfig("leadTrustee.individual.dateOfBirth", matchingLeadTrustee = true)
@@ -75,10 +79,15 @@ class DateOfBirthController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TrusteesDateOfBirthPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TrusteesDateOfBirthPage(index), draftId, updatedAnswers))
+          request.userAnswers.set(TrusteesDateOfBirthPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map{ _ =>
+                Redirect(navigator.nextPage(TrusteesDateOfBirthPage(index), draftId, updatedAnswers))
+              }
+            case Failure(_) =>
+              logger.error("[DateOfBirthController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
         }
       )
   }
