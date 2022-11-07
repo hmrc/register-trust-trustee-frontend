@@ -16,7 +16,6 @@
 
 package controllers.register.trustees.individual
 
-import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import controllers.register.IndexValidation
@@ -24,7 +23,6 @@ import forms.DateFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.individual.{DateOfBirthPage, NamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
@@ -32,7 +30,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.individual.DateOfBirthView
 
-class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
+import java.time.{LocalDate, ZoneOffset}
+
+class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
 
   private val trusteeMessagePrefix = "trustee.individual.dateOfBirth"
   private val formProvider = new DateFormProvider(frontendAppConfig)

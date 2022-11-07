@@ -29,9 +29,9 @@ class NinoYesNoViewSpec extends YesNoViewBehaviours {
 
   val index = 0
 
-  val form = new YesNoFormProvider().withPrefix("trustee.individual.ninoYesNo")
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix("trustee.individual.ninoYesNo")
 
-  val name = FullName("FirstName", None, "LastName").toString
+  val name: String = FullName("FirstName", None, "LastName").toString
 
   "NinoYesNoView view" must {
 

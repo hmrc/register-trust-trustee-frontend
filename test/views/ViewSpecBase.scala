@@ -131,7 +131,7 @@ trait ViewSpecBase extends SpecBase {
     assert(doc.getElementById(id) == null, "\n\nElement " + id + " was rendered on the page.\n")
   }
 
-  def assertRenderedByClass(doc: Document, cssClass: String) =
+  def assertRenderedByClass(doc: Document, cssClass: String): Assertion =
     assert(doc.getElementsByClass(cssClass) != null, "\n\nElement " + cssClass + " was not rendered on the page.\n")
 
   def assertNotRenderedByClass(doc: Document, className: String): Assertion = {
@@ -188,9 +188,10 @@ trait ViewSpecBase extends SpecBase {
     val radio = doc.getElementById(id)
     assert(radio.attr("name") == name, s"\n\nElement $id does not have name $name")
     assert(radio.attr("value") == value, s"\n\nElement $id does not have value $value")
-    isChecked match {
-      case true => assert(radio.hasAttr("checked"), s"\n\nElement $id is not checked")
-      case _ => assert(!radio.hasAttr("checked"), s"\n\nElement $id is checked")
+    if (isChecked) {
+      assert(radio.hasAttr("checked"), s"\n\nElement $id is not checked")
+    } else {
+      assert(!radio.hasAttr("checked"), s"\n\nElement $id is checked")
     }
   }
 

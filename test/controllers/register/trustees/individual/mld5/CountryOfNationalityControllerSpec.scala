@@ -17,23 +17,22 @@
 package controllers.register.trustees.individual.mld5
 
 import base.SpecBase
+import config.annotations.TrusteeIndividual
 import forms.CountryFormProvider
+import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
+import pages.register.trustees.individual.NamePage
+import pages.register.trustees.individual.mld5.CountryOfNationalityPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
-import config.annotations.TrusteeIndividual
-import models.core.pages.FullName
-import pages.register.trustees.individual.mld5.CountryOfNationalityPage
-import pages.register.trustees.individual.NamePage
 import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.mld5.CountryOfNationalityView
 
-class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfNationalityControllerSpec extends SpecBase {
 
   private val formProvider = new CountryFormProvider()
   private val form: Form[String] = formProvider.withPrefix("trustee.individual.5mld.countryOfNationality")

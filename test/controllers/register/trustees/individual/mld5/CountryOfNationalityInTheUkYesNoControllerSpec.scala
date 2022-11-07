@@ -17,13 +17,12 @@
 package controllers.register.trustees.individual.mld5
 
 import base.SpecBase
-import forms.YesNoFormProvider
 import config.annotations.TrusteeIndividual
+import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
-import pages.register.trustees.individual.mld5.CountryOfNationalityInTheUkYesNoPage
 import pages.register.trustees.individual.NamePage
+import pages.register.trustees.individual.mld5.CountryOfNationalityInTheUkYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -31,7 +30,7 @@ import play.api.test.Helpers._
 import views.html.InternalServerErrorPageView
 import views.html.register.trustees.individual.mld5.CountryOfNationalityInTheUkYesNoView
 
-class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
 
   private val formProvider = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfNationalityInTheUkYesNo")

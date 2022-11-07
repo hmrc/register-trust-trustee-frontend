@@ -16,8 +16,6 @@
 
 package utils
 
-import java.time.LocalDate
-
 import base.SpecBase
 import controllers.register.leadtrustee.individual.{routes => ltiRts}
 import controllers.register.leadtrustee.organisation.{routes => ltoRts}
@@ -35,6 +33,8 @@ import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.trustees.{individual => tind, organisation => torg}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import viewmodels.{AddRow, AddToRows}
+
+import java.time.LocalDate
 
 class AddATrusteeViewHelperSpec extends SpecBase {
 

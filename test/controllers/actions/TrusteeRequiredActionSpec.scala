@@ -17,7 +17,6 @@
 package controllers.actions
 
 import base.SpecBase
-import play.api.http.Status.SEE_OTHER
 import controllers.actions.register.{RemoveIndexRequest, TrusteeRequiredAction}
 import models.Status.Completed
 import models.UserAnswers
@@ -28,6 +27,7 @@ import org.scalatest.concurrent.ScalaFutures
 import pages.entitystatus.TrusteeStatus
 import pages.register.trustees.organisation.{NamePage, UtrPage, UtrYesNoPage}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
+import play.api.http.Status.SEE_OTHER
 import play.api.mvc.Result
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}

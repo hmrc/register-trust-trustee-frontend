@@ -16,14 +16,14 @@
 
 package pages.behaviours.leadtrustee.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.registration.pages.DetailsChoice._
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.leadtrustee.individual._
+
+import java.time.LocalDate
 
 class TrusteeDetailsChoicePageSpec extends PageBehaviours {
 

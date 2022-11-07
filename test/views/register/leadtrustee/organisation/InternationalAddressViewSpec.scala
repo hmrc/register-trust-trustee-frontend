@@ -43,7 +43,7 @@ class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like internationalAddress(applyView, Some(prefix), fakeName)
+    behave like internationalAddress(applyView, Some(prefix))
 
     behave like pageWithASubmitButton(applyView(form))
 

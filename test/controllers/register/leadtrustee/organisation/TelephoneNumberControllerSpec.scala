@@ -21,7 +21,6 @@ import config.annotations.LeadTrusteeOrganisation
 import forms.TelephoneNumberFormProvider
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.leadtrustee.organisation.{NamePage, TelephoneNumberPage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -29,7 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.leadtrustee.organisation.TelephoneNumberView
 
-class TelephoneNumberControllerSpec extends SpecBase with MockitoSugar {
+class TelephoneNumberControllerSpec extends SpecBase {
 
   val formProvider = new TelephoneNumberFormProvider()
   val form: Form[String] = formProvider("leadTrustee.organisation.telephoneNumber")

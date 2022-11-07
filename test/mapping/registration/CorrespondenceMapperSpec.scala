@@ -23,7 +23,7 @@ import models.RegistrationSubmission
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
-import org.scalatest.{OptionValues}
+import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}

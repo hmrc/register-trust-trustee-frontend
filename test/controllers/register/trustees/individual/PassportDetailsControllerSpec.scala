@@ -16,7 +16,6 @@
 
 package controllers.register.trustees.individual
 
-import java.time.LocalDate
 import base.SpecBase
 import config.annotations.TrusteeIndividual
 import forms.PassportOrIdCardFormProvider
@@ -30,6 +29,8 @@ import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.register.trustees.individual.PassportDetailsView
+
+import java.time.LocalDate
 
 class PassportDetailsControllerSpec extends SpecBase {
 

@@ -16,10 +16,10 @@
 
 package pages.behaviours
 
-import models.{UserAnswers, YesNoDontKnow}
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.DetailsChoice.Passport
 import models.registration.pages.PassportOrIdCardDetails
+import models.{UserAnswers, YesNoDontKnow}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.trustees.{individual => tind, organisation => torg}

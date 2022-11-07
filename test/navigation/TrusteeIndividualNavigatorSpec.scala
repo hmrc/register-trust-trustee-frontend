@@ -18,8 +18,8 @@ package navigation
 
 import base.SpecBase
 import config.FrontendAppConfig
-import controllers.register.trustees.individual.routes._
 import controllers.register.trustees.individual.mld5.routes._
+import controllers.register.trustees.individual.routes._
 import generators.Generators
 import models.YesNoDontKnow
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

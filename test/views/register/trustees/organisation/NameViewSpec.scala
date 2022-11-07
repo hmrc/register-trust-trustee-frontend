@@ -38,7 +38,7 @@ class NameViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPage(form, applyView, prefix, None, controllers.register.trustees.organisation.routes.NameController.onSubmit(index, fakeDraftId).url)
+    behave like stringPage(form, applyView, prefix, None)
 
     behave like pageWithASubmitButton(applyView(form))
 

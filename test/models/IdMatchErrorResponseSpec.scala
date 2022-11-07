@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package base
+package models
 
-import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar
-import repositories.RegistrationsRepository
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-import scala.concurrent.Future
+class IdMatchErrorResponseSpec extends AnyWordSpec with Matchers {
 
-trait Mocked extends MockitoSugar {
-
-  val registrationsRepository : RegistrationsRepository = mock[RegistrationsRepository]
-
-  when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
-  when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+  ".toString" must {
+    "return the correct string" in {
+      val input = Seq("foo", "bar")
+      IdMatchErrorResponse(input).toString mustEqual input.mkString(", ")
+    }
+  }
 }

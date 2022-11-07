@@ -33,17 +33,16 @@ import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.MatchingLockedView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class MatchingLockedController @Inject()(
-                                          val controllerComponents: MessagesControllerComponents,
+class MatchingLockedController @Inject()(val controllerComponents: MessagesControllerComponents,
                                           standardActionSets: StandardActionSets,
                                           nameAction: NameRequiredActionImpl,
                                           view: MatchingLockedView,
                                           registrationsRepository: RegistrationsRepository,
                                           errorPageView: InternalServerErrorPageView
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+                                        ) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)

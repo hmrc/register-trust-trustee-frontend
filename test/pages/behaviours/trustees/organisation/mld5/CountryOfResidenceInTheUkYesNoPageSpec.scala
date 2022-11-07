@@ -18,10 +18,9 @@ package pages.behaviours.trustees.organisation.mld5
 
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.trustees.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.behaviours.PageBehaviours
-import utils.Constants.GB
-import utils.Constants.ES
+import pages.register.trustees.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import utils.Constants.{ES, GB}
 
 class CountryOfResidenceInTheUkYesNoPageSpec  extends PageBehaviours {
 

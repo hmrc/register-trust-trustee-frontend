@@ -30,7 +30,7 @@ class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
   val index = 0
   val trusteeName = "Test"
 
-  val form = new CountryFormProvider().withPrefix(prefix)
+  val form: Form[String] = new CountryFormProvider().withPrefix(prefix)
 
   "countryOfNationality view" must {
 

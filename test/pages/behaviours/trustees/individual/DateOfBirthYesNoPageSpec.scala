@@ -16,12 +16,12 @@
 
 package pages.behaviours.trustees.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.trustees.individual.{DateOfBirthPage, DateOfBirthYesNoPage}
+
+import java.time.LocalDate
 
 class DateOfBirthYesNoPageSpec extends PageBehaviours {
 

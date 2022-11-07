@@ -20,8 +20,7 @@ import base.SpecBase
 import connectors.TrustsIndividualCheckConnector
 import models._
 import models.core.pages.FullName
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.{never, verify, when}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.scalatest.RecoverMethods.recoverToSucceededIf
 import pages.register.leadtrustee.individual._
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
@@ -200,7 +199,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
 
           whenReady(result) { res =>
             res mustBe IssueBuildingPayloadResponse
-            verify(mockConnector, never()).matchLeadTrustee(any())(any(), any())
+            verify(mockConnector, never).matchLeadTrustee(any())(any(), any())
           }
         }
       }

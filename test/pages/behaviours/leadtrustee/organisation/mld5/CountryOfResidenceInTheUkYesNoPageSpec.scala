@@ -20,8 +20,8 @@ import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.leadtrustee.organisation.{InternationalAddressPage, UkAddressPage}
 import pages.register.leadtrustee.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage}
+import pages.register.leadtrustee.organisation.{InternationalAddressPage, UkAddressPage}
 
 class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
 

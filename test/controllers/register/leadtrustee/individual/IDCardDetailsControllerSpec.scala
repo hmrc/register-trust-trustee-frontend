@@ -16,8 +16,6 @@
 
 package controllers.register.leadtrustee.individual
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
 import forms.PassportOrIdCardFormProvider
@@ -25,6 +23,7 @@ import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import navigation.{FakeNavigator, Navigator}
 import pages.register.leadtrustee.individual.{IDCardDetailsPage, TrusteesNamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -32,19 +31,21 @@ import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.register.leadtrustee.individual.IDCardDetailsView
 
+import java.time.LocalDate
+
 class IDCardDetailsControllerSpec extends SpecBase {
 
   val messagePrefix = "leadTrustee.individual.iDCardDetails"
   val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  val form = formProvider(messagePrefix)
-  val cardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
+  val form: Form[PassportOrIdCardDetails] = formProvider(messagePrefix)
+  val cardDetails: PassportOrIdCardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
 
   val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
   val index = 0
-  val trusteeName = FullName("FirstName", None, "LastName")
+  val trusteeName: FullName = FullName("FirstName", None, "LastName")
 
-  lazy val idCardDetailsRoute = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
+  lazy val idCardDetailsRoute: String = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
 
   "IDCardDetails Controller" must {
 
