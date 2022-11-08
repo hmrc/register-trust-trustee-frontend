@@ -17,6 +17,7 @@
 package navigation
 
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.register.trustees.organisation.mld5.{routes => mld5Rts}
 import controllers.register.trustees.organisation.routes._
 import generators.Generators
@@ -31,7 +32,7 @@ class TrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyC
   val navigator = new TrusteeOrganisationNavigator
   val index = 0
 
-  implicit val config = frontendAppConfig
+  implicit val config: FrontendAppConfig = frontendAppConfig
 
   "TrusteeOrganisation Navigator" when {
 

@@ -17,6 +17,7 @@
 package navigation
 
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.register.leadtrustee.organisation.mld5.{routes => mld5Rts}
 import controllers.register.leadtrustee.organisation.{routes => rts}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -28,7 +29,7 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
   val navigator = new LeadTrusteeOrganisationNavigator
   val index = 0
 
-  implicit val config = frontendAppConfig
+  implicit val config: FrontendAppConfig = frontendAppConfig
 
   "LeadTrusteeOrganisation Navigator" when {
 

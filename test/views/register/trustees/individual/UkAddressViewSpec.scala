@@ -27,7 +27,7 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
 
   val prefix = "trustee.individual.ukAddress"
   val index = 0
-  val fakeName = FullName("Test", None, "Name").toString
+  val fakeName: String = FullName("Test", None, "Name").toString
 
   override val form = new UKAddressFormProvider()()
 

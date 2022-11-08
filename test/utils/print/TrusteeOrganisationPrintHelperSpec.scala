@@ -18,8 +18,8 @@ package utils.print
 
 import base.SpecBase
 import controllers.register.routes.TrusteeIndividualOrBusinessController
-import controllers.register.trustees.organisation.routes._
 import controllers.register.trustees.organisation.mld5.routes._
+import controllers.register.trustees.organisation.routes._
 import models.UserAnswers
 import models.core.pages.IndividualOrBusiness.Business
 import models.core.pages.TrusteeOrLeadTrustee.Trustee

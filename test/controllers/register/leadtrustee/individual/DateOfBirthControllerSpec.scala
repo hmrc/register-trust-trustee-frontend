@@ -24,7 +24,6 @@ import models.UserAnswers
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesDateOfBirthPage, TrusteesNamePage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
@@ -34,7 +33,7 @@ import views.html.register.leadtrustee.individual.DateOfBirthView
 
 import java.time.{LocalDate, ZoneOffset}
 
-class DateOfBirthControllerSpec extends SpecBase with MockitoSugar with IndexValidation {
+class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
 
   val messagePrefix = "leadTrustee.individual.dateOfBirth"
   val formProvider = new DateFormProvider(frontendAppConfig)

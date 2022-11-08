@@ -16,20 +16,20 @@
 
 package views.register.trustees.individual
 
-import java.time.LocalDate
-
 import forms.DateFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.register.trustees.individual.DateOfBirthView
 
+import java.time.LocalDate
+
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "trustee.individual.dateOfBirth"
   val index = 0
 
-  val form = new DateFormProvider(frontendAppConfig).withConfig(messageKeyPrefix)
+  val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messageKeyPrefix)
 
   "DateOfBirthView view" must {
 

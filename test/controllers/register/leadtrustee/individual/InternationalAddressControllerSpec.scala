@@ -19,35 +19,36 @@ package controllers.register.leadtrustee.individual
 import base.SpecBase
 import config.annotations.LeadTrusteeIndividual
 import forms.InternationalAddressFormProvider
+import models.UserAnswers
 import models.core.pages.{FullName, InternationalAddress}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.leadtrustee.individual.{InternationalAddressPage, TrusteesNamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.leadtrustee.individual.InternationalAddressView
 
-class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
+class InternationalAddressControllerSpec extends SpecBase {
 
   val formProvider = new InternationalAddressFormProvider()
-  val form = formProvider()
+  val form: Form[InternationalAddress] = formProvider()
 
-  lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(index , fakeDraftId).url
+  lazy val internationalAddressRoute: String = routes.InternationalAddressController.onPageLoad(index , fakeDraftId).url
 
-  val countryOptions = injector.instanceOf[CountryOptionsNonUK]
+  val countryOptions: CountryOptionsNonUK = injector.instanceOf[CountryOptionsNonUK]
 
   val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
 
-  val name = FullName("Lead", None, "Trustee")
+  val name: FullName = FullName("Lead", None, "Trustee")
 
   val index = 0
 
-  override val emptyUserAnswers = super.emptyUserAnswers
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .set(TrusteesNamePage(index), name).success.value
 
-  val userAnswers = emptyUserAnswers
+  val userAnswers: UserAnswers = emptyUserAnswers
     .set(InternationalAddressPage(index), InternationalAddress("value 1", "value 2", None, "the country")).success.value
 
   "InternationalAddress Controller" must {

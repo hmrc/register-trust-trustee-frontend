@@ -30,9 +30,9 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetai
 
   val messageKeyPrefix = "trustee.individual.idCardDetails"
 
-  val name = FullName("First", None ,"last")
+  val name: FullName = FullName("First", None ,"last")
 
-  lazy val form = injector.instanceOf[PassportOrIdCardFormProvider].apply("trustee.individual.idCardDetails")
+  lazy val form: Form[PassportOrIdCardDetails] = injector.instanceOf[PassportOrIdCardFormProvider].apply("trustee.individual.idCardDetails")
 
   lazy val countryOptions: Seq[InputOption] = injector.instanceOf[CountryOptions].options
 

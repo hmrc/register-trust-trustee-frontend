@@ -24,6 +24,7 @@ import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.individual.{AddressUkYesNoPage, EmailAddressYesNoPage, TrusteesNamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -35,12 +36,12 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
   val messagePrefix = "leadTrustee.individual.emailAddressYesNo"
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(messagePrefix)
+  val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
 
   val index = 0
-  val trusteeName = FullName("FirstName", None, "LastName").toString
+  val trusteeName: String = FullName("FirstName", None, "LastName").toString
 
-  lazy val emailAddressYesNoRoute = routes.EmailAddressYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val emailAddressYesNoRoute: String = routes.EmailAddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "emailAddressYesNo Controller" must {
 

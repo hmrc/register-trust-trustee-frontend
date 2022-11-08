@@ -28,8 +28,7 @@ import models.registration.pages.AddATrustee
 import models.registration.pages.AddATrustee.{NoComplete, YesNow}
 import models.{Status, TaskStatus, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -358,7 +357,7 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
         redirectLocation(result).value mustEqual routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(AddATrusteePage).get mustBe YesNow
         uaCaptor.getValue.get(TrusteeOrLeadTrusteePage(index)).get mustBe LeadTrustee

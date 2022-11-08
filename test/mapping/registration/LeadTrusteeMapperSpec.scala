@@ -22,7 +22,7 @@ import models.core.pages.TrusteeOrLeadTrustee._
 import models.core.pages.{FullName, IndividualOrBusiness, InternationalAddress, UKAddress}
 import models.registration.pages.{DetailsChoice, PassportOrIdCardDetails}
 import models.{AddressType, IdentificationOrgType, IdentificationType, LeadTrusteeIndType, LeadTrusteeOrgType, LeadTrusteeType, PassportType}
-import org.scalatest.{OptionValues}
+import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
 import pages.register
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}

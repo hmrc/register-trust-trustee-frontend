@@ -16,21 +16,22 @@
 
 package utils.print
 
-import java.time.LocalDate
 import base.SpecBase
 import controllers.register.routes.TrusteeIndividualOrBusinessController
-import controllers.register.trustees.individual.routes._
 import controllers.register.trustees.individual.mld5.routes._
-import models.{UserAnswers, YesNoDontKnow}
+import controllers.register.trustees.individual.routes._
 import models.core.pages.IndividualOrBusiness.Individual
 import models.core.pages.TrusteeOrLeadTrustee.Trustee
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
+import models.{UserAnswers, YesNoDontKnow}
 import pages.register.trustees.individual._
 import pages.register.trustees.individual.mld5._
 import pages.register.{TrusteeIndividualOrBusinessPage, TrusteeOrLeadTrusteePage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
+
+import java.time.LocalDate
 
 class TrusteeIndividualPrintHelperSpec extends SpecBase {
 

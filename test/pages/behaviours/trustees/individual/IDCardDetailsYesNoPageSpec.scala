@@ -16,13 +16,13 @@
 
 package pages.behaviours.trustees.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.trustees.individual.{IDCardDetailsPage, IDCardDetailsYesNoPage}
+
+import java.time.LocalDate
 
 class IDCardDetailsYesNoPageSpec extends PageBehaviours {
 

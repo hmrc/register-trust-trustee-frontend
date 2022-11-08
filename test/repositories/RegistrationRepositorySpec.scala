@@ -19,10 +19,9 @@ package repositories
 import base.SpecBase
 import connectors.SubmissionDraftConnector
 import models._
-import org.mockito.Matchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.MockitoSugar
 import org.scalatest.matchers.must.Matchers
-import org.scalatestplus.mockito.MockitoSugar
 import play.api.http
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -33,7 +32,7 @@ import scala.concurrent.{Await, Future}
 
 class RegistrationRepositorySpec extends SpecBase with Matchers with MockitoSugar {
 
-  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory];
+  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory]
 
   private def createRepository(connector: SubmissionDraftConnector, submissionSetFactory: SubmissionSetFactory) = {
     new DefaultRegistrationsRepository(connector, frontendAppConfig, submissionSetFactory)

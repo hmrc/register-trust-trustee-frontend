@@ -19,7 +19,7 @@ package connectors
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.TaskStatus.Completed
-import org.scalatest.{OptionValues}
+import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder

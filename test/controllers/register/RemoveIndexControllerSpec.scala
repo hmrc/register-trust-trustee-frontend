@@ -23,8 +23,7 @@ import models.UserAnswers
 import models.core.pages.IndividualOrBusiness._
 import models.core.pages.{FullName, TrusteeOrLeadTrustee}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.ArgumentMatchers.any
 import pages.entitystatus.TrusteeStatus
 import pages.register.leadtrustee.{individual => ltind, organisation => ltorg}
 import pages.register.trustees.{individual => tind, organisation => torg}
@@ -331,7 +330,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         redirectLocation(result).value mustEqual addToPageRoute
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository, times(1)).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(Trustee(index)) mustNot be(defined)
 
@@ -356,7 +355,7 @@ class RemoveIndexControllerSpec extends SpecBase with IndexValidation {
 
         redirectLocation(result).value mustEqual addToPageRoute
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository, times(0)).set(uaCaptor.capture)(any(), any())
 
         application.stop()

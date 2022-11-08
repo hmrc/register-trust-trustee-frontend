@@ -16,13 +16,13 @@
 
 package generators
 
-import models.{Status, YesNoDontKnow}
-
-import java.time.LocalDate
 import models.core.pages._
 import models.registration.pages._
+import models.{Status, YesNoDontKnow}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+
+import java.time.LocalDate
 
 trait ModelGenerators {
 

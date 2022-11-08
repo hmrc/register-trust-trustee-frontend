@@ -27,7 +27,7 @@ class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
   val prefix = "leadTrustee.individual.5mld.countryOfResidenceInTheUkYesNo"
   val index = 0
-  val name = FullName("FirstName", None, "LastName").toString
+  val name: String = FullName("FirstName", None, "LastName").toString
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 

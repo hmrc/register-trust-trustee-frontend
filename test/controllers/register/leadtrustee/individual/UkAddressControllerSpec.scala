@@ -34,7 +34,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
   val formProvider = new UKAddressFormProvider()
   val form: Form[UKAddress] = formProvider()
-  val fakeName = FullName("First", None, "Last")
+  val fakeName: FullName = FullName("First", None, "Last")
   val index = 0
   val validAnswer: UKAddress = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
 

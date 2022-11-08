@@ -34,8 +34,8 @@ package controllers.register
 
 import base.SpecBase
 import generators.Generators
+import org.mockito.MockitoSugar
 import org.scalacheck.Gen
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.QuestionPage
 import play.api.Application
@@ -86,7 +86,7 @@ trait IndexValidation extends SpecBase with ScalaCheckPropertyChecks with Mockit
       index <- Gen.oneOf(
         Gen.chooseNum(answers.size + 1, answers.size + 100),
         Gen.chooseNum(-100, -1))
-    } yield (index)
+    } yield index
 
     forAll(gen) {
       index =>

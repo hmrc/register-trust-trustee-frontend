@@ -21,7 +21,6 @@ import config.annotations.LeadTrusteeIndividual
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.trustees.organisation.NamePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -31,7 +30,7 @@ import viewmodels.AnswerSection
 import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.CheckDetailsView
 
-class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class CheckDetailsControllerSpec extends SpecBase with ScalaFutures {
 
   private val index: Int = 0
   private val name = "Test"

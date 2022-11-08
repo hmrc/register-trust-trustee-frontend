@@ -22,6 +22,7 @@ import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import pages.register.leadtrustee.individual.{AddressUkYesNoPage, TrusteesNamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -31,13 +32,13 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
   val messagePrefix = "leadTrustee.individual.liveInTheUkYesNo"
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix(messagePrefix)
+  val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
 
   val index = 0
   val emptyTrusteeName = ""
   val trusteeName = "FirstName LastName"
 
-  lazy val trusteeLiveInTheUKRoute = routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeLiveInTheUKRoute: String = routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId).url
 
   "LiveInTheUkYesNo Controller" must {
 

@@ -24,6 +24,7 @@ import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.individual.{TelephoneNumberPage, TrusteesNamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -34,12 +35,12 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
   val messagePrefix = "leadTrustee.individual.telephoneNumber"
   val formProvider = new TelephoneNumberFormProvider()
-  val form = formProvider(messagePrefix)
+  val form: Form[String] = formProvider(messagePrefix)
 
   val index = 0
   val trusteeName = "FirstName LastName"
 
-  lazy val telephoneNumberRoute = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
+  lazy val telephoneNumberRoute: String = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
 
   "TelephoneNumber Controller" must {
 

@@ -21,7 +21,6 @@ import config.annotations.LeadTrusteeIndividual
 import forms.CountryFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.leadtrustee.individual.TrusteesNamePage
 import pages.register.leadtrustee.individual.mld5.CountryOfResidencePage
 import play.api.data.Form
@@ -33,7 +32,7 @@ import utils.countryOptions.CountryOptionsNonUK
 import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.mld5.CountryOfResidenceView
 
-class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfResidenceControllerSpec extends SpecBase {
 
   private val formProvider = new CountryFormProvider()
   private val form: Form[String] = formProvider.withPrefix("leadTrustee.individual.5mld.countryOfResidence")

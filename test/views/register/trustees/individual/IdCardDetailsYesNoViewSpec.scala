@@ -29,9 +29,9 @@ class IdCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
   val index = 0
 
-  val form = new YesNoFormProvider().withPrefix("trustee.individual.idCardDetailsYesNo")
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix("trustee.individual.idCardDetailsYesNo")
 
-  val name = FullName("FirstName", None, "LastName").toString
+  val name: String = FullName("FirstName", None, "LastName").toString
 
   "idCardDetailsYesNo view" must {
 
@@ -42,7 +42,7 @@ class IdCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like pageWithTitle(applyView(form), messageKeyPrefix, name.toString)
+    behave like pageWithTitle(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
