@@ -26,7 +26,7 @@ import config.FrontendAppConfig
 class SessionExpiredController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           view: SessionExpiredView,
-                                          appConfig: FrontendAppConfig
+                                          config: FrontendAppConfig
                                         ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
@@ -34,6 +34,6 @@ class SessionExpiredController @Inject()(
   }
 
   def onSubmit: Action[AnyContent] = Action { _ =>
-    Redirect(appConfig.loginUrl)
+    Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl), "origin" -> Seq(config.appName)))
   }
 }
