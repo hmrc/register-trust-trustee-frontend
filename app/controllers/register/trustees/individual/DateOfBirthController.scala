@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ class DateOfBirthController @Inject()(
                                        errorPageView: InternalServerErrorPageView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  val form: Form[LocalDate] = formProvider.withConfig("trustee.individual.dateOfBirth")
+  def form: Form[LocalDate] = formProvider.withConfig("trustee.individual.dateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
