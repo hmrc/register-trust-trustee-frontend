@@ -228,6 +228,7 @@ trustee.individual.nino.hint = It is on their National Insurance card, benefit l
 trustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 trustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 trustee.individual.nino.error.duplicate = Enter a National Insurance number that has not already been used to add a trustee or lead trustee
+trustee.individual.nino.error.unique = The trustee’s National Insurance number must not be the same as the settlor’s National Insurance number
 
 trustee.individual.addressYesNo.title = Do you know the trustee’s address?
 trustee.individual.addressYesNo.heading = Do you know {0}’s address?
@@ -600,6 +601,7 @@ leadTrustee.individual.nino.hint = It is on their National Insurance card, benef
 leadTrustee.individual.nino.error.required = Enter the trustee’s National Insurance number
 leadTrustee.individual.nino.error.invalidFormat = Enter the trustee’s National Insurance number in the correct format
 leadTrustee.individual.nino.error.duplicate = Enter a National Insurance number that has not already been used to add a trustee or lead trustee
+leadTrustee.individual.nino.error.unique = The lead trustee’s National Insurance number must not be the same as the settlor’s National Insurance number
 
 leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.title = Does the lead trustee have UK nationality?
 leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo.heading = Does {0} have UK nationality?

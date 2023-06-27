@@ -188,4 +188,21 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
       }
     }
   }
+
+  "uniqueNinoTrustee" should {
+
+    val existingSettlorNinos: Seq[String] = Seq("AA123456C", "AR123456A", "AE123456C")
+
+    "return Valid if the NINO is unique" in {
+
+      val result = uniqueNinoTrustee("error.duplicate", existingSettlorNinos)("AC123456C")
+      result mustEqual Valid
+    }
+
+    "return Invalid if the NINO is already in the existingSettlorNinos" in {
+
+      val result = uniqueNinoTrustee("error.duplicate", existingSettlorNinos)("AR123456A")
+      result mustEqual Invalid("error.duplicate")
+    }
+  }
 }

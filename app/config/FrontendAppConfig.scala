@@ -30,6 +30,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
                                    contactFrontendConfig: ContactFrontendConfig) {
 
   val repositoryKey: String = "trustees"
+  val repositoryKeySettlors: String = "settlors"
+
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
