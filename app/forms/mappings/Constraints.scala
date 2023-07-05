@@ -143,6 +143,16 @@ trait Constraints {
         }
     }
 
+  protected def uniqueNinoTrustee(errorKey: String, existingSettlorNinos: Seq[String]): Constraint[String] =
+    Constraint {
+      nino =>
+        if (existingSettlorNinos.contains(nino)) {
+          Invalid(errorKey)
+        } else {
+          Valid
+        }
+    }
+
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
     Constraint {
       case date if date.isAfter(maximum) =>

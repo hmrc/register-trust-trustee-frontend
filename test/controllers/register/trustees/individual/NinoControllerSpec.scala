@@ -22,21 +22,26 @@ import controllers.register.IndexValidation
 import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
+import services.DraftRegistrationService
 import views.html.register.trustees.individual.NinoView
+
+import scala.concurrent.Future
 
 class NinoControllerSpec extends SpecBase with IndexValidation {
 
   private val trusteeMessagePrefix = "trustee.individual.nino"
   private val formProvider = new NinoFormProvider()
   private val index = 0
+  val existingSettlorNinos = Seq("")
 
-  private val form = formProvider(trusteeMessagePrefix, emptyUserAnswers, index)
+  private val form = formProvider(trusteeMessagePrefix, emptyUserAnswers, index, existingSettlorNinos)
   private val trusteeName = "FirstName LastName"
   private val validAnswer = "NH111111A"
 
@@ -49,7 +54,11 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
       val request = FakeRequest(GET, trusteesNinoRoute)
 
@@ -71,7 +80,11 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(NinoPage(index), validAnswer).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
       val request = FakeRequest(GET, trusteesNinoRoute)
 
@@ -92,9 +105,14 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
+            bind[DraftRegistrationService].toInstance(mockDraftRegistrationService),
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
@@ -118,7 +136,11 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         val userAnswers = emptyUserAnswers
           .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+        when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
         val request =
           FakeRequest(POST, trusteesNinoRoute)
@@ -145,7 +167,11 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
             .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
             .set(NinoPage(index + 1), validAnswer).success.value
 
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+          when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
           val request =
             FakeRequest(POST, trusteesNinoRoute)
@@ -171,7 +197,11 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+
+      val application = applicationBuilder(userAnswers = None).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
       val request = FakeRequest(GET, trusteesNinoRoute)
 
@@ -186,7 +216,11 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to Session Expired for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+
+      val application = applicationBuilder(userAnswers = None).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
       val request =
         FakeRequest(POST, trusteesNinoRoute)

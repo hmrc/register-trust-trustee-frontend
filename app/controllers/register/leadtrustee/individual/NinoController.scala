@@ -31,6 +31,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.RegistrationsRepository
+import services.DraftRegistrationService
 import services.TrustsIndividualCheckService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -53,11 +54,21 @@ class NinoController @Inject()(
                                 view: NinoView,
                                 service: TrustsIndividualCheckService,
                                 errorHandler: ErrorHandler,
-                                errorPageView: InternalServerErrorPageView
+                                errorPageView: InternalServerErrorPageView,
+                                draftRegistrationService: DraftRegistrationService
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  def form(index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
-    formProvider("leadTrustee.individual.nino", request.userAnswers, index)
+  private def getForm(draftId: String, index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Future[Form[String]] = {
+    for {
+      existingSettlorNinos <- getSettlorNinos(draftId)
+    } yield {
+      formProvider("leadTrustee.individual.nino", request.userAnswers, index, Seq(existingSettlorNinos))
+    }
+  }
+
+  private def getSettlorNinos(draftId: String)(implicit request: TrusteeNameRequest[AnyContent]) = {
+    draftRegistrationService.retrieveSettlorNinos(draftId)
+  }
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
@@ -65,36 +76,42 @@ class NinoController @Inject()(
   private def isLeadTrusteeMatched(index: Int)(implicit request: TrusteeNameRequest[_]) =
     request.userAnswers.isLeadTrusteeMatched(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
-        case None => form(index)
-        case Some(value) => form(index).fill(value)
-      }
+      getForm(draftId, index).map { form =>
 
-      Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
+        val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
+
+        Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
+      }
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      form(index).bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
+      getForm(draftId, index).flatMap { form =>
 
-        value => {
-          request.userAnswers.set(TrusteesNinoPage(index), value) match {
-            case Success(updatedAnswers) =>
-              service.matchLeadTrustee(updatedAnswers, index).map { matchingResponse =>
-                handleMatchingResponse(updatedAnswers, index, draftId, matchingResponse)
-              }
-            case Failure(_) =>
-              logger.error("[NinoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(errorPageView()))
+        form.bindFromRequest().fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
+
+          value => {
+            request.userAnswers.set(TrusteesNinoPage(index), value) match {
+              case Success(updatedAnswers) =>
+                service.matchLeadTrustee(updatedAnswers, index).map { matchingResponse =>
+                  handleMatchingResponse(updatedAnswers, index, draftId, matchingResponse)
+                }
+              case Failure(_) =>
+                logger.error("[NinoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(errorPageView()))
+            }
           }
-        }
-      )
+        )
+      }
   }
 
   private def handleMatchingResponse(updatedAnswers: UserAnswers, index: Int, draftId: String,
