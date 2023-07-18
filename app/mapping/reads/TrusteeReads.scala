@@ -44,25 +44,25 @@ abstract class TrusteeReads[A : ClassTag] {
   def trusteeReads: Reads[A]
 
   def isLeadReads: Reads[Boolean] =
-    (__ \ 'trusteeOrLeadTrustee).read[TrusteeOrLeadTrustee].map[Boolean] {
+    (__ \ Symbol("trusteeOrLeadTrustee")).read[TrusteeOrLeadTrustee].map[Boolean] {
       case LeadTrustee => true
       case _ => false
     }
 
   def addressReads: Reads[Address] =
-    (__ \ 'ukAddress).read[UKAddress].widen[Address] or
-      (__ \ 'internationalAddress).read[InternationalAddress].widen[Address]
+    (__ \ Symbol("ukAddress")).read[UKAddress].widen[Address] or
+      (__ \ Symbol("internationalAddress")).read[InternationalAddress].widen[Address]
 
   def optionalAddressReads(yesNoPath: String): Reads[Option[Address]] = {
 
     val addressReads: Reads[Option[Address]] =
-      (__ \ 'ukAddress).read[UKAddress].map(Some(_: Address)) or
-        (__ \ 'internationalAddress).read[InternationalAddress].map(Some(_: Address)) or
+      (__ \ Symbol("ukAddress")).read[UKAddress].map(Some(_: Address)) or
+        (__ \ Symbol("internationalAddress")).read[InternationalAddress].map(Some(_: Address)) or
         Reads(_ => JsSuccess(None))
 
     ((__ \ yesNoPath).readNullable[Boolean] and
-      (__ \ 'addressYesNo).readNullable[Boolean] and
-      (__ \ 'addressUKYesNo).readNullable[Boolean] and
+      (__ \ Symbol("addressYesNo")).readNullable[Boolean] and
+      (__ \ Symbol("addressUKYesNo")).readNullable[Boolean] and
       addressReads
       ) ((_, _, _, _)).flatMap[Option[Address]] {
       case (Some(false), Some(true), Some(_), address @ Some(_)) =>
@@ -88,10 +88,10 @@ abstract class TrusteeReads[A : ClassTag] {
   }
 
   def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
-    (__ \ 'mentalCapacityYesNo).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+    (__ \ Symbol("mentalCapacityYesNo")).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
       Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
     }.orElse {
-      (__ \ 'mentalCapacityYesNo).readNullable[YesNoDontKnow]
+      (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
     }
 
 }

@@ -34,7 +34,7 @@ class IDCardDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetai
 
   lazy val form: Form[PassportOrIdCardDetails] = injector.instanceOf[PassportOrIdCardFormProvider].apply("leadTrustee.individual.iDCardDetails")
 
-  lazy val countryOptions: Seq[InputOption] = injector.instanceOf[CountryOptions].options
+  lazy val countryOptions: Seq[InputOption] = injector.instanceOf[CountryOptions].options()
 
   "IdCardDetails view" must {
 

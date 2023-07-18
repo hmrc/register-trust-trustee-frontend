@@ -32,7 +32,7 @@ title = s"${errorPrefix(form)}${messages("trustee.individual.addressUkYesNo.titl
 showBackLink = true
     ) {
 
-    @formHelper(action = AddressUkYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddressUkYesNoController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

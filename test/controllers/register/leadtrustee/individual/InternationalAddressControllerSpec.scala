@@ -66,7 +66,7 @@ class InternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form,index, fakeDraftId, countryOptions.options, name.toString)(request, messages).toString
+        view(form,index, fakeDraftId, countryOptions.options(), name.toString)(request, messages).toString
 
       application.stop()
     }
@@ -84,7 +84,7 @@ class InternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("value 1", "value 2", None, "the country")), index,fakeDraftId, countryOptions.options, name.toString)(request, messages).toString
+        view(form.fill(InternationalAddress("value 1", "value 2", None, "the country")), index,fakeDraftId, countryOptions.options(), name.toString)(request, messages).toString
 
       application.stop()
     }
@@ -134,7 +134,7 @@ class InternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId, countryOptions.options, name.toString)(request, messages).toString
+        view(boundForm, index, fakeDraftId, countryOptions.options(), name.toString)(request, messages).toString
 
        application.stop()
     }

@@ -43,7 +43,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
   val index = 0
 
-  val existingSettlorNinos = Seq("")
+  val existingSettlorNinos: Seq[String] = Seq("")
 
   val form = new NinoFormProvider()(messagePrefix, emptyUserAnswers, index, existingSettlorNinos)
 

@@ -39,7 +39,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
   private val trusteeMessagePrefix = "trustee.individual.nino"
   private val formProvider = new NinoFormProvider()
   private val index = 0
-  val existingSettlorNinos = Seq("")
+  val existingSettlorNinos: Seq[String] = Seq("")
 
   private val form = formProvider(trusteeMessagePrefix, emptyUserAnswers, index, existingSettlorNinos)
   private val trusteeName = "FirstName LastName"

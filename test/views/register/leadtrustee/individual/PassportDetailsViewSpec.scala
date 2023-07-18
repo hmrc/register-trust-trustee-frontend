@@ -34,13 +34,13 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
 
   lazy val form: Form[PassportOrIdCardDetails] = injector.instanceOf[PassportOrIdCardFormProvider].apply("leadTrustee.individual.passportDetails")
 
-  lazy val countryOptions: Seq[InputOption] = injector.instanceOf[CountryOptions].options
+  lazy val countryOptions: Seq[InputOption] = injector.instanceOf[CountryOptions].options()
 
   "PassportDetailsView view" must {
 
     val view = viewFor[PassportDetailsView](Some(emptyUserAnswers))
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, draftId, 0, name.toString)(fakeRequest, messages)

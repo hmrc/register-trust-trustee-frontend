@@ -34,7 +34,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = EmailAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = EmailAddressController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
