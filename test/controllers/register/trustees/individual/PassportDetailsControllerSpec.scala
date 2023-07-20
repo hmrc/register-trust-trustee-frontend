@@ -38,7 +38,7 @@ class PassportDetailsControllerSpec extends SpecBase {
   private val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
   private val form = formProvider(trusteeMessagePrefix)
 
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
   private val passportDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
 

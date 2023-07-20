@@ -38,7 +38,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = AddATrusteeController.submitComplete(draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddATrusteeController.submitComplete(draftId), Symbol("autoComplete") -> "off") {
 
         @heading(dynamicHeading)
 

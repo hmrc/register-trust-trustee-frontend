@@ -29,7 +29,7 @@ class NinoViewSpec extends StringViewBehaviours {
 
   val index = 0
 
-  val existingSettlorNinos = Seq("")
+  val existingSettlorNinos: Seq[String] = Seq("")
 
   val form: Form[String] = new NinoFormProvider().apply(messageKeyPrefix, emptyUserAnswers, index, existingSettlorNinos)
 

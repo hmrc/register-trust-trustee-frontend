@@ -63,7 +63,7 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
         val futureResult = action.callRefine(request(emptyUserAnswers))
 
         whenReady(futureResult) { r =>
-          val result = Future.successful(r.left.get)
+          val result = Future.successful(r.left.value)
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual controllers.register.routes.AddATrusteeController.onPageLoad(fakeDraftId).url
         }
@@ -87,7 +87,7 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
         val futureResult = action.callRefine(request(userAnswers))
 
         whenReady(futureResult) { result =>
-          result.right.get.trustee mustBe TrusteeViewModel(
+          result.value.trustee mustBe TrusteeViewModel(
             isLead = false,
             name = Some(name),
             `type` = Some(Business),

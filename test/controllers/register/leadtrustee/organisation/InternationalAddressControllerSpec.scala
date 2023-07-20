@@ -57,7 +57,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       val view = application.injector.instanceOf[InternationalAddressView]
 
@@ -82,7 +82,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
@@ -131,7 +131,7 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual BAD_REQUEST
 

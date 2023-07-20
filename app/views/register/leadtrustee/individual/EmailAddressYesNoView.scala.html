@@ -32,7 +32,7 @@ formHelper: FormWithCSRF
     showBackLink = true
     ) {
 
-@formHelper(action = EmailAddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+@formHelper(action = EmailAddressYesNoController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
 @errorSummary(form.errors)
 

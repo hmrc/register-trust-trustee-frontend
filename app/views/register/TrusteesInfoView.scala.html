@@ -111,7 +111,7 @@
 
     @warning("trusteesInfo.5mld")
 
-    @formHelper(action = TrusteesInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = TrusteesInfoController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
         @button(Some(messages("site.onlyContinue")))
     }
 

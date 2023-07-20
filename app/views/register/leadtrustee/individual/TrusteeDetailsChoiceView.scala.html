@@ -37,7 +37,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = TrusteeDetailsChoiceController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = TrusteeDetailsChoiceController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors, DetailsChoice.options)
 

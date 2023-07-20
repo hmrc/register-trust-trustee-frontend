@@ -39,7 +39,7 @@ class IDCardDetailsControllerSpec extends SpecBase {
   private val form = formProvider(trusteeMessagePrefix)
   private val cardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
 
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
   private val index = 0
   private val trusteeName = FullName("FirstName", None, "LastName")

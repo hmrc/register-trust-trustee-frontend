@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = NinoYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = NinoYesNoController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
