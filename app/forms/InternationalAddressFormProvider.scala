@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,7 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
               regexp(Validation.addressLineRegex, "internationalAddress.error.line2.invalidCharacters")
             )),
       "line3" ->
-        optional(Forms.text
-          .transform(trimWhitespace, identity[String])
+        optional(text()
           .verifying(
             firstError(
               maxLength(35, "internationalAddress.error.line3.length"),
