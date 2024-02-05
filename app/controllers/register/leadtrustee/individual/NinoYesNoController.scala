@@ -19,22 +19,21 @@ package controllers.register.leadtrustee.individual
 import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
-import controllers.actions.register.TrusteeNameRequest
 import controllers.actions.register.leadtrustee.individual.NameRequiredActionImpl
 import forms.YesNoFormProvider
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteeNinoYesNoPage
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.TrustsIndividualCheckService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.NinoYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -43,31 +42,30 @@ class NinoYesNoController @Inject()(
                                      implicit val frontendAppConfig: FrontendAppConfig,
                                      registrationsRepository: RegistrationsRepository,
                                      @LeadTrusteeIndividual navigator: Navigator,
-                                     standardActionSets: StandardActionSets,
-                                     nameAction: NameRequiredActionImpl,
+                                     val standardActionSets: StandardActionSets,
+                                     val nameAction: NameRequiredActionImpl,
                                      formProvider: YesNoFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
                                      view: NinoYesNoView,
-                                     errorPageView: InternalServerErrorPageView
-                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+                                     errorPageView: InternalServerErrorPageView,
+                                     val trustsIndividualCheckService: TrustsIndividualCheckService
+                                   )(implicit val ec: ExecutionContext) extends FrontendBaseController with NinoControllerHelper with I18nSupport with Logging {
 
   private val form = formProvider.withPrefix("leadTrustee.individual.ninoYesNo")
 
-  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
-    standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
-
-  private def isLeadTrusteeMatched(index: Int)(implicit request: TrusteeNameRequest[_]) =
-    request.userAnswers.isLeadTrusteeMatched(index)
-
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      val preparedForm = request.userAnswers.get(TrusteeNinoYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+      maxFailedAttemptsReached(draftId).flatMap { isMaxAttemptsReached =>
+        if (isMaxAttemptsReached) {
+          Future.successful(redirectToFailedAttemptsPage(index, draftId))
+        } else {
+          val preparedForm = request.userAnswers.get(TrusteeNinoYesNoPage(index)) match {
+            case None => form
+            case Some(value) => form.fill(value)
+          }
+          Future.successful(Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index))))
+        }
       }
-
-      Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
