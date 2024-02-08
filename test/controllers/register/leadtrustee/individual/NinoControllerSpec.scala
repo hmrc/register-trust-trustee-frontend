@@ -55,6 +55,13 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
   lazy val ninoRoute: String = routes.NinoController.onPageLoad(index, fakeDraftId).url
 
+  private val mockService = mock[TrustsIndividualCheckService]
+  val numberOfFailedAttempts: Int = 1
+  val maxNumberOfFailedAttempts: Int = 3
+
+  when(mockService.failedAttempts(any())(any(), any()))
+    .thenReturn(Future.successful(numberOfFailedAttempts))
+
   override def beforeEach(): Unit = {
     reset(registrationsRepository)
     when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
@@ -68,7 +75,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers))
+        .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+        .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+        .build()
 
       val request = FakeRequest(GET, ninoRoute)
 
@@ -93,7 +103,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+        .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+        .build()
 
       val request = FakeRequest(GET, ninoRoute)
 
@@ -118,7 +131,10 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+        .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+        .build()
 
       val request = FakeRequest(GET, ninoRoute)
 
@@ -218,9 +234,6 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
     "redirect to matching locked page" when {
       "LockedMatchResponse" in {
-
-        val mockService = mock[TrustsIndividualCheckService]
-
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
           .thenReturn(Future.successful(LockedMatchResponse))
 
@@ -229,7 +242,8 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
         val mockDraftRegistrationService = mock[DraftRegistrationService]
 
-        when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
+        when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any()))
+          .thenReturn(Future.successful(""))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
@@ -252,6 +266,36 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
 
         application.stop()
+      }
+
+      "lead trustee not matched 3 or more times" in {
+        when(mockService.failedAttempts(any())(any(), any()))
+          .thenReturn(Future.successful(maxNumberOfFailedAttempts))
+
+        val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+        when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any()))
+          .thenReturn(Future.successful(""))
+
+
+        val userAnswers = baseAnswers
+          .set(TrusteesNinoPage(index), validAnswer).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+            .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
+            .build()
+
+        val request = FakeRequest(POST, ninoRoute)
+          .withFormUrlEncodedBody(("value", validAnswer))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.MatchingLockedController.onPageLoad(index, fakeDraftId).url
       }
     }
 

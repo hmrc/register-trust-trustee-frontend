@@ -5,7 +5,6 @@ object AppDependencies {
   val bootstrapVersion = "7.23.0"
 
   private lazy val compile = Seq(
-    play.sbt.PlayImport.ws,
     "uk.gov.hmrc"             %% "play-frontend-hmrc"             % "7.29.0-play-28",
     "uk.gov.hmrc"             %% "domain"                         % "8.3.0-play-28",
     "uk.gov.hmrc"             %% "play-conditional-form-mapping"  % "1.13.0-play-28",
@@ -20,7 +19,7 @@ object AppDependencies {
     "org.mockito"                 %% "mockito-scala-scalatest"  % "1.17.30",
     "org.wiremock"                %  "wiremock-standalone"      % "3.3.1",
     "io.github.wolfendale"        %% "scalacheck-gen-regexp"    % "1.1.0",
-    "org.scalatestplus"           %% "scalatestplus-scalacheck" % "3.1.0.0-RC2",
+    "org.scalatestplus"           %% "scalacheck-1-17"          % "3.2.17.0",
     "com.vladsch.flexmark"        %  "flexmark-all"             % "0.64.8"
   ).map(_ % Test)
 

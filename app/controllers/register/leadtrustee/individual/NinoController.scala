@@ -31,8 +31,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.RegistrationsRepository
-import services.DraftRegistrationService
-import services.TrustsIndividualCheckService
+import services.{DraftRegistrationService, TrustsIndividualCheckService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.InternalServerErrorPageView
@@ -47,16 +46,16 @@ class NinoController @Inject()(
                                 implicit val frontendAppConfig: FrontendAppConfig,
                                 registrationsRepository: RegistrationsRepository,
                                 @LeadTrusteeIndividual navigator: Navigator,
-                                standardActionSets: StandardActionSets,
-                                nameAction: NameRequiredActionImpl,
+                                val standardActionSets: StandardActionSets,
+                                val nameAction: NameRequiredActionImpl,
                                 formProvider: NinoFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NinoView,
-                                service: TrustsIndividualCheckService,
+                                val trustsIndividualCheckService: TrustsIndividualCheckService,
                                 errorHandler: ErrorHandler,
                                 errorPageView: InternalServerErrorPageView,
                                 draftRegistrationService: DraftRegistrationService
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+                              )(implicit val ec: ExecutionContext) extends FrontendBaseController with NinoControllerHelper with I18nSupport with Logging {
 
   private def getForm(draftId: String, index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Future[Form[String]] = {
     for {
@@ -70,23 +69,22 @@ class NinoController @Inject()(
     draftRegistrationService.retrieveSettlorNinos(draftId)
   }
 
-  private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
-    standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
-
-  private def isLeadTrusteeMatched(index: Int)(implicit request: TrusteeNameRequest[_]) =
-    request.userAnswers.isLeadTrusteeMatched(index)
-
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
+      maxFailedAttemptsReached(draftId).flatMap { isMaxAttemptsReached =>
+        if (isMaxAttemptsReached) {
+          Future.successful(redirectToFailedAttemptsPage(index, draftId))
+        } else {
+          getForm(draftId, index).map { form =>
 
-      getForm(draftId, index).map { form =>
+            val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
+              case None => form
+              case Some(value) => form.fill(value)
+            }
 
-        val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
+            Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
+          }
         }
-
-        Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
       }
   }
 
@@ -102,7 +100,7 @@ class NinoController @Inject()(
           value => {
             request.userAnswers.set(TrusteesNinoPage(index), value) match {
               case Success(updatedAnswers) =>
-                service.matchLeadTrustee(updatedAnswers, index).map { matchingResponse =>
+                trustsIndividualCheckService.matchLeadTrustee(updatedAnswers, index).map { matchingResponse =>
                   handleMatchingResponse(updatedAnswers, index, draftId, matchingResponse)
                 }
               case Failure(_) =>
