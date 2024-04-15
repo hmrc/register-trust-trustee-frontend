@@ -39,7 +39,7 @@ import views.html.register.leadtrustee.individual.NinoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
 
 class NinoController @Inject()(
                                 override val messagesApi: MessagesApi,
@@ -58,9 +58,7 @@ class NinoController @Inject()(
                               )(implicit val ec: ExecutionContext) extends FrontendBaseController with NinoControllerHelper with I18nSupport with Logging {
 
   private def getForm(draftId: String, index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Future[Form[String]] = {
-    for {
-      existingSettlorNinos <- getSettlorNinos(draftId)
-    } yield {
+    getSettlorNinos(draftId).map { existingSettlorNinos =>
       formProvider("leadTrustee.individual.nino", request.userAnswers, index, Seq(existingSettlorNinos))
     }
   }
@@ -90,29 +88,15 @@ class NinoController @Inject()(
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
       getForm(draftId, index).flatMap { form =>
-
         form.bindFromRequest().fold(
-          (formWithErrors: Form[_]) =>
+          formWithErrors =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
-
           value => {
             request.userAnswers.set(TrusteesNinoPage(index), value) match {
               case Success(updatedAnswers) =>
-                trustsIndividualCheckService.matchLeadTrustee(updatedAnswers, index).flatMap { matchingResponse =>
-                  if (matchingResponse == UnsuccessfulMatchResponse) {
-                    val updatedAnswersWithoutNinoTry: Try[UserAnswers] = updatedAnswers.remove(TrusteesNinoPage(index))
-                    updatedAnswersWithoutNinoTry match {
-                      case Success(updatedAnswersWithoutNino) =>
-                        handleMatching(updatedAnswersWithoutNino, index, draftId, matchingResponse)
-                      case Failure(_) =>
-                        logger.error("[NinoController][onSubmit] Error while removing NI from user answers")
-                        Future.successful(InternalServerError(errorPageView()))
-                    }
-                  } else {
-                    handleMatching(updatedAnswers, index, draftId, matchingResponse)
-                  }
+                trustsIndividualCheckService.matchLeadTrustee(updatedAnswers, index).map { matchingResponse =>
+                  handleMatchingResponse(updatedAnswers, index, draftId, matchingResponse)
                 }
               case Failure(_) =>
                 logger.error("[NinoController][onSubmit] Error while storing user answers")
@@ -123,64 +107,38 @@ class NinoController @Inject()(
       }
   }
 
-  private def handleMatching(updatedAnswers: UserAnswers, index: Int, draftId: String,
-                             matchingResponse: TrustsIndividualCheckServiceResponse)
-                            (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Future[Result] = {
+  private def handleMatchingResponse(updatedAnswers: UserAnswers, index: Int, draftId: String,
+                                     matchingResponse: TrustsIndividualCheckServiceResponse)
+                                    (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Result = {
     updatedAnswers.set(MatchedYesNoPage(index), matchingResponse == SuccessfulMatchResponse) match {
       case Success(updatedAnswersWithMatched) =>
         registrationsRepository.set(updatedAnswersWithMatched)
         matchingResponse match {
           case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
-            Future.successful(Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswersWithMatched)))
+            Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswersWithMatched))
           case UnsuccessfulMatchResponse =>
-            Future.successful(Redirect(routes.MatchingFailedController.onPageLoad(index, draftId)))
+            removeNinoAndRedirect(updatedAnswersWithMatched, index, draftId, Redirect(routes.MatchingFailedController.onPageLoad(index, draftId)))
           case LockedMatchResponse =>
-            Future.successful(Redirect(routes.MatchingLockedController.onPageLoad(index, draftId)))
+            removeNinoAndRedirect(updatedAnswersWithMatched, index, draftId, Redirect(routes.MatchingLockedController.onPageLoad(index, draftId)))
           case _ =>
-            Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+            InternalServerError(errorHandler.internalServerErrorTemplate)
         }
       case Failure(_) =>
         logger.error("[NinoController][handleMatching] Error while storing user answers")
-        Future.successful(InternalServerError(errorPageView()))
+        InternalServerError(errorPageView())
     }
   }
 
-  //  private def handleSuccessfulMatching(updatedAnswers: UserAnswers, index: Int, draftId: String,
-//                                       matchingResponse: TrustsIndividualCheckServiceResponse)
-//                                      (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Future[Result] = {
-//    updatedAnswers.set(MatchedYesNoPage(index), matchingResponse == SuccessfulMatchResponse) match {
-//      case Success(updatedAnswersWithMatched) =>
-//        registrationsRepository.set(updatedAnswersWithMatched)
-//        matchingResponse match {
-//          case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
-//            Future.successful(Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswersWithMatched)))
-//          case LockedMatchResponse =>
-//            Future.successful(Redirect(routes.MatchingLockedController.onPageLoad(index, draftId)))
-//          case _ =>
-//            Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
-//        }
-//      case Failure(_) =>
-//        logger.error("[NinoController][handleSuccessfulMatching] Error while storing user answers")
-//        Future.successful(InternalServerError(errorPageView()))
-//    }
-//  }
-
-//  private def handleMatchingResponse(updatedAnswers: UserAnswers, index: Int, draftId: String,
-//                                     matchingResponse: TrustsIndividualCheckServiceResponse)
-//                                    (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Result =
-//    updatedAnswers.set(MatchedYesNoPage(index), matchingResponse == SuccessfulMatchResponse) match {
-//      case Success(updatedAnswersWithMatched) =>
-//        registrationsRepository.set(updatedAnswersWithMatched)
-//        matchingResponse match {
-//          case UnsuccessfulMatchResponse =>
-//            Redirect(routes.MatchingFailedController.onPageLoad(index, draftId))
-//          case LockedMatchResponse =>
-//            Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
-//          case _ =>
-//            InternalServerError(errorHandler.internalServerErrorTemplate)
-//        }
-//      case Failure(_) =>
-//        logger.error("[NinoController][handleMatchingResponse] Error while storing user answers")
-//        InternalServerError(errorPageView())
-//    }
+  private def removeNinoAndRedirect(updatedAnswers: UserAnswers, index: Int, draftId: String, redirect: Result)
+                                   (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Result = {
+    updatedAnswers.remove(TrusteesNinoPage(index)) match {
+      case Success(updatedAnswersWithMatched) =>
+        registrationsRepository.set(updatedAnswersWithMatched)
+        redirect
+      case Failure(_) => {
+        logger.error("[NinoController][removeNinoAndRedirect] Error while removing NI from user answers")
+        InternalServerError(errorPageView())
+      }
+    }
+  }
 }

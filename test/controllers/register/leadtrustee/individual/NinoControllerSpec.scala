@@ -225,7 +225,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
           routes.MatchingFailedController.onPageLoad(index, fakeDraftId).url
 
         val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        verify(registrationsRepository, times(2)).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
 
         application.stop()
@@ -262,7 +262,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
           routes.MatchingLockedController.onPageLoad(index, fakeDraftId).url
 
         val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        verify(registrationsRepository, times(2)).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(MatchedYesNoPage(index)).get mustBe false
 
         application.stop()
