@@ -35,10 +35,8 @@ import scala.concurrent.duration.Duration
 class SubmissionDraftConnectorSpec extends SpecBase with Matchers with OptionValues with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Seq(
-      "microservice.services.trusts.port" -> server.port(),
-      "auditing.enabled" -> false): _*
-    ).build()
+    .configure(defaultAppConfigurations ++ Map("microservice.services.trusts.port" -> server.port()))
+    .build()
 
   private lazy val connector = injector.instanceOf[SubmissionDraftConnector]
 

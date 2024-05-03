@@ -23,6 +23,8 @@ import forms.NinoFormProvider
 import models.core.pages.{FullName, IndividualOrBusiness}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.trustees.individual.{NamePage, NinoPage}
 import play.api.inject.bind
@@ -54,7 +56,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -80,7 +82,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
         .set(NinoPage(index), validAnswer).success.value
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -105,7 +107,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -136,7 +138,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         val userAnswers = emptyUserAnswers
           .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -167,7 +169,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
             .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
             .set(NinoPage(index + 1), validAnswer).success.value
 
-          val mockDraftRegistrationService = mock[DraftRegistrationService]
+          val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
           when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -197,7 +199,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -216,7 +218,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to Session Expired for a POST if no existing data is found" in {
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 

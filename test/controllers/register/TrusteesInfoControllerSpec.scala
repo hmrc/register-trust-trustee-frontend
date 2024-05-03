@@ -17,6 +17,7 @@
 package controllers.register
 
 import base.SpecBase
+import org.mockito.Mockito
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -25,7 +26,7 @@ import views.html.register.TrusteesInfoView
 
 class TrusteesInfoControllerSpec extends SpecBase {
 
-  lazy val mockFeatureFlagService: TrustsStoreService = mock[TrustsStoreService]
+  lazy val mockFeatureFlagService: TrustsStoreService = Mockito.mock(classOf[TrustsStoreService])
 
   "TrusteesInfo Controller" must {
 
