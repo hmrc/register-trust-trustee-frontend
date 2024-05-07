@@ -24,6 +24,8 @@ import models.UserAnswers
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary.arbitrary
 import pages.register.leadtrustee.individual._
 import play.api.data.Form
@@ -51,7 +53,7 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
   val baseAnswers: UserAnswers = emptyUserAnswers
     .set(TrusteesNamePage(index), trusteeName).success.value
 
-  private val mockService = mock[TrustsIndividualCheckService]
+  private val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
   val numberOfFailedAttempts: Int = 1
   val maxNumberOfFailedAttempts: Int = 3
 

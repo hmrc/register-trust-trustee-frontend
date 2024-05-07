@@ -17,14 +17,16 @@
 package base
 
 import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar
+import org.mockito.Mockito.when
+import org.mockito.Mockito
+import org.scalatestplus.mockito.MockitoSugar
 import repositories.RegistrationsRepository
 
 import scala.concurrent.Future
 
 trait Mocked extends MockitoSugar {
 
-  val registrationsRepository : RegistrationsRepository = mock[RegistrationsRepository]
+  val registrationsRepository : RegistrationsRepository = Mockito.mock(classOf[RegistrationsRepository])
 
   when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
   when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))

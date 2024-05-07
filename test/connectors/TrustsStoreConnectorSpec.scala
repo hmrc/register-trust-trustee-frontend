@@ -28,12 +28,8 @@ import utils.WireMockHelper
 class TrustsStoreConnectorSpec extends SpecBase with Matchers with OptionValues with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(
-      Seq(
-        "microservice.services.trusts-store.port" -> server.port(),
-        "auditing.enabled" -> false
-      ): _*
-    ).build()
+    .configure(defaultAppConfigurations ++ Map("microservice.services.trusts-store.port" -> server.port()))
+    .build()
 
   private lazy val connector = injector.instanceOf[TrustsStoreConnector]
 

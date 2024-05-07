@@ -23,8 +23,9 @@ import forms.NinoFormProvider
 import models._
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito._
+import org.mockito.{ArgumentCaptor, Mockito}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach
 import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesNamePage, TrusteesNinoPage}
@@ -55,7 +56,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
   lazy val ninoRoute: String = routes.NinoController.onPageLoad(index, fakeDraftId).url
 
-  private val mockService = mock[TrustsIndividualCheckService]
+  private val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
   val numberOfFailedAttempts: Int = 1
   val maxNumberOfFailedAttempts: Int = 3
 
@@ -71,7 +72,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
     "return OK and the correct view for a GET" in {
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService: DraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -99,7 +100,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       val userAnswers = baseAnswers
         .set(MatchedYesNoPage(index), true).success.value
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -127,7 +128,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
       val userAnswers = baseAnswers
         .set(TrusteesNinoPage(index), validAnswer).success.value
 
-      val mockDraftRegistrationService = mock[DraftRegistrationService]
+      val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -153,7 +154,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
     "redirect to the next page when valid data is submitted" when {
       "SuccessfulMatchResponse" in {
 
-        val mockService = mock[TrustsIndividualCheckService]
+        val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
           .thenReturn(Future.successful(SuccessfulMatchResponse))
@@ -161,7 +162,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -193,7 +194,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
       "UnsuccessfulMatchResponse" in {
 
-        val mockService = mock[TrustsIndividualCheckService]
+        val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
           .thenReturn(Future.successful(UnsuccessfulMatchResponse))
@@ -204,7 +205,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -240,7 +241,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any()))
           .thenReturn(Future.successful(""))
@@ -272,7 +273,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         when(mockService.failedAttempts(any())(any(), any()))
           .thenReturn(Future.successful(maxNumberOfFailedAttempts))
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any()))
           .thenReturn(Future.successful(""))
@@ -303,7 +304,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
       "IssueBuildingPayloadResponse" in {
 
-        val mockService = mock[TrustsIndividualCheckService]
+        val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
           .thenReturn(Future.successful(IssueBuildingPayloadResponse))
@@ -311,7 +312,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -337,7 +338,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
       "ServiceUnavailableErrorResponse" in {
 
-        val mockService = mock[TrustsIndividualCheckService]
+        val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
           .thenReturn(Future.successful(ServiceUnavailableErrorResponse))
@@ -345,7 +346,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -371,7 +372,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
 
       "TechnicalDifficultiesErrorResponse" in {
 
-        val mockService = mock[TrustsIndividualCheckService]
+        val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
 
         when(mockService.matchLeadTrustee(any(), any())(any(), any()))
           .thenReturn(Future.successful(TechnicalDifficultiesErrorResponse))
@@ -379,7 +380,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -410,7 +411,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
@@ -438,7 +439,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation with BeforeAndAft
         val userAnswers = baseAnswers
           .set(TrusteesNinoPage(index + 1), validAnswer).success.value
 
-        val mockDraftRegistrationService = mock[DraftRegistrationService]
+        val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 

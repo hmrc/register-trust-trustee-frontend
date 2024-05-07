@@ -27,8 +27,9 @@ import models.core.pages.{FullName, IndividualOrBusiness}
 import models.registration.pages.AddATrustee
 import models.registration.pages.AddATrustee.{NoComplete, YesNow}
 import models.{Status, TaskStatus, UserAnswers}
-import org.mockito.ArgumentCaptor
+import org.mockito.{ArgumentCaptor, Mockito}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -89,11 +90,13 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
       )
   }
 
-  private val mockTrustsStoreService: TrustsStoreService = mock[TrustsStoreService]
-  private val mockRegistrationProgress: RegistrationProgress = mock[RegistrationProgress]
+  private val mockTrustsStoreService: TrustsStoreService = Mockito.mock(classOf[TrustsStoreService])
+  private val mockRegistrationProgress: RegistrationProgress = Mockito.mock(classOf[RegistrationProgress])
 
   override def beforeEach(): Unit = {
-    reset(mockTrustsStoreService, mockRegistrationProgress, registrationsRepository)
+    reset(mockTrustsStoreService)
+    reset(mockRegistrationProgress)
+    reset(registrationsRepository)
 
     when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
       .thenReturn(Future.successful(HttpResponse(OK, "")))

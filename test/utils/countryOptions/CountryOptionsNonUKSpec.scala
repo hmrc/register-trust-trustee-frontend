@@ -29,9 +29,7 @@ class CountryOptionsNonUKSpec extends SpecBase {
     "build correctly the English InputOptions with non-UK country list and country code" in {
 
       val application = new GuiceApplicationBuilder()
-        .configure(Map(
-          "location.canonical.list.all" -> "non-uk-countries-canonical-list-test.json"
-        ))
+        .configure(defaultAppConfigurations ++ Map("location.canonical.list.all" -> "non-uk-countries-canonical-list-test.json"))
         .build()
 
         val messagesApi = app.injector.instanceOf[MessagesApi]
@@ -46,9 +44,7 @@ class CountryOptionsNonUKSpec extends SpecBase {
     "build correctly the Welsh InputOptions with non-UK country list and country code" in {
 
       val application = new GuiceApplicationBuilder()
-        .configure(Map(
-          "location.canonical.list.allCY" -> "non-uk-countries-canonical-list-test-cy.json"
-        ))
+        .configure(defaultAppConfigurations ++ Map("location.canonical.list.allCY" -> "non-uk-countries-canonical-list-test-cy.json"))
         .build()
 
       val messagesApi = app.injector.instanceOf[MessagesApi]
@@ -63,9 +59,7 @@ class CountryOptionsNonUKSpec extends SpecBase {
     "throw the error if the country json does not exist" in {
 
       val application = new GuiceApplicationBuilder()
-        .configure(Map(
-          "location.canonical.list.all" -> "countries-canonical-test.json"
-        ))
+        .configure(defaultAppConfigurations ++ Map("location.canonical.list.all" -> "countries-canonical-test.json"))
         .build()
 
       an[ConfigException.BadValue] shouldBe thrownBy {

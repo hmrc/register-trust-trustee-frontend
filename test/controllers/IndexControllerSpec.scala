@@ -21,8 +21,9 @@ import connectors.SubmissionDraftConnector
 import models.TaskStatus.InProgress
 import models.UserAnswers
 import models.core.pages.TrusteeOrLeadTrustee.LeadTrustee
-import org.mockito.ArgumentCaptor
+import org.mockito.{ArgumentCaptor, Mockito}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.TrusteeOrLeadTrusteePage
@@ -36,8 +37,8 @@ import scala.concurrent.Future
 
 class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  private val trustsStoreService: TrustsStoreService = mock[TrustsStoreService]
-  private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
+  private val trustsStoreService: TrustsStoreService = Mockito.mock(classOf[TrustsStoreService])
+  private val submissionDraftConnector: SubmissionDraftConnector = Mockito.mock(classOf[SubmissionDraftConnector])
 
   private val utr: String = "1234567890"
 

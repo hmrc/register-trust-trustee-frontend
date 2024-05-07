@@ -22,6 +22,7 @@ import models.core.pages.FullName
 import models.registration.pages.DetailsChoice._
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, verify, when}
 import pages.register.leadtrustee.individual._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

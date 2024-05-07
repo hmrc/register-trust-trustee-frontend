@@ -41,6 +41,12 @@ trait SpecBase extends PlaySpec
   with FakeTrustsApp
   with EitherValues {
 
+  val defaultAppConfigurations: Map[String, Any] = Map(
+    "auditing.enabled" -> false,
+    "metrics.enabled" -> false,
+    "play.filters.disabled" -> List("play.filters.csrf.CSRFFilter", "play.filters.csp.CSPFilter")
+  )
+
   final val ENGLISH = "en"
   final val WELSH = "cy"
 
@@ -78,4 +84,6 @@ trait SpecBase extends PlaySpec
         bind[RegistrationsRepository].toInstance(registrationsRepository),
         bind[AffinityGroup].toInstance(Organisation)
       )
+      .configure(defaultAppConfigurations)
+
 }

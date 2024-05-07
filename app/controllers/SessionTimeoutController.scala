@@ -17,20 +17,18 @@
 package controllers
 
 import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.api.{Configuration, Environment, Logging}
-import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
+import play.api.{Configuration, Logging}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
 class SessionTimeoutController @Inject()(val appConfig: FrontendAppConfig,
                                          val config: Configuration,
-                                         val env: Environment,
-                                         val controllerComponents: MessagesControllerComponents) extends FrontendBaseController with AuthRedirects with Logging {
+                                         val controllerComponents: MessagesControllerComponents) extends FrontendBaseController with Logging {
 
   val keepAlive: Action[AnyContent] = Action.async {
     implicit request =>
