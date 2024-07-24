@@ -53,7 +53,7 @@ class MatchingFailedController @Inject()(
       } recoverWith {
         case e =>
           logger.error(s"Failed to retrieve number of failed matching attempts: ${e.getMessage}")
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          errorHandler.onServerError(request, new Exception("Could not retrieve retrieve number of failed matching attempts."))
       }
   }
 

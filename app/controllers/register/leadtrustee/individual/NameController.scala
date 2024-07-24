@@ -20,9 +20,8 @@ import config.FrontendAppConfig
 import config.annotations.LeadTrusteeIndividual
 import controllers.actions._
 import forms.NameFormProvider
+import handlers.ErrorHandler
 import models.requests.RegistrationDataRequest
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.leadtrustee.individual.TrusteesNamePage
 import play.api.Logging
@@ -31,9 +30,9 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.InternalServerErrorPageView
 import views.html.register.leadtrustee.individual.NameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -46,7 +45,7 @@ class NameController @Inject()(
                                 formProvider: NameFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView,
-                                errorPageView: InternalServerErrorPageView
+                                errorHandler: ErrorHandler,
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider("leadTrustee.individual.name")
@@ -84,7 +83,7 @@ class NameController @Inject()(
               }
             case Failure(_) =>
               logger.error("[NameController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(errorPageView()))
+              errorHandler.onServerError(request, new Exception("Error while storing user answers."))
           }
         }
       )
