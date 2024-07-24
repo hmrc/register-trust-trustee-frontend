@@ -19,22 +19,30 @@ package connectors
 import config.FrontendAppConfig
 import models.{IdMatchRequest, IdMatchResponse}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import play.api.libs.json.Json
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrustsIndividualCheckConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
+class TrustsIndividualCheckConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) {
 
   private val trustsIndividualCheckUrl: String = s"${config.trustsIndividualCheckUrl}/trusts-individual-check"
 
   def matchLeadTrustee(body: IdMatchRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[IdMatchResponse] = {
     val url: String = s"$trustsIndividualCheckUrl/individual-check"
-    http.POST[IdMatchRequest, IdMatchResponse](url, body)
+    http
+      .post(url"$url")
+      .withBody(Json.toJson(body))
+      .execute[IdMatchResponse]
   }
 
   def failedAttempts(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int] = {
     val url: String = s"$trustsIndividualCheckUrl/$id/failed-attempts"
-    http.GET[Int](url)
+    http
+      .get(url"$url")
+      .execute[Int]
+
   }
 }

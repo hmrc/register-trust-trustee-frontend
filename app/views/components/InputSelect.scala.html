@@ -16,9 +16,11 @@
 
 @import utils.InputOption
 
+
 @this(
 govukSelect: GovukSelect
 )
+
 
 @(
 field: Field,
@@ -48,7 +50,7 @@ selectAttribute: Map[String, String] = Map.empty
  selected = field.value.contains(valueOption.value)
  )
 ),
- formGroupClasses = formGroupClasses.mkString(" "),
+ classes = formGroupClasses.mkString(" "),
  attributes = selectAttribute,
  errorMessage = field.error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
  )

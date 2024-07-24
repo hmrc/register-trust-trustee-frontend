@@ -25,6 +25,7 @@ import forms.NinoFormProvider
 import handlers.ErrorHandler
 import models._
 import navigation.Navigator
+import org.apache.pekko.http.scaladsl.model.HttpMessage.AlreadyDiscardedEntity.future
 import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesNinoPage}
 import play.api.Logging
 import play.api.data.Form
@@ -121,7 +122,7 @@ class NinoController @Inject()(
           case LockedMatchResponse =>
             removeNinoAndRedirect(updatedAnswersWithMatched, index, draftId, Redirect(routes.MatchingLockedController.onPageLoad(index, draftId)))
           case _ =>
-            InternalServerError(errorHandler.internalServerErrorTemplate)
+            InternalServerError(errorPageView())
         }
       case Failure(_) =>
         logger.error("[NinoController][handleMatching] Error while storing user answers")
