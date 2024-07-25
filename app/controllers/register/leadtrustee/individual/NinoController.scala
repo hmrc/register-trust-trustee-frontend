@@ -25,7 +25,6 @@ import forms.NinoFormProvider
 import handlers.ErrorHandler
 import models._
 import navigation.Navigator
-import org.apache.pekko.http.scaladsl.model.HttpMessage.AlreadyDiscardedEntity.future
 import pages.register.leadtrustee.individual.{MatchedYesNoPage, TrusteesNinoPage}
 import play.api.Logging
 import play.api.data.Form

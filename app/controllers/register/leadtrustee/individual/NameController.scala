@@ -83,7 +83,7 @@ class NameController @Inject()(
               }
             case Failure(_) =>
               logger.error("[NameController][onSubmit] Error while storing user answers")
-              errorHandler.onServerError(request, new Exception("Error while storing user answers."))
+              errorHandler.internalServerErrorTemplate.flatMap(html => Future.successful(InternalServerError(html)))
           }
         }
       )
