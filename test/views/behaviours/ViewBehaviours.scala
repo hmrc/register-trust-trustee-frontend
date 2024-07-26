@@ -195,7 +195,7 @@ trait ViewBehaviours extends ViewSpecBase {
       assertContainsClass(doc, "govuk-warning-text")
       assertContainsClass(doc, "govuk-warning-text__icon")
       assertContainsClass(doc, "govuk-warning-text__text")
-      assertContainsClass(doc, "govuk-warning-text__assistive")
+      assertContainsClass(doc.getElementsByClass("govuk-warning-text__text").first(), "govuk-visually-hidden")
     }
   }
 
