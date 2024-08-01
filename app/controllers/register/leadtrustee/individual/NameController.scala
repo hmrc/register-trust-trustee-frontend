@@ -45,7 +45,7 @@ class NameController @Inject()(
                                 formProvider: NameFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView,
-                                errorHandler: ErrorHandler,
+                                errorHandler: ErrorHandler
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider("leadTrustee.individual.name")
