@@ -121,7 +121,7 @@ class NinoController @Inject()(
           case LockedMatchResponse =>
             removeNinoAndRedirect(updatedAnswersWithMatched, index, draftId, Redirect(routes.MatchingLockedController.onPageLoad(index, draftId)))
           case _ =>
-            InternalServerError(errorHandler.internalServerErrorTemplate)
+            InternalServerError(errorPageView())
         }
       case Failure(_) =>
         logger.error("[NinoController][handleMatching] Error while storing user answers")

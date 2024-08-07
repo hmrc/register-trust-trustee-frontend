@@ -175,12 +175,12 @@ trait ViewSpecBase extends SpecBase {
     assertNotRenderedById(doc, "reg-progress")
   }
 
-  def assertContainsClass(doc: Document, className: String): Any = {
-    assert(doc.getElementsByClass(className).size() > 0, s"\n\nPage did not contain element with class $className")
+  def assertContainsClass(element: Element, className: String): Any = {
+    assert(element.getElementsByClass(className).size() > 0, s"\n\nPage did not contain element with class $className")
   }
 
-  def assertElementHasClass(doc: Document, id: String, expectedClass: String): Assertion = {
-    assert(doc.getElementById(id).hasClass(expectedClass), s"\n\nElement $id does not have class $expectedClass")
+  def assertElementHasClass(element: Element, id: String, expectedClass: String): Assertion = {
+    assert(element.getElementById(id).hasClass(expectedClass), s"\n\nElement $id does not have class $expectedClass")
   }
 
   def assertContainsRadioButton(doc: Document, id: String, name: String, value: String, isChecked: Boolean): Assertion = {
