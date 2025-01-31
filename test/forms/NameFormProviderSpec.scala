@@ -29,8 +29,9 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
     s".firstName with $prefix" must {
 
       val fieldName = "firstName"
-      val requiredKey = s"$prefix.error.firstnamerequired"
-      val lengthKey = s"$prefix.error.lengthfirstname"
+      val requiredKey = s"$prefix.error.firstName.required"
+      val lengthKey = s"$prefix.error.firstName.length"
+      val capitalKey = s"$prefix.error.firstName.capitalLetter"
       val maxLength = 35
 
       behave like fieldThatBindsValidData(
@@ -57,12 +58,19 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
         fieldName,
         requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
       )
+
+      behave like fieldStartingWithCapitalLetter(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, capitalKey, Seq(fieldName))
+      )
     }
 
     s".middleName with $prefix" must {
 
       val fieldName = "middleName"
-      val lengthKey = s"$prefix.error.lengthmiddlename"
+      val lengthKey = s"$prefix.error.middleName.length"
+      val capitalKey = s"$prefix.error.middleName.capitalLetter"
       val maxLength = 35
 
       behave like fieldWithMaxLength(
@@ -78,18 +86,24 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
         validDataGenerator = RegexpGen.from(Validation.nameRegex)
       )
 
+      behave like fieldStartingWithCapitalLetter(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, capitalKey, Seq(fieldName))
+      )
+
       "bind whitespace trim values" in {
-        val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  middle  ", "lastName" -> "lastName"))
-        result.value.value.middleName mustBe Some("middle")
+        val result = form.bind(Map("firstName" -> "FirstName", "middleName" -> "  Middle  ", "lastName" -> "LastName"))
+        result.value.value.middleName mustBe Some("Middle")
       }
 
       "bind whitespace blank values" in {
-        val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  ", "lastName" -> "lastName"))
+        val result = form.bind(Map("firstName" -> "FirstName", "middleName" -> "  ", "lastName" -> "LastName"))
         result.value.value.middleName mustBe None
       }
 
       "bind whitespace no values" in {
-        val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "", "lastName" -> "lastName"))
+        val result = form.bind(Map("firstName" -> "FirstName", "middleName" -> "", "lastName" -> "LastName"))
         result.value.value.middleName mustBe None
       }
     }
@@ -97,8 +111,9 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
     s".lastName with $prefix" must {
 
       val fieldName = "lastName"
-      val requiredKey = s"$prefix.error.lastnamerequired"
-      val lengthKey = s"$prefix.error.lengthlastname"
+      val requiredKey = s"$prefix.error.lastName.required"
+      val lengthKey = s"$prefix.error.lastName.length"
+      val capitalKey = s"$prefix.error.lastName.capitalLetter"
       val maxLength = 35
 
       behave like fieldThatBindsValidData(
@@ -124,6 +139,12 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
         form,
         fieldName,
         requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
+      )
+
+      behave like fieldStartingWithCapitalLetter(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, capitalKey, Seq(fieldName))
       )
     }
   }

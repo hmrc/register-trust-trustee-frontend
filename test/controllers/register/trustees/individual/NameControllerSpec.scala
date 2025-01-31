@@ -125,7 +125,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
     "redirect to the next page on a POST valid data is submitted" in {
 
-      val name = FullName("first name", Some("middle name"), "last name")
+      val name = FullName("First name", Some("Middle name"), "Last name")
 
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), name).success.value
@@ -140,7 +140,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
       val request =
         FakeRequest(POST, trusteesNameRoute)
-          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+          .withFormUrlEncodedBody(("firstName", "First"), ("middleName", "Middle"), ("lastName", "Last"))
 
       val result = route(application, request).value
 
@@ -172,7 +172,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
       val request =
         FakeRequest(POST, trusteesNameRoute)
-          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+          .withFormUrlEncodedBody(("firstName", "First"), ("middleName", "Middle"), ("lastName", "Last"))
 
       val result = route(application, request).value
 
@@ -206,7 +206,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
           controllers.register.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+          .withFormUrlEncodedBody(("firstName", "First"), ("middleName", "Middle"), ("lastName", "Last"))
       }
 
       validateIndex(

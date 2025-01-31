@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
   val index = 0
 
-  val name: FullName = FullName("first name", Some("middle name"), "last name")
+  val name: FullName = FullName("First name", Some("Middle name"), "Last name")
 
   val messageKeyPrefix = "leadTrustee.individual.name"
 
@@ -155,7 +155,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         val request =
           FakeRequest(POST, trusteesNameRoute)
-            .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+            .withFormUrlEncodedBody(("firstName", "First"), ("middleName", "Middle"), ("lastName", "Last"))
 
         val result = route(application, request).value
 
@@ -187,7 +187,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
       val request =
         FakeRequest(POST, trusteesNameRoute)
-          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+          .withFormUrlEncodedBody(("firstName", "First"), ("middleName", "Middle"), ("lastName", "Last"))
 
       val result = route(application, request).value
 
@@ -221,7 +221,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
           controllers.register.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+          .withFormUrlEncodedBody(("firstName", "First"), ("middleName", "Middle"), ("lastName", "Last"))
       }
 
       validateIndex(

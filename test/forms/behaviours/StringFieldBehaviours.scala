@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,17 @@ trait StringFieldBehaviours extends FieldBehaviours {
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
           result.errors mustEqual Seq(lengthError)
       }
+    }
+  }
+
+  def fieldStartingWithCapitalLetter(form: Form[_],
+                                     fieldName: String,
+                                     requiredError: FormError): Unit = {
+
+    "not bind a string without a starting capital letter" in {
+
+      val result = form.bind(Map(fieldName -> "notStartingWithCapital")).apply(fieldName)
+      result.errors mustBe Seq(requiredError)
     }
   }
 
