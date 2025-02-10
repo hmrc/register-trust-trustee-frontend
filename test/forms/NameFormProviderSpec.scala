@@ -17,12 +17,32 @@
 package forms
 
 import forms.behaviours.{OptionalFieldBehaviours, StringFieldBehaviours}
+import org.scalacheck.Gen
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehaviours {
 
   val messagePrefix: Seq[String] = Seq("trustee.individual.name", "leadTrustee.individual.name")
+
+  /**
+   * The following section of the nameRegex is removed,
+   * as the scalacheck-gen-regexp library does not appear to support it: ^(?=.{1,99}$)
+   */
+  val nameRegex = "([A-Z]([-'. ]{0,1}[A-Za-z ]+)*[A-Za-z]?)$"
+
+  /**
+   * This method produces a Gen[String] that conforms to the nameRegex,
+   * but is at least one character over the max allowed length
+   */
+  private def validStringButOverMaxLength(maxLength: Int): Gen[String] = {
+    for {
+      firstChar <- Gen.alphaUpperChar
+      length <- Gen.choose(maxLength + 1, maxLength * 2)
+      chars <- Gen.listOfN(length, Gen.alphaChar)
+    } yield (firstChar :: chars).mkString
+  }
+
 
   for (prefix <- messagePrefix) {
     val form = new NameFormProvider()(prefix)
@@ -37,14 +57,15 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
       behave like fieldThatBindsValidData(
         form,
         fieldName,
-        RegexpGen.from(Validation.nameRegex)
+        RegexpGen.from(nameRegex)
       )
 
       behave like fieldWithMaxLength(
         form,
         fieldName,
         maxLength = maxLength,
-        lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+        lengthError = FormError(fieldName, lengthKey, Seq(maxLength)),
+        validStringButOverMaxLength(maxLength)
       )
 
       behave like mandatoryField(
@@ -77,13 +98,14 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
         form,
         fieldName,
         maxLength = maxLength,
-        lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+        lengthError = FormError(fieldName, lengthKey, Seq(maxLength)),
+        validStringButOverMaxLength(maxLength)
       )
 
       behave like optionalField(
         form,
         fieldName,
-        validDataGenerator = RegexpGen.from(Validation.nameRegex)
+        validDataGenerator = RegexpGen.from(nameRegex)
       )
 
       behave like fieldStartingWithCapitalLetter(
@@ -119,14 +141,15 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
       behave like fieldThatBindsValidData(
         form,
         fieldName,
-        RegexpGen.from(Validation.nameRegex)
+        RegexpGen.from(nameRegex)
       )
 
       behave like fieldWithMaxLength(
         form,
         fieldName,
         maxLength = maxLength,
-        lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+        lengthError = FormError(fieldName, lengthKey, Seq(maxLength)),
+        validStringButOverMaxLength(maxLength)
       )
 
       behave like mandatoryField(

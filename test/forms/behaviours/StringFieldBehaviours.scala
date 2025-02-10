@@ -60,6 +60,21 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
   }
 
+  def fieldWithMaxLength(form: Form[_],
+                         fieldName: String,
+                         maxLength: Int,
+                         lengthError: FormError,
+                         stringGenerator: Gen[String]): Unit = {
+
+    s"not bind strings longer than $maxLength characters" in {
+      forAll(stringGenerator -> "longString") {
+        string =>
+          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+          result.errors mustEqual Seq(lengthError)
+      }
+    }
+  }
+
   def fieldStartingWithCapitalLetter(form: Form[_],
                                      fieldName: String,
                                      requiredError: FormError): Unit = {
