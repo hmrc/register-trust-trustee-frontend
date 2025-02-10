@@ -35,10 +35,10 @@ class NameFormProvider @Inject() extends Mappings {
       "firstName" -> text(s"$messagePrefix.error.firstName.required")
         .verifying(
           firstError(
-            maxLength(maxFieldCharacters, s"$messagePrefix.error.firstName.length"),
             nonEmptyString("firstName", s"$messagePrefix.error.firstName.required"),
-            startsWithCapitalLetter("firstName", s"$messagePrefix.error.firstName.capitalLetter"),
-            regexp(Validation.nameRegex, s"$messagePrefix.error.firstName.invalid")
+            regexp(Validation.nameRegex, s"$messagePrefix.error.firstName.invalid"),
+            maxLength(maxFieldCharacters, s"$messagePrefix.error.firstName.length"),
+            startsWithCapitalLetter("firstName", s"$messagePrefix.error.firstName.capitalLetter")
           )
         ),
       "middleName" -> optional(text()
@@ -47,9 +47,9 @@ class NameFormProvider @Inject() extends Mappings {
             Constraint[String] { value: String =>
               if (value.nonEmpty) {
                 firstError(
+                  regexp(Validation.nameRegex, s"$messagePrefix.error.middleName.invalid"),
                   maxLength(maxFieldCharacters, s"$messagePrefix.error.middleName.length"),
-                  startsWithCapitalLetter("middleName", s"$messagePrefix.error.middleName.capitalLetter"),
-                  regexp(Validation.nameRegex, s"$messagePrefix.error.middleName.invalid")
+                  startsWithCapitalLetter("middleName", s"$messagePrefix.error.middleName.capitalLetter")
                 )(value)
               } else {
                 Valid
@@ -60,10 +60,10 @@ class NameFormProvider @Inject() extends Mappings {
       "lastName" -> text(s"$messagePrefix.error.lastName.required")
         .verifying(
           firstError(
-            maxLength(maxFieldCharacters, s"$messagePrefix.error.lastName.length"),
             nonEmptyString("lastName", s"$messagePrefix.error.lastName.required"),
-            startsWithCapitalLetter("lastName", s"$messagePrefix.error.lastName.capitalLetter"),
-            regexp(Validation.nameRegex, s"$messagePrefix.error.lastName.invalid")
+            regexp(Validation.nameRegex, s"$messagePrefix.error.lastName.invalid"),
+            maxLength(maxFieldCharacters, s"$messagePrefix.error.lastName.length"),
+            startsWithCapitalLetter("lastName", s"$messagePrefix.error.lastName.capitalLetter")
           )
         )
     )(FullName.apply)(FullName.unapply)
