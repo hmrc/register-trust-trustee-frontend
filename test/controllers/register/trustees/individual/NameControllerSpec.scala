@@ -100,7 +100,7 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val name = FullName("first name", Some("middle name"), "last name")
+      val name = FullName("First name", Some("Middle name"), "Last name")
 
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), name).success.value

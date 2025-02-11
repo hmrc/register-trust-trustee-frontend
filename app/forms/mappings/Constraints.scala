@@ -16,7 +16,6 @@
 
 package forms.mappings
 
-import forms.Validation
 import models.UserAnswers
 import pages.register.trustees.individual.NinoPage
 import play.api.data.validation.{Constraint, Invalid, Valid}
@@ -26,7 +25,6 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.emailaddress.EmailAddress
 
 import java.time.LocalDate
-import scala.util.matching.Regex
 
 trait Constraints {
 
@@ -71,19 +69,6 @@ trait Constraints {
         Valid
       case _ =>
         Invalid(errorKey, value)
-    }
-
-  protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint {
-      input =>
-
-        import ev._
-
-        if (input >= minimum && input <= maximum) {
-          Valid
-        } else {
-          Invalid(errorKey, minimum, maximum)
-        }
     }
 
   protected def regexp(regex: String, errorKey: String): Constraint[String] =
@@ -168,16 +153,6 @@ trait Constraints {
       case _ =>
         Valid
     }
-
-  protected def wholeNumber(errorKey: String): Constraint[String] = {
-
-    val regex: Regex = Validation.decimalCheck.r
-
-    Constraint {
-      case regex(_*) => Valid
-      case _ => Invalid(errorKey)
-    }
-  }
 
   protected def isTelephoneNumberValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
