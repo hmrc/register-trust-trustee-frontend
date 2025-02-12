@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,34 +23,47 @@ import javax.inject.Inject
 import models.core.pages.FullName
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.validation.{Constraint, Valid}
 
 
 class NameFormProvider @Inject() extends Mappings {
 
+  private val maxFieldCharacters = 35
+
   def apply(messagePrefix: String): Form[FullName] = Form(
     mapping(
-      "firstName" -> text(s"$messagePrefix.error.firstnamerequired")
+      "firstName" -> text(s"$messagePrefix.error.firstName.required")
         .verifying(
           firstError(
-            maxLength(35, s"$messagePrefix.error.lengthfirstname"),
-            nonEmptyString("firstName", s"$messagePrefix.error.firstnamerequired"),
-            regexp(Validation.nameRegex, s"$messagePrefix.error.invalidFirstNameCharacters")
+            nonEmptyString("firstName", s"$messagePrefix.error.firstName.required"),
+            regexp(Validation.nameRegex, s"$messagePrefix.error.firstName.invalid"),
+            maxLength(maxFieldCharacters, s"$messagePrefix.error.firstName.length"),
+            startsWithCapitalLetter("firstName", s"$messagePrefix.error.firstName.capitalLetter")
           )
         ),
       "middleName" -> optional(text()
         .transform(trimWhitespace, identity[String])
         .verifying(
-          firstError(
-            maxLength(35, s"$messagePrefix.error.lengthmiddlename"),
-            regexp(Validation.nameRegex, s"$messagePrefix.error.invalidMiddleNameCharacters"))
+            Constraint[String] { value: String =>
+              if (value.nonEmpty) {
+                firstError(
+                  regexp(Validation.nameRegex, s"$messagePrefix.error.middleName.invalid"),
+                  maxLength(maxFieldCharacters, s"$messagePrefix.error.middleName.length"),
+                  startsWithCapitalLetter("middleName", s"$messagePrefix.error.middleName.capitalLetter")
+                )(value)
+              } else {
+                Valid
+              }
+            }
         )
       ).transform(emptyToNone, identity[Option[String]]),
-      "lastName" -> text(s"$messagePrefix.error.lastnamerequired")
+      "lastName" -> text(s"$messagePrefix.error.lastName.required")
         .verifying(
           firstError(
-            maxLength(35, s"$messagePrefix.error.lengthlastname"),
-            nonEmptyString("lastName", s"$messagePrefix.error.lastnamerequired"),
-            regexp(Validation.nameRegex, s"$messagePrefix.error.invalidLastNameCharacters")
+            nonEmptyString("lastName", s"$messagePrefix.error.lastName.required"),
+            regexp(Validation.nameRegex, s"$messagePrefix.error.lastName.invalid"),
+            maxLength(maxFieldCharacters, s"$messagePrefix.error.lastName.length"),
+            startsWithCapitalLetter("lastName", s"$messagePrefix.error.lastName.capitalLetter")
           )
         )
     )(FullName.apply)(FullName.unapply)
