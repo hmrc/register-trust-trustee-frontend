@@ -169,7 +169,7 @@ leadTrustee.individual.name.error.middleName.length=Mae’n rhaid i enwau canol 
 leadTrustee.individual.name.error.middleName.invalid=Mae’n rhaid i enw canol y prif ymddiriedolwr gynnwys y llythrennau A i Z, cysylltnodau, collnodau neu atalnodau llawn yn unig.
 leadTrustee.individual.name.error.middleName.capitalLetter = Mae’n rhaid i enw canol y prif ymddiriedolwr ddechrau â phrif lythyren.
 
-leadTrustee.individual.name.error.lastName.required = Nodwch enw olaf y prif ymddiriedolwr
+leadTrustee.individual.name.error.lastName.required = Nodwch enw olaf y prif ymddiriedolwr.
 leadTrustee.individual.name.error.lastName.length=Mae’n rhaid i enw olaf y prif ymddiriedolwr fod yn 35 o gymeriadau neu lai.
 leadTrustee.individual.name.error.lastName.invalid=Mae’n rhaid i enw olaf y prif ymddiriedolwr gynnwys y llythrennau A i Z, cysylltnodau, collnodau neu atalnodau llawn yn unig.
 leadTrustee.individual.name.error.lastName.capitalLetter = Mae’n rhaid i enw olaf y prif ymddiriedolwr ddechrau â phrif lythyren.
