@@ -36,7 +36,7 @@ class NameFormProvider @Inject() extends Mappings {
         .verifying(
           firstError(
             nonEmptyString("firstName", s"$messagePrefix.error.firstName.required"),
-            regexp(Validation.nameRegex, s"$messagePrefix.error.firstName.invalid"),
+            regexp(Validation.individualNameRegex, s"$messagePrefix.error.firstName.invalid"),
             maxLength(maxFieldCharacters, s"$messagePrefix.error.firstName.length"),
             startsWithCapitalLetter("firstName", s"$messagePrefix.error.firstName.capitalLetter")
           )
@@ -47,7 +47,7 @@ class NameFormProvider @Inject() extends Mappings {
             Constraint[String] { value: String =>
               if (value.nonEmpty) {
                 firstError(
-                  regexp(Validation.nameRegex, s"$messagePrefix.error.middleName.invalid"),
+                  regexp(Validation.individualNameRegex, s"$messagePrefix.error.middleName.invalid"),
                   maxLength(maxFieldCharacters, s"$messagePrefix.error.middleName.length"),
                   startsWithCapitalLetter("middleName", s"$messagePrefix.error.middleName.capitalLetter")
                 )(value)
@@ -61,7 +61,7 @@ class NameFormProvider @Inject() extends Mappings {
         .verifying(
           firstError(
             nonEmptyString("lastName", s"$messagePrefix.error.lastName.required"),
-            regexp(Validation.nameRegex, s"$messagePrefix.error.lastName.invalid"),
+            regexp(Validation.individualNameRegex, s"$messagePrefix.error.lastName.invalid"),
             maxLength(maxFieldCharacters, s"$messagePrefix.error.lastName.length"),
             startsWithCapitalLetter("lastName", s"$messagePrefix.error.lastName.capitalLetter")
           )
