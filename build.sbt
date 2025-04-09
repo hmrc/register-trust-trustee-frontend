@@ -5,7 +5,7 @@ import uk.gov.hmrc.DefaultBuildSettings
 lazy val appName: String = "register-trust-trustee-frontend"
 
 ThisBuild / scalaVersion := "2.13.16"
-ThisBuild / majorVersion := 1
+ThisBuild / majorVersion := 0
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
