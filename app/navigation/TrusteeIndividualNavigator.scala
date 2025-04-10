@@ -26,7 +26,6 @@ import pages.register.trustees.individual.mld5._
 import play.api.mvc.Call
 
 class TrusteeIndividualNavigator extends Navigator {
-
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => _ => mld5Rts.CountryOfNationalityYesNoController.onPageLoad(index, draftId)

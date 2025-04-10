@@ -17,6 +17,7 @@
 package forms
 
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import play.api.data.Form
 
@@ -28,7 +29,7 @@ class EmailAddressFormProvider @Inject() extends Mappings {
         .verifying(
           firstError(
             maxLength(256, s"$prefix.error.length"),
-            isEmailValid("value", s"$prefix.error.invalid")
+            isEmailValid(Validation.emailAddressRegex, s"$prefix.error.invalid")
           )
         )
     )
