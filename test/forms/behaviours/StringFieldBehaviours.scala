@@ -22,7 +22,6 @@ import org.scalacheck.Gen
 import pages.register.leadtrustee.{organisation => ltorg}
 import pages.register.trustees.{organisation => torg}
 import play.api.data.{Form, FormError}
-import uk.gov.hmrc.emailaddress.EmailAddress
 import wolfendale.scalacheck.regexp.RegexpGen
 
 trait StringFieldBehaviours extends FieldBehaviours {
@@ -108,7 +107,6 @@ trait StringFieldBehaviours extends FieldBehaviours {
                     requiredError: FormError): Unit = {
 
     "not bind spaces" in {
-
       val result = form.bind(Map(fieldName -> "    ")).apply(fieldName)
       result.errors mustBe Seq(requiredError)
     }
@@ -130,28 +128,12 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
   }
 
-  def emailAddressField(form: Form[_],
-                        fieldName: String,
-                        invalidError: FormError): Unit = {
-
-    s"not bind strings which do not match valid email address format " in {
-      forAll(nonEmptyString) {
-        string =>
-          whenever(!EmailAddress.isValid(string)) {
-            val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors mustEqual Seq(invalidError)
-          }
-      }
-    }
-  }
-
   def utrField(form: UtrFormProvider,
                prefix: String,
                fieldName: String,
                length: Int,
                notUniqueError: FormError,
                sameAsTrustUtrError: FormError): Unit = {
-
     val regex = Validation.utrRegex.replace("*", s"{$length}")
     val utrGenerator = RegexpGen.from(regex)
 

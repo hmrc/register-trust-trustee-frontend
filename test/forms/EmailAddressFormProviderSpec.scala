@@ -52,10 +52,13 @@ class EmailAddressFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    behave like emailAddressField(
+    behave like fieldWithRegexpWithGenerator(
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey, Seq(fieldName))
+      regexp = Validation.emailAddressRegex,
+      generator = stringsWithMaxLength(maxLength),
+      error = FormError(fieldName, invalidKey, Seq(Validation.emailAddressRegex))
     )
+
   }
 }
