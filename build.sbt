@@ -55,4 +55,4 @@ lazy val root = (project in file("."))
     uglify / includeFilter := GlobFilter("registertrusttrusteefrontend-*.js")
   )
 
-addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")
+
