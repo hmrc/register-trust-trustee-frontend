@@ -390,7 +390,6 @@ site.inprogress=Ar y gweill
 site.no=Na
 site.onlyContinue=Yn eich blaen
 site.print-or-save=Argraffu neu gadw’r dudalen hon
-site.reg-progress=Yn ôl i gynnydd cofrestru
 site.save.continue=Cadw ac yn eich blaen
 service.name=Cofrestru ymddiriedolaeth
 site.service_section=Ymddiriedolwyr
