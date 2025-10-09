@@ -1,6 +1,4 @@
 import play.sbt.routes.RoutesKeys
-import scoverage.ScoverageKeys
-import uk.gov.hmrc.DefaultBuildSettings
 
 lazy val appName: String = "register-trust-trustee-frontend"
 
@@ -24,10 +22,7 @@ lazy val root = (project in file("."))
       "controllers.routes._"
     ),
     PlayKeys.playDefaultPort := 8839,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;.*components.*;.*Mode.*;.*Routes.*;",
-    ScoverageKeys.coverageMinimumStmtTotal := 86,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true,
+    CodeCoverageSettings(),
     scalacOptions ++= Seq(
       "-feature",
       "-Wconf:src=routes/.*:s",
