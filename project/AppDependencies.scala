@@ -11,7 +11,6 @@ object AppDependencies {
     "uk.gov.hmrc"         %% "bootstrap-frontend-play-30"             % playBootstrapVersion
   )
 
-
   private lazy val test = Seq(
     "uk.gov.hmrc"            %% "bootstrap-test-play-30"         % playBootstrapVersion,
     "org.scalatestplus"      %% "scalacheck-1-18"                % "3.2.19.0",
