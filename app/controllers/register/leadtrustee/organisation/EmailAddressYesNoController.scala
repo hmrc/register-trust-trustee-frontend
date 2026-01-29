@@ -37,51 +37,49 @@ import views.html.register.leadtrustee.organisation.EmailAddressYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class EmailAddressYesNoController @Inject()(
-                                             val controllerComponents: MessagesControllerComponents,
-                                             implicit val frontendAppConfig: FrontendAppConfig,
-                                             registrationsRepository: RegistrationsRepository,
-                                             @LeadTrusteeOrganisation navigator: Navigator,
-                                             standardActionSets: StandardActionSets,
-                                             nameAction: NameRequiredActionImpl,
-                                             formProvider: YesNoFormProvider,
-                                             view: EmailAddressYesNoView,
-                                             errorPageView: InternalServerErrorPageView
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class EmailAddressYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @LeadTrusteeOrganisation navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredActionImpl,
+  formProvider: YesNoFormProvider,
+  view: EmailAddressYesNoView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
   val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.organisation.emailYesNo")
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(EmailAddressYesNoPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(EmailAddressYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+    Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
-
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
         value =>
           request.userAnswers.set(EmailAddressYesNoPage(index), value) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(EmailAddressYesNoPage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[EmailAddressYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
       )
   }
+
 }

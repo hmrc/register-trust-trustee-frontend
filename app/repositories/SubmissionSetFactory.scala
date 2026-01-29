@@ -27,68 +27,69 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
-class SubmissionSetFactory @Inject()(trusteeMapper: TrusteeMapper,
-                                     leadTrusteeMapper: LeadTrusteeMapper,
-                                     correspondenceMapper: CorrespondenceMapper,
-                                     printHelpers: PrintHelpers) extends Logging {
+class SubmissionSetFactory @Inject() (
+  trusteeMapper: TrusteeMapper,
+  leadTrusteeMapper: LeadTrusteeMapper,
+  correspondenceMapper: CorrespondenceMapper,
+  printHelpers: PrintHelpers
+) extends Logging {
 
-  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
+  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet =
 
     RegistrationSubmission.DataSet(
       data = Json.toJson(userAnswers),
       registrationPieces = mappedData(userAnswers),
       answerSections = answerSections(userAnswers)
     )
-  }
 
   private def mappedData(userAnswers: UserAnswers) = {
 
     logger.info(s"[mappedData] attempting to generate mapped data")
 
-      val result: Option[List[RegistrationSubmission.MappedPiece]] = leadTrusteeMapper.build(userAnswers) match {
-        case Some(x) =>
-          val leadTrusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", Json.toJson(x))
+    val result: Option[List[RegistrationSubmission.MappedPiece]] = leadTrusteeMapper.build(userAnswers) match {
+      case Some(x) =>
+        val leadTrusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", Json.toJson(x))
 
-          trusteeMapper.build(userAnswers) match {
-            case Some(trustees) =>
-              val trusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/trustees", Json.toJson(trustees))
-              Some(List(leadTrusteesPiece, trusteesPiece))
-            case _ =>
-              Some(List(leadTrusteesPiece))
-          }
-        case None =>
-          logger.warn(s"[mappedDataIfCompleted] unable to generate a lead trustee")
-          None
-      }
+        trusteeMapper.build(userAnswers) match {
+          case Some(trustees) =>
+            val trusteesPiece = RegistrationSubmission.MappedPiece("trust/entities/trustees", Json.toJson(trustees))
+            Some(List(leadTrusteesPiece, trusteesPiece))
+          case _              =>
+            Some(List(leadTrusteesPiece))
+        }
+      case None    =>
+        logger.warn(s"[mappedDataIfCompleted] unable to generate a lead trustee")
+        None
+    }
 
-      result match {
-        case Some(pieces) => pieces ++ correspondenceMapper.build(userAnswers)
-        case None =>
-          logger.warn(s"[mappedDataIfCompleted] lead trustee status is complete, no data to map")
-          List.empty
-      }
+    result match {
+      case Some(pieces) => pieces ++ correspondenceMapper.build(userAnswers)
+      case None         =>
+        logger.warn(s"[mappedDataIfCompleted] lead trustee status is complete, no data to map")
+        List.empty
+    }
   }
 
-  private def answerSections(userAnswers: UserAnswers)
-                                       (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
-      val helper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
+  private def answerSections(
+    userAnswers: UserAnswers
+  )(implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+    val helper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId, canEdit = false)
 
-      helper.trustees match {
-        case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
-        case None => List.empty
-      }
+    helper.trustees match {
+      case Some(answerSections: Seq[AnswerSection]) => answerSections.toList map convertForSubmission
+      case None                                     => List.empty
+    }
   }
 
-  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection =
     RegistrationSubmission.AnswerSection(
       headingKey = section.headingKey,
       rows = section.rows.map(convertForSubmission),
       sectionKey = section.sectionKey,
       headingArgs = section.headingArgs.map(_.toString)
     )
-  }
 
-  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
+  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow =
     RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
-  }
+
 }

@@ -33,4 +33,5 @@ class SessionExpiredViewSpec extends ViewBehaviours {
 
     behave like pageWithGuidance(applyView, "session_expired", "guidance")
   }
+
 }

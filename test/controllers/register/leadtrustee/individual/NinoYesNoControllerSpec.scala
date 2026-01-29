@@ -38,23 +38,24 @@ import views.html.register.leadtrustee.individual.NinoYesNoView
 
 import scala.concurrent.Future
 
-
 class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  val messagePrefix = "trustee.individual.ninoYesNo"
-  val formProvider = new YesNoFormProvider()
+  val messagePrefix       = "trustee.individual.ninoYesNo"
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
 
-  val index = 0
+  val index                 = 0
   val trusteeName: FullName = FullName("FirstName", None, "LastName")
 
   lazy val ninoYesNo: String = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
 
   val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(TrusteesNamePage(index), trusteeName).success.value
+    .set(TrusteesNamePage(index), trusteeName)
+    .success
+    .value
 
-  private val mockService = Mockito.mock(classOf[TrustsIndividualCheckService])
-  val numberOfFailedAttempts: Int = 1
+  private val mockService            = Mockito.mock(classOf[TrustsIndividualCheckService])
+  val numberOfFailedAttempts: Int    = 1
   val maxNumberOfFailedAttempts: Int = 3
 
   when(mockService.failedAttempts(any())(any(), any()))
@@ -85,7 +86,9 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET when lead trustee matched" in {
 
       val userAnswers = baseAnswers
-        .set(MatchedYesNoPage(index), true).success.value
+        .set(MatchedYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
@@ -108,7 +111,9 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(TrusteeNinoYesNoPage(index), true).success.value
+        .set(TrusteeNinoYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TrustsIndividualCheckService].toInstance(mockService))
@@ -136,12 +141,12 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
             bind[Navigator]
               .qualifiedWith(classOf[LeadTrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, ninoYesNo)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -168,7 +173,11 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.register.leadtrustee.individual.routes.MatchingLockedController.onPageLoad(0, "draftId").url
+      redirectLocation(
+        result
+      ).value mustEqual controllers.register.leadtrustee.individual.routes.MatchingLockedController
+        .onPageLoad(0, "draftId")
+        .url
 
       application.stop()
     }
@@ -259,4 +268,5 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       )
     }
   }
+
 }

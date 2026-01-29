@@ -19,7 +19,7 @@ package models.registration.pages
 import java.time.LocalDate
 import play.api.libs.json.{Json, OFormat}
 
-case class PassportOrIdCardDetails(country: String, cardNumber: String, expiryDate:LocalDate)
+case class PassportOrIdCardDetails(country: String, cardNumber: String, expiryDate: LocalDate)
 
 object PassportOrIdCardDetails {
   implicit val format: OFormat[PassportOrIdCardDetails] = Json.format[PassportOrIdCardDetails]

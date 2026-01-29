@@ -64,8 +64,12 @@ class TrusteeOrLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
       "redirect to TrusteeIndividualOrBusiness Page for a different index to previously answered" in {
 
         val answers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-          .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
+          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+          .success
+          .value
+          .set(TrusteeOrLeadTrusteePage(1), Trustee)
+          .success
+          .value
 
         val application =
           applicationBuilder(userAnswers = Some(answers)).build()
@@ -175,7 +179,7 @@ class TrusteeOrLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
 
     "for a GET" must {
 
-      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
+      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
         val route = routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
@@ -206,4 +210,5 @@ class TrusteeOrLeadTrusteeControllerSpec extends SpecBase with IndexValidation {
       )
     }
   }
+
 }

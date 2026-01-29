@@ -27,34 +27,36 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, Upstream
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubmissionDraftConnector @Inject()(http: HttpClientV2, config : FrontendAppConfig) {
+class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig) {
 
   private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
 
-  def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)
-                        (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] =
+  def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[HttpResponse] =
     http
       .post(url"$submissionsBaseUrl/$draftId/set/$section")
       .withBody(Json.toJson(data))
       .execute[HttpResponse]
 
-
-  def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] =
+  def getDraftSection(draftId: String, section: String)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[SubmissionDraftResponse] =
     http
       .get(url"$submissionsBaseUrl/$draftId/$section")
       .execute[SubmissionDraftResponse]
 
-
-  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
+  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
     http
       .get(url"$submissionsBaseUrl/$draftId/is-trust-taxable")
       .execute[Boolean]
       .recover { case _ =>
         true
       }
-  }
 
-  def getTrustUtr(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = {
+  def getTrustUtr(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] =
     http
       .get(url"$submissionsBaseUrl/$draftId/trust-utr")
       .execute[String]
@@ -62,6 +64,5 @@ class SubmissionDraftConnector @Inject()(http: HttpClientV2, config : FrontendAp
       .recover {
         case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => None
       }
-  }
 
 }

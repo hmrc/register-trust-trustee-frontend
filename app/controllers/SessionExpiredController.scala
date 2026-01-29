@@ -23,11 +23,11 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.SessionExpiredView
 import config.FrontendAppConfig
 
-class SessionExpiredController @Inject()(
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: SessionExpiredView,
-                                          config: FrontendAppConfig
-                                        ) extends FrontendBaseController with I18nSupport {
+class SessionExpiredController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  view: SessionExpiredView,
+  config: FrontendAppConfig
+) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(view())
@@ -36,4 +36,5 @@ class SessionExpiredController @Inject()(
   def onSubmit: Action[AnyContent] = Action { _ =>
     Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl), "origin" -> Seq(config.appName)))
   }
+
 }

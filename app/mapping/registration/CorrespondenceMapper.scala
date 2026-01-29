@@ -25,22 +25,25 @@ class CorrespondenceMapper extends Logging {
 
   def build(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
     val result = userAnswers.get(Trustees).getOrElse(Nil) match {
-      case Nil => None
-      case list => list.find(_.isLead).map {
-        case lt: LeadTrustee => List(
-          RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lt.hasUkAddress)),
-          RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(lt.addressType)),
-          RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lt.telephoneNumber))
-        )
-        case _ =>
-          logger.info(s"[build] unable to create correspondence due to unexpected lead trustee type")
-          List.empty
-      }
+      case Nil  => None
+      case list =>
+        list.find(_.isLead).map {
+          case lt: LeadTrustee =>
+            List(
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(!lt.hasUkAddress)),
+              RegistrationSubmission.MappedPiece("correspondence/address", Json.toJson(lt.addressType)),
+              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString(lt.telephoneNumber))
+            )
+          case _               =>
+            logger.info(s"[build] unable to create correspondence due to unexpected lead trustee type")
+            List.empty
+        }
     }
 
     result match {
       case Some(list) => list
-      case None => Nil
+      case None       => Nil
     }
   }
+
 }

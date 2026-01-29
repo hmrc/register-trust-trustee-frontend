@@ -33,29 +33,58 @@ class RegistrationProgressSpec extends SpecBase {
 
   private val registrationProgress: RegistrationProgress = injector.instanceOf[RegistrationProgress]
 
-  private implicit class AddTrusteesToUserAnswers(userAnswers: UserAnswers) {
+  implicit private class AddTrusteesToUserAnswers(userAnswers: UserAnswers) {
 
-    def addIndividualLeadTrustee(index: Int): UserAnswers = {
-      userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-        .set(ltind.TrusteesNamePage(index), FullName("first name", Some("middle name"), "Last Name")).success.value
-        .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(2000, 10, 10)).success.value
-        .set(ltind.TrusteeNinoYesNoPage(index), true).success.value
-        .set(ltind.TrusteesNinoPage(index), "AB123456C").success.value
-        .set(ltind.AddressUkYesNoPage(index), true).success.value
-        .set(ltind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA")).success.value
-        .set(ltind.EmailAddressYesNoPage(index), false).success.value
-        .set(ltind.TelephoneNumberPage(index), "0191 1111111").success.value
-        .set(TrusteeStatus(index), Status.Completed).success.value
-    }
-    
-    def addOrganisationTrustee(index: Int): UserAnswers = {
+    def addIndividualLeadTrustee(index: Int): UserAnswers =
       userAnswers
-        .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-        .set(torg.NamePage(index), "Org Name1").success.value
-        .set(TrusteeStatus(index), Status.Completed).success.value
-    }
+        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+        .success
+        .value
+        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual)
+        .success
+        .value
+        .set(ltind.TrusteesNamePage(index), FullName("first name", Some("middle name"), "Last Name"))
+        .success
+        .value
+        .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(2000, 10, 10))
+        .success
+        .value
+        .set(ltind.TrusteeNinoYesNoPage(index), true)
+        .success
+        .value
+        .set(ltind.TrusteesNinoPage(index), "AB123456C")
+        .success
+        .value
+        .set(ltind.AddressUkYesNoPage(index), true)
+        .success
+        .value
+        .set(ltind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA"))
+        .success
+        .value
+        .set(ltind.EmailAddressYesNoPage(index), false)
+        .success
+        .value
+        .set(ltind.TelephoneNumberPage(index), "0191 1111111")
+        .success
+        .value
+        .set(TrusteeStatus(index), Status.Completed)
+        .success
+        .value
+
+    def addOrganisationTrustee(index: Int): UserAnswers =
+      userAnswers
+        .set(TrusteeOrLeadTrusteePage(index), Trustee)
+        .success
+        .value
+        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business)
+        .success
+        .value
+        .set(torg.NamePage(index), "Org Name1")
+        .success
+        .value
+        .set(TrusteeStatus(index), Status.Completed)
+        .success
+        .value
 
   }
 
@@ -66,7 +95,7 @@ class RegistrationProgressSpec extends SpecBase {
       "there are no trustees or lead trustees" in {
 
         val userAnswers = emptyUserAnswers
-        val result = registrationProgress.trusteesStatus(userAnswers)
+        val result      = registrationProgress.trusteesStatus(userAnswers)
         result mustBe None
       }
     }
@@ -77,7 +106,9 @@ class RegistrationProgressSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
           .addIndividualLeadTrustee(0)
-          .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+          .set(AddATrusteePage, AddATrustee.NoComplete)
+          .success
+          .value
 
         val result = registrationProgress.trusteesStatus(userAnswers)
         result mustBe Some(Completed)
@@ -88,7 +119,9 @@ class RegistrationProgressSpec extends SpecBase {
         val userAnswers = emptyUserAnswers
           .addIndividualLeadTrustee(0)
           .addOrganisationTrustee(1)
-          .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+          .set(AddATrusteePage, AddATrustee.NoComplete)
+          .success
+          .value
 
         val result = registrationProgress.trusteesStatus(userAnswers)
         result mustBe Some(Completed)
@@ -100,9 +133,15 @@ class RegistrationProgressSpec extends SpecBase {
       "there are trustees that are incomplete" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-          .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
-          .set(TrusteeStatus(1), Status.Completed).success.value
+          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+          .success
+          .value
+          .set(TrusteeOrLeadTrusteePage(1), Trustee)
+          .success
+          .value
+          .set(TrusteeStatus(1), Status.Completed)
+          .success
+          .value
 
         val result = registrationProgress.trusteesStatus(userAnswers)
         result mustBe Some(InProgress)
@@ -111,11 +150,21 @@ class RegistrationProgressSpec extends SpecBase {
       "there are trustees that are complete, but section flagged not complete" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-          .set(TrusteeStatus(0), Status.Completed).success.value
-          .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
-          .set(TrusteeStatus(1), Status.Completed).success.value
-          .set(AddATrusteePage, AddATrustee.YesLater).success.value
+          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+          .success
+          .value
+          .set(TrusteeStatus(0), Status.Completed)
+          .success
+          .value
+          .set(TrusteeOrLeadTrusteePage(1), Trustee)
+          .success
+          .value
+          .set(TrusteeStatus(1), Status.Completed)
+          .success
+          .value
+          .set(AddATrusteePage, AddATrustee.YesLater)
+          .success
+          .value
 
         val result = registrationProgress.trusteesStatus(userAnswers)
         result mustBe Some(InProgress)
@@ -124,15 +173,26 @@ class RegistrationProgressSpec extends SpecBase {
       "there are completed trustees, the section is flagged as completed, but there is no lead trustee" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-          .set(TrusteeStatus(0), Status.Completed).success.value
-          .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
-          .set(TrusteeStatus(1), Status.Completed).success.value
-          .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+          .set(TrusteeOrLeadTrusteePage(0), Trustee)
+          .success
+          .value
+          .set(TrusteeStatus(0), Status.Completed)
+          .success
+          .value
+          .set(TrusteeOrLeadTrusteePage(1), Trustee)
+          .success
+          .value
+          .set(TrusteeStatus(1), Status.Completed)
+          .success
+          .value
+          .set(AddATrusteePage, AddATrustee.NoComplete)
+          .success
+          .value
 
         val result = registrationProgress.trusteesStatus(userAnswers)
         result mustBe Some(InProgress)
       }
     }
   }
+
 }

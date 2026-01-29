@@ -18,11 +18,7 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class IdMatchRequest(id: String,
-                          nino: String,
-                          surname: String,
-                          forename: String,
-                          birthDate: String)
+case class IdMatchRequest(id: String, nino: String, surname: String, forename: String, birthDate: String)
 
 object IdMatchRequest {
   implicit val formats: Format[IdMatchRequest] = Json.format[IdMatchRequest]

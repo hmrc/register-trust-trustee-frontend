@@ -16,7 +16,6 @@
 
 package views.register.trustees.organisation.mld5
 
-
 import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -25,8 +24,8 @@ import views.html.register.trustees.organisation.mld5.CountryOfResidenceInTheUkY
 
 class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "trustee.organisation.5mld.countryOfResidenceInTheUkYesNo"
-  val index = 0
+  val prefix      = "trustee.organisation.5mld.countryOfResidenceInTheUkYesNo"
+  val index       = 0
   val trusteeName = "Test"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
@@ -48,4 +47,5 @@ class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

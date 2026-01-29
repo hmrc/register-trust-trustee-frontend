@@ -34,10 +34,10 @@ import views.html.register.leadtrustee.organisation.InternationalAddressView
 
 class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new InternationalAddressFormProvider()
+  val formProvider                     = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
 
-  val index = 0
+  val index    = 0
   val fakeName = "Test"
 
   val validAnswer: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
@@ -45,7 +45,9 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
   private lazy val internationalAddressRoute = routes.InternationalAddressController.onPageLoad(index, fakeDraftId).url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(NamePage(index), fakeName).success.value
+    .set(NamePage(index), fakeName)
+    .success
+    .value
 
   "InternationalAddress Controller" must {
 
@@ -72,7 +74,9 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(InternationalAddressPage(index), validAnswer).success.value
+        .set(InternationalAddressPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -98,7 +102,8 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, internationalAddressRoute)
@@ -171,4 +176,5 @@ class InternationalAddressControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

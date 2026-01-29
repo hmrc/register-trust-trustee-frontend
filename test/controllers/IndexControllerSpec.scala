@@ -37,7 +37,7 @@ import scala.concurrent.Future
 
 class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  private val trustsStoreService: TrustsStoreService = Mockito.mock(classOf[TrustsStoreService])
+  private val trustsStoreService: TrustsStoreService             = Mockito.mock(classOf[TrustsStoreService])
   private val submissionDraftConnector: SubmissionDraftConnector = Mockito.mock(classOf[SubmissionDraftConnector])
 
   private val utr: String = "1234567890"
@@ -47,7 +47,8 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
     when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
     reset(trustsStoreService)
-    when(trustsStoreService.updateTaskStatus(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
+    when(trustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
 
     reset(submissionDraftConnector)
     when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(isTaxable))
@@ -68,7 +69,8 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
           .overrides(
             bind[TrustsStoreService].toInstance(trustsStoreService),
             bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
-          ).build()
+          )
+          .build()
 
         when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
 
@@ -78,7 +80,9 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.register.routes.TrusteesInfoController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).value mustEqual controllers.register.routes.TrusteesInfoController
+          .onPageLoad(fakeDraftId)
+          .url
 
         verify(trustsStoreService).updateTaskStatus(any(), eqTo(InProgress))(any(), any())
 
@@ -90,13 +94,16 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
         beforeTest()
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
+          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[TrustsStoreService].toInstance(trustsStoreService),
             bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
-          ).build()
+          )
+          .build()
 
         when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
 
@@ -106,7 +113,9 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.register.routes.AddATrusteeController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).value mustEqual controllers.register.routes.AddATrusteeController
+          .onPageLoad(fakeDraftId)
+          .url
 
         verify(trustsStoreService).updateTaskStatus(any(), eqTo(InProgress))(any(), any())
 
@@ -124,7 +133,8 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
         .overrides(
           bind[TrustsStoreService].toInstance(trustsStoreService),
           bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
-        ).build()
+        )
+        .build()
 
       when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
 
@@ -134,7 +144,7 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
         val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-        uaCaptor.getValue.isTaxable mustBe true
+        uaCaptor.getValue.isTaxable            mustBe true
         uaCaptor.getValue.existingTrustUtr.get mustBe utr
 
         application.stop()
@@ -143,34 +153,33 @@ class IndexControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
   }
 
   "no pre-existing user answers" must {
-    "instantiate new set of user answers" in {
+    "instantiate new set of user answers" in
+      forAll(arbitrary[Boolean], arbitrary[Option[String]]) { (isTrustTaxable, utr) =>
+        beforeTest(isTaxable = isTrustTaxable, utr = utr)
 
-      forAll(arbitrary[Boolean], arbitrary[Option[String]]) {
-        (isTrustTaxable, utr) =>
-          beforeTest(isTaxable = isTrustTaxable, utr = utr)
+        val application = applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[TrustsStoreService].toInstance(trustsStoreService),
+            bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+          )
+          .build()
 
-          val application = applicationBuilder(userAnswers = None)
-            .overrides(
-              bind[TrustsStoreService].toInstance(trustsStoreService),
-              bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
-            ).build()
+        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
 
-          when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
-          val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+        route(application, request).value.map { _ =>
+          val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-          route(application, request).value.map { _ =>
-            val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-            verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+          uaCaptor.getValue.isTaxable        mustBe isTrustTaxable
+          uaCaptor.getValue.existingTrustUtr mustBe utr
+          uaCaptor.getValue.draftId          mustBe fakeDraftId
+          uaCaptor.getValue.internalAuthId   mustBe "id"
 
-            uaCaptor.getValue.isTaxable mustBe isTrustTaxable
-            uaCaptor.getValue.existingTrustUtr mustBe utr
-            uaCaptor.getValue.draftId mustBe fakeDraftId
-            uaCaptor.getValue.internalAuthId mustBe "id"
-
-            application.stop()
-          }
+          application.stop()
+        }
       }
-    }
   }
+
 }

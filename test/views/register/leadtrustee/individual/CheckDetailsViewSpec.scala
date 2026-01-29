@@ -24,7 +24,7 @@ import views.html.register.leadtrustee.individual.CheckDetailsView
 class CheckDetailsViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "leadTrustee.individual.checkDetails"
-  val index = 0
+  val index            = 0
 
   val view: CheckDetailsView = viewFor[CheckDetailsView](Some(emptyUserAnswers))
 
@@ -43,7 +43,15 @@ class CheckDetailsViewSpec extends ViewBehaviours {
 
       val verifiedAnswerSection = AnswerSection(
         None,
-        Seq(AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", Html("Answer"), None, "Name", canEdit = false))
+        Seq(
+          AnswerRow(
+            "leadTrustee.individual.ninoYesNo.checkYourAnswersLabel",
+            Html("Answer"),
+            None,
+            "Name",
+            canEdit = false
+          )
+        )
       )
 
       val doc = asDocument(view(verifiedAnswerSection, fakeDraftId, index)(fakeRequest, messages))
@@ -65,4 +73,5 @@ class CheckDetailsViewSpec extends ViewBehaviours {
       assertContainsText(doc, messages("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Name"))
     }
   }
+
 }

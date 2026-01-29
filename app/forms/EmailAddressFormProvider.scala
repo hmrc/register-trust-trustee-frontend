@@ -33,4 +33,5 @@ class EmailAddressFormProvider @Inject() extends Mappings {
           )
         )
     )
+
 }

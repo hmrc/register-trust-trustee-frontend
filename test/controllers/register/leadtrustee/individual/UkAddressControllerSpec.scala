@@ -32,16 +32,16 @@ import views.html.register.leadtrustee.individual.UkAddressView
 
 class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new UKAddressFormProvider()
-  val form: Form[UKAddress] = formProvider()
-  val fakeName: FullName = FullName("First", None, "Last")
-  val index = 0
+  val formProvider           = new UKAddressFormProvider()
+  val form: Form[UKAddress]  = formProvider()
+  val fakeName: FullName     = FullName("First", None, "Last")
+  val index                  = 0
   val validAnswer: UKAddress = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
 
   lazy val ukAddressRoute: String = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
-  override val emptyUserAnswers: UserAnswers = super
-    .emptyUserAnswers.set(TrusteesNamePage(index), fakeName).success.value
+  override val emptyUserAnswers: UserAnswers =
+    super.emptyUserAnswers.set(TrusteesNamePage(index), fakeName).success.value
 
   "UkAddress Controller" must {
 
@@ -66,7 +66,9 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UkAddressPage(index), validAnswer).success.value
+        .set(UkAddressPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,7 +92,8 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, ukAddressRoute)
@@ -167,4 +170,5 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

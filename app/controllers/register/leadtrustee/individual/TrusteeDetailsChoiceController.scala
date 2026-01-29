@@ -38,54 +38,51 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class TrusteeDetailsChoiceController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                implicit val frontendAppConfig: FrontendAppConfig,
-                                                registrationsRepository: RegistrationsRepository,
-                                                @LeadTrusteeIndividual navigator: Navigator,
-                                                standardActionSets: StandardActionSets,
-                                                nameAction: NameRequiredActionImpl,
-                                                formProvider: DetailsChoiceFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: TrusteeDetailsChoiceView,
-                                                errorPageView: InternalServerErrorPageView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class TrusteeDetailsChoiceController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @LeadTrusteeIndividual navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredActionImpl,
+  formProvider: DetailsChoiceFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: TrusteeDetailsChoiceView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[DetailsChoice] = formProvider.withPrefix("leadTrustee.individual.trusteeDetailsChoice")
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(TrusteeDetailsChoicePage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TrusteeDetailsChoicePage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+    Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
-
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
-
-        value => {
+        value =>
           request.userAnswers.set(TrusteeDetailsChoicePage(index), value) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(TrusteeDetailsChoicePage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[TrusteeDetailsChoiceController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }

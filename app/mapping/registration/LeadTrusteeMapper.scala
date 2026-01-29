@@ -25,36 +25,38 @@ class LeadTrusteeMapper {
     val leadTrustee: Option[Trustee] = userAnswers.get(Trustees).getOrElse(Nil).find(_.isLead)
     leadTrustee match {
       case None => None
-      case _ => leadTrustee.map(buildLeadTrusteeType)
+      case _    => leadTrustee.map(buildLeadTrusteeType)
     }
   }
 
-  private def buildLeadTrusteeType(leadTrustee: Trustee): LeadTrusteeType = {
+  private def buildLeadTrusteeType(leadTrustee: Trustee): LeadTrusteeType =
     leadTrustee match {
-      case indLeadTrustee: LeadTrusteeIndividual => LeadTrusteeType(
-        leadTrusteeInd = Some(
-          LeadTrusteeIndType(
-            name = indLeadTrustee.name,
-            dateOfBirth = indLeadTrustee.dateOfBirth,
-            phoneNumber = indLeadTrustee.telephoneNumber,
-            email = indLeadTrustee.email,
-            identification = indLeadTrustee.identification,
-            countryOfResidence = indLeadTrustee.countryOfResidence,
-            nationality = indLeadTrustee.nationality
+      case indLeadTrustee: LeadTrusteeIndividual   =>
+        LeadTrusteeType(
+          leadTrusteeInd = Some(
+            LeadTrusteeIndType(
+              name = indLeadTrustee.name,
+              dateOfBirth = indLeadTrustee.dateOfBirth,
+              phoneNumber = indLeadTrustee.telephoneNumber,
+              email = indLeadTrustee.email,
+              identification = indLeadTrustee.identification,
+              countryOfResidence = indLeadTrustee.countryOfResidence,
+              nationality = indLeadTrustee.nationality
+            )
           )
         )
-      )
-      case orgLeadTrustee: LeadTrusteeOrganisation => LeadTrusteeType(
-        leadTrusteeOrg = Some(
-          LeadTrusteeOrgType(
-            name = orgLeadTrustee.name,
-            phoneNumber = orgLeadTrustee.telephoneNumber,
-            email = orgLeadTrustee.email,
-            identification = orgLeadTrustee.identification,
-            countryOfResidence = orgLeadTrustee.countryOfResidence
+      case orgLeadTrustee: LeadTrusteeOrganisation =>
+        LeadTrusteeType(
+          leadTrusteeOrg = Some(
+            LeadTrusteeOrgType(
+              name = orgLeadTrustee.name,
+              phoneNumber = orgLeadTrustee.telephoneNumber,
+              email = orgLeadTrustee.email,
+              identification = orgLeadTrustee.identification,
+              countryOfResidence = orgLeadTrustee.countryOfResidence
+            )
           )
         )
-      )
     }
-  }
+
 }

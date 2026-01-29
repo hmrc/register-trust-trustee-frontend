@@ -19,10 +19,12 @@ package pages.behaviours.trustees.organisation.mld5
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.trustees.organisation.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.trustees.organisation.mld5.{
+  CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
+}
 import utils.Constants.{ES, GB}
 
-class CountryOfResidenceInTheUkYesNoPageSpec  extends PageBehaviours {
+class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
 
   "UKResidentYesNoPage" must {
 
@@ -33,27 +35,34 @@ class CountryOfResidenceInTheUkYesNoPageSpec  extends PageBehaviours {
     beRemovable[Boolean](CountryOfResidenceInTheUkYesNoPage(0))
   }
 
-  "Yes selected - set CountryOfResidencePage to 'GB' " in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
-          .set(CountryOfResidencePage(0), ES).success.value
+  "Yes selected - set CountryOfResidencePage to 'GB' " in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial
+        .set(CountryOfResidenceYesNoPage(0), true)
+        .success
+        .value
+        .set(CountryOfResidencePage(0), ES)
+        .success
+        .value
 
-        val result = answers.set(CountryOfResidenceInTheUkYesNoPage(0), true).success.value
+      val result = answers.set(CountryOfResidenceInTheUkYesNoPage(0), true).success.value
 
-        result.get(CountryOfResidencePage(0)).get mustBe GB
+      result.get(CountryOfResidencePage(0)).get mustBe GB
     }
-  }
 
-  "No selected" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
-          .set(CountryOfResidencePage(0), ES).success.value
+  "No selected" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial
+        .set(CountryOfResidenceYesNoPage(0), true)
+        .success
+        .value
+        .set(CountryOfResidencePage(0), ES)
+        .success
+        .value
 
-        val result = answers.set(CountryOfResidenceInTheUkYesNoPage(0), false).success.value
+      val result = answers.set(CountryOfResidenceInTheUkYesNoPage(0), false).success.value
 
-        result.get(CountryOfResidencePage(0)).get mustBe ES
+      result.get(CountryOfResidencePage(0)).get mustBe ES
     }
-  }
+
 }

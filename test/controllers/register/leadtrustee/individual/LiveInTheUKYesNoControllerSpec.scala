@@ -30,13 +30,13 @@ import views.html.register.leadtrustee.individual.LiveInTheUKYesNoView
 
 class LiveInTheUKYesNoControllerSpec extends SpecBase {
 
-  val messagePrefix = "leadTrustee.individual.liveInTheUkYesNo"
-  val formProvider = new YesNoFormProvider()
+  val messagePrefix       = "leadTrustee.individual.liveInTheUkYesNo"
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
 
-  val index = 0
+  val index            = 0
   val emptyTrusteeName = ""
-  val trusteeName = "FirstName LastName"
+  val trusteeName      = "FirstName LastName"
 
   lazy val trusteeLiveInTheUKRoute: String = routes.LiveInTheUKYesNoController.onPageLoad(index, fakeDraftId).url
 
@@ -45,7 +45,9 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -66,8 +68,12 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(AddressUkYesNoPage(index), true).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(AddressUkYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,14 +94,19 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(AddressUkYesNoPage(index), true).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(AddressUkYesNoPage(index), true)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trusteeLiveInTheUKRoute)
@@ -113,7 +124,9 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -167,5 +180,5 @@ class LiveInTheUKYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
-}
 
+}

@@ -21,26 +21,31 @@ import models.UserAnswers
 import play.api.i18n.Messages
 import viewmodels.AnswerSection
 
-class PrintHelpers @Inject()(trusteeIndividualPrintHelper: TrusteeIndividualPrintHelper,
-                             trusteeBusinessPrintHelper: TrusteeOrganisationPrintHelper,
-                             leadTrusteeIndividualPrintHelper: LeadTrusteeIndividualPrintHelper,
-                             leadTrusteeBusinessPrintHelper: LeadTrusteeOrganisationPrintHelper
-                            ) {
+class PrintHelpers @Inject() (
+  trusteeIndividualPrintHelper: TrusteeIndividualPrintHelper,
+  trusteeBusinessPrintHelper: TrusteeOrganisationPrintHelper,
+  leadTrusteeIndividualPrintHelper: LeadTrusteeIndividualPrintHelper,
+  leadTrusteeBusinessPrintHelper: LeadTrusteeOrganisationPrintHelper
+) {
 
-  def trusteeIndividual(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                       (implicit messages: Messages): AnswerSection =
+  def trusteeIndividual(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     trusteeIndividualPrintHelper.checkDetailsSection(userAnswers, name, index, draftId)
 
-  def trusteeOrganisation(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                         (implicit messages: Messages): AnswerSection =
+  def trusteeOrganisation(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     trusteeBusinessPrintHelper.checkDetailsSection(userAnswers, name, index, draftId)
 
-  def leadTrusteeIndividual(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                           (implicit messages: Messages): AnswerSection =
+  def leadTrusteeIndividual(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     leadTrusteeIndividualPrintHelper.checkDetailsSection(userAnswers, name, index, draftId)
 
-  def leadTrusteeOrganisation(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                             (implicit messages: Messages): AnswerSection =
+  def leadTrusteeOrganisation(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     leadTrusteeBusinessPrintHelper.checkDetailsSection(userAnswers, name, index, draftId)
 
 }

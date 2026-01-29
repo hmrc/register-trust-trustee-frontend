@@ -35,17 +35,19 @@ class EmailAddressYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers =
-              userAnswers
-                .set(EmailAddressPage(index), "email").success.value
-                .set(EmailAddressYesNoPage(index), false).success.value
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers =
+            userAnswers
+              .set(EmailAddressPage(index), "email")
+              .success
+              .value
+              .set(EmailAddressYesNoPage(index), false)
+              .success
+              .value
 
-            result.get(EmailAddressPage(index)) mustNot be(defined)
+          result.get(EmailAddressPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

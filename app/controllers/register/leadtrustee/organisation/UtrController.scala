@@ -37,18 +37,19 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class UtrController @Inject()(
-                               override val messagesApi: MessagesApi,
-                               implicit val frontendAppConfig: FrontendAppConfig,
-                               registrationsRepository: RegistrationsRepository,
-                               @LeadTrusteeOrganisation navigator: Navigator,
-                               standardActionSets: StandardActionSets,
-                               nameAction: NameRequiredActionImpl,
-                               formProvider: UtrFormProvider,
-                               val controllerComponents: MessagesControllerComponents,
-                               view: UtrView,
-                               errorPageView: InternalServerErrorPageView
-                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class UtrController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @LeadTrusteeOrganisation navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredActionImpl,
+  formProvider: UtrFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: UtrView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Form[String] =
     formProvider.withConfig("leadTrustee.organisation.utr", request.userAnswers, index)
@@ -56,35 +57,32 @@ class UtrController @Inject()(
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.identifiedUserWithData(draftId) andThen nameAction(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(UtrPage(index)) match {
+      case None        => form(index)
+      case Some(value) => form(index).fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(UtrPage(index)) match {
-        case None => form(index)
-        case Some(value) => form(index).fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+    Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form(index).bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form(index)
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
-
-        value => {
+        value =>
           request.userAnswers.set(UtrPage(index), value) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(UtrPage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[UtrController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }

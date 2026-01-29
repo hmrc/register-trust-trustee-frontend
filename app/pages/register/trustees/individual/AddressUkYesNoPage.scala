@@ -23,13 +23,13 @@ import sections.Trustees
 
 import scala.util.Try
 
-final case class AddressUkYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class AddressUkYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
   override def toString: String = "addressUKYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(true) =>
         userAnswers.remove(InternationalAddressPage(index))
@@ -39,5 +39,5 @@ final case class AddressUkYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
       case _ => super.cleanup(value, userAnswers)
     }
-  }
+
 }

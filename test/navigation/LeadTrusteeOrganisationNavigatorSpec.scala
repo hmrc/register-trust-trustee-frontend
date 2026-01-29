@@ -27,7 +27,7 @@ import pages.register.leadtrustee.organisation.mld5.{CountryOfResidenceInTheUkYe
 class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   val navigator = new LeadTrusteeOrganisationNavigator
-  val index = 0
+  val index     = 0
 
   implicit val config: FrontendAppConfig = frontendAppConfig
 
@@ -38,39 +38,48 @@ class LeadTrusteeOrganisationNavigatorSpec extends SpecBase with ScalaCheckPrope
       "Not UK registered" must {
         "-> Address UK yes no page" in {
           val answers = emptyUserAnswers
-            .set(UkRegisteredYesNoPage(index), false).success.value
+            .set(UkRegisteredYesNoPage(index), false)
+            .success
+            .value
 
-          navigator.nextPage(NamePage(index), fakeDraftId, answers)
+          navigator
+            .nextPage(NamePage(index), fakeDraftId, answers)
             .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
     }
 
-    "UTR page -> Country Of Residence UK yes no page" in {
-      navigator.nextPage(UtrPage(index), fakeDraftId, emptyUserAnswers)
+    "UTR page -> Country Of Residence UK yes no page" in
+      navigator
+        .nextPage(UtrPage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
-    }
 
     "Country Of Residence UK yes no page -> No -> Country of Residence page" in {
       val answers = emptyUserAnswers
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false)
+        .success
+        .value
 
-      navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+      navigator
+        .nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
         .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId))
     }
 
     "Country Of Residence UK yes no page -> Yes -> UK Address page" in {
       val answers = emptyUserAnswers
-        .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), true)
+        .success
+        .value
 
-      navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
+      navigator
+        .nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId, answers)
         .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
     }
 
-    "Country Of Residence page -> International Address page" in {
-      navigator.nextPage(CountryOfResidencePage(index), fakeDraftId, emptyUserAnswers)
+    "Country Of Residence page -> International Address page" in
+      navigator
+        .nextPage(CountryOfResidencePage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(rts.InternationalAddressController.onPageLoad(index, fakeDraftId))
-    }
   }
 
 }

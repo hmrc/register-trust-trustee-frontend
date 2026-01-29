@@ -73,4 +73,5 @@ class NinoViewSpec extends StringViewBehaviours {
       behave like pageWithASubmitButton(applyView(form))
     }
   }
+
 }

@@ -23,7 +23,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class DateFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings {
+class DateFormProvider @Inject() (appConfig: FrontendAppConfig) extends Mappings {
 
   def withConfig(prefix: String, matchingLeadTrustee: Boolean = false): Form[LocalDate] = {
 
@@ -37,14 +37,17 @@ class DateFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings 
 
     Form(
       "value" -> localDate(
-        invalidKey     = s"$prefix.error.invalid",
+        invalidKey = s"$prefix.error.invalid",
         allRequiredKey = s"$prefix.error.required.all",
         twoRequiredKey = s"$prefix.error.required.two",
-        requiredKey    = s"$prefix.error.required"
-      ).verifying(firstError(
-        maxDate(LocalDate.now, s"$prefix.error.future", "day", "month", "year"),
-        minDate(minDateConfig.date, minDateConfig.messageKey, "day", "month", "year")
-      ))
+        requiredKey = s"$prefix.error.required"
+      ).verifying(
+        firstError(
+          maxDate(LocalDate.now, s"$prefix.error.future", "day", "month", "year"),
+          minDate(minDateConfig.date, minDateConfig.messageKey, "day", "month", "year")
+        )
+      )
     )
   }
+
 }

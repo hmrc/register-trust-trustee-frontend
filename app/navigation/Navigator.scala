@@ -30,60 +30,69 @@ import uk.gov.hmrc.http.HttpVerbs.GET
 
 class Navigator {
 
-  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)
-              (implicit config: FrontendAppConfig): Call = routes(draftId)(config)(page)(userAnswers)
+  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers)(implicit
+    config: FrontendAppConfig
+  ): Call = routes(draftId)(config)(page)(userAnswers)
 
-  private def routes(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] =
+  private def routes(draftId: String)(implicit
+    config: FrontendAppConfig
+  ): PartialFunction[Page, ReadableUserAnswers => Call] =
     simpleNavigation(draftId) orElse
       conditionalNavigation(draftId)
 
   def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case TrusteeOrLeadTrusteePage(index) => _ => TrusteeIndividualOrBusinessController.onPageLoad(index, draftId)
-    case TrusteesAnswerPage => _ => AddATrusteeController.onPageLoad(draftId)
+    case TrusteesAnswerPage              => _ => AddATrusteeController.onPageLoad(draftId)
   }
 
-  def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case TrusteeIndividualOrBusinessPage(index) => ua =>
-      trusteeTypeJourney(ua, index, draftId)
+  def conditionalNavigation(
+    draftId: String
+  )(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case TrusteeIndividualOrBusinessPage(index) => ua => trusteeTypeJourney(ua, index, draftId)
 
-    case AddATrusteeYesNoPage => ua =>
-      yesNoNav(ua, AddATrusteeYesNoPage, TrusteeOrLeadTrusteeController.onPageLoad(0, draftId), registrationTaskList(draftId))
+    case AddATrusteeYesNoPage =>
+      ua =>
+        yesNoNav(
+          ua,
+          AddATrusteeYesNoPage,
+          TrusteeOrLeadTrusteeController.onPageLoad(0, draftId),
+          registrationTaskList(draftId)
+        )
 
-    case AddATrusteePage => ua => {
-      def routeToTrusteeIndex: Call = {
-        val trustees = ua.get(Trustees).getOrElse(List.empty)
-        TrusteeOrLeadTrusteeController.onPageLoad(trustees.size, draftId)
+    case AddATrusteePage =>
+      ua => {
+        def routeToTrusteeIndex: Call = {
+          val trustees = ua.get(Trustees).getOrElse(List.empty)
+          TrusteeOrLeadTrusteeController.onPageLoad(trustees.size, draftId)
+        }
+        ua.get(AddATrusteePage) match {
+          case Some(AddATrustee.YesNow)                                  => routeToTrusteeIndex
+          case Some(AddATrustee.YesLater) | Some(AddATrustee.NoComplete) => registrationTaskList(draftId)
+          case _                                                         => controllers.routes.SessionExpiredController.onPageLoad
+        }
       }
-      ua.get(AddATrusteePage) match {
-        case Some(AddATrustee.YesNow) => routeToTrusteeIndex
-        case Some(AddATrustee.YesLater) | Some(AddATrustee.NoComplete) => registrationTaskList(draftId)
-        case _ => controllers.routes.SessionExpiredController.onPageLoad
-      }
-    }
   }
 
-  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
+  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call =
     ua.get(fromPage)
       .map(if (_) yesCall else noCall)
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad)
-  }
 
-  private def registrationTaskList(draftId: String)(implicit config: FrontendAppConfig): Call = {
+  private def registrationTaskList(draftId: String)(implicit config: FrontendAppConfig): Call =
     Call(GET, config.registrationProgressUrl(draftId))
-  }
 
-  private def trusteeTypeJourney(userAnswers: ReadableUserAnswers, index: Int, draftId: String): Call = {
+  private def trusteeTypeJourney(userAnswers: ReadableUserAnswers, index: Int, draftId: String): Call =
     (userAnswers.get(TrusteeOrLeadTrusteePage(index)), userAnswers.get(TrusteeIndividualOrBusinessPage(index))) match {
-      case (Some(Trustee), Some(IndividualOrBusiness.Individual)) =>
+      case (Some(Trustee), Some(IndividualOrBusiness.Individual))     =>
         controllers.register.trustees.individual.routes.NameController.onPageLoad(index, draftId)
       case (Some(LeadTrustee), Some(IndividualOrBusiness.Individual)) =>
         controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, draftId)
-      case (Some(Trustee), Some(IndividualOrBusiness.Business)) =>
+      case (Some(Trustee), Some(IndividualOrBusiness.Business))       =>
         controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, draftId)
-      case (Some(LeadTrustee), Some(IndividualOrBusiness.Business)) =>
+      case (Some(LeadTrustee), Some(IndividualOrBusiness.Business))   =>
         controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, draftId)
-      case _ =>
+      case _                                                          =>
         controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
+
 }

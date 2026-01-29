@@ -22,11 +22,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class StringFormProviderSpec extends StringFieldBehaviours {
 
-  val prefix: String = "trustee.organisation.name"
-  val requiredKey = s"$prefix.error.required"
-  val lengthKey = s"$prefix.error.length"
+  val prefix: String   = "trustee.organisation.name"
+  val requiredKey      = s"$prefix.error.required"
+  val lengthKey        = s"$prefix.error.length"
   val invalidFormatKey = s"$prefix.error.invalid"
-  val maxLength = 56
+  val maxLength        = 56
 
   val form: Form[String] = new StringFormProvider().withConfig(prefix, maxLength)
 

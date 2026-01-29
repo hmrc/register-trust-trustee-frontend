@@ -33,36 +33,41 @@ object DeedOfVariation {
     ReplaceAbsolute
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("howDeedOfVariationCreated", value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption("howDeedOfVariationCreated", value.toString)
   }
 
   implicit val enumerable: Enumerable[DeedOfVariation] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
-  implicit def reads[A](implicit ev: Enumerable[A]): Reads[A] = {
+  implicit def reads[A](implicit ev: Enumerable[A]): Reads[A] =
     Reads {
-      case JsString("Addition to the will trust") =>
-        ev.withName("AdditionToWillTrust").map {
-          s => JsSuccess(s)
-        }.getOrElse(JsError("error.invalid"))
-      case JsString("Replaced the will trust") =>
-        ev.withName("ReplacedWill").map {
-          s => JsSuccess(s)
-        }.getOrElse(JsError("error.invalid"))
+      case JsString("Addition to the will trust")                                    =>
+        ev.withName("AdditionToWillTrust")
+          .map { s =>
+            JsSuccess(s)
+          }
+          .getOrElse(JsError("error.invalid"))
+      case JsString("Replaced the will trust")                                       =>
+        ev.withName("ReplacedWill")
+          .map { s =>
+            JsSuccess(s)
+          }
+          .getOrElse(JsError("error.invalid"))
       case JsString("Previously there was only an absolute interest under the will") =>
-        ev.withName("ReplaceAbsolute").map {
-          s => JsSuccess(s)
-        }.getOrElse(JsError("error.invalid"))
-      case _ =>
+        ev.withName("ReplaceAbsolute")
+          .map { s =>
+            JsSuccess(s)
+          }
+          .getOrElse(JsError("error.invalid"))
+      case _                                                                         =>
         JsError("error.invalid")
     }
-  }
 
   implicit def writes: Writes[DeedOfVariation] = Writes {
-    case AdditionToWill => JsString("Addition to the will trust")
-    case ReplacedWill => JsString("Replaced the will trust")
+    case AdditionToWill  => JsString("Addition to the will trust")
+    case ReplacedWill    => JsString("Replaced the will trust")
     case ReplaceAbsolute => JsString("Previously there was only an absolute interest under the will")
   }
+
 }

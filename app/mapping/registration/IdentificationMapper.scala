@@ -23,18 +23,16 @@ import utils.Constants.GB
 
 object IdentificationMapper {
 
-  def buildAddress(address: Address): AddressType = {
+  def buildAddress(address: Address): AddressType =
     address match {
-      case a: UKAddress => buildUkAddress(a)
+      case a: UKAddress            => buildUkAddress(a)
       case a: InternationalAddress => buildInternationalAddress(a)
     }
-  }
 
-  def buildAddress(address: Option[Address]): Option[AddressType] = {
+  def buildAddress(address: Option[Address]): Option[AddressType] =
     address.map(buildAddress)
-  }
 
-  private def buildUkAddress(address: UKAddress): AddressType = {
+  private def buildUkAddress(address: UKAddress): AddressType =
     AddressType(
       line1 = address.line1,
       line2 = address.line2,
@@ -43,9 +41,8 @@ object IdentificationMapper {
       postCode = Some(address.postcode),
       country = GB
     )
-  }
 
-  private def buildInternationalAddress(address: InternationalAddress): AddressType = {
+  private def buildInternationalAddress(address: InternationalAddress): AddressType =
     AddressType(
       line1 = address.line1,
       line2 = address.line2,
@@ -54,12 +51,14 @@ object IdentificationMapper {
       postCode = None,
       country = address.country
     )
-  }
 
-  def buildPassport(passportOrIdCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] = {
+  def buildPassport(passportOrIdCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] =
     passportOrIdCardDetails map { passportOrIdCardDetails =>
-      PassportType(passportOrIdCardDetails.cardNumber, passportOrIdCardDetails.expiryDate, passportOrIdCardDetails.country)
+      PassportType(
+        passportOrIdCardDetails.cardNumber,
+        passportOrIdCardDetails.expiryDate,
+        passportOrIdCardDetails.country
+      )
     }
-  }
 
 }

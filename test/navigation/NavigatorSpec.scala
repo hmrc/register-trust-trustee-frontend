@@ -37,11 +37,10 @@ import sections.Trustees
 class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   val navigator = new Navigator
-  val index = 0
+  val index     = 0
 
-  private def registrationTaskList: Call = {
+  private def registrationTaskList: Call =
     Call("GET", frontendAppConfig.registrationProgressUrl(draftId))
-  }
 
   implicit val config: FrontendAppConfig = frontendAppConfig
 
@@ -49,42 +48,50 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
 
     "there are no trustees" must {
 
-      "go to the next trustee from AddATrusteePage when selected add them now" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "go to the next trustee from AddATrusteePage when selected add them now" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val answers = userAnswers
+            .set(AddATrusteePage, AddATrustee.YesNow)
+            .success
+            .value
+            .remove(Trustees)
+            .success
+            .value
 
-            val answers = userAnswers
-              .set(AddATrusteePage, AddATrustee.YesNow).success.value
-              .remove(Trustees).success.value
-
-            navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
-              .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId))
+          navigator
+            .nextPage(AddATrusteePage, fakeDraftId, answers)
+            .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId))
         }
-      }
 
-      "go to the next trustee from AddATrusteeYesNoPage when selecting yes" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "go to the next trustee from AddATrusteeYesNoPage when selecting yes" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val answers = userAnswers
+            .set(AddATrusteeYesNoPage, true)
+            .success
+            .value
+            .remove(Trustees)
+            .success
+            .value
 
-            val answers = userAnswers.set(AddATrusteeYesNoPage, true).success.value
-              .remove(Trustees).success.value
-
-            navigator.nextPage(AddATrusteeYesNoPage, fakeDraftId, answers)
-              .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId))
+          navigator
+            .nextPage(AddATrusteeYesNoPage, fakeDraftId, answers)
+            .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(index, fakeDraftId))
         }
-      }
 
-      "go to the registration progress page from AddATrusteeYesNoPage when selecting no" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "go to the registration progress page from AddATrusteeYesNoPage when selecting no" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val answers = userAnswers
+            .set(AddATrusteeYesNoPage, false)
+            .success
+            .value
+            .remove(Trustees)
+            .success
+            .value
 
-            val answers = userAnswers.set(AddATrusteeYesNoPage, false).success.value
-              .remove(Trustees).success.value
-
-            navigator.nextPage(AddATrusteeYesNoPage, fakeDraftId, answers)
-              .mustBe(registrationTaskList)
+          navigator
+            .nextPage(AddATrusteeYesNoPage, fakeDraftId, answers)
+            .mustBe(registrationTaskList)
         }
-      }
 
     }
 
@@ -93,111 +100,138 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
       "go to the next trustee from AddATrusteePage when selected add them now" in {
 
         val answers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-          .set(NamePage(index), "Name").success.value
-          .set(TrusteeStatus(index), Completed).success.value
-          .set(AddATrusteePage, AddATrustee.YesNow).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee)
+          .success
+          .value
+          .set(TrusteeIndividualOrBusinessPage(index), Business)
+          .success
+          .value
+          .set(NamePage(index), "Name")
+          .success
+          .value
+          .set(TrusteeStatus(index), Completed)
+          .success
+          .value
+          .set(AddATrusteePage, AddATrustee.YesNow)
+          .success
+          .value
 
-        navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
+        navigator
+          .nextPage(AddATrusteePage, fakeDraftId, answers)
           .mustBe(routes.TrusteeOrLeadTrusteeController.onPageLoad(1, fakeDraftId))
       }
 
       "go to RegistrationProgress from AddATrusteePage " when {
-        "selecting add them later" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
+        "selecting add them later" in
+          forAll(arbitrary[UserAnswers]) { userAnswers =>
+            val answers = userAnswers
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+              .success
+              .value
+              .set(AddATrusteePage, AddATrustee.YesLater)
+              .success
+              .value
 
-              val answers = userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-                .set(AddATrusteePage, AddATrustee.YesLater).success.value
-
-              navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
-                .mustBe(registrationTaskList)
+            navigator
+              .nextPage(AddATrusteePage, fakeDraftId, answers)
+              .mustBe(registrationTaskList)
           }
-        }
 
-        "selecting added them all" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
+        "selecting added them all" in
+          forAll(arbitrary[UserAnswers]) { userAnswers =>
+            val answers = userAnswers
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+              .success
+              .value
+              .set(AddATrusteePage, AddATrustee.NoComplete)
+              .success
+              .value
 
-              val answers = userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-                .set(AddATrusteePage, AddATrustee.NoComplete).success.value
-
-              navigator.nextPage(AddATrusteePage, fakeDraftId, answers)
-                .mustBe(registrationTaskList)
+            navigator
+              .nextPage(AddATrusteePage, fakeDraftId, answers)
+              .mustBe(registrationTaskList)
           }
-        }
       }
 
-      "go to IndividualOrBusinessPage from TrusteeOrLeadTrusteePage page when YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-
-            navigator.nextPage(TrusteeOrLeadTrusteePage(index), fakeDraftId, userAnswers)
-              .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
+      "go to IndividualOrBusinessPage from TrusteeOrLeadTrusteePage page when YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          navigator
+            .nextPage(TrusteeOrLeadTrusteePage(index), fakeDraftId, userAnswers)
+            .mustBe(routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId))
         }
-      }
 
       "go to TrusteesNamePage from TrusteeIndividualOrBusinessPage" when {
-        "for a lead trustee Individual" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-              val answers = userAnswers
-                .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-                .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
+        "for a lead trustee Individual" in
+          forAll(arbitrary[UserAnswers]) { userAnswers =>
+            val answers = userAnswers
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(index), Individual)
+              .success
+              .value
 
-              navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-                .mustBe(controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, fakeDraftId))
+            navigator
+              .nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
+              .mustBe(controllers.register.leadtrustee.individual.routes.NameController.onPageLoad(index, fakeDraftId))
           }
-        }
 
-        "for a non-lead trustee Individual" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-              val answers = userAnswers
-                .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-                .set(TrusteeIndividualOrBusinessPage(index), Individual).success.value
+        "for a non-lead trustee Individual" in
+          forAll(arbitrary[UserAnswers]) { userAnswers =>
+            val answers = userAnswers
+              .set(TrusteeOrLeadTrusteePage(index), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(index), Individual)
+              .success
+              .value
 
-              navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-                .mustBe(NameController.onPageLoad(index, fakeDraftId))
+            navigator
+              .nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
+              .mustBe(NameController.onPageLoad(index, fakeDraftId))
           }
-        }
 
-        "for a non-lead trustee Business" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-              val answers = userAnswers
-                .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-                .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
+        "for a non-lead trustee Business" in
+          forAll(arbitrary[UserAnswers]) { userAnswers =>
+            val answers = userAnswers
+              .set(TrusteeOrLeadTrusteePage(index), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(index), Business)
+              .success
+              .value
 
-              navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-                .mustBe(controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, fakeDraftId))
+            navigator
+              .nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
+              .mustBe(controllers.register.trustees.organisation.routes.NameController.onPageLoad(index, fakeDraftId))
           }
-        }
 
+        "for a lead trustee Business" in
+          forAll(arbitrary[UserAnswers]) { userAnswers =>
+            val answers = userAnswers
+              .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(index), Business)
+              .success
+              .value
 
-        "for a lead trustee Business" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-              val answers = userAnswers
-                .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-                .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-
-              navigator.nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
-                .mustBe(controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId))
+            navigator
+              .nextPage(TrusteeIndividualOrBusinessPage(index), fakeDraftId, answers)
+              .mustBe(
+                controllers.register.leadtrustee.organisation.routes.UkRegisteredYesNoController
+                  .onPageLoad(index, fakeDraftId)
+              )
           }
-        }
 
       }
 
-      "go to AddATrusteePage from TrusteeAnswersPage page" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-
-            navigator.nextPage(TrusteesAnswerPage, fakeDraftId, userAnswers)
-              .mustBe(routes.AddATrusteeController.onPageLoad(fakeDraftId))
+      "go to AddATrusteePage from TrusteeAnswersPage page" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          navigator
+            .nextPage(TrusteesAnswerPage, fakeDraftId, userAnswers)
+            .mustBe(routes.AddATrusteeController.onPageLoad(fakeDraftId))
         }
-      }
     }
 
   }

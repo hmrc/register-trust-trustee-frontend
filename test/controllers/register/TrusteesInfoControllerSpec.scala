@@ -35,7 +35,8 @@ class TrusteesInfoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[TrustsStoreService].toInstance(mockFeatureFlagService)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(GET, routes.TrusteesInfoController.onPageLoad(fakeDraftId).url)
 
@@ -51,4 +52,5 @@ class TrusteesInfoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

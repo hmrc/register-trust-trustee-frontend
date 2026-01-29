@@ -25,16 +25,16 @@ import sections.Trustees
 
 class RegistrationProgress extends Logging {
 
-  def trusteesStatus(userAnswers: UserAnswers): Option[Status] = {
+  def trusteesStatus(userAnswers: UserAnswers): Option[Status] =
 
     userAnswers.get(Trustees) match {
-      case Some(Nil) =>
+      case Some(Nil)      =>
         logger.info(s"[trusteesStatus] no trustees to determine a status")
         None
       case Some(trustees) =>
-        val noMoreToAdd = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
+        val noMoreToAdd    = userAnswers.get(AddATrusteePage).contains(AddATrustee.NoComplete)
         val hasLeadTrustee = trustees.exists(_.isLead)
-        val isComplete = !trustees.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
+        val isComplete     = !trustees.exists(_.status == InProgress) && noMoreToAdd && hasLeadTrustee
 
         if (isComplete) {
           logger.info(s"[trusteesStatus] trustee status is completed")
@@ -43,10 +43,9 @@ class RegistrationProgress extends Logging {
           logger.info(s"[trusteesStatus] trustee status is in progress")
           Some(InProgress)
         }
-      case None =>
+      case None           =>
         logger.info(s"[trusteesStatus] no trustees to determine a status")
         None
     }
-  }
 
 }

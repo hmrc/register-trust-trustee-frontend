@@ -33,12 +33,15 @@ final case class CountryOfResidenceInTheUkYesNoPage(index: Int) extends Question
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) =>
-        userAnswers.set(CountryOfResidencePage(index), GB).flatMap(
-          _.remove(InternationalAddressPage(index))
-        )
+      case Some(true)  =>
+        userAnswers
+          .set(CountryOfResidencePage(index), GB)
+          .flatMap(
+            _.remove(InternationalAddressPage(index))
+          )
       case Some(false) =>
         userAnswers.remove(UkAddressPage(index))
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
+
 }

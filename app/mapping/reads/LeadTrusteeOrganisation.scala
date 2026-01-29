@@ -23,23 +23,26 @@ import models.core.pages.{Address, IndividualOrBusiness}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsSuccess, Reads, __}
 
-final case class LeadTrusteeOrganisation(override val isLead: Boolean,
-                                         name: String,
-                                         utr: Option[String],
-                                         address: Address,
-                                         telephoneNumber: String,
-                                         email: Option[String],
-                                         countryOfResidence: Option[String]) extends LeadTrustee {
+final case class LeadTrusteeOrganisation(
+  override val isLead: Boolean,
+  name: String,
+  utr: Option[String],
+  address: Address,
+  telephoneNumber: String,
+  email: Option[String],
+  countryOfResidence: Option[String]
+) extends LeadTrustee {
 
   val identification: IdentificationOrgType = utr match {
     case Some(_) => IdentificationOrgType(utr, None)
-    case _ => IdentificationOrgType(None, Some(buildAddress(address)))
+    case _       => IdentificationOrgType(None, Some(buildAddress(address)))
   }
+
 }
 
 object LeadTrusteeOrganisation extends TrusteeReads[LeadTrusteeOrganisation] {
 
-  override val isLeadTrustee: Boolean = true
+  override val isLeadTrustee: Boolean                     = true
   override val individualOrBusiness: IndividualOrBusiness = Business
 
   override def trusteeReads: Reads[LeadTrusteeOrganisation] = (
@@ -50,6 +53,6 @@ object LeadTrusteeOrganisation extends TrusteeReads[LeadTrusteeOrganisation] {
       (__ \ "telephoneNumber").read[String] and
       yesNoReads[String]("emailYesNo", "email") and
       (__ \ "countryOfResidence").readNullable[String]
-    )(LeadTrusteeOrganisation.apply _)
+  )(LeadTrusteeOrganisation.apply _)
 
 }

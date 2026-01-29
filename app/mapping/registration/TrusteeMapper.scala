@@ -27,42 +27,42 @@ class TrusteeMapper {
 
     trustees match {
       case Nil => None
-      case _ => Some(trustees.map(buildTrusteeType))
+      case _   => Some(trustees.map(buildTrusteeType))
     }
   }
 
-  private def buildTrusteeType(trustee: Trustee): TrusteeType = {
+  private def buildTrusteeType(trustee: Trustee): TrusteeType =
     trustee match {
-      case indTrustee: TrusteeIndividual => TrusteeType(
-        trusteeInd = Some(
-          TrusteeIndividualType(
-            name = indTrustee.name,
-            dateOfBirth = indTrustee.dateOfBirth,
-            phoneNumber = None,
-            identification = indTrustee.identification,
-            countryOfResidence = indTrustee.countryOfResidence,
-            nationality = indTrustee.nationality,
-            legallyIncapable = {
-              indTrustee.mentalCapacityYesNo.flatMap {
-                case Yes => Some(false)
-                case No => Some(true)
+      case indTrustee: TrusteeIndividual   =>
+        TrusteeType(
+          trusteeInd = Some(
+            TrusteeIndividualType(
+              name = indTrustee.name,
+              dateOfBirth = indTrustee.dateOfBirth,
+              phoneNumber = None,
+              identification = indTrustee.identification,
+              countryOfResidence = indTrustee.countryOfResidence,
+              nationality = indTrustee.nationality,
+              legallyIncapable = indTrustee.mentalCapacityYesNo.flatMap {
+                case Yes      => Some(false)
+                case No       => Some(true)
                 case DontKnow => None
               }
-            }
+            )
           )
         )
-      )
-      case orgTrustee: TrusteeOrganisation => TrusteeType(
-        trusteeOrg = Some(
-          TrusteeOrgType(
-            name = orgTrustee.name,
-            phoneNumber = None,
-            email = None,
-            identification = orgTrustee.identification,
-            countryOfResidence = orgTrustee.countryOfResidence
+      case orgTrustee: TrusteeOrganisation =>
+        TrusteeType(
+          trusteeOrg = Some(
+            TrusteeOrgType(
+              name = orgTrustee.name,
+              phoneNumber = None,
+              email = None,
+              identification = orgTrustee.identification,
+              countryOfResidence = orgTrustee.countryOfResidence
+            )
           )
         )
-      )
     }
-  }
+
 }

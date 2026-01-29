@@ -49,18 +49,19 @@ import views.html.register.{AddATrusteeView, AddATrusteeYesNoView, MaxedOutView}
 
 import scala.concurrent.Future
 
-class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
+class AddATrusteeControllerSpec
+    extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
 
-  private lazy val getRoute: String = routes.AddATrusteeController.onPageLoad(fakeDraftId).url
-  private lazy val submitAnotherRoute: String = routes.AddATrusteeController.submitAnother(fakeDraftId).url
-  private lazy val submitLeadRoute: String = routes.AddATrusteeController.submitLead(fakeDraftId).url
-  private lazy val submitYesNoRoute: String = routes.AddATrusteeController.submitOne(fakeDraftId).url
+  private lazy val getRoute: String            = routes.AddATrusteeController.onPageLoad(fakeDraftId).url
+  private lazy val submitAnotherRoute: String  = routes.AddATrusteeController.submitAnother(fakeDraftId).url
+  private lazy val submitLeadRoute: String     = routes.AddATrusteeController.submitLead(fakeDraftId).url
+  private lazy val submitYesNoRoute: String    = routes.AddATrusteeController.submitOne(fakeDraftId).url
   private lazy val submitCompleteRoute: String = routes.AddATrusteeController.submitComplete(fakeDraftId).url
 
   private def changeLink(index: Int): String = CheckDetailsController.onPageLoad(index, fakeDraftId).url
   private def removeLink(index: Int): String = RemoveIndexController.onPageLoad(index, fakeDraftId).url
 
-  private val addTrusteeForm = new AddATrusteeFormProvider()()
+  private val addTrusteeForm           = new AddATrusteeFormProvider()()
   private val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addATrusteeYesNo")
 
   private lazy val trustee = List(
@@ -69,28 +70,50 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
   )
 
   private val userAnswersWithTrusteesComplete: UserAnswers = emptyUserAnswers
-    .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-    .set(TrusteeIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-    .set(NamePage(0), FullName("First 0", None, "Last 0")).success.value
-    .set(TrusteeStatus(0), Completed).success.value
+    .set(TrusteeOrLeadTrusteePage(0), Trustee)
+    .success
+    .value
+    .set(TrusteeIndividualOrBusinessPage(0), IndividualOrBusiness.Individual)
+    .success
+    .value
+    .set(NamePage(0), FullName("First 0", None, "Last 0"))
+    .success
+    .value
+    .set(TrusteeStatus(0), Completed)
+    .success
+    .value
+    .set(TrusteeOrLeadTrusteePage(1), Trustee)
+    .success
+    .value
+    .set(TrusteeIndividualOrBusinessPage(1), IndividualOrBusiness.Individual)
+    .success
+    .value
+    .set(NamePage(1), FullName("First 1", None, "Last 1"))
+    .success
+    .value
+    .set(TrusteeStatus(1), Completed)
+    .success
+    .value
 
-    .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
-    .set(TrusteeIndividualOrBusinessPage(1), IndividualOrBusiness.Individual).success.value
-    .set(NamePage(1), FullName("First 1", None, "Last 1")).success.value
-    .set(TrusteeStatus(1), Completed).success.value
-
-  private def generateTrustees(range: Int): UserAnswers = {
+  private def generateTrustees(range: Int): UserAnswers =
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) =>
+      .foldLeft(emptyUserAnswers)((ua, index) =>
         ua
-          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-          .set(NamePage(index), FullName(s"First $index", None, s"Last $index")).success.value
-          .set(TrusteeStatus(index), Completed).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee)
+          .success
+          .value
+          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual)
+          .success
+          .value
+          .set(NamePage(index), FullName(s"First $index", None, s"Last $index"))
+          .success
+          .value
+          .set(TrusteeStatus(index), Completed)
+          .success
+          .value
       )
-  }
 
-  private val mockTrustsStoreService: TrustsStoreService = Mockito.mock(classOf[TrustsStoreService])
+  private val mockTrustsStoreService: TrustsStoreService     = Mockito.mock(classOf[TrustsStoreService])
   private val mockRegistrationProgress: RegistrationProgress = Mockito.mock(classOf[RegistrationProgress])
 
   override def beforeEach(): Unit = {
@@ -232,8 +255,7 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
       "redirect to the next page when valid data is submitted" when {
 
-        "YesNow / YesLater selected" in {
-
+        "YesNow / YesLater selected" in
           forAll(arbitrary[AddATrustee].suchThat(_ != NoComplete)) { selection =>
             beforeEach()
 
@@ -255,7 +277,6 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
             application.stop()
           }
-        }
 
         "NoComplete selected" in {
 
@@ -358,11 +379,13 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+        redirectLocation(result).value mustEqual routes.TrusteeIndividualOrBusinessController
+          .onPageLoad(index, fakeDraftId)
+          .url
 
         val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
-        uaCaptor.getValue.get(AddATrusteePage).get mustBe YesNow
+        uaCaptor.getValue.get(AddATrusteePage).get                 mustBe YesNow
         uaCaptor.getValue.get(TrusteeOrLeadTrusteePage(index)).get mustBe LeadTrustee
 
         verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
@@ -402,15 +425,23 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
     "there are 25 trustees total (including the lead trustee)" must {
 
       val numberOfTrustees = 24
-      val index = numberOfTrustees
+      val index            = numberOfTrustees
 
       val baseAnswers = generateTrustees(numberOfTrustees)
 
       val userAnswers = baseAnswers
-        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-        .set(ltind.TrusteesNamePage(index), FullName(s"First $index", None, s"Last $index")).success.value
-        .set(TrusteeStatus(index), Completed).success.value
+        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+        .success
+        .value
+        .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual)
+        .success
+        .value
+        .set(ltind.TrusteesNamePage(index), FullName(s"First $index", None, s"Last $index"))
+        .success
+        .value
+        .set(TrusteeStatus(index), Completed)
+        .success
+        .value
 
       lazy val trusteeRows = new AddATrusteeViewHelper(userAnswers, fakeDraftId).rows
 
@@ -437,7 +468,9 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
           )(request, messages).toString
 
         content must include("You cannot add another trustee as you have entered a maximum of 25.")
-        content must include("You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees.")
+        content must include(
+          "You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees."
+        )
 
         application.stop()
       }
@@ -462,13 +495,14 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
           redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
           verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
-          verify(mockRegistrationProgress).trusteesStatus(eqTo(userAnswers.set(AddATrusteePage, NoComplete).success.value))
+          verify(mockRegistrationProgress).trusteesStatus(
+            eqTo(userAnswers.set(AddATrusteePage, NoComplete).success.value)
+          )
 
           application.stop()
         }
 
-        "registration progress is not completed" in {
-
+        "registration progress is not completed" in
           forAll(arbitrary[Option[Status]].suchThat(!_.contains(Completed))) { regProgressStatus =>
             beforeEach()
 
@@ -488,12 +522,14 @@ class AddATrusteeControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
             verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
-            verify(mockRegistrationProgress).trusteesStatus(eqTo(userAnswers.set(AddATrusteePage, NoComplete).success.value))
+            verify(mockRegistrationProgress).trusteesStatus(
+              eqTo(userAnswers.set(AddATrusteePage, NoComplete).success.value)
+            )
 
             application.stop()
           }
-        }
       }
     }
   }
+
 }

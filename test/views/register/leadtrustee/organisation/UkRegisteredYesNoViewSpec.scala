@@ -24,9 +24,9 @@ import views.html.register.leadtrustee.organisation.UkRegisteredYesNoView
 
 class UkRegisteredYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "leadTrustee.organisation.ukRegisteredYesNo"
+  val prefix   = "leadTrustee.organisation.ukRegisteredYesNo"
   val fakeName = "Test"
-  val index = 0
+  val index    = 0
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
@@ -47,4 +47,5 @@ class UkRegisteredYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

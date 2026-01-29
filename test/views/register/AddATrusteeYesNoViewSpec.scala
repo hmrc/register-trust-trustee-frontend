@@ -43,4 +43,5 @@ class AddATrusteeYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

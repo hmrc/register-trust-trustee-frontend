@@ -35,19 +35,21 @@ import java.time.{LocalDate, ZoneOffset}
 
 class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
 
-  val messagePrefix = "leadTrustee.individual.dateOfBirth"
-  val formProvider = new DateFormProvider(frontendAppConfig)
+  val messagePrefix          = "leadTrustee.individual.dateOfBirth"
+  val formProvider           = new DateFormProvider(frontendAppConfig)
   val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
-  val index = 0
-  val name: FullName = FullName("FirstName", None, "LastName")
+  val index                  = 0
+  val name: FullName         = FullName("FirstName", None, "LastName")
 
   lazy val trusteesDateOfBirthRoute: String = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
   "DateOfBirth Controller" when {
 
-    val form = formProvider.withConfig(messagePrefix, matchingLeadTrustee = true)
+    val form                         = formProvider.withConfig(messagePrefix, matchingLeadTrustee = true)
     val baseUserAnswers: UserAnswers = emptyUserAnswers
-      .set(TrusteesNamePage(index), name).success.value
+      .set(TrusteesNamePage(index), name)
+      .success
+      .value
 
     "return OK and the correct view for a GET" in {
 
@@ -70,7 +72,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET when lead trustee matched" in {
 
       val userAnswers = baseUserAnswers
-        .set(MatchedYesNoPage(index), true).success.value
+        .set(MatchedYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +95,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseUserAnswers
-        .set(TrusteesDateOfBirthPage(index), validAnswer).success.value
+        .set(TrusteesDateOfBirthPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -121,9 +127,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
       val request =
         FakeRequest(POST, trusteesDateOfBirthRoute)
           .withFormUrlEncodedBody(
-            "value.day" -> validAnswer.getDayOfMonth.toString,
+            "value.day"   -> validAnswer.getDayOfMonth.toString,
             "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year" -> validAnswer.getYear.toString
+            "value.year"  -> validAnswer.getYear.toString
           )
 
       val result = route(application, request).value
@@ -178,9 +184,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
       val request =
         FakeRequest(POST, trusteesDateOfBirthRoute)
           .withFormUrlEncodedBody(
-            "value.day" -> validAnswer.getDayOfMonth.toString,
+            "value.day"   -> validAnswer.getDayOfMonth.toString,
             "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year" -> validAnswer.getYear.toString
+            "value.year"  -> validAnswer.getYear.toString
           )
 
       val result = route(application, request).value
@@ -191,7 +197,6 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
 
       application.stop()
     }
-
 
     "for a GET" must {
 
@@ -217,9 +222,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
 
         FakeRequest(POST, route)
           .withFormUrlEncodedBody(
-            "value.day" -> validAnswer.getDayOfMonth.toString,
+            "value.day"   -> validAnswer.getDayOfMonth.toString,
             "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year" -> validAnswer.getYear.toString
+            "value.year"  -> validAnswer.getYear.toString
           )
       }
 
@@ -230,4 +235,5 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
       )
     }
   }
+
 }

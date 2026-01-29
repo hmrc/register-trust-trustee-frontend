@@ -28,46 +28,50 @@ import play.api.mvc.Call
 class LeadTrusteeOrganisationNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case UkRegisteredYesNoPage(index) => _ => rts.NameController.onPageLoad(index, draftId)
-    case NamePage(index) => ua => navigateAwayFromNameQuestion(ua, index, draftId)
-    case UtrPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
-    case UkAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
+    case UkRegisteredYesNoPage(index)    => _ => rts.NameController.onPageLoad(index, draftId)
+    case NamePage(index)                 => ua => navigateAwayFromNameQuestion(ua, index, draftId)
+    case UtrPage(index)                  => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index)   => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
+    case UkAddressPage(index)            => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
-    case EmailAddressPage(index) => _ => rts.TelephoneNumberController.onPageLoad(index, draftId)
-    case TelephoneNumberPage(index) => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
+    case EmailAddressPage(index)         => _ => rts.TelephoneNumberController.onPageLoad(index, draftId)
+    case TelephoneNumberPage(index)      => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case page @ AddressUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
-        noCall = rts.InternationalAddressController.onPageLoad(index, draftId)
-      )
-    case page @ EmailAddressYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.EmailAddressController.onPageLoad(index, draftId),
-        noCall = rts.TelephoneNumberController.onPageLoad(index, draftId)
-      )
-    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
-        noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
-      )
+  override def conditionalNavigation(
+    draftId: String
+  )(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case page @ AddressUkYesNoPage(index)                 =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+          noCall = rts.InternationalAddressController.onPageLoad(index, draftId)
+        )
+    case page @ EmailAddressYesNoPage(index)              =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.EmailAddressController.onPageLoad(index, draftId),
+          noCall = rts.TelephoneNumberController.onPageLoad(index, draftId)
+        )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+          noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
+        )
   }
 
-  private def navigateAwayFromNameQuestion(ua: ReadableUserAnswers, index: Int, draftId: String): Call = {
+  private def navigateAwayFromNameQuestion(ua: ReadableUserAnswers, index: Int, draftId: String): Call =
     ua.get(UkRegisteredYesNoPage(index)) match {
-      case Some(true) => rts.UtrController.onPageLoad(index, draftId)
+      case Some(true)  => rts.UtrController.onPageLoad(index, draftId)
       case Some(false) => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case _           => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
 
 }

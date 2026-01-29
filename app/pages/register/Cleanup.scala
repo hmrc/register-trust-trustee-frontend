@@ -26,7 +26,8 @@ trait Cleanup {
     import pages.register.trustees.individual._
     import pages.register.trustees.individual.mld5._
 
-    userAnswers.remove(NamePage(index))
+    userAnswers
+      .remove(NamePage(index))
       .flatMap(_.remove(DateOfBirthYesNoPage(index)))
       .flatMap(_.remove(DateOfBirthPage(index)))
       .flatMap(_.remove(CountryOfNationalityYesNoPage(index)))
@@ -52,7 +53,8 @@ trait Cleanup {
     import pages.register.trustees.organisation._
     import pages.register.trustees.organisation.mld5._
 
-    userAnswers.remove(NamePage(index))
+    userAnswers
+      .remove(NamePage(index))
       .flatMap(_.remove(UtrYesNoPage(index)))
       .flatMap(_.remove(UtrPage(index)))
       .flatMap(_.remove(CountryOfResidenceYesNoPage(index)))
@@ -68,7 +70,8 @@ trait Cleanup {
     import pages.register.leadtrustee.individual._
     import pages.register.leadtrustee.individual.mld5._
 
-    userAnswers.remove(TrusteesNamePage(index))
+    userAnswers
+      .remove(TrusteesNamePage(index))
       .flatMap(_.remove(TrusteesDateOfBirthPage(index)))
       .flatMap(_.remove(CountryOfNationalityInTheUkYesNoPage(index)))
       .flatMap(_.remove(CountryOfNationalityPage(index)))
@@ -92,7 +95,8 @@ trait Cleanup {
     import pages.register.leadtrustee.organisation._
     import pages.register.leadtrustee.organisation.mld5._
 
-    userAnswers.remove(UkRegisteredYesNoPage(index))
+    userAnswers
+      .remove(UkRegisteredYesNoPage(index))
       .flatMap(_.remove(NamePage(index)))
       .flatMap(_.remove(UtrPage(index)))
       .flatMap(_.remove(CountryOfResidenceInTheUkYesNoPage(index)))

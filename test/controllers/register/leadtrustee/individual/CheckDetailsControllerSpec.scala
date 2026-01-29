@@ -33,12 +33,14 @@ import views.html.register.leadtrustee.individual.CheckDetailsView
 class CheckDetailsControllerSpec extends SpecBase with ScalaFutures {
 
   private val index: Int = 0
-  private val name = "Test"
+  private val name       = "Test"
 
   private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad(index, fakeDraftId).url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(NamePage(index), name).success.value
+    .set(NamePage(index), name)
+    .success
+    .value
 
   "CheckDetails Controller" must {
 
@@ -50,8 +52,8 @@ class CheckDetailsControllerSpec extends SpecBase with ScalaFutures {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[LeadTrusteeIndividualPrintHelper]
+      val view                         = application.injector.instanceOf[CheckDetailsView]
+      val printHelper                  = application.injector.instanceOf[LeadTrusteeIndividualPrintHelper]
       val answerSection: AnswerSection = printHelper.checkDetailsSection(emptyUserAnswers, name, index, fakeDraftId)
 
       status(result) mustEqual OK
@@ -86,7 +88,7 @@ class CheckDetailsControllerSpec extends SpecBase with ScalaFutures {
     "return an Internal Server Error and redirect to error page when set user answers operation fails" in {
 
       val differentIndex: Int = index + 2
-      val onSubmitPath = routes.CheckDetailsController.onSubmit(differentIndex, draftId).url
+      val onSubmitPath        = routes.CheckDetailsController.onSubmit(differentIndex, draftId).url
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
@@ -109,4 +111,5 @@ class CheckDetailsControllerSpec extends SpecBase with ScalaFutures {
     }
 
   }
+
 }

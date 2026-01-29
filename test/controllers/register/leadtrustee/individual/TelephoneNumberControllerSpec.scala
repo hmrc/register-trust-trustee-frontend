@@ -33,11 +33,11 @@ import views.html.register.leadtrustee.individual.TelephoneNumberView
 
 class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
 
-  val messagePrefix = "leadTrustee.individual.telephoneNumber"
-  val formProvider = new TelephoneNumberFormProvider()
+  val messagePrefix      = "leadTrustee.individual.telephoneNumber"
+  val formProvider       = new TelephoneNumberFormProvider()
   val form: Form[String] = formProvider(messagePrefix)
 
-  val index = 0
+  val index       = 0
   val trusteeName = "FirstName LastName"
 
   lazy val telephoneNumberRoute: String = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
@@ -47,7 +47,9 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -68,8 +70,12 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TelephoneNumberPage(index), "0191 1111111").success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(TelephoneNumberPage(index), "0191 1111111")
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,14 +96,19 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(TelephoneNumberPage(index), "0191 1111111").success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(TelephoneNumberPage(index), "0191 1111111")
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, telephoneNumberRoute)
@@ -115,7 +126,9 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -167,37 +180,38 @@ class TelephoneNumberControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-  "for a GET" must {
+    "for a GET" must {
 
-    def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
-      val route = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
+      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
+        val route = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
 
-      FakeRequest(GET, route)
+        FakeRequest(GET, route)
+      }
+
+      validateIndex(
+        arbitrary[String],
+        TelephoneNumberPage.apply,
+        getForIndex
+      )
+
     }
 
-    validateIndex(
-      arbitrary[String],
-      TelephoneNumberPage.apply,
-      getForIndex
-    )
+    "for a POST" must {
+      def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
 
+        val route =
+          routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
+
+        FakeRequest(POST, route)
+          .withFormUrlEncodedBody(("value", "0191 1111111"))
+      }
+
+      validateIndex(
+        arbitrary[String],
+        TelephoneNumberPage.apply,
+        postForIndex
+      )
+    }
   }
 
-  "for a POST" must {
-    def postForIndex(index: Int): FakeRequest[AnyContentAsFormUrlEncoded] = {
-
-      val route =
-        routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
-
-      FakeRequest(POST, route)
-        .withFormUrlEncodedBody(("value", "0191 1111111"))
-    }
-
-    validateIndex(
-      arbitrary[String],
-      TelephoneNumberPage.apply,
-      postForIndex
-    )
-    }
-  }
 }

@@ -31,10 +31,10 @@ import views.html.register.trustees.organisation.AddressYesNoView
 
 class AddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressYesNo")
 
-  val index = 0
+  val index    = 0
   val fakeName = "Test"
 
   lazy val addressYesNoRoute: String = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
@@ -64,7 +64,9 @@ class AddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(AddressYesNoPage(index), true).success.value
+        .set(AddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,12 +90,12 @@ class AddressYesNoControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -156,4 +158,5 @@ class AddressYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

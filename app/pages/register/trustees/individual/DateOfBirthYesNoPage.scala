@@ -29,12 +29,12 @@ final case class DateOfBirthYesNoPage(index: Int) extends QuestionPage[Boolean] 
 
   override def toString: String = "dateOfBirthYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) =>
         userAnswers.remove(DateOfBirthPage(index))
-      case _ =>
+      case _           =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

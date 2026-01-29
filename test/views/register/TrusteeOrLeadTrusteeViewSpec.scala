@@ -26,8 +26,8 @@ import views.html.register.TrusteeOrLeadTrusteeView
 class TrusteeOrLeadTrusteeViewSpec extends ViewBehaviours {
 
   private val form: Form[TrusteeOrLeadTrustee] = new TrusteeOrLeadTrusteeFormProvider()()
-  private val messageKeyPrefix: String = "trusteeOrLeadTrustee"
-  private val index = 0
+  private val messageKeyPrefix: String         = "trusteeOrLeadTrustee"
+  private val index                            = 0
 
   "TrusteeOrLeadTrustee view" must {
 
@@ -44,4 +44,5 @@ class TrusteeOrLeadTrusteeViewSpec extends ViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

@@ -24,8 +24,8 @@ import views.html.register.trustees.organisation.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val prefix = "trustee.organisation.ukAddress"
-  val index = 0
+  val prefix   = "trustee.organisation.ukAddress"
+  val index    = 0
   val fakeName = "Test"
 
   override val form = new UKAddressFormProvider()()
@@ -48,4 +48,5 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

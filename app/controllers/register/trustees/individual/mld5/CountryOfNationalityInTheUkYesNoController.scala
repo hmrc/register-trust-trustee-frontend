@@ -37,50 +37,48 @@ import views.html.register.trustees.individual.mld5.CountryOfNationalityInTheUkY
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class CountryOfNationalityInTheUkYesNoController @Inject()(
-                                               val controllerComponents: MessagesControllerComponents,
-                                               implicit val frontendAppConfig: FrontendAppConfig,
-                                               @TrusteeIndividual navigator: Navigator,
-                                               standardActionSets: StandardActionSets,
-                                               formProvider: YesNoFormProvider,
-                                               view: CountryOfNationalityInTheUkYesNoView,
-                                               repository: RegistrationsRepository,
-                                               nameAction: NameRequiredActionImpl,
-                                               errorPageView: InternalServerErrorPageView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CountryOfNationalityInTheUkYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  @TrusteeIndividual navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  formProvider: YesNoFormProvider,
+  view: CountryOfNationalityInTheUkYesNoView,
+  repository: RegistrationsRepository,
+  nameAction: NameRequiredActionImpl,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.5mld.countryOfNationalityInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-    implicit request =>
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) { implicit request =>
       val preparedForm = request.userAnswers.get(CountryOfNationalityInTheUkYesNoPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm,  draftId , index, request.trusteeName))
-  }
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-    implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
+          value =>
+            request.userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value) match {
+              case Success(updatedAnswers) =>
+                repository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), draftId, updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[CountryOfNationalityInTheUkYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(errorPageView()))
+            }
+        )
+    }
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId , index, request.trusteeName))),
-
-        value =>
-          request.userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value) match {
-            case Success(updatedAnswers) =>
-              repository.set(updatedAnswers).map{ _ =>
-                Redirect(navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), draftId, updatedAnswers))
-              }
-            case Failure(_) =>
-              logger.error("[CountryOfNationalityInTheUkYesNoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(errorPageView()))
-          }
-      )
-  }
 }

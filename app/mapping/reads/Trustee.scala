@@ -31,7 +31,7 @@ trait LeadTrustee extends Trustee {
   override val isLead: Boolean = true
 
   val address: Address
-  def hasUkAddress: Boolean = address.isInstanceOf[UKAddress]
+  def hasUkAddress: Boolean    = address.isInstanceOf[UKAddress]
   def addressType: AddressType = buildAddress(address)
 
   val telephoneNumber: String
@@ -43,20 +43,19 @@ object Trustee {
 
     def or[B >: A](b: Reads[B]): Reads[B] =
       a.map[B](identity).orElse(b)
+
   }
 
   implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
     a.map(identity)
 
-  implicit lazy val reads: Reads[Trustee] = {
+  implicit lazy val reads: Reads[Trustee] =
     TrusteeIndividual.reads or
       LeadTrusteeIndividual.reads or
       TrusteeOrganisation.reads or
       LeadTrusteeOrganisation.reads
-  }
 
-  implicit lazy val optionalReads: Reads[Option[Trustee]] = {
+  implicit lazy val optionalReads: Reads[Option[Trustee]] =
     reads.map(Some(_)) or Reads(_ => JsSuccess(None))
-  }
 
 }

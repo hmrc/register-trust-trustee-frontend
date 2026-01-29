@@ -39,30 +39,41 @@ class AddressYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(AddressYesNoPage(index), true)
+              .success
+              .value
+              .set(AddressUkYesNoPage(index), true)
+              .success
+              .value
+              .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "postcode"))
+              .success
+              .value
+              .set(PassportDetailsYesNoPage(index), true)
+              .success
+              .value
+              .set(PassportDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4)))
+              .success
+              .value
+              .set(IDCardDetailsYesNoPage(index), true)
+              .success
+              .value
+              .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4)))
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(AddressYesNoPage(index), true).success.value
-                .set(AddressUkYesNoPage(index), true).success.value
-                .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "postcode")).success.value
-                .set(PassportDetailsYesNoPage(index), true).success.value
-                .set(PassportDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4))).success.value
-                .set(IDCardDetailsYesNoPage(index), true).success.value
-                .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4))).success.value
+          val result = initial.set(AddressYesNoPage(index), false).success.value
 
-            val result = initial.set(AddressYesNoPage(index), false).success.value
-
-            result.get(AddressUkYesNoPage(index)) mustNot be(defined)
-            result.get(UkAddressPage(index)) mustNot be(defined)
-            result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
-            result.get(PassportDetailsPage(index)) mustNot be(defined)
-            result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
-            result.get(IDCardDetailsPage(index)) mustNot be(defined)
+          result.get(AddressUkYesNoPage(index)) mustNot be(defined)
+          result.get(UkAddressPage(index)) mustNot be(defined)
+          result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
+          result.get(PassportDetailsPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

@@ -33,19 +33,19 @@ import scala.concurrent.Future
 class TrustsIndividualCheckServiceSpec extends SpecBase {
 
   private val sessionId = "sessionId"
-  private val id = s"$sessionId~$fakeDraftId"
+  private val id        = s"$sessionId~$fakeDraftId"
 
-  override implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
+  implicit override val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
 
   private val index = 0
 
-  private val firstName = "joe"
+  private val firstName            = "joe"
   private val firstNameCapitalised = "Joe"
-  private val lastName = "bloggs"
-  private val lastNameCapitalised = "Bloggs"
-  private val nino = "aa000000a"
-  private val ninoUpperCase = "AA000000A"
-  private val date = "1996-02-03"
+  private val lastName             = "bloggs"
+  private val lastNameCapitalised  = "Bloggs"
+  private val nino                 = "aa000000a"
+  private val ninoUpperCase        = "AA000000A"
+  private val date                 = "1996-02-03"
 
   private val idMatchRequest = IdMatchRequest(
     id = id,
@@ -62,15 +62,21 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
       "sufficient data to assemble IdMatchRequest body" must {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteesNamePage(index), FullName(firstName, None, lastName)).success.value
-          .set(TrusteesDateOfBirthPage(index), LocalDate.parse(date)).success.value
-          .set(TrusteesNinoPage(index), nino).success.value
+          .set(TrusteesNamePage(index), FullName(firstName, None, lastName))
+          .success
+          .value
+          .set(TrusteesDateOfBirthPage(index), LocalDate.parse(date))
+          .success
+          .value
+          .set(TrusteesNinoPage(index), nino)
+          .success
+          .value
 
         "return SuccessfulMatchResponse" when {
           "successfully matched" in {
 
             val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-            val service = new TrustsIndividualCheckService(mockConnector)
+            val service       = new TrustsIndividualCheckService(mockConnector)
 
             when(mockConnector.matchLeadTrustee(any())(any(), any()))
               .thenReturn(Future.successful(SuccessfulOrUnsuccessfulMatchResponse(id, idMatch = true)))
@@ -89,7 +95,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           "unsuccessfully matched" in {
 
             val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-            val service = new TrustsIndividualCheckService(mockConnector)
+            val service       = new TrustsIndividualCheckService(mockConnector)
 
             when(mockConnector.matchLeadTrustee(any())(any(), any()))
               .thenReturn(Future.successful(SuccessfulOrUnsuccessfulMatchResponse(id, idMatch = false)))
@@ -105,7 +111,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           "NINO not found" in {
 
             val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-            val service = new TrustsIndividualCheckService(mockConnector)
+            val service       = new TrustsIndividualCheckService(mockConnector)
 
             when(mockConnector.matchLeadTrustee(any())(any(), any()))
               .thenReturn(Future.successful(NinoNotFoundResponse))
@@ -123,7 +129,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           "attempt limit exceeded" in {
 
             val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-            val service = new TrustsIndividualCheckService(mockConnector)
+            val service       = new TrustsIndividualCheckService(mockConnector)
 
             when(mockConnector.matchLeadTrustee(any())(any(), any()))
               .thenReturn(Future.successful(AttemptLimitExceededResponse))
@@ -141,7 +147,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           "service unavailable" in {
 
             val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-            val service = new TrustsIndividualCheckService(mockConnector)
+            val service       = new TrustsIndividualCheckService(mockConnector)
 
             when(mockConnector.matchLeadTrustee(any())(any(), any()))
               .thenReturn(Future.successful(ServiceUnavailableResponse))
@@ -160,7 +166,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           "invalid match ID" in {
 
             val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-            val service = new TrustsIndividualCheckService(mockConnector)
+            val service       = new TrustsIndividualCheckService(mockConnector)
 
             when(mockConnector.matchLeadTrustee(any())(any(), any()))
               .thenReturn(Future.successful(InvalidIdMatchResponse))
@@ -176,7 +182,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           "internal server error" in {
 
             val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-            val service = new TrustsIndividualCheckService(mockConnector)
+            val service       = new TrustsIndividualCheckService(mockConnector)
 
             when(mockConnector.matchLeadTrustee(any())(any(), any()))
               .thenReturn(Future.successful(InternalServerErrorResponse))
@@ -195,7 +201,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
         "return IssueBuildingPayloadResponse" in {
 
           val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-          val service = new TrustsIndividualCheckService(mockConnector)
+          val service       = new TrustsIndividualCheckService(mockConnector)
 
           val result = service.matchLeadTrustee(emptyUserAnswers, index)
 
@@ -215,7 +221,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(sessionId)))
 
           val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-          val service = new TrustsIndividualCheckService(mockConnector)
+          val service       = new TrustsIndividualCheckService(mockConnector)
 
           val numberOfFailedAttempts = 1
 
@@ -237,7 +243,7 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
           implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = None)
 
           val mockConnector = Mockito.mock(classOf[TrustsIndividualCheckConnector])
-          val service = new TrustsIndividualCheckService(mockConnector)
+          val service       = new TrustsIndividualCheckService(mockConnector)
 
           val result = service.failedAttempts(fakeDraftId)
 
@@ -246,4 +252,5 @@ class TrustsIndividualCheckServiceSpec extends SpecBase {
       }
     }
   }
+
 }

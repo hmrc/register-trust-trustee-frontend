@@ -24,7 +24,7 @@ import play.api.libs.json._
 
 import scala.reflect.{ClassTag, classTag}
 
-abstract class TrusteeReads[A : ClassTag] {
+abstract class TrusteeReads[A: ClassTag] {
 
   val isLeadTrustee: Boolean
   val individualOrBusiness: IndividualOrBusiness
@@ -32,21 +32,26 @@ abstract class TrusteeReads[A : ClassTag] {
   implicit lazy val reads: Reads[A] = (
     isLeadReads and
       (__ \ "individualOrBusiness").read[IndividualOrBusiness]
-    )((_, _)).flatMap[(Boolean, IndividualOrBusiness)] {
-    case (a, b) =>
+  )((_, _))
+    .flatMap[(Boolean, IndividualOrBusiness)] { case (a, b) =>
       if (a == isLeadTrustee && b == individualOrBusiness) {
         Reads(_ => JsSuccess((isLeadTrustee, individualOrBusiness)))
       } else {
-        Reads(_ => JsError(s"${classTag[A].runtimeClass.getSimpleName} must not have values isLeadTrustee = $a and individualOrBusiness = $b"))
+        Reads(_ =>
+          JsError(
+            s"${classTag[A].runtimeClass.getSimpleName} must not have values isLeadTrustee = $a and individualOrBusiness = $b"
+          )
+        )
       }
-  }.andKeep(trusteeReads)
+    }
+    .andKeep(trusteeReads)
 
   def trusteeReads: Reads[A]
 
   def isLeadReads: Reads[Boolean] =
     (__ \ Symbol("trusteeOrLeadTrustee")).read[TrusteeOrLeadTrustee].map[Boolean] {
       case LeadTrustee => true
-      case _ => false
+      case _           => false
     }
 
   def addressReads: Reads[Address] =
@@ -63,35 +68,35 @@ abstract class TrusteeReads[A : ClassTag] {
     ((__ \ yesNoPath).readNullable[Boolean] and
       (__ \ Symbol("addressYesNo")).readNullable[Boolean] and
       (__ \ Symbol("addressUKYesNo")).readNullable[Boolean] and
-      addressReads
-      ) ((_, _, _, _)).flatMap[Option[Address]] {
-      case (Some(false), Some(true), Some(_), address @ Some(_)) =>
+      addressReads)((_, _, _, _)).flatMap[Option[Address]] {
+      case (Some(false), Some(true), Some(_), address @ Some(_))                                              =>
         Reads(_ => JsSuccess(address))
       case (Some(false), Some(false), None, None) | (Some(true), None, None, None) | (None, None, None, None) =>
         Reads(_ => JsSuccess(None))
-      case _ =>
+      case _                                                                                                  =>
         Reads(_ => JsError("address answers are in an invalid state"))
     }
   }
 
-  def yesNoReads[T](yesNoPath: String, valuePath: String)(implicit reads: Reads[T]): Reads[Option[T]] = {
+  def yesNoReads[T](yesNoPath: String, valuePath: String)(implicit reads: Reads[T]): Reads[Option[T]] =
     ((__ \ yesNoPath).readNullable[Boolean] and
-      (__ \ valuePath).readNullable[T]
-      ) ((_, _)).flatMap[Option[T]] {
-      case (Some(true), x @ Some(_)) =>
+      (__ \ valuePath).readNullable[T])((_, _)).flatMap[Option[T]] {
+      case (Some(true), x @ Some(_))          =>
         Reads(_ => JsSuccess(x))
       case (Some(false), None) | (None, None) =>
         Reads(_ => JsSuccess(None))
-      case _ =>
+      case _                                  =>
         Reads(_ => JsError(s"answers at $yesNoPath and $valuePath are in an invalid state"))
     }
-  }
 
   def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
-    (__ \ Symbol("mentalCapacityYesNo")).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
-      Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
-    }.orElse {
-      (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
-    }
+    (__ \ Symbol("mentalCapacityYesNo"))
+      .readNullable[Boolean]
+      .flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+        Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
+      }
+      .orElse {
+        (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
+      }
 
 }

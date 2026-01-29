@@ -31,17 +31,18 @@ class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](CountryOfNationalityInTheUkYesNoPage(0))
 
-    "Yes selected - set CountryOfNationalityPage to 'GB'" in {
-      forAll(arbitrary[UserAnswers]) {
-        initial =>
-          val answers: UserAnswers = initial
-            .set(CountryOfNationalityPage(0), "ES").success.value
+    "Yes selected - set CountryOfNationalityPage to 'GB'" in
+      forAll(arbitrary[UserAnswers]) { initial =>
+        val answers: UserAnswers = initial
+          .set(CountryOfNationalityPage(0), "ES")
+          .success
+          .value
 
-          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), true).success.value
+        val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), true).success.value
 
-          result.get(CountryOfNationalityPage(0)).get mustBe "GB"
+        result.get(CountryOfNationalityPage(0)).get mustBe "GB"
       }
-    }
 
   }
+
 }

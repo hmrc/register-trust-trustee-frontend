@@ -25,10 +25,10 @@ import views.html.register.trustees.individual.NameView
 
 class NameViewSpec extends QuestionViewBehaviours[FullName] {
 
-  val prefix = "trustee.individual.name"
-  val index = 0
+  val prefix               = "trustee.individual.name"
+  val index                = 0
   val form: Form[FullName] = new NameFormProvider()(prefix)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val view: NameView       = viewFor[NameView](Some(emptyUserAnswers))
 
   "Name View" must {
 
@@ -49,4 +49,5 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

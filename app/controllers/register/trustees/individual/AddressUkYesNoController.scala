@@ -39,56 +39,54 @@ import views.html.InternalServerErrorPageView
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class AddressUkYesNoController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          implicit val frontendAppConfig: FrontendAppConfig,
-                                          registrationsRepository: RegistrationsRepository,
-                                          @TrusteeIndividual navigator: Navigator,
-                                          standardActionSets: StandardActionSets,
-                                          nameAction: NameRequiredActionImpl,
-                                          validateIndex: IndexActionFilterProvider,
-                                          formProvider: YesNoFormProvider,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: AddressUkYesNoView,
-                                          errorPageView: InternalServerErrorPageView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class AddressUkYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @TrusteeIndividual navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredActionImpl,
+  validateIndex: IndexActionFilterProvider,
+  formProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: AddressUkYesNoView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
 
-      val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
+    val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AddressUkYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+    Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
 
-      val form: Form[Boolean] = formProvider.withPrefix("trustee.individual.addressUkYesNo")
-
-      form.bindFromRequest().fold(
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
-
-        value => {
+        value =>
           request.userAnswers.set(AddressUkYesNoPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(AddressUkYesNoPage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[AddressUkYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }

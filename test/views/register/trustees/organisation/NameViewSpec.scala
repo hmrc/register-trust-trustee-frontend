@@ -24,10 +24,10 @@ import views.html.register.trustees.organisation.NameView
 
 class NameViewSpec extends StringViewBehaviours {
 
-  val prefix = "trustee.organisation.name"
-  val index = 0
+  val prefix                      = "trustee.organisation.name"
+  val index                       = 0
   override val form: Form[String] = new StringFormProvider().withConfig(prefix, 56)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val view: NameView              = viewFor[NameView](Some(emptyUserAnswers))
 
   "Name View" must {
 
@@ -43,4 +43,5 @@ class NameViewSpec extends StringViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

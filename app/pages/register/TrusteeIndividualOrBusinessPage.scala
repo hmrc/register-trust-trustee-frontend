@@ -32,20 +32,21 @@ final case class TrusteeIndividualOrBusinessPage(index: Int) extends QuestionPag
 
   override def toString: String = "individualOrBusiness"
 
-  override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(Business) =>
-        userAnswers.remove(TrusteeStatus(index))
+        userAnswers
+          .remove(TrusteeStatus(index))
           .flatMap(ua => removeLeadTrusteeIndividual(ua, index))
           .flatMap(ua => removeTrusteeIndividual(ua, index))
 
       case Some(Individual) =>
-        userAnswers.remove(TrusteeStatus(index))
+        userAnswers
+          .remove(TrusteeStatus(index))
           .flatMap(ua => removeLeadTrusteeBusiness(ua, index))
           .flatMap(ua => removeTrusteeBusiness(ua, index))
 
       case _ => super.cleanup(value, userAnswers)
     }
-  }
 
 }

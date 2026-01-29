@@ -35,17 +35,19 @@ class UtrYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers =
-              userAnswers
-                .set(UtrPage(index), "utr").success.value
-                .set(UtrYesNoPage(index), false).success.value
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers =
+            userAnswers
+              .set(UtrPage(index), "utr")
+              .success
+              .value
+              .set(UtrYesNoPage(index), false)
+              .success
+              .value
 
-            result.get(UtrPage(index)) mustNot be(defined)
+          result.get(UtrPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

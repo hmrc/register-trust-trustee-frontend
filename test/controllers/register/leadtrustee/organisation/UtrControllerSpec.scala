@@ -32,16 +32,15 @@ import views.html.register.leadtrustee.organisation.UtrView
 
 class UtrControllerSpec extends SpecBase with IndexValidation {
 
-  private val fakeName = "Test"
-  private val index = 0
+  private val fakeName    = "Test"
+  private val index       = 0
   private val validAnswer = "1234567890"
 
   private lazy val utrRoute: String = routes.UtrController.onPageLoad(index, fakeDraftId).url
 
-  override val emptyUserAnswers: UserAnswers = super
-    .emptyUserAnswers.set(NamePage(index), fakeName).success.value
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
-  private val formProvider = new UtrFormProvider()
+  private val formProvider       = new UtrFormProvider()
   private val form: Form[String] = formProvider.withConfig("leadTrustee.organisation.utr", emptyUserAnswers, index)
 
   "Utr Controller" must {
@@ -67,7 +66,9 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UtrPage(index), validAnswer).success.value
+        .set(UtrPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +92,8 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, utrRoute)
@@ -160,9 +162,9 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
     }
 
     "return an Internal Server Error and redirect to error page when set user answers operation fails" in {
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fakeName).success.value
+      val userAnswers         = emptyUserAnswers.set(NamePage(index), fakeName).success.value
       val differentIndex: Int = index + 2
-      val onSubmitPath = routes.UtrController.onSubmit(differentIndex, fakeDraftId).url
+      val onSubmitPath        = routes.UtrController.onSubmit(differentIndex, fakeDraftId).url
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -185,4 +187,5 @@ class UtrControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

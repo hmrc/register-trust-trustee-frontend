@@ -18,10 +18,9 @@ package forms
 
 object Validation {
 
-  val countryRegex = "^[A-Za-z ,.()'-]*$"
+  val countryRegex  = "^[A-Za-z ,.()'-]*$"
   val postcodeRegex = """^[a-zA-Z]{1,2}[0-9][0-9a-zA-Z]?\s?[0-9][a-zA-Z]{2}$"""
-  val nameRegex = "^[A-Za-z0-9 ,.()/&'-]*$"
-
+  val nameRegex     = "^[A-Za-z0-9 ,.()/&'-]*$"
 
   /** This is the actual regex for an individual's name:
    * `"^(?=.{1,99}$)([A-Z]([-'. ]{0,1}[A-Za-z ]+)*[A-Za-z]?)$"`
@@ -30,9 +29,9 @@ object Validation {
    */
   val individualNameRegex = "^(?=.{1,99}$)([A-Za-z]([-'. ]{0,1}[A-Za-z ]+)*[A-Za-z]?)$"
 
-  val utrRegex = "^[0-9]*$"
-  val telephoneRegex = """^\+[0-9 ]{1,18}$|^[0-9 ]{1,19}$"""
-  val addressLineRegex = "^[A-Za-z0-9 ,.()/&'-]*$"
+  val utrRegex                    = "^[0-9]*$"
+  val telephoneRegex              = """^\+[0-9 ]{1,18}$|^[0-9 ]{1,19}$"""
+  val addressLineRegex            = "^[A-Za-z0-9 ,.()/&'-]*$"
   val passportOrIdCardNumberRegEx = """^([A-Za-z0-9]{1,30})$"""
-  val emailAddressRegex = """^([a-zA-Z0-9.!#$%&’'*+/=?^_`{|}~-]+)@([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$"""
+  val emailAddressRegex           = """^([a-zA-Z0-9.!#$%&’'*+/=?^_`{|}~-]+)@([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$"""
 }

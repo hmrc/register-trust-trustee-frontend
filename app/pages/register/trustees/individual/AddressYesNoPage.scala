@@ -29,7 +29,7 @@ final case class AddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def toString: String = "addressYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) =>
         userAnswers
@@ -40,8 +40,8 @@ final case class AddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
           .flatMap(_.remove(PassportDetailsPage(index)))
           .flatMap(_.remove(IDCardDetailsYesNoPage(index)))
           .flatMap(_.remove(IDCardDetailsPage(index)))
-      case _ =>
+      case _           =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

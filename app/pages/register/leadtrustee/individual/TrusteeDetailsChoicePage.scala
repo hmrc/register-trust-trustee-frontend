@@ -25,20 +25,20 @@ import sections.Trustees
 
 import scala.util.Try
 
-final case class TrusteeDetailsChoicePage(index : Int) extends QuestionPage[DetailsChoice] {
+final case class TrusteeDetailsChoicePage(index: Int) extends QuestionPage[DetailsChoice] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
   override def toString: String = "trusteeDetailsChoice"
 
-  override def cleanup(value: Option[DetailsChoice], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[DetailsChoice], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(Passport) =>
         userAnswers.remove(IDCardDetailsPage(index))
-      case Some(IdCard) =>
+      case Some(IdCard)   =>
         userAnswers.remove(PassportDetailsPage(index))
-      case _ =>
+      case _              =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

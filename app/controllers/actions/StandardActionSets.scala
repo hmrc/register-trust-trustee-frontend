@@ -23,14 +23,17 @@ import models.requests.RegistrationDataRequest
 import play.api.mvc.{ActionBuilder, AnyContent}
 import sections.Trustees
 
-class StandardActionSets @Inject()(identify: RegistrationIdentifierAction,
-                                   getData: DraftIdRetrievalActionProvider,
-                                   requireData: RegistrationDataRequiredAction,
-                                   validateIndex: IndexActionFilterProvider
-                                  ){
+class StandardActionSets @Inject() (
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  validateIndex: IndexActionFilterProvider
+) {
+
   def identifiedUserWithData(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen requireData
 
   def indexValidated(draftId: String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identifiedUserWithData(draftId) andThen validateIndex(index, Trustees)
+
 }

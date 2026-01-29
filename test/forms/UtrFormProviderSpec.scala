@@ -23,11 +23,11 @@ class UtrFormProviderSpec extends StringFieldBehaviours {
 
   val prefix = "businessProtector.utr"
 
-  val requiredKey = s"$prefix.error.required"
-  val lengthKey = s"$prefix.error.length"
-  val notUniqueKey = s"$prefix.error.notUnique"
+  val requiredKey       = s"$prefix.error.required"
+  val lengthKey         = s"$prefix.error.length"
+  val notUniqueKey      = s"$prefix.error.notUnique"
   val sameAsTrustUtrKey = s"$prefix.error.sameAsTrustUtr"
-  val utrLength = 10
+  val utrLength         = 10
 
   val form: Form[String] = new UtrFormProvider().withConfig(prefix, emptyUserAnswers, 0)
 
@@ -71,4 +71,5 @@ class UtrFormProviderSpec extends StringFieldBehaviours {
     )
 
   }
+
 }

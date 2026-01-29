@@ -34,6 +34,7 @@ final case class CountryOfNationalityInTheUkYesNoPage(index: Int) extends Questi
     value match {
       case Some(true) =>
         userAnswers.set(CountryOfNationalityPage(index), GB)
-      case _ => super.cleanup(value, userAnswers)
+      case _          => super.cleanup(value, userAnswers)
     }
+
 }

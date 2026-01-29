@@ -33,49 +33,48 @@ import viewmodels.addAnother.TrusteeViewModel
 
 class AddATrusteeViewHelper(userAnswers: UserAnswers, draftId: String)(implicit messages: Messages) {
 
-  private def render(trustee : (TrusteeViewModel, Int)) : AddRow = {
+  private def render(trustee: (TrusteeViewModel, Int)): AddRow = {
 
     val viewModel = trustee._1
-    val index = trustee._2
+    val index     = trustee._2
 
     val nameOfTrustee = viewModel.name.getOrElse(messages("entities.no.name.added"))
 
-    def renderForLead(message : String) = s"${messages("entities.lead")} $message"
+    def renderForLead(message: String) = s"${messages("entities.lead")} $message"
 
     val trusteeType = {
       val key = viewModel.`type` match {
-        case Some(k : IndividualOrBusiness) =>
+        case Some(k: IndividualOrBusiness) =>
           messages(s"entities.trustee.$k")
-        case None =>
+        case None                          =>
           s"${messages("entities.trustee")}"
       }
-      if(viewModel.isLead) renderForLead(key) else key
+      if (viewModel.isLead) renderForLead(key) else key
     }
 
     case class ChangeLink(inProgressRoute: String, completedRoute: String)
 
-    val changeLink: Call = {
+    val changeLink: Call =
       viewModel match {
         case TrusteeViewModel(false, _, Some(Individual), InProgress) =>
           tiRts.NameController.onPageLoad(index, draftId)
-        case TrusteeViewModel(false, _, Some(Individual), Completed) =>
+        case TrusteeViewModel(false, _, Some(Individual), Completed)  =>
           tiRts.CheckDetailsController.onPageLoad(index, draftId)
-        case TrusteeViewModel(false, _, Some(Business), InProgress) =>
+        case TrusteeViewModel(false, _, Some(Business), InProgress)   =>
           toRts.NameController.onPageLoad(index, draftId)
-        case TrusteeViewModel(false, _, Some(Business), Completed) =>
+        case TrusteeViewModel(false, _, Some(Business), Completed)    =>
           toRts.CheckDetailsController.onPageLoad(index, draftId)
-        case TrusteeViewModel(true, _, Some(Individual), InProgress) =>
+        case TrusteeViewModel(true, _, Some(Individual), InProgress)  =>
           ltiRts.NameController.onPageLoad(index, draftId)
-        case TrusteeViewModel(true, _, Some(Individual), Completed) =>
+        case TrusteeViewModel(true, _, Some(Individual), Completed)   =>
           ltiRts.CheckDetailsController.onPageLoad(index, draftId)
-        case TrusteeViewModel(true, _, Some(Business), InProgress) =>
+        case TrusteeViewModel(true, _, Some(Business), InProgress)    =>
           ltoRts.UkRegisteredYesNoController.onPageLoad(index, draftId)
-        case TrusteeViewModel(true, _, Some(Business), Completed) =>
+        case TrusteeViewModel(true, _, Some(Business), Completed)     =>
           ltoRts.CheckDetailsController.onPageLoad(index, draftId)
-        case _ =>
+        case _                                                        =>
           rts.TrusteeOrLeadTrusteeController.onPageLoad(index, draftId)
       }
-    }
 
     AddRow(
       name = nameOfTrustee,
@@ -85,7 +84,7 @@ class AddATrusteeViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
     )
   }
 
-  def rows : AddToRows = {
+  def rows: AddToRows = {
     val trustees = userAnswers.get(Trustees).toList.flatten.zipWithIndex
 
     val complete = trustees.filter(_._1.status == Completed).map(render)

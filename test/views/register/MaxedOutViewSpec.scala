@@ -29,11 +29,11 @@ class MaxedOutViewSpec extends OptionsViewBehaviours with TabularDataViewBehavio
 
   private val fakeAddRow: AddRow = AddRow("name", "label", "change", "remove")
 
-  private val numberInProgress = 1
+  private val numberInProgress             = 1
   private val inProgressRows: List[AddRow] = List.fill(numberInProgress)(fakeAddRow)
-  private val numberComplete = 15
-  private val completeRows: List[AddRow] = List.fill(numberComplete)(fakeAddRow)
-  private val total = numberInProgress + numberComplete
+  private val numberComplete               = 15
+  private val completeRows: List[AddRow]   = List.fill(numberComplete)(fakeAddRow)
+  private val total                        = numberInProgress + numberComplete
 
   private def applyView(): HtmlFormat.Appendable =
     view.apply(fakeDraftId, inProgressRows, completeRows, s"You have added $total trustees")(fakeRequest, messages)
@@ -56,7 +56,11 @@ class MaxedOutViewSpec extends OptionsViewBehaviours with TabularDataViewBehavio
       val doc = asDocument(view)
 
       assertContainsText(doc, "You cannot add another trustee as you have entered a maximum of 25.")
-      assertContainsText(doc, "You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees.")
+      assertContainsText(
+        doc,
+        "You can add another trustee by removing an existing one, or write to HMRC with details of any additional trustees."
+      )
     }
   }
+
 }

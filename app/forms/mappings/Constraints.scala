@@ -28,45 +28,40 @@ import java.time.LocalDate
 trait Constraints {
 
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
-    Constraint {
-      input =>
-        constraints
-          .map(_.apply(input))
-          .find(_ != Valid)
-          .getOrElse(Valid)
+    Constraint { input =>
+      constraints
+        .map(_.apply(input))
+        .find(_ != Valid)
+        .getOrElse(Valid)
     }
 
   protected def minimumValue[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint {
-      input =>
+    Constraint { input =>
+      import ev._
 
-        import ev._
-
-        if (input >= minimum) {
-          Valid
-        } else {
-          Invalid(errorKey, minimum)
-        }
+      if (input >= minimum) {
+        Valid
+      } else {
+        Invalid(errorKey, minimum)
+      }
     }
 
   protected def maximumValue[A](maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint {
-      input =>
+    Constraint { input =>
+      import ev._
 
-        import ev._
-
-        if (input <= maximum) {
-          Valid
-        } else {
-          Invalid(errorKey, maximum)
-        }
+      if (input <= maximum) {
+        Valid
+      } else {
+        Invalid(errorKey, maximum)
+      }
     }
 
   protected def nonEmptyString(value: String, errorKey: String): Constraint[String] =
     Constraint {
       case str if str.trim.nonEmpty =>
         Valid
-      case _ =>
+      case _                        =>
         Invalid(errorKey, value)
     }
 
@@ -74,7 +69,7 @@ trait Constraints {
     Constraint {
       case str if str.matches(regex) =>
         Valid
-      case _ =>
+      case _                         =>
         Invalid(errorKey, regex)
     }
 
@@ -82,7 +77,7 @@ trait Constraints {
     Constraint {
       case str if str.length <= maximum =>
         Valid
-      case _ =>
+      case _                            =>
         Invalid(errorKey, maximum)
     }
 
@@ -90,7 +85,7 @@ trait Constraints {
     Constraint {
       case str if str.length >= minimum =>
         Valid
-      case _ =>
+      case _                            =>
         Invalid(errorKey, minimum)
     }
 
@@ -98,50 +93,47 @@ trait Constraints {
     Constraint {
       case str if Nino.isValid(str) =>
         Valid
-      case _ =>
+      case _                        =>
         Invalid(errorKey, value)
     }
 
   protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
-    Constraint {
-      nino =>
-        userAnswers.data.transform(Trustees.path.json.pick[JsArray]) match {
-          case JsSuccess(trustees, _) =>
+    Constraint { nino =>
+      userAnswers.data.transform(Trustees.path.json.pick[JsArray]) match {
+        case JsSuccess(trustees, _) =>
 
-            val uniqueNino = trustees.value.zipWithIndex.forall { trustee =>
+          val uniqueNino = trustees.value.zipWithIndex.forall { trustee =>
+            val isNinoFoundInTrustees = (trustee._1 \\ NinoPage.key).contains(JsString(nino))
+            val isNotThisNino         = trustee._2 != index
 
-              val isNinoFoundInTrustees = (trustee._1 \\ NinoPage.key).contains(JsString(nino))
-              val isNotThisNino = trustee._2 != index
+            !(isNinoFoundInTrustees && isNotThisNino)
 
-              !(isNinoFoundInTrustees && isNotThisNino)
+          }
 
-            }
-
-            if (uniqueNino) {
-              Valid
-            } else {
-              Invalid(errorKey)
-            }
-          case _ =>
+          if (uniqueNino) {
             Valid
-        }
+          } else {
+            Invalid(errorKey)
+          }
+        case _ =>
+          Valid
+      }
     }
 
   protected def uniqueNinoTrustee(errorKey: String, existingSettlorNinos: Seq[String]): Constraint[String] =
-    Constraint {
-      nino =>
-        if (existingSettlorNinos.contains(nino)) {
-          Invalid(errorKey)
-        } else {
-          Valid
-        }
+    Constraint { nino =>
+      if (existingSettlorNinos.contains(nino)) {
+        Invalid(errorKey)
+      } else {
+        Valid
+      }
     }
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
     Constraint {
       case date if date.isAfter(maximum) =>
         Invalid(errorKey, args: _*)
-      case _ =>
+      case _                             =>
         Valid
     }
 
@@ -149,7 +141,7 @@ trait Constraints {
     Constraint {
       case date if date.isBefore(minimum) =>
         Invalid(errorKey, args: _*)
-      case _ =>
+      case _                              =>
         Valid
     }
 
@@ -157,7 +149,7 @@ trait Constraints {
     Constraint {
       case str if TelephoneNumber.isValid(str) =>
         Valid
-      case _ =>
+      case _                                   =>
         Invalid(errorKey, value)
     }
 
@@ -165,38 +157,43 @@ trait Constraints {
     Constraint {
       case str if str.matches(value) =>
         Valid
-      case _ =>
+      case _                         =>
         Invalid(errorKey, value)
     }
 
-  protected def uniqueUtr(userAnswers: UserAnswers, index: Int, notUniqueKey: String, sameAsTrustUtrKey: String): Constraint[String] =
-    Constraint {
-      utr =>
-        if (userAnswers.existingTrustUtr.contains(utr)) {
-          Invalid(sameAsTrustUtrKey)
-        } else {
-          userAnswers.data.transform(Trustees.path.json.pick[JsArray]) match {
-            case JsSuccess(trustees, _) =>
-              val utrIsUnique = trustees.value.zipWithIndex.forall(trustee =>
-                !((trustee._1 \\ "utr").contains(JsString(utr)) && trustee._2 != index)
-              )
+  protected def uniqueUtr(
+    userAnswers: UserAnswers,
+    index: Int,
+    notUniqueKey: String,
+    sameAsTrustUtrKey: String
+  ): Constraint[String] =
+    Constraint { utr =>
+      if (userAnswers.existingTrustUtr.contains(utr)) {
+        Invalid(sameAsTrustUtrKey)
+      } else {
+        userAnswers.data.transform(Trustees.path.json.pick[JsArray]) match {
+          case JsSuccess(trustees, _) =>
+            val utrIsUnique = trustees.value.zipWithIndex.forall(trustee =>
+              !((trustee._1 \\ "utr").contains(JsString(utr)) && trustee._2 != index)
+            )
 
-              if (utrIsUnique) {
-                Valid
-              } else {
-                Invalid(notUniqueKey)
-              }
-            case _ =>
+            if (utrIsUnique) {
               Valid
-          }
+            } else {
+              Invalid(notUniqueKey)
+            }
+          case _                      =>
+            Valid
         }
+      }
     }
 
   protected def startsWithCapitalLetter(value: String, errorKey: String): Constraint[String] =
     Constraint {
       case str if str.nonEmpty && str.head.isUpper =>
         Valid
-      case _ =>
+      case _                                       =>
         Invalid(errorKey, value)
     }
+
 }

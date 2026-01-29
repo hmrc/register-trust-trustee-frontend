@@ -75,4 +75,5 @@ class NinoYesNoViewSpec extends YesNoViewBehaviours {
       behave like pageWithDisabledInput(applyView(form))
     }
   }
+
 }

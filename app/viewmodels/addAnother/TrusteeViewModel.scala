@@ -23,10 +23,12 @@ import models.core.pages.{FullName, IndividualOrBusiness, TrusteeOrLeadTrustee}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-final case class TrusteeViewModel(isLead: Boolean,
-                                  name: Option[String],
-                                  `type`: Option[IndividualOrBusiness],
-                                  status: Status) {
+final case class TrusteeViewModel(
+  isLead: Boolean,
+  name: Option[String],
+  `type`: Option[IndividualOrBusiness],
+  status: Status
+) {
 
   def isComplete: Boolean = status == Status.Completed
 }
@@ -34,7 +36,7 @@ final case class TrusteeViewModel(isLead: Boolean,
 object TrusteeViewModel {
 
   implicit class OptionString(s: String) {
-    def toOption: Option[String] = if(s.isEmpty) None else Some(s)
+    def toOption: Option[String] = if (s.isEmpty) None else Some(s)
   }
 
   val nameReads: Reads[Option[String]] =
@@ -44,18 +46,15 @@ object TrusteeViewModel {
   val isLeadReads: Reads[Boolean] =
     (__ \ "trusteeOrLeadTrustee").readWithDefault[TrusteeOrLeadTrustee](TrusteeOrLeadTrustee.Trustee).map[Boolean] {
       case TrusteeOrLeadTrustee.LeadTrustee => true
-      case _ => false
+      case _                                => false
     }
 
   val statusReads: Reads[Status] =
     ((__ \ "status").readWithDefault[Status](InProgress) and
-      Trustee.optionalReads
-      )(
-      (status, trustee) => {
-        (status, trustee) match {
-          case (Completed, Some(_)) => Completed
-          case _ => InProgress
-        }
+      Trustee.optionalReads)((status, trustee) =>
+      (status, trustee) match {
+        case (Completed, Some(_)) => Completed
+        case _                    => InProgress
       }
     )
 
@@ -63,11 +62,8 @@ object TrusteeViewModel {
     (isLeadReads and
       (__ \ "individualOrBusiness").readNullable[IndividualOrBusiness] and
       nameReads and
-      statusReads
-      )(
-      (isLead, individualOrBusiness, name, status) => {
-        TrusteeViewModel(isLead, name, individualOrBusiness, status)
-      }
+      statusReads)((isLead, individualOrBusiness, name, status) =>
+      TrusteeViewModel(isLead, name, individualOrBusiness, status)
     )
 
 }

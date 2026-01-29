@@ -27,4 +27,5 @@ class TrusteeOrLeadTrusteeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[TrusteeOrLeadTrustee]("trusteeOrLeadTrustee.error.required")
     )
+
 }

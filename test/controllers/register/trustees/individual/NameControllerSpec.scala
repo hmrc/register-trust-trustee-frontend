@@ -86,7 +86,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
         val result = route(application, request).value
 
-
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
@@ -103,7 +102,9 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       val name = FullName("First name", Some("Middle name"), "Last name")
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
+        .set(NamePage(index), name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -128,7 +129,9 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       val name = FullName("First name", Some("Middle name"), "Last name")
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
+        .set(NamePage(index), name)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -136,7 +139,8 @@ class NameControllerSpec extends SpecBase with IndexValidation {
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trusteesNameRoute)
@@ -216,4 +220,5 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       )
     }
   }
+
 }

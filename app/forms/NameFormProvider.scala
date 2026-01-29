@@ -25,14 +25,13 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.{Constraint, Valid}
 
-
 class NameFormProvider @Inject() extends Mappings {
 
   private val maxFieldCharacters = 35
 
   def apply(messagePrefix: String): Form[FullName] = Form(
     mapping(
-      "firstName" -> text(s"$messagePrefix.error.firstName.required")
+      "firstName"  -> text(s"$messagePrefix.error.firstName.required")
         .verifying(
           firstError(
             nonEmptyString("firstName", s"$messagePrefix.error.firstName.required"),
@@ -41,9 +40,10 @@ class NameFormProvider @Inject() extends Mappings {
             startsWithCapitalLetter("firstName", s"$messagePrefix.error.firstName.capitalLetter")
           )
         ),
-      "middleName" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
+      "middleName" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
             Constraint[String] { value: String =>
               if (value.nonEmpty) {
                 firstError(
@@ -55,9 +55,9 @@ class NameFormProvider @Inject() extends Mappings {
                 Valid
               }
             }
-        )
+          )
       ).transform(emptyToNone, identity[Option[String]]),
-      "lastName" -> text(s"$messagePrefix.error.lastName.required")
+      "lastName"   -> text(s"$messagePrefix.error.lastName.required")
         .verifying(
           firstError(
             nonEmptyString("lastName", s"$messagePrefix.error.lastName.required"),
@@ -68,5 +68,5 @@ class NameFormProvider @Inject() extends Mappings {
         )
     )(FullName.apply)(FullName.unapply)
   )
-}
 
+}

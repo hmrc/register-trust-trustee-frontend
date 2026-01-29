@@ -37,55 +37,56 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class NinoYesNoController @Inject()(
-                                     override val messagesApi: MessagesApi,
-                                     implicit val frontendAppConfig: FrontendAppConfig,
-                                     registrationsRepository: RegistrationsRepository,
-                                     @LeadTrusteeIndividual navigator: Navigator,
-                                     val standardActionSets: StandardActionSets,
-                                     val nameAction: NameRequiredActionImpl,
-                                     formProvider: YesNoFormProvider,
-                                     val controllerComponents: MessagesControllerComponents,
-                                     view: NinoYesNoView,
-                                     errorPageView: InternalServerErrorPageView,
-                                     val trustsIndividualCheckService: TrustsIndividualCheckService
-                                   )(implicit val ec: ExecutionContext) extends FrontendBaseController with NinoControllerHelper with I18nSupport with Logging {
+class NinoYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @LeadTrusteeIndividual navigator: Navigator,
+  val standardActionSets: StandardActionSets,
+  val nameAction: NameRequiredActionImpl,
+  formProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: NinoYesNoView,
+  errorPageView: InternalServerErrorPageView,
+  val trustsIndividualCheckService: TrustsIndividualCheckService
+)(implicit val ec: ExecutionContext)
+    extends FrontendBaseController with NinoControllerHelper with I18nSupport with Logging {
 
   private val form = formProvider.withPrefix("leadTrustee.individual.ninoYesNo")
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-      maxFailedAttemptsReached(draftId).flatMap { isMaxAttemptsReached =>
-        if (isMaxAttemptsReached) {
-          Future.successful(redirectToFailedAttemptsPage(index, draftId))
-        } else {
-          val preparedForm = request.userAnswers.get(TrusteeNinoYesNoPage(index)) match {
-            case None => form
-            case Some(value) => form.fill(value)
-          }
-          Future.successful(Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index))))
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    maxFailedAttemptsReached(draftId).flatMap { isMaxAttemptsReached =>
+      if (isMaxAttemptsReached) {
+        Future.successful(redirectToFailedAttemptsPage(index, draftId))
+      } else {
+        val preparedForm = request.userAnswers.get(TrusteeNinoYesNoPage(index)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
         }
+        Future.successful(Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index))))
       }
+    }
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
-
-        value => {
+          Future.successful(
+            BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
+          ),
+        value =>
           request.userAnswers.set(TrusteeNinoYesNoPage(index), value) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(TrusteeNinoYesNoPage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[NinoYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }
