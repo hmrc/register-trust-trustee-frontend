@@ -32,13 +32,13 @@ import views.html.register.leadtrustee.individual.mld5.CountryOfNationalityInThe
 
 class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
 
-  private val formProvider        = new YesNoFormProvider()
+  private val formProvider = new YesNoFormProvider()
 
   private val form: Form[Boolean] =
     formProvider.withPrefix("leadTrustee.individual.5mld.countryOfNationalityInTheUkYesNo")
 
-  private val index: Int          = 0
-  private val name: FullName      = FullName("FirstName", None, "LastName")
+  private val index: Int     = 0
+  private val name: FullName = FullName("FirstName", None, "LastName")
 
   private lazy val countryOfNationalityInTheUkYesNo: String =
     routes.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId).url

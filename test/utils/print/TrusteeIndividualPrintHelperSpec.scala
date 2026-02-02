@@ -35,13 +35,13 @@ import java.time.LocalDate
 
 class TrusteeIndividualPrintHelperSpec extends SpecBase {
 
-  private val index: Int                                       = 0
-  private val fullName: FullName                               = FullName("John", None, "Doe")
-  private val displayName: String                              = fullName.toString
-  private val date: LocalDate                                  = LocalDate.parse("1996-02-03")
-  private val nino: String                                     = "AA000000A"
-  private val ukAddress: UKAddress                             = UKAddress("Line 1", "Line 2", None, None, "NE1 1NE")
-  private val internationalAddress: InternationalAddress       = InternationalAddress("Line 1", "Line 2", None, "DE")
+  private val index: Int                                 = 0
+  private val fullName: FullName                         = FullName("John", None, "Doe")
+  private val displayName: String                        = fullName.toString
+  private val date: LocalDate                            = LocalDate.parse("1996-02-03")
+  private val nino: String                               = "AA000000A"
+  private val ukAddress: UKAddress                       = UKAddress("Line 1", "Line 2", None, None, "NE1 1NE")
+  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "DE")
 
   private val passportOrIdCardDetails: PassportOrIdCardDetails =
     PassportOrIdCardDetails("DE", "1234567890", date)

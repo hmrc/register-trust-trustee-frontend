@@ -27,7 +27,7 @@ import java.time.LocalDate
 
 class TrusteeDetailsChoicePageSpec extends PageBehaviours {
 
-  private val index                                            = 0
+  private val index = 0
 
   private val passportOrIdCardDetails: PassportOrIdCardDetails =
     PassportOrIdCardDetails("FR", "num", LocalDate.parse("2010-05-04"))

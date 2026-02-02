@@ -38,10 +38,10 @@ import java.time.LocalDate
 
 class AddATrusteeViewHelperSpec extends SpecBase {
 
-  private val defaultName: String                              = "No name added"
-  private val ukAddress: UKAddress                             = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
-  private val internationalAddress: InternationalAddress       = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
-  private val date: LocalDate                                  = LocalDate.parse("1996-02-03")
+  private val defaultName: String                        = "No name added"
+  private val ukAddress: UKAddress                       = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
+  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
+  private val date: LocalDate                            = LocalDate.parse("1996-02-03")
 
   private val passportOrIdCardDetails: PassportOrIdCardDetails =
     PassportOrIdCardDetails("country", "number", date)
