@@ -20,7 +20,9 @@ import models.UserAnswers
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.trustees.individual.{IDCardDetailsPage, IDCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage}
+import pages.register.trustees.individual.{
+  IDCardDetailsPage, IDCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage
+}
 
 import java.time.LocalDate
 
@@ -38,38 +40,42 @@ class PassportDetailsYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(PassportDetailsYesNoPage(index), true)
+              .success
+              .value
+              .set(PassportDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4)))
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(PassportDetailsYesNoPage(index), true).success.value
-                .set(PassportDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4))).success.value
+          val result = initial.set(PassportDetailsYesNoPage(index), false).success.value
 
-            val result = initial.set(PassportDetailsYesNoPage(index), false).success.value
-
-            result.get(PassportDetailsPage(index)) mustNot be(defined)
+          result.get(PassportDetailsPage(index)) mustNot be(defined)
         }
-      }
 
-      "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(PassportDetailsYesNoPage(index), false)
+              .success
+              .value
+              .set(IDCardDetailsYesNoPage(index), true)
+              .success
+              .value
+              .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4)))
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(PassportDetailsYesNoPage(index), false).success.value
-                .set(IDCardDetailsYesNoPage(index), true).success.value
-                .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4))).success.value
+          val result = initial.set(PassportDetailsYesNoPage(index), true).success.value
 
-            val result = initial.set(PassportDetailsYesNoPage(index), true).success.value
-
-            result.get(PassportDetailsPage(index)) mustNot be(defined)
-            result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
-            result.get(IDCardDetailsPage(index)) mustNot be(defined)
+          result.get(PassportDetailsPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

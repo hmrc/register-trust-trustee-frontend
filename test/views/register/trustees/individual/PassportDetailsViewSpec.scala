@@ -30,9 +30,10 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
 
   val messageKeyPrefix = "trustee.individual.passportDetails"
 
-  val name: FullName = FullName("First", None ,"last")
+  val name: FullName = FullName("First", None, "last")
 
-  lazy val form: Form[PassportOrIdCardDetails] = injector.instanceOf[PassportOrIdCardFormProvider].apply("trustee.individual.passportDetails")
+  lazy val form: Form[PassportOrIdCardDetails] =
+    injector.instanceOf[PassportOrIdCardFormProvider].apply("trustee.individual.passportDetails")
 
   lazy val countryOptions: Seq[InputOption] = injector.instanceOf[CountryOptions].options()
 
@@ -63,4 +64,5 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

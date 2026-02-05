@@ -29,12 +29,12 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.leadtrustee.organisation.NameView
 
-class NameControllerSpec extends SpecBase  with IndexValidation {
+class NameControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new StringFormProvider()
+  val formProvider       = new StringFormProvider()
   val form: Form[String] = formProvider.withConfig("trustee.organisation.name", 56)
 
-  val index = 0
+  val index       = 0
   val validAnswer = "Name"
 
   lazy val nameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
@@ -46,7 +46,9 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       val isUkRegistered: Boolean = true
 
       val baseAnswers: UserAnswers = super.emptyUserAnswers
-        .set(UkRegisteredYesNoPage(index), isUkRegistered).success.value
+        .set(UkRegisteredYesNoPage(index), isUkRegistered)
+        .success
+        .value
 
       returnOkAndCorrectViewForAGet(isUkRegistered, baseAnswers)
       populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered, baseAnswers)
@@ -61,7 +63,9 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       val isUkRegistered: Boolean = false
 
       val baseAnswers: UserAnswers = super.emptyUserAnswers
-        .set(UkRegisteredYesNoPage(index), isUkRegistered).success.value
+        .set(UkRegisteredYesNoPage(index), isUkRegistered)
+        .success
+        .value
 
       returnOkAndCorrectViewForAGet(isUkRegistered, baseAnswers)
       populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered, baseAnswers)
@@ -72,7 +76,7 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     }
   }
 
-  private def returnOkAndCorrectViewForAGet(isUkRegistered: Boolean, baseAnswers: UserAnswers): Unit = {
+  private def returnOkAndCorrectViewForAGet(isUkRegistered: Boolean, baseAnswers: UserAnswers): Unit =
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
@@ -90,13 +94,17 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
-  }
 
-  private def populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(isUkRegistered: Boolean, baseAnswers: UserAnswers): Unit = {
+  private def populateViewCorrectlyOnGetWhenQuestionPreviouslyAnswered(
+    isUkRegistered: Boolean,
+    baseAnswers: UserAnswers
+  ): Unit =
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(NamePage(index), validAnswer).success.value
+        .set(NamePage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -113,16 +121,16 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
-  }
 
-  private def redirectToNextPageWhenValidDataSubmitted(baseAnswers: UserAnswers): Unit = {
+  private def redirectToNextPageWhenValidDataSubmitted(baseAnswers: UserAnswers): Unit =
     "redirect to the next page when valid data is submitted" in {
 
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nameRoute)
@@ -135,9 +143,11 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
-  }
 
-  private def returnBadRequestAndErrorsWhenInvalidDataSubmitted(isUkRegistered: Boolean, baseAnswers: UserAnswers): Unit = {
+  private def returnBadRequestAndErrorsWhenInvalidDataSubmitted(
+    isUkRegistered: Boolean,
+    baseAnswers: UserAnswers
+  ): Unit =
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
@@ -159,9 +169,8 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
-  }
 
-  private def redirectToSessionExpiredForAGetIfNoExistingDataFound(): Unit = {
+  private def redirectToSessionExpiredForAGetIfNoExistingDataFound(): Unit =
     "redirect to Session Expired for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -176,9 +185,8 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
-  }
 
-  private def redirectToSessionExpiredForAPostIfNoExistingDataFound(): Unit = {
+  private def redirectToSessionExpiredForAPostIfNoExistingDataFound(): Unit =
     "redirect to Session Expired for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -195,5 +203,5 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
 
       application.stop()
     }
-  }
+
 }

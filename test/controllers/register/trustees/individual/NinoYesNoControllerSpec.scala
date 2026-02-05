@@ -30,14 +30,13 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.individual.NinoYesNoView
 
-
 class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
 
   private val trusteeMessagePrefix = "trustee.individual.ninoYesNo"
-  private val formProvider = new YesNoFormProvider()
-  private val form = formProvider.withPrefix(trusteeMessagePrefix)
+  private val formProvider         = new YesNoFormProvider()
+  private val form                 = formProvider.withPrefix(trusteeMessagePrefix)
 
-  private val index = 0
+  private val index       = 0
   private val trusteeName = "FirstName LastName"
 
   private lazy val trusteeAUKCitizenRoute = routes.NinoYesNoController.onPageLoad(index, fakeDraftId).url
@@ -47,7 +46,9 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -68,8 +69,12 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(NinoYesNoPage(index), true).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(NinoYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,7 +95,9 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -98,12 +105,12 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trusteeAUKCitizenRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -117,7 +124,9 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -203,4 +212,5 @@ class NinoYesNoControllerSpec extends SpecBase with IndexValidation {
       )
     }
   }
+
 }

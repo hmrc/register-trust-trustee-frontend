@@ -28,8 +28,8 @@ import java.time.LocalDate
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "leadTrustee.individual.dateOfBirth"
-  val name: String = FullName("FirstName", None, "LastName").toString
-  val index = 0
+  val name: String     = FullName("FirstName", None, "LastName").toString
+  val index            = 0
 
   val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messageKeyPrefix)
 
@@ -42,7 +42,7 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name, readOnly = false)(fakeRequest, messages)
 
-      val applyViewF = (form : Form[_]) => applyView(form)
+      val applyViewF = (form: Form[_]) => applyView(form)
 
       behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -52,11 +52,7 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
       behave like pageWithBackLink(applyView(form))
 
-      behave like pageWithDateFields(form, applyViewF,
-        messageKeyPrefix,
-        "value",
-        name
-      )
+      behave like pageWithDateFields(form, applyViewF, messageKeyPrefix, "value", name)
 
       behave like pageWithASubmitButton(applyView(form))
 
@@ -70,7 +66,7 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, index, name, readOnly = true)(fakeRequest, messages)
 
-      val applyViewF = (form : Form[_]) => applyView(form)
+      val applyViewF = (form: Form[_]) => applyView(form)
 
       behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -80,15 +76,12 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
       behave like pageWithBackLink(applyView(form))
 
-      behave like pageWithDateFields(form, applyViewF,
-        messageKeyPrefix,
-        "value",
-        name
-      )
+      behave like pageWithDateFields(form, applyViewF, messageKeyPrefix, "value", name)
 
       behave like pageWithASubmitButton(applyView(form))
 
       behave like pageWithReadOnlyInput(applyView(form))
     }
   }
+
 }

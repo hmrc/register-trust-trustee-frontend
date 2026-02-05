@@ -26,25 +26,28 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
-final case class TrusteeIndividual(override val isLead: Boolean,
-                                   name: FullName,
-                                   dateOfBirth: Option[LocalDate],
-                                   nino: Option[String],
-                                   address: Option[Address],
-                                   passportOrIdCard: Option[PassportOrIdCardDetails],
-                                   countryOfResidence: Option[String],
-                                   nationality: Option[String],
-                                   mentalCapacityYesNo: Option[YesNoDontKnow]) extends Trustee {
+final case class TrusteeIndividual(
+  override val isLead: Boolean,
+  name: FullName,
+  dateOfBirth: Option[LocalDate],
+  nino: Option[String],
+  address: Option[Address],
+  passportOrIdCard: Option[PassportOrIdCardDetails],
+  countryOfResidence: Option[String],
+  nationality: Option[String],
+  mentalCapacityYesNo: Option[YesNoDontKnow]
+) extends Trustee {
 
   val identification: Option[IdentificationType] = (nino, passportOrIdCard, address) match {
     case (None, None, None) => None
-    case _ => Some(IdentificationType(nino, buildPassport(passportOrIdCard), buildAddress(address)))
+    case _                  => Some(IdentificationType(nino, buildPassport(passportOrIdCard), buildAddress(address)))
   }
+
 }
 
 object TrusteeIndividual extends TrusteeReads[TrusteeIndividual] {
 
-  override val isLeadTrustee: Boolean = false
+  override val isLeadTrustee: Boolean                     = false
   override val individualOrBusiness: IndividualOrBusiness = Individual
 
   override def trusteeReads: Reads[TrusteeIndividual] = {
@@ -54,14 +57,14 @@ object TrusteeIndividual extends TrusteeReads[TrusteeIndividual] {
         (__ \ "passportDetails").readNullable[PassportOrIdCardDetails] and
         (__ \ "idCardDetailsYesNo").readNullable[Boolean] and
         (__ \ "idCard").readNullable[PassportOrIdCardDetails]
-      )((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
-      case (Some(true), passport @ Some(_), None, None) =>
+    )((_, _, _, _)).flatMap[Option[PassportOrIdCardDetails]] {
+      case (Some(true), passport @ Some(_), None, None)                      =>
         Reads(_ => JsSuccess(passport))
-      case (Some(false), None, Some(true), idCard @ Some(_)) =>
+      case (Some(false), None, Some(true), idCard @ Some(_))                 =>
         Reads(_ => JsSuccess(idCard))
       case (Some(false), None, Some(false), None) | (None, None, None, None) =>
         Reads(_ => JsSuccess(None))
-      case _ =>
+      case _                                                                 =>
         Reads(_ => JsError("individual trustee passport / ID card answers are in an invalid state"))
     }
 
@@ -75,7 +78,7 @@ object TrusteeIndividual extends TrusteeReads[TrusteeIndividual] {
         (__ \ "countryOfResidence").readNullable[String] and
         (__ \ "nationality").readNullable[String] and
         readMentalCapacity
-      )(TrusteeIndividual.apply _)
+    )(TrusteeIndividual.apply _)
 
   }
 

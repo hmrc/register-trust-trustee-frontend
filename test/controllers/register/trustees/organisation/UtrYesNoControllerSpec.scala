@@ -32,10 +32,10 @@ import views.html.register.trustees.organisation.UtrYesNoView
 
 class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.utrYesNo")
 
-  private val index = 0
+  private val index    = 0
   private val fakeName = "Name"
 
   private lazy val utrYesNoRoute: String = routes.UtrYesNoController.onPageLoad(index, fakeDraftId).url
@@ -65,7 +65,9 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UtrYesNoPage(index), true).success.value
+        .set(UtrYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,12 +91,12 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, utrYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -158,9 +160,9 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
     }
 
     "return an Internal Server Error and redirect to error page when set user answers operation fails" in {
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fakeName).success.value
+      val userAnswers         = emptyUserAnswers.set(NamePage(index), fakeName).success.value
       val differentIndex: Int = index + 2
-      val onSubmitPath = routes.UtrYesNoController.onSubmit(differentIndex, fakeDraftId).url
+      val onSubmitPath        = routes.UtrYesNoController.onSubmit(differentIndex, fakeDraftId).url
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -183,4 +185,5 @@ class UtrYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

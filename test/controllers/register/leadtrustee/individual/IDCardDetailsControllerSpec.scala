@@ -35,14 +35,14 @@ import java.time.LocalDate
 
 class IDCardDetailsControllerSpec extends SpecBase {
 
-  val messagePrefix = "leadTrustee.individual.iDCardDetails"
-  val formProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  val form: Form[PassportOrIdCardDetails] = formProvider(messagePrefix)
+  val messagePrefix                        = "leadTrustee.individual.iDCardDetails"
+  val formProvider                         = new PassportOrIdCardFormProvider(frontendAppConfig)
+  val form: Form[PassportOrIdCardDetails]  = formProvider(messagePrefix)
   val cardDetails: PassportOrIdCardDetails = PassportOrIdCardDetails("UK", "0987654321234", LocalDate.now())
 
   val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
-  val index = 0
+  val index                 = 0
   val trusteeName: FullName = FullName("FirstName", None, "LastName")
 
   lazy val idCardDetailsRoute: String = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
@@ -52,7 +52,9 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), trusteeName).success.value
+        .set(TrusteesNamePage(index), trusteeName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -73,8 +75,12 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(IDCardDetailsPage(index), cardDetails).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(IDCardDetailsPage(index), cardDetails)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,7 +93,10 @@ class IDCardDetailsControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(cardDetails), countryOptions, fakeDraftId, index, trusteeName.toString)(request, messages).toString
+        view(form.fill(cardDetails), countryOptions, fakeDraftId, index, trusteeName.toString)(
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
@@ -95,8 +104,12 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(IDCardDetailsPage(index), cardDetails).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(IDCardDetailsPage(index), cardDetails)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -108,8 +121,8 @@ class IDCardDetailsControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, idCardDetailsRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
+            "country"          -> "country",
+            "number"           -> "123456",
             "expiryDate.day"   -> "1",
             "expiryDate.month" -> "1",
             "expiryDate.year"  -> "1990"
@@ -127,7 +140,9 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -181,5 +196,5 @@ class IDCardDetailsControllerSpec extends SpecBase {
       application.stop()
     }
   }
-}
 
+}

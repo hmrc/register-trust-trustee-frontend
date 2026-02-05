@@ -25,9 +25,9 @@ import views.html.register.leadtrustee.individual.EmailAddressView
 
 class EmailAddressViewSpec extends StringViewBehaviours {
 
-  val prefix = "leadTrustee.individual.email"
+  val prefix         = "leadTrustee.individual.email"
   val name: FullName = FullName("FirstName", None, "LastName")
-  val index = 0
+  val index          = 0
 
   override val form: Form[String] = new EmailAddressFormProvider().withPrefix(prefix)
 
@@ -50,4 +50,5 @@ class EmailAddressViewSpec extends StringViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

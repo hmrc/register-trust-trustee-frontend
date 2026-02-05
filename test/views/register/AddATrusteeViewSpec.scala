@@ -28,17 +28,17 @@ import views.html.register.AddATrusteeView
 
 class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBehaviours {
 
-  private val form: Form[AddATrustee] = new AddATrusteeFormProvider()()
+  private val form: Form[AddATrustee]  = new AddATrusteeFormProvider()()
   private val messageKeyPrefix: String = "addATrustee.count"
 
   private val fakeAddRow: AddRow = AddRow("name", "label", "change", "remove")
   private val fakeOnSubmit: Call = Call(POST, "redirectUrl")
 
-  private val numberInProgress = 1
+  private val numberInProgress             = 1
   private val inProgressRows: List[AddRow] = List.fill(numberInProgress)(fakeAddRow)
-  private val numberComplete = 15
-  private val completeRows: List[AddRow] = List.fill(numberComplete)(fakeAddRow)
-  private val total = numberInProgress + numberComplete
+  private val numberComplete               = 15
+  private val completeRows: List[AddRow]   = List.fill(numberComplete)(fakeAddRow)
+  private val total                        = numberInProgress + numberComplete
 
   "AddATrusteeView" when {
 
@@ -46,7 +46,14 @@ class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
       def applyView(form: Form[_]): HtmlFormat.Appendable = {
         val view: AddATrusteeView = viewFor[AddATrusteeView](Some(emptyUserAnswers))
-        view.apply(form, fakeOnSubmit, inProgressRows, completeRows, isLeadTrusteeDefined = true, s"You have added $total trustees")(fakeRequest, messages)
+        view.apply(
+          form,
+          fakeOnSubmit,
+          inProgressRows,
+          completeRows,
+          isLeadTrusteeDefined = true,
+          s"You have added $total trustees"
+        )(fakeRequest, messages)
       }
 
       val view = applyView(form)
@@ -74,7 +81,14 @@ class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
       def applyView(form: Form[_]): HtmlFormat.Appendable = {
         val view: AddATrusteeView = viewFor[AddATrusteeView](Some(emptyUserAnswers))
-        view.apply(form, fakeOnSubmit, inProgressRows, completeRows, isLeadTrusteeDefined = false, s"You have added $total trustees")(fakeRequest, messages)
+        view.apply(
+          form,
+          fakeOnSubmit,
+          inProgressRows,
+          completeRows,
+          isLeadTrusteeDefined = false,
+          s"You have added $total trustees"
+        )(fakeRequest, messages)
       }
 
       val view = applyView(form)
@@ -98,4 +112,5 @@ class AddATrusteeViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
       }
     }
   }
+
 }

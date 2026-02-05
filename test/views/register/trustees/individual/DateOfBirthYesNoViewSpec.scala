@@ -24,8 +24,8 @@ import views.html.register.trustees.individual.DateOfBirthYesNoView
 
 class DateOfBirthYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "trustee.individual.dateOfBirthYesNo"
-  val index = 0
+  val prefix   = "trustee.individual.dateOfBirthYesNo"
+  val index    = 0
   val fakeName = "Test"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
@@ -47,4 +47,5 @@ class DateOfBirthYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

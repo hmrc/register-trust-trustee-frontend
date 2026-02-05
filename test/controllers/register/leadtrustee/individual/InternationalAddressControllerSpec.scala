@@ -32,10 +32,10 @@ import views.html.register.leadtrustee.individual.InternationalAddressView
 
 class InternationalAddressControllerSpec extends SpecBase {
 
-  val formProvider = new InternationalAddressFormProvider()
+  val formProvider                     = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
 
-  lazy val internationalAddressRoute: String = routes.InternationalAddressController.onPageLoad(index , fakeDraftId).url
+  lazy val internationalAddressRoute: String = routes.InternationalAddressController.onPageLoad(index, fakeDraftId).url
 
   val countryOptions: CountryOptionsNonUK = injector.instanceOf[CountryOptionsNonUK]
 
@@ -46,10 +46,14 @@ class InternationalAddressControllerSpec extends SpecBase {
   val index = 0
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(TrusteesNamePage(index), name).success.value
+    .set(TrusteesNamePage(index), name)
+    .success
+    .value
 
   val userAnswers: UserAnswers = emptyUserAnswers
-    .set(InternationalAddressPage(index), InternationalAddress("value 1", "value 2", None, "the country")).success.value
+    .set(InternationalAddressPage(index), InternationalAddress("value 1", "value 2", None, "the country"))
+    .success
+    .value
 
   "InternationalAddress Controller" must {
 
@@ -66,7 +70,7 @@ class InternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form,index, fakeDraftId, countryOptions.options(), name.toString)(request, messages).toString
+        view(form, index, fakeDraftId, countryOptions.options(), name.toString)(request, messages).toString
 
       application.stop()
     }
@@ -84,7 +88,13 @@ class InternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("value 1", "value 2", None, "the country")), index,fakeDraftId, countryOptions.options(), name.toString)(request, messages).toString
+        view(
+          form.fill(InternationalAddress("value 1", "value 2", None, "the country")),
+          index,
+          fakeDraftId,
+          countryOptions.options(),
+          name.toString
+        )(request, messages).toString
 
       application.stop()
     }
@@ -92,30 +102,33 @@ class InternationalAddressControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
-            .overrides(
-              bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-            ).build()
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
+          )
+          .build()
 
-        val request =
-          FakeRequest(POST, internationalAddressRoute)
-            .withFormUrlEncodedBody(
-              ("line1", validAnswer.line1),
-              ("line2", validAnswer.line2),
-              ("country", validAnswer.country)
-            )
+      val request =
+        FakeRequest(POST, internationalAddressRoute)
+          .withFormUrlEncodedBody(
+            ("line1", validAnswer.line1),
+            ("line2", validAnswer.line2),
+            ("country", validAnswer.country)
+          )
 
-        val result = route(application, request).value
+      val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+      status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-        application.stop()
-      }
+      application.stop()
+    }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
@@ -136,7 +149,7 @@ class InternationalAddressControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, index, fakeDraftId, countryOptions.options(), name.toString)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -170,4 +183,5 @@ class InternationalAddressControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

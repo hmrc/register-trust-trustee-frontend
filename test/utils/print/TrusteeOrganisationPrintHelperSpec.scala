@@ -31,10 +31,10 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 class TrusteeOrganisationPrintHelperSpec extends SpecBase {
 
-  private val index: Int = 0
-  private val name: String = "Name"
-  private val utr: String = "1234567890"
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "NE1 1NE")
+  private val index: Int                                 = 0
+  private val name: String                               = "Name"
+  private val utr: String                                = "1234567890"
+  private val ukAddress: UKAddress                       = UKAddress("Line 1", "Line 2", None, None, "NE1 1NE")
   private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "DE")
 
   "TrusteeOrganisationPrintHelper" must {
@@ -42,119 +42,309 @@ class TrusteeOrganisationPrintHelperSpec extends SpecBase {
     val helper = injector.instanceOf[TrusteeOrganisationPrintHelper]
 
     val baseAnswers = emptyUserAnswers
-      .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-      .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-      .set(NamePage(index), name).success.value
+      .set(TrusteeOrLeadTrusteePage(index), Trustee)
+      .success
+      .value
+      .set(TrusteeIndividualOrBusinessPage(index), Business)
+      .success
+      .value
+      .set(NamePage(index), name)
+      .success
+      .value
 
     "render a print section" when {
 
       "trustee has no UTR or address" in {
         val userAnswers: UserAnswers = baseAnswers
-          .set(UtrYesNoPage(index), false).success.value
-          .set(AddressYesNoPage(index), false).success.value
+          .set(UtrYesNoPage(index), false)
+          .success
+          .value
+          .set(AddressYesNoPage(index), false)
+          .success
+          .value
 
         val result = helper.checkDetailsSection(userAnswers, name, index, fakeDraftId)
 
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.addressYesNo.checkYourAnswersLabel", Html("No"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name)
+            AnswerRow(
+              "trustee.individualOrBusiness.checkYourAnswersLabel",
+              Html("Business"),
+              Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.name.checkYourAnswersLabel",
+              Html("Name"),
+              Some(NameController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.utrYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.addressYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            )
           )
         )
       }
 
       "trustee has UTR" in {
         val userAnswers: UserAnswers = baseAnswers
-          .set(UtrYesNoPage(index), true).success.value
-          .set(UtrPage(index), utr).success.value
+          .set(UtrYesNoPage(index), true)
+          .success
+          .value
+          .set(UtrPage(index), utr)
+          .success
+          .value
 
         val result = helper.checkDetailsSection(userAnswers, name, index, fakeDraftId)
 
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("Yes"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.utr.checkYourAnswersLabel", Html("1234567890"), Some(UtrController.onPageLoad(index, fakeDraftId).url), name)
+            AnswerRow(
+              "trustee.individualOrBusiness.checkYourAnswersLabel",
+              Html("Business"),
+              Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.name.checkYourAnswersLabel",
+              Html("Name"),
+              Some(NameController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.utrYesNo.checkYourAnswersLabel",
+              Html("Yes"),
+              Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.utr.checkYourAnswersLabel",
+              Html("1234567890"),
+              Some(UtrController.onPageLoad(index, fakeDraftId).url),
+              name
+            )
           )
         )
       }
 
       "trustee has UK address" in {
         val userAnswers: UserAnswers = baseAnswers
-          .set(UtrYesNoPage(index), false).success.value
-          .set(AddressYesNoPage(index), true).success.value
-          .set(AddressUkYesNoPage(index), true).success.value
-          .set(UkAddressPage(index), ukAddress).success.value
+          .set(UtrYesNoPage(index), false)
+          .success
+          .value
+          .set(AddressYesNoPage(index), true)
+          .success
+          .value
+          .set(AddressUkYesNoPage(index), true)
+          .success
+          .value
+          .set(UkAddressPage(index), ukAddress)
+          .success
+          .value
 
         val result = helper.checkDetailsSection(userAnswers, name, index, fakeDraftId)
 
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.addressUkYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.ukAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />NE1 1NE"), Some(UkAddressController.onPageLoad(index, fakeDraftId).url), name)
+            AnswerRow(
+              "trustee.individualOrBusiness.checkYourAnswersLabel",
+              Html("Business"),
+              Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.name.checkYourAnswersLabel",
+              Html("Name"),
+              Some(NameController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.utrYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.addressYesNo.checkYourAnswersLabel",
+              Html("Yes"),
+              Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.addressUkYesNo.checkYourAnswersLabel",
+              Html("Yes"),
+              Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.ukAddress.checkYourAnswersLabel",
+              Html("Line 1<br />Line 2<br />NE1 1NE"),
+              Some(UkAddressController.onPageLoad(index, fakeDraftId).url),
+              name
+            )
           )
         )
       }
 
       "trustee has international address" in {
         val userAnswers: UserAnswers = baseAnswers
-          .set(UtrYesNoPage(index), false).success.value
-          .set(AddressYesNoPage(index), true).success.value
-          .set(AddressUkYesNoPage(index), false).success.value
-          .set(InternationalAddressPage(index), internationalAddress).success.value
+          .set(UtrYesNoPage(index), false)
+          .success
+          .value
+          .set(AddressYesNoPage(index), true)
+          .success
+          .value
+          .set(AddressUkYesNoPage(index), false)
+          .success
+          .value
+          .set(InternationalAddressPage(index), internationalAddress)
+          .success
+          .value
 
         val result = helper.checkDetailsSection(userAnswers, name, index, fakeDraftId)
 
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.addressUkYesNo.checkYourAnswersLabel", Html("No"), Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.internationalAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Germany"), Some(InternationalAddressController.onPageLoad(index, fakeDraftId).url), name)
+            AnswerRow(
+              "trustee.individualOrBusiness.checkYourAnswersLabel",
+              Html("Business"),
+              Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.name.checkYourAnswersLabel",
+              Html("Name"),
+              Some(NameController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.utrYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.addressYesNo.checkYourAnswersLabel",
+              Html("Yes"),
+              Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.addressUkYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.internationalAddress.checkYourAnswersLabel",
+              Html("Line 1<br />Line 2<br />Germany"),
+              Some(InternationalAddressController.onPageLoad(index, fakeDraftId).url),
+              name
+            )
           )
         )
       }
 
       "5mld trustee has country of residence" in {
         val userAnswers: UserAnswers = baseAnswers
-          .set(UtrYesNoPage(index), false).success.value
-          .set(mld5.CountryOfResidenceYesNoPage(index), true).success.value
-          .set(mld5.CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-          .set(mld5.CountryOfResidencePage(index), "DE").success.value
-          .set(AddressYesNoPage(index), true).success.value
-          .set(AddressUkYesNoPage(index), false).success.value
-          .set(InternationalAddressPage(index), internationalAddress).success.value
+          .set(UtrYesNoPage(index), false)
+          .success
+          .value
+          .set(mld5.CountryOfResidenceYesNoPage(index), true)
+          .success
+          .value
+          .set(mld5.CountryOfResidenceInTheUkYesNoPage(index), false)
+          .success
+          .value
+          .set(mld5.CountryOfResidencePage(index), "DE")
+          .success
+          .value
+          .set(AddressYesNoPage(index), true)
+          .success
+          .value
+          .set(AddressUkYesNoPage(index), false)
+          .success
+          .value
+          .set(InternationalAddressPage(index), internationalAddress)
+          .success
+          .value
 
         val result = helper.checkDetailsSection(userAnswers, name, index, fakeDraftId)
 
         result mustBe AnswerSection(
           None,
           Seq(
-            AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", Html("Business"), Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.name.checkYourAnswersLabel", Html("Name"), Some(NameController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.utrYesNo.checkYourAnswersLabel", Html("No"), Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.5mld.countryOfResidence.checkYourAnswersLabel", Html("Germany"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.addressUkYesNo.checkYourAnswersLabel", Html("No"), Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), name),
-            AnswerRow("trustee.organisation.internationalAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Germany"), Some(InternationalAddressController.onPageLoad(index, fakeDraftId).url), name)
+            AnswerRow(
+              "trustee.individualOrBusiness.checkYourAnswersLabel",
+              Html("Business"),
+              Some(TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.name.checkYourAnswersLabel",
+              Html("Name"),
+              Some(NameController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.utrYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(UtrYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
+              Html("Yes"),
+              Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.5mld.countryOfResidence.checkYourAnswersLabel",
+              Html("Germany"),
+              Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.addressYesNo.checkYourAnswersLabel",
+              Html("Yes"),
+              Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.addressUkYesNo.checkYourAnswersLabel",
+              Html("No"),
+              Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url),
+              name
+            ),
+            AnswerRow(
+              "trustee.organisation.internationalAddress.checkYourAnswersLabel",
+              Html("Line 1<br />Line 2<br />Germany"),
+              Some(InternationalAddressController.onPageLoad(index, fakeDraftId).url),
+              name
+            )
           )
         )
       }
     }
   }
+
 }

@@ -34,7 +34,7 @@ class DateFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
       val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messagePrefix)
 
-      val min = frontendAppConfig.minDate
+      val min       = frontendAppConfig.minDate
       val validData = datesBetween(
         min = min,
         max = max
@@ -44,12 +44,16 @@ class DateFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
       behave like mandatoryDateField(form, "value", s"$messagePrefix.error.required.all", List("day", "month", "year"))
 
-      behave like dateFieldWithMax(form, "value",
+      behave like dateFieldWithMax(
+        form,
+        "value",
         max = max,
         FormError("value", s"$messagePrefix.error.future", List("day", "month", "year"))
       )
 
-      behave like dateFieldWithMin(form, "value",
+      behave like dateFieldWithMin(
+        form,
+        "value",
         min = min,
         FormError("value", s"$messagePrefix.error.past", List("day", "month", "year"))
       )
@@ -57,9 +61,10 @@ class DateFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
     "lead trustee matching" should {
 
-      val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messagePrefix, matchingLeadTrustee = true)
+      val form: Form[LocalDate] =
+        new DateFormProvider(frontendAppConfig).withConfig(messagePrefix, matchingLeadTrustee = true)
 
-      val min = frontendAppConfig.minLeadTrusteeDob
+      val min       = frontendAppConfig.minLeadTrusteeDob
       val validData = datesBetween(
         min = min,
         max = max
@@ -69,15 +74,20 @@ class DateFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
       behave like mandatoryDateField(form, "value", s"$messagePrefix.error.required.all", List("day", "month", "year"))
 
-      behave like dateFieldWithMax(form, "value",
+      behave like dateFieldWithMax(
+        form,
+        "value",
         max = max,
         FormError("value", s"$messagePrefix.error.future", List("day", "month", "year"))
       )
 
-      behave like dateFieldWithMin(form, "value",
+      behave like dateFieldWithMin(
+        form,
+        "value",
         min = min,
         FormError("value", s"$messagePrefix.matching.error.past", List("day", "month", "year"))
       )
     }
   }
+
 }

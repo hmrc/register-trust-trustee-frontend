@@ -25,15 +25,23 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class DraftRegistrationService @Inject()(config: FrontendAppConfig,
-                                         submissionDraftConnector: SubmissionDraftConnector)
-                                        (implicit ec: ExecutionContext) extends Logging {
+class DraftRegistrationService @Inject() (
+  config: FrontendAppConfig,
+  submissionDraftConnector: SubmissionDraftConnector
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
-
-  def retrieveSettlorNinos(draftId: String)(implicit hc: HeaderCarrier) = {
-    submissionDraftConnector.getDraftSection(draftId, config.repositoryKeySettlors).map {
-      response =>
-        response.data.\("data").\("settlors").\("deceased").asOpt[JsObject].getOrElse(JsObject.empty).\("nationalInsuranceNumber").asOpt[String].getOrElse("")
+  def retrieveSettlorNinos(draftId: String)(implicit hc: HeaderCarrier) =
+    submissionDraftConnector.getDraftSection(draftId, config.repositoryKeySettlors).map { response =>
+      response.data
+        .\("data")
+        .\("settlors")
+        .\("deceased")
+        .asOpt[JsObject]
+        .getOrElse(JsObject.empty)
+        .\("nationalInsuranceNumber")
+        .asOpt[String]
+        .getOrElse("")
     }
-  }
+
 }

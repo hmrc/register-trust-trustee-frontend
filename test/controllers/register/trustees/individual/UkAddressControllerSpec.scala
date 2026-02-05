@@ -33,11 +33,11 @@ import views.html.register.trustees.individual.UkAddressView
 
 class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
-  private val formProvider = new UKAddressFormProvider()
+  private val formProvider          = new UKAddressFormProvider()
   private val form: Form[UKAddress] = formProvider()
-  private val index = 0
-  private val trusteeName = "FirstName LastName"
-  private val validAnswer = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
+  private val index                 = 0
+  private val trusteeName           = "FirstName LastName"
+  private val validAnswer           = UKAddress("value 1", "value 2", Some("value 3"), Some("value 4"), "AB1 1AB")
 
   private lazy val trusteesUkAddressRoute: String = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
@@ -46,7 +46,9 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -67,8 +69,12 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(UkAddressPage(index), validAnswer).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(UkAddressPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,7 +95,9 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -97,11 +105,18 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trusteesUkAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("line3", "value 3"), ("line4", "town"), ("postcode", "AB1 1AB") )
+          .withFormUrlEncodedBody(
+            ("line1", "value 1"),
+            ("line2", "value 2"),
+            ("line3", "value 3"),
+            ("line4", "town"),
+            ("postcode", "AB1 1AB")
+          )
 
       val result = route(application, request).value
 
@@ -115,7 +130,9 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -170,7 +187,7 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
 
     "for a GET" must {
 
-      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
+      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
         val route = routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
@@ -191,7 +208,13 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
           routes.UkAddressController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(POST, route)
-          .withFormUrlEncodedBody(("line1", "line1"), ("line2", "line2"), ("line3", "line3"), ("line4", "town or city"), ("postcode", "AB1 1AB"))
+          .withFormUrlEncodedBody(
+            ("line1", "line1"),
+            ("line2", "line2"),
+            ("line3", "line3"),
+            ("line4", "town or city"),
+            ("postcode", "AB1 1AB")
+          )
       }
 
       validateIndex(
@@ -202,4 +225,5 @@ class UkAddressControllerSpec extends SpecBase with IndexValidation {
     }
 
   }
+
 }

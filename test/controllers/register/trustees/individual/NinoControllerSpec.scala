@@ -38,12 +38,12 @@ import scala.concurrent.Future
 
 class NinoControllerSpec extends SpecBase with IndexValidation {
 
-  private val trusteeMessagePrefix = "trustee.individual.nino"
-  private val formProvider = new NinoFormProvider()
-  private val index = 0
+  private val trusteeMessagePrefix      = "trustee.individual.nino"
+  private val formProvider              = new NinoFormProvider()
+  private val index                     = 0
   val existingSettlorNinos: Seq[String] = Seq("")
 
-  private val form = formProvider(trusteeMessagePrefix, emptyUserAnswers, index, existingSettlorNinos)
+  private val form        = formProvider(trusteeMessagePrefix, emptyUserAnswers, index, existingSettlorNinos)
   private val trusteeName = "FirstName LastName"
   private val validAnswer = "NH111111A"
 
@@ -54,13 +54,17 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+        .build()
 
       val request = FakeRequest(GET, trusteesNinoRoute)
 
@@ -79,14 +83,20 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(NinoPage(index), validAnswer).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(NinoPage(index), validAnswer)
+        .success
+        .value
 
       val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+        .build()
 
       val request = FakeRequest(GET, trusteesNinoRoute)
 
@@ -105,7 +115,9 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
@@ -118,7 +130,8 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trusteesNinoRoute)
@@ -136,13 +149,17 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
       "invalid data is submitted" in {
 
         val userAnswers = emptyUserAnswers
-          .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+          .set(NamePage(index), FullName("FirstName", None, "LastName"))
+          .success
+          .value
 
         val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
         when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+          .build()
 
         val request =
           FakeRequest(POST, trusteesNinoRoute)
@@ -166,14 +183,20 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
         "trustee" in {
 
           val userAnswers = emptyUserAnswers
-            .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-            .set(NinoPage(index + 1), validAnswer).success.value
+            .set(NamePage(index), FullName("FirstName", None, "LastName"))
+            .success
+            .value
+            .set(NinoPage(index + 1), validAnswer)
+            .success
+            .value
 
           val mockDraftRegistrationService = Mockito.mock(classOf[DraftRegistrationService])
 
           when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+          val application = applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+            .build()
 
           val request =
             FakeRequest(POST, trusteesNinoRoute)
@@ -203,7 +226,9 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-      val application = applicationBuilder(userAnswers = None).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+        .build()
 
       val request = FakeRequest(GET, trusteesNinoRoute)
 
@@ -222,7 +247,9 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
       when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(Future.successful(""))
 
-      val application = applicationBuilder(userAnswers = None).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService))
+        .build()
 
       val request =
         FakeRequest(POST, trusteesNinoRoute)
@@ -239,7 +266,7 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
 
     "for a GET" must {
 
-      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
+      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
         val route = controllers.register.routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
@@ -271,4 +298,5 @@ class NinoControllerSpec extends SpecBase with IndexValidation {
     }
 
   }
+
 }

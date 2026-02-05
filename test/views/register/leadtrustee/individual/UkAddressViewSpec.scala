@@ -26,8 +26,8 @@ import views.html.register.leadtrustee.individual.UkAddressView
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
   val messageKeyPrefix = "leadTrustee.individual.ukAddress"
-  val name: FullName = FullName("First", Some("Middle"), "Last")
-  val index = 0
+  val name: FullName   = FullName("First", Some("Middle"), "Last")
+  val index            = 0
 
   override val form: Form[UKAddress] = new UKAddressFormProvider().apply()
 
@@ -52,4 +52,5 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

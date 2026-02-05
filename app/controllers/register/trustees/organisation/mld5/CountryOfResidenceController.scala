@@ -38,54 +38,53 @@ import views.html.InternalServerErrorPageView
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class CountryOfResidenceController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              implicit val frontendAppConfig: FrontendAppConfig,
-                                              registrationsRepository: RegistrationsRepository,
-                                              @TrusteeOrganisation navigator: Navigator,
-                                              actions: StandardActionSets,
-                                              requireName: NameRequiredActionImpl,
-                                              formProvider: CountryFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: CountryOfResidenceView,
-                                              val countryOptions: CountryOptionsNonUK,
-                                              errorPageView: InternalServerErrorPageView
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController
-  with I18nSupport with Logging {
+class CountryOfResidenceController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @TrusteeOrganisation navigator: Navigator,
+  actions: StandardActionSets,
+  requireName: NameRequiredActionImpl,
+  formProvider: CountryFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: CountryOfResidenceView,
+  val countryOptions: CountryOptionsNonUK,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = formProvider.withPrefix("trustee.organisation.5mld.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    actions.identifiedUserWithData(draftId).andThen(requireName(index)) {
-      implicit request =>
+    actions.identifiedUserWithData(draftId).andThen(requireName(index)) { implicit request =>
+      val preparedForm = request.userAnswers.get(CountryOfResidencePage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(CountryOfResidencePage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, countryOptions.options(), draftId, index, request.trusteeName))
+      Ok(view(preparedForm, countryOptions.options(), draftId, index, request.trusteeName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    actions.identifiedUserWithData(draftId).andThen(requireName(index)).async {
-      implicit request =>
-
-        form.bindFromRequest().fold(
+    actions.identifiedUserWithData(draftId).andThen(requireName(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
           (formWithErrors: Form[_]) =>
-            Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, request.trusteeName))),
-
-          value => {
+            Future.successful(
+              BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, request.trusteeName))
+            ),
+          value =>
             request.userAnswers.set(CountryOfResidencePage(index), value) match {
               case Success(updatedAnswers) =>
-                registrationsRepository.set(updatedAnswers).map{ _ =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
                   Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
                 }
-              case Failure(_) =>
+              case Failure(_)              =>
                 logger.error("[CountryOfResidenceController][onSubmit] Error while storing user answers")
                 Future.successful(InternalServerError(errorPageView()))
             }
-          }
         )
     }
+
 }

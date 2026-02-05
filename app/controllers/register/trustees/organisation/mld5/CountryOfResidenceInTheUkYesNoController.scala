@@ -36,52 +36,48 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class CountryOfResidenceInTheUkYesNoController @Inject()(
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   implicit val frontendAppConfig: FrontendAppConfig,
-                                                   repository: RegistrationsRepository,
-                                                   @TrusteeOrganisation navigator: Navigator,
-                                                   actions: StandardActionSets,
-                                                   requireName: NameRequiredActionImpl,
-                                                   formProvider: YesNoFormProvider,
-                                                   view: CountryOfResidenceInTheUkYesNoView,
-                                                   errorPageView: InternalServerErrorPageView
-                                                 )(implicit ec: ExecutionContext)
-  extends FrontendBaseController with I18nSupport with Logging {
+class CountryOfResidenceInTheUkYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  repository: RegistrationsRepository,
+  @TrusteeOrganisation navigator: Navigator,
+  actions: StandardActionSets,
+  requireName: NameRequiredActionImpl,
+  formProvider: YesNoFormProvider,
+  view: CountryOfResidenceInTheUkYesNoView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    actions.identifiedUserWithData(draftId).andThen(requireName(index)) {
-      implicit request =>
+    actions.identifiedUserWithData(draftId).andThen(requireName(index)) { implicit request =>
+      val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, draftId, index, request.trusteeName))
+      Ok(view(preparedForm, draftId, index, request.trusteeName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    actions.identifiedUserWithData(draftId).andThen(requireName(index)).async {
-      implicit request =>
-
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
-
+    actions.identifiedUserWithData(draftId).andThen(requireName(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
           value =>
             request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value) match {
               case Success(updatedAnswers) =>
-                repository.set(updatedAnswers).map{ _ =>
+                repository.set(updatedAnswers).map { _ =>
                   Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
                 }
-              case Failure(_) =>
+              case Failure(_)              =>
                 logger.error("[CountryOfResidenceInTheUkYesNoController][onSubmit] Error while storing user answers")
                 Future.successful(InternalServerError(errorPageView()))
             }
         )
     }
-}
 
+}

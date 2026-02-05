@@ -36,21 +36,27 @@ class AddressYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers =
-              userAnswers
-                .set(AddressUkYesNoPage(index), true).success.value
-                .set(UkAddressPage(index), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).success.value
-                .set(InternationalAddressPage(index), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).success.value
-                .set(AddressYesNoPage(index), false).success.value
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers =
+            userAnswers
+              .set(AddressUkYesNoPage(index), true)
+              .success
+              .value
+              .set(UkAddressPage(index), UKAddress("Line 1", "Line 2", None, None, "POSTCODE"))
+              .success
+              .value
+              .set(InternationalAddressPage(index), InternationalAddress("Line 1", "Line 2", None, "COUNTRY"))
+              .success
+              .value
+              .set(AddressYesNoPage(index), false)
+              .success
+              .value
 
-            result.get(AddressUkYesNoPage(index)) mustNot be(defined)
-            result.get(UkAddressPage(index)) mustNot be(defined)
-            result.get(InternationalAddressPage(index)) mustNot be(defined)
+          result.get(AddressUkYesNoPage(index)) mustNot be(defined)
+          result.get(UkAddressPage(index)) mustNot be(defined)
+          result.get(InternationalAddressPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

@@ -26,7 +26,7 @@ import views.html.register.leadtrustee.individual.InternationalAddressView
 
 class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
 
-  val prefix = "leadTrustee.individual.internationalAddress"
+  val prefix   = "leadTrustee.individual.internationalAddress"
   val fakeName = "Test"
 
   val index: Int = 0
@@ -49,4 +49,5 @@ class InternationalAddressViewSpec extends InternationalAddressViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

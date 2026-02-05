@@ -24,11 +24,11 @@ import views.html.register.trustees.organisation.UtrView
 
 class UtrViewSpec extends StringViewBehaviours {
 
-  val prefix = "trustee.organisation.utr"
-  val index = 0
+  val prefix                      = "trustee.organisation.utr"
+  val index                       = 0
   override val form: Form[String] = new UtrFormProvider().withConfig(prefix, emptyUserAnswers, index)
-  val view: UtrView = viewFor[UtrView](Some(emptyUserAnswers))
-  val fakeName = "Test"
+  val view: UtrView               = viewFor[UtrView](Some(emptyUserAnswers))
+  val fakeName                    = "Test"
 
   "Utr View" must {
 
@@ -46,4 +46,5 @@ class UtrViewSpec extends StringViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

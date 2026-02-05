@@ -25,10 +25,10 @@ import views.html.register.leadtrustee.individual.NameView
 
 class NameViewSpec extends QuestionViewBehaviours[FullName] {
 
-  val prefix = "leadTrustee.individual.name"
-  val index = 0
+  val prefix               = "leadTrustee.individual.name"
+  val index                = 0
   val form: Form[FullName] = new NameFormProvider()(prefix)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val view: NameView       = viewFor[NameView](Some(emptyUserAnswers))
 
   "NameView" when {
 
@@ -74,4 +74,5 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] {
       behave like pageWithReadOnlyInput(applyView(form))
     }
   }
+
 }

@@ -24,38 +24,37 @@ import viewmodels.AnswerSection
 
 import javax.inject.Inject
 
-class CheckYourAnswersHelper @Inject()(printHelpers: PrintHelpers)
-                                      (val userAnswers: UserAnswers,
-                                       val draftId: String,
-                                       val canEdit: Boolean)
-                                      (implicit val messages: Messages) {
+class CheckYourAnswersHelper @Inject() (printHelpers: PrintHelpers)(
+  val userAnswers: UserAnswers,
+  val draftId: String,
+  val canEdit: Boolean
+)(implicit val messages: Messages) {
 
-  def trustees: Option[Seq[AnswerSection]] = {
+  def trustees: Option[Seq[AnswerSection]] =
     for {
       trustees <- userAnswers.get(Trustees)
-      indexed = trustees.zipWithIndex
-    } yield indexed.map {
-      case (trustee, index) =>
+      indexed   = trustees.zipWithIndex
+    } yield indexed.map { case (trustee, index) =>
 
-        val questions = trustee match {
-          case x: TrusteeIndividual =>
-            printHelpers.trusteeIndividual(userAnswers, x.name.toString, index, draftId)
-          case x: TrusteeOrganisation =>
-            printHelpers.trusteeOrganisation(userAnswers, x.name, index, draftId)
-          case x: LeadTrusteeIndividual =>
-            printHelpers.leadTrusteeIndividual(userAnswers, x.name.toString, index, draftId)
-          case x: LeadTrusteeOrganisation =>
-            printHelpers.leadTrusteeOrganisation(userAnswers, x.name, index, draftId)
-        }
+      val questions = trustee match {
+        case x: TrusteeIndividual       =>
+          printHelpers.trusteeIndividual(userAnswers, x.name.toString, index, draftId)
+        case x: TrusteeOrganisation     =>
+          printHelpers.trusteeOrganisation(userAnswers, x.name, index, draftId)
+        case x: LeadTrusteeIndividual   =>
+          printHelpers.leadTrusteeIndividual(userAnswers, x.name.toString, index, draftId)
+        case x: LeadTrusteeOrganisation =>
+          printHelpers.leadTrusteeOrganisation(userAnswers, x.name, index, draftId)
+      }
 
-        val sectionKey = if (index == 0) Some("answersPage.section.trustees.heading") else None
+      val sectionKey = if (index == 0) Some("answersPage.section.trustees.heading") else None
 
-        AnswerSection(
-          headingKey = Some("answersPage.section.trustee.subheading"),
-          rows = questions.rows,
-          sectionKey = sectionKey,
-          headingArgs = Seq(index + 1)
-        )
+      AnswerSection(
+        headingKey = Some("answersPage.section.trustee.subheading"),
+        rows = questions.rows,
+        sectionKey = sectionKey,
+        headingArgs = Seq(index + 1)
+      )
     }
-  }
+
 }

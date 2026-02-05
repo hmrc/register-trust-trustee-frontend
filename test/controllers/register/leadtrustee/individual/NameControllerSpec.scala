@@ -68,7 +68,9 @@ class NameControllerSpec extends SpecBase with IndexValidation {
     "return Ok and the correct view for a GET when lead trustee matched" in {
 
       val userAnswers = emptyUserAnswers
-        .set(MatchedYesNoPage(index), true).success.value
+        .set(MatchedYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -105,7 +107,6 @@ class NameControllerSpec extends SpecBase with IndexValidation {
 
       val result = route(application, request).value
 
-
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
@@ -118,7 +119,9 @@ class NameControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), name).success.value
+        .set(TrusteesNamePage(index), name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -138,13 +141,14 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
 
-
     "redirect to the next page on a POST" when {
 
       "valid data is submitted" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteesNamePage(index), name).success.value
+          .set(TrusteesNamePage(index), name)
+          .success
+          .value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers))
@@ -231,4 +235,5 @@ class NameControllerSpec extends SpecBase with IndexValidation {
       )
     }
   }
+
 }

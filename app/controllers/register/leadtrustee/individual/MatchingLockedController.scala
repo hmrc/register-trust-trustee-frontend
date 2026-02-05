@@ -36,21 +36,20 @@ import javax.inject.Inject
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class MatchingLockedController @Inject()(val controllerComponents: MessagesControllerComponents,
-                                          standardActionSets: StandardActionSets,
-                                          nameAction: NameRequiredActionImpl,
-                                          view: MatchingLockedView,
-                                          registrationsRepository: RegistrationsRepository,
-                                          errorPageView: InternalServerErrorPageView
-                                        ) extends FrontendBaseController with I18nSupport with Logging {
+class MatchingLockedController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredActionImpl,
+  view: MatchingLockedView,
+  registrationsRepository: RegistrationsRepository,
+  errorPageView: InternalServerErrorPageView
+) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[TrusteeNameRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
-
-      Ok(view(draftId, index, request.trusteeName))
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    Ok(view(draftId, index, request.trusteeName))
   }
 
   def continueWithPassport(index: Int, draftId: String): Action[AnyContent] =
@@ -59,30 +58,34 @@ class MatchingLockedController @Inject()(val controllerComponents: MessagesContr
   def continueWithIdCard(index: Int, draftId: String): Action[AnyContent] =
     amendUserAnswersAndRedirect(index, draftId, IdCard, routes.IDCardDetailsController.onPageLoad(index, draftId))
 
-  private def amendUserAnswersAndRedirect(index: Int,
-                                          draftId: String,
-                                          detailsChoice: DetailsChoice,
-                                          call: Call): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-      request.userAnswers.set(TrusteeNinoYesNoPage(index), false) match {
-        case Success(ninoYesNoSet) =>
-          handleDetailsChoiceSet(ninoYesNoSet, index, detailsChoice, call)
-        case Failure(_) =>
-          logger.error("[MatchingLockedController][amendUserAnswersAndRedirect] Error while storing user answers")
-         Future.successful(InternalServerError(errorPageView()))
-      }
+  private def amendUserAnswersAndRedirect(
+    index: Int,
+    draftId: String,
+    detailsChoice: DetailsChoice,
+    call: Call
+  ): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    request.userAnswers.set(TrusteeNinoYesNoPage(index), false) match {
+      case Success(ninoYesNoSet) =>
+        handleDetailsChoiceSet(ninoYesNoSet, index, detailsChoice, call)
+      case Failure(_)            =>
+        logger.error("[MatchingLockedController][amendUserAnswersAndRedirect] Error while storing user answers")
+        Future.successful(InternalServerError(errorPageView()))
+    }
   }
 
-  private def handleDetailsChoiceSet(ninoYesNoSet: UserAnswers, index: Int, detailsChoice: DetailsChoice, call: Call)
-                                    (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Future[Result] = {
+  private def handleDetailsChoiceSet(ninoYesNoSet: UserAnswers, index: Int, detailsChoice: DetailsChoice, call: Call)(
+    implicit
+    hc: HeaderCarrier,
+    request: TrusteeNameRequest[_]
+  ): Future[Result] =
     ninoYesNoSet.set(TrusteeDetailsChoicePage(index), detailsChoice) match {
       case Success(detailsChoiceSet) =>
         registrationsRepository.set(detailsChoiceSet)
         Future.successful(Redirect(call))
-      case Failure(_) =>
+      case Failure(_)                =>
         logger.error("[MatchingLockedController][handleDetailsChoiceSet] Error while storing user answers")
         Future.successful(InternalServerError(errorPageView()))
 
     }
-  }
+
 }

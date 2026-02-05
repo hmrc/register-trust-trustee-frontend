@@ -21,11 +21,11 @@ import play.api.data.{Form, FormError}
 
 class EmailAddressFormProviderSpec extends StringFieldBehaviours {
 
-  val prefix = "leadtrustee.individual.emailAddress"
+  val prefix      = "leadtrustee.individual.emailAddress"
   val requiredKey = s"$prefix.error.required"
-  val lengthKey = s"$prefix.error.length"
-  val invalidKey = s"$prefix.error.invalid"
-  val maxLength = 256
+  val lengthKey   = s"$prefix.error.length"
+  val invalidKey  = s"$prefix.error.invalid"
+  val maxLength   = 256
 
   val form: Form[String] = new EmailAddressFormProvider().withPrefix(prefix)
 
@@ -61,4 +61,5 @@ class EmailAddressFormProviderSpec extends StringFieldBehaviours {
     )
 
   }
+
 }

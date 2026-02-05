@@ -30,10 +30,10 @@ import views.html.register.trustees.individual.PassportDetailsYesNoView
 class PassportDetailsYesNoControllerSpec extends SpecBase {
 
   private val trusteeMessagePrefix = "trustee.individual.passportDetailsYesNo"
-  private val formProvider = new YesNoFormProvider()
-  private val form = formProvider.withPrefix(trusteeMessagePrefix)
+  private val formProvider         = new YesNoFormProvider()
+  private val form                 = formProvider.withPrefix(trusteeMessagePrefix)
 
-  private val index = 0
+  private val index       = 0
   private val trusteeName = "FirstName LastName"
 
   private lazy val passportDetailsYesNoRoute = routes.PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url
@@ -43,7 +43,9 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -64,8 +66,12 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(PassportDetailsYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,8 +92,12 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(PassportDetailsYesNoPage(index), true)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -95,7 +105,8 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, passportDetailsYesNoRoute)
@@ -113,7 +124,9 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -167,5 +180,5 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
-}
 
+}

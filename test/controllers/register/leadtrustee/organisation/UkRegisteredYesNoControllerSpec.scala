@@ -31,16 +31,15 @@ import views.html.register.leadtrustee.organisation.UkRegisteredYesNoView
 
 class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.organisation.ukRegisteredYesNo")
 
-  val index = 0
+  val index    = 0
   val fakeName = "Test"
 
   lazy val ukRegisteredYesNoRoute: String = routes.UkRegisteredYesNoController.onPageLoad(index, fakeDraftId).url
 
-  override val emptyUserAnswers: UserAnswers = super
-    .emptyUserAnswers.set(NamePage(index), fakeName).success.value
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers.set(NamePage(index), fakeName).success.value
 
   "UkRegisteredYesNo Controller" must {
 
@@ -65,7 +64,9 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(UkRegisteredYesNoPage(index), true).success.value
+        .set(UkRegisteredYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,7 +90,8 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, ukRegisteredYesNoRoute)
@@ -156,4 +158,5 @@ class UkRegisteredYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

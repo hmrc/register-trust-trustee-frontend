@@ -37,19 +37,20 @@ class DateOfBirthYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers = userAnswers
+            .set(DateOfBirthYesNoPage(index), true)
+            .success
+            .value
+            .set(DateOfBirthPage(index), LocalDate.of(2010, 5, 4))
+            .success
+            .value
 
-            val initial: UserAnswers = userAnswers
-                .set(DateOfBirthYesNoPage(index), true).success.value
-                .set(DateOfBirthPage(index), LocalDate.of(2010, 5, 4)).success.value
+          val result = initial.set(DateOfBirthYesNoPage(index), false).success.value
 
-            val result = initial.set(DateOfBirthYesNoPage(index), false).success.value
-
-            result.get(DateOfBirthPage(index)) mustNot be(defined)
+          result.get(DateOfBirthPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

@@ -27,4 +27,5 @@ class DetailsChoiceFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[DetailsChoice](s"$prefix.error.required")
     )
+
 }

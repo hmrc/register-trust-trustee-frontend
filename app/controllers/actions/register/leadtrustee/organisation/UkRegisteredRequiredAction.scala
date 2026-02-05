@@ -27,13 +27,15 @@ import play.api.mvc.{ActionRefiner, Result}
 import scala.concurrent.{ExecutionContext, Future}
 
 class UkRegisteredRequiredAction(index: Int)(implicit val executionContext: ExecutionContext)
-  extends ActionRefiner[RegistrationDataRequest, UkRegisteredYesNoRequest] {
+    extends ActionRefiner[RegistrationDataRequest, UkRegisteredYesNoRequest] {
 
-  override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, UkRegisteredYesNoRequest[A]]] = {
+  override protected def refine[A](
+    request: RegistrationDataRequest[A]
+  ): Future[Either[Result, UkRegisteredYesNoRequest[A]]] =
 
     Future.successful(
       request.userAnswers.get(UkRegisteredYesNoPage(index)) match {
-        case None =>
+        case None        =>
           Left(
             Redirect(controllers.routes.SessionExpiredController.onPageLoad)
           )
@@ -46,9 +48,12 @@ class UkRegisteredRequiredAction(index: Int)(implicit val executionContext: Exec
           )
       }
     )
-  }
+
 }
 
-class UkRegisteredRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) {
+class UkRegisteredRequiredActionImpl @Inject() (implicit
+  val executionContext: ExecutionContext,
+  val messagesApi: MessagesApi
+) {
   def apply(index: Int): UkRegisteredRequiredAction = new UkRegisteredRequiredAction(index)
 }

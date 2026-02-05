@@ -25,8 +25,8 @@ import views.html.register.trustees.individual.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val prefix = "trustee.individual.ukAddress"
-  val index = 0
+  val prefix           = "trustee.individual.ukAddress"
+  val index            = 0
   val fakeName: String = FullName("Test", None, "Name").toString
 
   override val form = new UKAddressFormProvider()()
@@ -36,7 +36,7 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
     val view = viewFor[UkAddressView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeName,  index, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeName, index, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), prefix)
 
@@ -49,4 +49,5 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

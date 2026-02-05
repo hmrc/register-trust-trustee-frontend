@@ -49,7 +49,9 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         val leadHeading = Messages(s"$messageKeyPrefix.heading")
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
+          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers)).build()
 
@@ -69,7 +71,6 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         application.stop()
       }
 
-
       "is trustee" in {
 
         val messageKeyPrefix = "trustee.individualOrBusiness"
@@ -77,7 +78,9 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         val heading = Messages(s"$messageKeyPrefix.heading")
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -105,8 +108,12 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       val leadHeading = Messages(s"$messageKeyPrefix.heading")
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-        .set(MatchedYesNoPage(index), true).success.value
+        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+        .success
+        .value
+        .set(MatchedYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(Some(userAnswers)).build()
 
@@ -133,8 +140,12 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         val messageKeyPrefix = "leadTrustee.individualOrBusiness"
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.values.head).success.value
+          .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+          .success
+          .value
+          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.values.head)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -151,19 +162,25 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading, disabled = false)(request, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, leadHeading, disabled = false)(
+            request,
+            messages
+          ).toString
 
         application.stop()
       }
-
 
       "is not lead trustee" in {
 
         val messageKeyPrefix = "trustee.individualOrBusiness"
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.values.head).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee)
+          .success
+          .value
+          .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.values.head)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -180,7 +197,10 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading, disabled = false)(request, messages).toString
+          view(form.fill(IndividualOrBusiness.values.head), fakeDraftId, index, heading, disabled = false)(
+            request,
+            messages
+          ).toString
 
         application.stop()
       }
@@ -204,7 +224,9 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
     "redirect to the next page when valid data is submitted (lead trustee)" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
+        .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -225,7 +247,9 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
     "redirect to the next page when valid data is submitted (trustee)" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
+        .set(TrusteeOrLeadTrusteePage(index), Trustee)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -250,8 +274,9 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       val heading = Messages(s"$messageKeyPrefix.heading")
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-
+        .set(TrusteeOrLeadTrusteePage(index), Trustee)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -308,7 +333,7 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
 
     "for a GET" must {
 
-      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
+      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
         val route = routes.TrusteeIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
@@ -339,4 +364,5 @@ class TrusteeIndividualOrBusinessControllerSpec extends SpecBase with IndexValid
       )
     }
   }
+
 }

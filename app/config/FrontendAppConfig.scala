@@ -26,23 +26,22 @@ import java.time.LocalDate
 import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration,
-                                   contactFrontendConfig: ContactFrontendConfig) {
+class FrontendAppConfig @Inject() (configuration: Configuration, contactFrontendConfig: ContactFrontendConfig) {
 
-  val repositoryKey: String = "trustees"
+  val repositoryKey: String         = "trustees"
   val repositoryKeySettlors: String = "settlors"
 
-
   final val ENGLISH = "en"
-  final val WELSH = "cy"
+  final val WELSH   = "cy"
 
-  val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
+  val betaFeedbackUrl =
+    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
-  lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
-  lazy val loginUrl: String = configuration.get[String]("urls.login")
+  lazy val authUrl: String          = configuration.get[Service]("auth").baseUrl
+  lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String = configuration.get[String]("urls.logout")
-  val appName: String = configuration.get[String]("appName")
+  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
+  val appName: String               = configuration.get[String]("appName")
 
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
@@ -56,22 +55,23 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
-  lazy val maintainATrustFrontendUrl : String = configuration.get[String]("urls.maintainATrust")
-  lazy val createAgentServicesAccountUrl : String = configuration.get[String]("urls.createAgentServicesAccount")
+  lazy val maintainATrustFrontendUrl: String     = configuration.get[String]("urls.maintainATrust")
+  lazy val createAgentServicesAccountUrl: String = configuration.get[String]("urls.createAgentServicesAccount")
 
   lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
 
   lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl
 
-  lazy val trustsIndividualCheckUrl: String = configuration.get[Service]("microservice.services.trusts-individual-check").baseUrl
+  lazy val trustsIndividualCheckUrl: String =
+    configuration.get[Service]("microservice.services.trusts-individual-check").baseUrl
 
-  lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
+  lazy val locationCanonicalList: String   = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
 
   lazy val findLostUtrUrl: String = "https://www.gov.uk/find-lost-utr-number"
 
   lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
-  lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
+  lazy val timeoutLength: Int   = configuration.get[Int]("timeout.length")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),
@@ -90,14 +90,14 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
       getInt(s"dates.$entry.day")
     )
 
-  lazy val minDate: LocalDate = getDate("minimum")
-  lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
+  lazy val minDate: LocalDate           = getDate("minimum")
+  lazy val maxPassportDate: LocalDate   = getDate("maximumPassport")
   lazy val minLeadTrusteeDob: LocalDate = getDate("minLeadTrusteeDob")
 
   def helplineUrl(implicit messages: Messages): String = {
     val path = messages.lang.code match {
       case WELSH => "urls.welshHelpline"
-      case _ => "urls.trustsHelpline"
+      case _     => "urls.trustsHelpline"
     }
 
     configuration.get[String](path)

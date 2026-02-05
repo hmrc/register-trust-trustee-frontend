@@ -19,8 +19,6 @@ package pages.behaviours.trustees.organisation.mld5
 import pages.behaviours.PageBehaviours
 import pages.register.trustees.organisation.mld5.CountryOfResidencePage
 
-
-
 class CountryOfResidencePageSpec extends PageBehaviours {
 
   "CountryOfResidencePage" must {

@@ -36,35 +36,37 @@ class AddressUkYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(AddressUkYesNoPage(index), true)
+              .success
+              .value
+              .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "postcode"))
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(AddressUkYesNoPage(index), true).success.value
-                .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "postcode")).success.value
+          val result = initial.set(AddressUkYesNoPage(index), false).success.value
 
-            val result = initial.set(AddressUkYesNoPage(index), false).success.value
-
-            result.get(UkAddressPage(index)) mustNot be(defined)
+          result.get(UkAddressPage(index)) mustNot be(defined)
         }
-      }
 
-      "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(AddressUkYesNoPage(index), false)
+              .success
+              .value
+              .set(InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR"))
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(AddressUkYesNoPage(index), false).success.value
-                .set(InternationalAddressPage(index), InternationalAddress("line1", "line2", None, "FR")).success.value
+          val result = initial.set(AddressUkYesNoPage(index), true).success.value
 
-            val result = initial.set(AddressUkYesNoPage(index), true).success.value
-
-            result.get(InternationalAddressPage(index)) mustNot be(defined)
+          result.get(InternationalAddressPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

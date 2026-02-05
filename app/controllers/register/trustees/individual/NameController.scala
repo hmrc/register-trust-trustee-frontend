@@ -38,56 +38,53 @@ import views.html.register.trustees.individual.NameView
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class NameController @Inject()(
-                                override val messagesApi: MessagesApi,
-                                implicit val frontendAppConfig: FrontendAppConfig,
-                                registrationsRepository: RegistrationsRepository,
-                                @TrusteeIndividual navigator: Navigator,
-                                standardActionSets: StandardActionSets,
-                                validateIndex: IndexActionFilterProvider,
-                                formProvider: NameFormProvider,
-                                val controllerComponents: MessagesControllerComponents,
-                                view: NameView,
-                                errorPageView: InternalServerErrorPageView
-                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class NameController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @TrusteeIndividual navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  validateIndex: IndexActionFilterProvider,
+  formProvider: NameFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: NameView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val form = formProvider("trustee.individual.name")
 
-      val form = formProvider("trustee.individual.name")
+    val preparedForm = request.userAnswers.get(NamePage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(NamePage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index))
+    Ok(view(preparedForm, draftId, index))
 
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    val form = formProvider("trustee.individual.name")
 
-      val form = formProvider("trustee.individual.name")
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
-
-        value => {
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+        value =>
           request.userAnswers.set(NamePage(index), value) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[NameController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }

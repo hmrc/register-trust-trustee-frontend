@@ -24,19 +24,19 @@ import views.html.register.TrusteesInfoView
 
 import javax.inject.Inject
 
-class TrusteesInfoController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        identify: RegistrationIdentifierAction,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: TrusteesInfoView
-                                      ) extends FrontendBaseController with I18nSupport {
+class TrusteesInfoController @Inject() (
+  override val messagesApi: MessagesApi,
+  identify: RegistrationIdentifierAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: TrusteesInfoView
+) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(draftId: String): Action[AnyContent] = identify {
-    implicit request =>
-      Ok(view(draftId))
+  def onPageLoad(draftId: String): Action[AnyContent] = identify { implicit request =>
+    Ok(view(draftId))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = identify { _ =>
     Redirect(controllers.register.routes.TrusteeOrLeadTrusteeController.onPageLoad(0, draftId))
   }
+
 }

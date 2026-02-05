@@ -30,10 +30,10 @@ import views.html.register.trustees.individual.IDCardDetailsYesNoView
 class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
   private val trusteeMessagePrefix = "trustee.individual.idCardDetailsYesNo"
-  private val formProvider = new YesNoFormProvider()
-  private val form = formProvider.withPrefix(trusteeMessagePrefix)
+  private val formProvider         = new YesNoFormProvider()
+  private val form                 = formProvider.withPrefix(trusteeMessagePrefix)
 
-  private val index = 0
+  private val index       = 0
   private val trusteeName = "FirstName LastName"
 
   private lazy val idCardDetailsYesNoRoute = routes.IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId).url
@@ -43,7 +43,9 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -64,8 +66,12 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(IDCardDetailsYesNoPage(index), true).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(IDCardDetailsYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,8 +92,12 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(IDCardDetailsYesNoPage(index), true).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(IDCardDetailsYesNoPage(index), true)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -95,7 +105,8 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, idCardDetailsYesNoRoute)
@@ -113,7 +124,9 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -168,5 +181,5 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
     }
 
   }
-}
 
+}

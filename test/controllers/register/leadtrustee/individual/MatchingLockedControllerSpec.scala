@@ -37,9 +37,15 @@ class MatchingLockedControllerSpec extends SpecBase {
   private val name: FullName = FullName("Joe", None, "Bloggs")
 
   private val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(TrusteesNamePage(index), name).success.value
-    .set(TrusteeNinoYesNoPage(index), true).success.value
-    .set(TrusteesNinoPage(index), "AA000000A").success.value
+    .set(TrusteesNamePage(index), name)
+    .success
+    .value
+    .set(TrusteeNinoYesNoPage(index), true)
+    .success
+    .value
+    .set(TrusteesNinoPage(index), "AA000000A")
+    .success
+    .value
 
   "MatchingLockedController" when {
 
@@ -108,8 +114,8 @@ class MatchingLockedControllerSpec extends SpecBase {
           val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
           verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-          uaCaptor.getValue.get(TrusteeNinoYesNoPage(index)).get mustBe false
-          uaCaptor.getValue.get(TrusteesNinoPage(index)) mustBe None
+          uaCaptor.getValue.get(TrusteeNinoYesNoPage(index)).get     mustBe false
+          uaCaptor.getValue.get(TrusteesNinoPage(index))             mustBe None
           uaCaptor.getValue.get(TrusteeDetailsChoicePage(index)).get mustBe Passport
 
           application.stop()
@@ -157,8 +163,8 @@ class MatchingLockedControllerSpec extends SpecBase {
           val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
           verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-          uaCaptor.getValue.get(TrusteeNinoYesNoPage(index)).get mustBe false
-          uaCaptor.getValue.get(TrusteesNinoPage(index)) mustBe None
+          uaCaptor.getValue.get(TrusteeNinoYesNoPage(index)).get     mustBe false
+          uaCaptor.getValue.get(TrusteesNinoPage(index))             mustBe None
           uaCaptor.getValue.get(TrusteeDetailsChoicePage(index)).get mustBe IdCard
 
           application.stop()
@@ -182,4 +188,5 @@ class MatchingLockedControllerSpec extends SpecBase {
       }
     }
   }
+
 }

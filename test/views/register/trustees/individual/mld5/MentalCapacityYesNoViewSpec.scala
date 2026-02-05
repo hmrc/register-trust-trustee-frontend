@@ -27,8 +27,8 @@ import views.html.register.trustees.individual.mld5.MentalCapacityYesNoView
 
 class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] with OptionsViewBehaviours {
 
-  val prefix = "trustee.individual.5mld.mentalCapacityYesNo"
-  val index = 0
+  val prefix       = "trustee.individual.5mld.mentalCapacityYesNo"
+  val index        = 0
   val name: String = FullName("FirstName", None, "LastName").toString
 
   val form: Form[YesNoDontKnow] = new YesNoDontKnowFormProvider().withPrefix(prefix)
@@ -44,7 +44,21 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
 
     behave like pageWithTitle(applyView(form), prefix, name)
 
-    behave like pageWithGuidance(applyView(form), prefix, "p1", "p2", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4", "p3", "p4", "heading2", "p5", "p6")
+    behave like pageWithGuidance(
+      applyView(form),
+      prefix,
+      "p1",
+      "p2",
+      "bulletpoint1",
+      "bulletpoint2",
+      "bulletpoint3",
+      "bulletpoint4",
+      "p3",
+      "p4",
+      "heading2",
+      "p5",
+      "p6"
+    )
 
     behave like pageWithBackLink(applyView(form))
 
@@ -58,4 +72,5 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

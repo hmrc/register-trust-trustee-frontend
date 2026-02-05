@@ -39,47 +39,61 @@ class NinoYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(NinoYesNoPage(index), false)
+              .success
+              .value
+              .set(AddressYesNoPage(index), true)
+              .success
+              .value
+              .set(AddressUkYesNoPage(index), true)
+              .success
+              .value
+              .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "postcode"))
+              .success
+              .value
+              .set(PassportDetailsYesNoPage(index), true)
+              .success
+              .value
+              .set(PassportDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4)))
+              .success
+              .value
+              .set(IDCardDetailsYesNoPage(index), true)
+              .success
+              .value
+              .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4)))
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(NinoYesNoPage(index), false).success.value
-                .set(AddressYesNoPage(index), true).success.value
-                .set(AddressUkYesNoPage(index), true).success.value
-                .set(UkAddressPage(index), UKAddress("line1", "line2", None, None, "postcode")).success.value
-                .set(PassportDetailsYesNoPage(index), true).success.value
-                .set(PassportDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4))).success.value
-                .set(IDCardDetailsYesNoPage(index), true).success.value
-                .set(IDCardDetailsPage(index), PassportOrIdCardDetails("FR", "num", LocalDate.of(2010, 5, 4))).success.value
+          val result = initial.set(NinoYesNoPage(index), true).success.value
 
-            val result = initial.set(NinoYesNoPage(index), true).success.value
-
-            result.get(AddressYesNoPage(index)) mustNot be(defined)
-            result.get(AddressUkYesNoPage(index)) mustNot be(defined)
-            result.get(UkAddressPage(index)) mustNot be(defined)
-            result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
-            result.get(PassportDetailsPage(index)) mustNot be(defined)
-            result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
-            result.get(IDCardDetailsPage(index)) mustNot be(defined)
+          result.get(AddressYesNoPage(index)) mustNot be(defined)
+          result.get(AddressUkYesNoPage(index)) mustNot be(defined)
+          result.get(UkAddressPage(index)) mustNot be(defined)
+          result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
+          result.get(PassportDetailsPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsPage(index)) mustNot be(defined)
         }
-      }
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(NinoYesNoPage(index), true)
+              .success
+              .value
+              .set(NinoPage(index), "nino")
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(NinoYesNoPage(index), true).success.value
-                .set(NinoPage(index), "nino").success.value
+          val result = initial.set(NinoYesNoPage(index), false).success.value
 
-            val result = initial.set(NinoYesNoPage(index), false).success.value
-
-            result.get(NinoPage(index)) mustNot be(defined)
+          result.get(NinoPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

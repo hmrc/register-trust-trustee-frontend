@@ -32,8 +32,7 @@ import java.time.LocalDate
 
 class SubmissionSetFactorySpec extends SpecBase {
 
-  private val expectedTrusteeMappedJson = Json.parse(
-    """
+  private val expectedTrusteeMappedJson = Json.parse("""
       |[
       | {
       |   "trusteeOrg":{
@@ -43,8 +42,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       |]
       |""".stripMargin)
 
-  private val expectedLeadTrusteeMappedJson = Json.parse(
-    """
+  private val expectedLeadTrusteeMappedJson = Json.parse("""
       |{
       | "leadTrusteeInd":{
       |   "name":{
@@ -61,27 +59,56 @@ class SubmissionSetFactorySpec extends SpecBase {
       |}
       |""".stripMargin)
 
-  private def addTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
+  private def addTrustee(index: Int, userAnswers: UserAnswers): UserAnswers =
     userAnswers
-      .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-      .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-      .set(torg.NamePage(index), "Org Name1").success.value
-      .set(TrusteeStatus(index), Status.Completed).success.value
-  }
+      .set(TrusteeOrLeadTrusteePage(index), Trustee)
+      .success
+      .value
+      .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Business)
+      .success
+      .value
+      .set(torg.NamePage(index), "Org Name1")
+      .success
+      .value
+      .set(TrusteeStatus(index), Status.Completed)
+      .success
+      .value
 
-  private def addLeadTrustee(index: Int, userAnswers: UserAnswers): UserAnswers = {
-    userAnswers.set(TrusteeOrLeadTrusteePage(index), LeadTrustee).success.value
-      .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-      .set(ltind.TrusteesNamePage(index), FullName("first name",  Some("middle name"), "Last Name")).success.value
-      .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(2000,10,10)).success.value
-      .set(ltind.TrusteeNinoYesNoPage(index), true).success.value
-      .set(ltind.TrusteesNinoPage(index), "AB123456C").success.value
-      .set(ltind.AddressUkYesNoPage(index), true).success.value
-      .set(ltind.UkAddressPage(index), UKAddress("line1", "line2" ,None, None, "NE65QA")).success.value
-      .set(ltind.EmailAddressYesNoPage(index), false).success.value
-      .set(ltind.TelephoneNumberPage(index), "0191 1111111").success.value
-      .set(TrusteeStatus(index), Status.Completed).success.value
-  }
+  private def addLeadTrustee(index: Int, userAnswers: UserAnswers): UserAnswers =
+    userAnswers
+      .set(TrusteeOrLeadTrusteePage(index), LeadTrustee)
+      .success
+      .value
+      .set(TrusteeIndividualOrBusinessPage(index), IndividualOrBusiness.Individual)
+      .success
+      .value
+      .set(ltind.TrusteesNamePage(index), FullName("first name", Some("middle name"), "Last Name"))
+      .success
+      .value
+      .set(ltind.TrusteesDateOfBirthPage(index), LocalDate.of(2000, 10, 10))
+      .success
+      .value
+      .set(ltind.TrusteeNinoYesNoPage(index), true)
+      .success
+      .value
+      .set(ltind.TrusteesNinoPage(index), "AB123456C")
+      .success
+      .value
+      .set(ltind.AddressUkYesNoPage(index), true)
+      .success
+      .value
+      .set(ltind.UkAddressPage(index), UKAddress("line1", "line2", None, None, "NE65QA"))
+      .success
+      .value
+      .set(ltind.EmailAddressYesNoPage(index), false)
+      .success
+      .value
+      .set(ltind.TelephoneNumberPage(index), "0191 1111111")
+      .success
+      .value
+      .set(TrusteeStatus(index), Status.Completed)
+      .success
+      .value
 
   "Submission set factory" must {
 
@@ -94,7 +121,8 @@ class SubmissionSetFactorySpec extends SpecBase {
           factory.createFrom(emptyUserAnswers) mustBe RegistrationSubmission.DataSet(
             data = Json.toJson(emptyUserAnswers),
             registrationPieces = List.empty,
-            answerSections = List.empty)
+            answerSections = List.empty
+          )
         }
       }
 
@@ -104,30 +132,62 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               headingKey = Some("answersPage.section.trustee.subheading"),
               rows = List(
-                AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
+                AnswerRow(
+                  "leadTrustee.individualOrBusiness.checkYourAnswersLabel",
+                  "Individual",
+                  "first name Last Name"
+                ),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
-                AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 2000", "first name Last Name"),
+                AnswerRow(
+                  "leadTrustee.individual.dateOfBirth.checkYourAnswersLabel",
+                  "10 October 2000",
+                  "first name Last Name"
+                ),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.ukAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
+                AnswerRow(
+                  "leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel",
+                  "Yes",
+                  "first name Last Name"
+                ),
+                AnswerRow(
+                  "leadTrustee.individual.ukAddress.checkYourAnswersLabel",
+                  "line1<br />line2<br />NE65QA",
+                  "first name Last Name"
+                ),
+                AnswerRow(
+                  "leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel",
+                  "No",
+                  "first name Last Name"
+                ),
+                AnswerRow(
+                  "leadTrustee.individual.telephoneNumber.checkYourAnswersLabel",
+                  "0191 1111111",
+                  "first name Last Name"
+                )
               ),
               sectionKey = Some("answersPage.section.trustees.heading"),
               headingArgs = Seq("1")
             )
           )
-          val userAnswers = addLeadTrustee(0, emptyUserAnswers)
-            .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+          val userAnswers             = addLeadTrustee(0, emptyUserAnswers)
+            .set(AddATrusteePage, AddATrustee.NoComplete)
+            .success
+            .value
 
-          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(Json.toJson(userAnswers), List(
-                        RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
-                        RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
-                        RegistrationSubmission.MappedPiece("correspondence/address",
-                          Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
-                        RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
-                      ), leadTrusteeOnlySections)
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
+            Json.toJson(userAnswers),
+            List(
+              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+              RegistrationSubmission.MappedPiece(
+                "correspondence/address",
+                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")
+              ),
+              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
+            ),
+            leadTrusteeOnlySections
+          )
         }
       }
 
@@ -137,15 +197,39 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               headingKey = Some("answersPage.section.trustee.subheading"),
               rows = List(
-                AnswerRow("leadTrustee.individualOrBusiness.checkYourAnswersLabel", "Individual", "first name Last Name"),
+                AnswerRow(
+                  "leadTrustee.individualOrBusiness.checkYourAnswersLabel",
+                  "Individual",
+                  "first name Last Name"
+                ),
                 AnswerRow("leadTrustee.individual.name.checkYourAnswersLabel", "first name middle name Last Name", ""),
-                AnswerRow("leadTrustee.individual.dateOfBirth.checkYourAnswersLabel", "10 October 2000", "first name Last Name"),
+                AnswerRow(
+                  "leadTrustee.individual.dateOfBirth.checkYourAnswersLabel",
+                  "10 October 2000",
+                  "first name Last Name"
+                ),
                 AnswerRow("leadTrustee.individual.ninoYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
                 AnswerRow("leadTrustee.individual.nino.checkYourAnswersLabel", "AB 12 34 56 C", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel", "Yes", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.ukAddress.checkYourAnswersLabel", "line1<br />line2<br />NE65QA", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel", "No", "first name Last Name"),
-                AnswerRow("leadTrustee.individual.telephoneNumber.checkYourAnswersLabel", "0191 1111111", "first name Last Name")
+                AnswerRow(
+                  "leadTrustee.individual.liveInTheUkYesNo.checkYourAnswersLabel",
+                  "Yes",
+                  "first name Last Name"
+                ),
+                AnswerRow(
+                  "leadTrustee.individual.ukAddress.checkYourAnswersLabel",
+                  "line1<br />line2<br />NE65QA",
+                  "first name Last Name"
+                ),
+                AnswerRow(
+                  "leadTrustee.individual.emailAddressYesNo.checkYourAnswersLabel",
+                  "No",
+                  "first name Last Name"
+                ),
+                AnswerRow(
+                  "leadTrustee.individual.telephoneNumber.checkYourAnswersLabel",
+                  "0191 1111111",
+                  "first name Last Name"
+                )
               ),
               sectionKey = Some("answersPage.section.trustees.heading"),
               headingArgs = Seq("1")
@@ -154,27 +238,35 @@ class SubmissionSetFactorySpec extends SpecBase {
               headingKey = Some("answersPage.section.trustee.subheading"),
               rows = List(
                 AnswerRow("trustee.individualOrBusiness.checkYourAnswersLabel", "Business", "Org Name1"),
-                AnswerRow("trustee.organisation.name.checkYourAnswersLabel", "Org Name1", "Org Name1")),
+                AnswerRow("trustee.organisation.name.checkYourAnswersLabel", "Org Name1", "Org Name1")
+              ),
               sectionKey = None,
               headingArgs = Seq("2")
             )
           )
-          val userAnswers =
-            addTrustee(1,
-              addLeadTrustee(0, emptyUserAnswers))
-              .set(AddATrusteePage, AddATrustee.NoComplete).success.value
+          val userAnswers    =
+            addTrustee(1, addLeadTrustee(0, emptyUserAnswers))
+              .set(AddATrusteePage, AddATrustee.NoComplete)
+              .success
+              .value
 
-          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(data = Json.toJson(userAnswers), registrationPieces = List(
-                        RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
-                        RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson),
-                        RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
-                        RegistrationSubmission.MappedPiece("correspondence/address",
-                          Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")),
-                        RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
-
-                      ), answerSections = answerSections)
+          factory.createFrom(userAnswers) mustBe RegistrationSubmission.DataSet(
+            data = Json.toJson(userAnswers),
+            registrationPieces = List(
+              RegistrationSubmission.MappedPiece("trust/entities/leadTrustees", expectedLeadTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("trust/entities/trustees", expectedTrusteeMappedJson),
+              RegistrationSubmission.MappedPiece("correspondence/abroadIndicator", JsBoolean(false)),
+              RegistrationSubmission.MappedPiece(
+                "correspondence/address",
+                Json.parse("""{"line1":"line1","line2":"line2","postCode":"NE65QA","country":"GB"}""")
+              ),
+              RegistrationSubmission.MappedPiece("correspondence/phoneNumber", JsString("0191 1111111"))
+            ),
+            answerSections = answerSections
+          )
         }
       }
     }
   }
+
 }

@@ -30,34 +30,33 @@ import views.html.register.leadtrustee.individual.MatchingFailedView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class MatchingFailedController @Inject()(
-                                          val controllerComponents: MessagesControllerComponents,
-                                          implicit val frontendAppConfig: FrontendAppConfig,
-                                          standardActionSets: StandardActionSets,
-                                          view: MatchingFailedView,
-                                          errorHandler: ErrorHandler,
-                                          service: TrustsIndividualCheckService
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class MatchingFailedController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  standardActionSets: StandardActionSets,
+  view: MatchingFailedView,
+  errorHandler: ErrorHandler,
+  service: TrustsIndividualCheckService
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActionSets.indexValidated(draftId, index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      service.failedAttempts(draftId) map {
-        case x if x < frontendAppConfig.maxMatchingAttempts =>
-          Ok(view(draftId, index, x, frontendAppConfig.maxMatchingAttempts - x))
-        case _ =>
-          Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
-      } recoverWith {
-        case e =>
-          logger.error(s"Failed to retrieve number of failed matching attempts: ${e.getMessage}")
-          errorHandler.internalServerErrorTemplate.flatMap(html => Future.successful(InternalServerError(html)))
-      }
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    service.failedAttempts(draftId) map {
+      case x if x < frontendAppConfig.maxMatchingAttempts =>
+        Ok(view(draftId, index, x, frontendAppConfig.maxMatchingAttempts - x))
+      case _                                              =>
+        Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
+    } recoverWith { case e =>
+      logger.error(s"Failed to retrieve number of failed matching attempts: ${e.getMessage}")
+      errorHandler.internalServerErrorTemplate.flatMap(html => Future.successful(InternalServerError(html)))
+    }
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     Redirect(routes.NameController.onPageLoad(index, draftId))
   }
+
 }

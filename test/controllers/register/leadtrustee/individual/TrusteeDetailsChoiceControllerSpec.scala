@@ -32,16 +32,19 @@ import views.html.register.leadtrustee.individual.TrusteeDetailsChoiceView
 
 class TrusteeDetailsChoiceControllerSpec extends SpecBase {
 
-  val messageKeyPrefix = "leadTrustee.individual.trusteeDetailsChoice"
+  val messageKeyPrefix          = "leadTrustee.individual.trusteeDetailsChoice"
   val form: Form[DetailsChoice] = new DetailsChoiceFormProvider().withPrefix(messageKeyPrefix)
 
-  val index = 0
+  val index                 = 0
   val trusteeName: FullName = FullName("FirstName", None, "LastName")
 
-  lazy val trusteeDetailsChoiceUKRoute: String = routes.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url
+  lazy val trusteeDetailsChoiceUKRoute: String =
+    routes.TrusteeDetailsChoiceController.onPageLoad(index, fakeDraftId).url
 
   val answersWithName: UserAnswers = emptyUserAnswers
-    .set(TrusteesNamePage(index), trusteeName).success.value
+    .set(TrusteesNamePage(index), trusteeName)
+    .success
+    .value
 
   val validAnswer: DetailsChoice = DetailsChoice.IdCard
 
@@ -70,7 +73,9 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(TrusteeDetailsChoicePage(index), validAnswer).success.value
+        .set(TrusteeDetailsChoicePage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -115,7 +120,8 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(answersWithName))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeIndividual]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request = FakeRequest(POST, trusteeDetailsChoiceUKRoute)
         .withFormUrlEncodedBody(("value", validAnswer.toString))
@@ -160,4 +166,5 @@ class TrusteeDetailsChoiceControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

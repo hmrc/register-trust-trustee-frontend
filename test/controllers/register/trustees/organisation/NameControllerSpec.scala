@@ -28,11 +28,11 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.trustees.organisation.NameView
 
-class NameControllerSpec extends SpecBase  with IndexValidation {
+class NameControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new StringFormProvider()
+  val formProvider       = new StringFormProvider()
   val form: Form[String] = formProvider.withConfig("trustee.organisation.name", 56)
-  val index = 0
+  val index              = 0
 
   val validAnswer = "Name"
 
@@ -61,7 +61,9 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), validAnswer).success.value
+        .set(NamePage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +87,8 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nameRoute)
@@ -153,4 +156,5 @@ class NameControllerSpec extends SpecBase  with IndexValidation {
       application.stop()
     }
   }
+
 }

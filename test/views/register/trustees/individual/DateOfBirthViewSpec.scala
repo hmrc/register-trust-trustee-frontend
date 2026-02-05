@@ -27,7 +27,7 @@ import java.time.LocalDate
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "trustee.individual.dateOfBirth"
-  val index = 0
+  val index            = 0
 
   val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withConfig(messageKeyPrefix)
 
@@ -46,4 +46,5 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithBackLink(applyView(form))
   }
+
 }

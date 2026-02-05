@@ -40,55 +40,55 @@ import views.html.register.trustees.individual.InternationalAddressView
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class InternationalAddressController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                implicit val frontendAppConfig: FrontendAppConfig,
-                                                registrationsRepository: RegistrationsRepository,
-                                                @TrusteeIndividual navigator: Navigator,
-                                                standardActionSets: StandardActionSets,
-                                                nameAction: NameRequiredActionImpl,
-                                                validateIndex: IndexActionFilterProvider,
-                                                formProvider: InternationalAddressFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: InternationalAddressView,
-                                                val countryOptions: CountryOptionsNonUK,
-                                                errorPageView: InternalServerErrorPageView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class InternationalAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @TrusteeIndividual navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredActionImpl,
+  validateIndex: IndexActionFilterProvider,
+  formProvider: InternationalAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: InternationalAddressView,
+  val countryOptions: CountryOptionsNonUK,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider()
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.identifiedUserWithData(draftId) andThen validateIndex(index, Trustees) andThen nameAction(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, countryOptions.options(), draftId, index, request.trusteeName))
+    Ok(view(preparedForm, countryOptions.options(), draftId, index, request.trusteeName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, request.trusteeName))),
-
-        value => {
+          Future.successful(
+            BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, request.trusteeName))
+          ),
+        value =>
           request.userAnswers.set(InternationalAddressPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[InternationalAddressController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }

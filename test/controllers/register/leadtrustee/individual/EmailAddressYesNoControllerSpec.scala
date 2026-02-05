@@ -31,14 +31,13 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.leadtrustee.individual.EmailAddressYesNoView
 
-
 class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  val messagePrefix = "leadTrustee.individual.emailAddressYesNo"
-  val formProvider = new YesNoFormProvider()
+  val messagePrefix       = "leadTrustee.individual.emailAddressYesNo"
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix(messagePrefix)
 
-  val index = 0
+  val index               = 0
   val trusteeName: String = FullName("FirstName", None, "LastName").toString
 
   lazy val emailAddressYesNoRoute: String = routes.EmailAddressYesNoController.onPageLoad(index, fakeDraftId).url
@@ -48,7 +47,9 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -69,8 +70,12 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(EmailAddressYesNoPage(index), true).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(EmailAddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +96,9 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -103,7 +110,6 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
       val request =
         FakeRequest(POST, emailAddressYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -117,7 +123,9 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(TrusteesNamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -203,4 +211,5 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
       )
     }
   }
+
 }

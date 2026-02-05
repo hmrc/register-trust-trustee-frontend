@@ -24,7 +24,12 @@ import play.api.data.Form
 
 class NinoFormProvider @Inject() extends Mappings {
 
-  def apply(messagePrefix: String, userAnswers: UserAnswers, index: Int, existingSettlorNinos: Seq[String]): Form[String] =
+  def apply(
+    messagePrefix: String,
+    userAnswers: UserAnswers,
+    index: Int,
+    existingSettlorNinos: Seq[String]
+  ): Form[String] =
     Form(
       "value" -> nino(s"$messagePrefix.error.required")
         .verifying(
@@ -33,6 +38,8 @@ class NinoFormProvider @Inject() extends Mappings {
             isNinoValid("value", s"$messagePrefix.error.invalidFormat"),
             isNinoDuplicated(userAnswers, index, s"$messagePrefix.error.duplicate"),
             uniqueNinoTrustee(s"$messagePrefix.error.unique", existingSettlorNinos)
-          ))
+          )
+        )
     )
+
 }

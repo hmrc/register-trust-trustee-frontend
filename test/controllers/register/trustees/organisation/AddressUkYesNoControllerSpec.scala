@@ -32,10 +32,10 @@ import views.html.register.trustees.organisation.AddressUkYesNoView
 
 class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("trustee.organisation.addressUkYesNo")
 
-  private val index = 0
+  private val index    = 0
   private val fakeName = "Test"
 
   private lazy val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(index, fakeDraftId).url
@@ -65,7 +65,9 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(AddressUkYesNoPage(index), true).success.value
+        .set(AddressUkYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,12 +91,12 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUkYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -159,11 +161,15 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
 
     "return an Internal Server Error and redirect to error page when set user answers operation fails" in {
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fakeName).success.value
-        .set(AddressUkYesNoPage(index), true).success.value
+        .set(NamePage(index), fakeName)
+        .success
+        .value
+        .set(AddressUkYesNoPage(index), true)
+        .success
+        .value
 
       val differentIndex: Int = index + 2
-      val onSubmitPath = routes.AddressUkYesNoController.onSubmit(differentIndex, draftId).url
+      val onSubmitPath        = routes.AddressUkYesNoController.onSubmit(differentIndex, draftId).url
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -187,4 +193,5 @@ class AddressUkYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

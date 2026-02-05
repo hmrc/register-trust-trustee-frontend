@@ -26,8 +26,8 @@ import views.html.register.leadtrustee.individual.TelephoneNumberView
 class TelephoneNumberViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "leadTrustee.individual.telephoneNumber"
-  val name: FullName = FullName("First", None ,"last")
-  val index = 0
+  val name: FullName   = FullName("First", None, "last")
+  val index            = 0
 
   override val form: Form[String] = new TelephoneNumberFormProvider()(messageKeyPrefix)
 
@@ -49,4 +49,5 @@ class TelephoneNumberViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
   }
+
 }

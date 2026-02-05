@@ -38,10 +38,11 @@ import java.time.LocalDate
 
 class AddATrusteeViewHelperSpec extends SpecBase {
 
-  private val defaultName: String = "No name added"
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
+  private val defaultName: String                        = "No name added"
+  private val ukAddress: UKAddress                       = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
   private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
-  private val date: LocalDate = LocalDate.parse("1996-02-03")
+  private val date: LocalDate                            = LocalDate.parse("1996-02-03")
+
   private val passportOrIdCardDetails: PassportOrIdCardDetails =
     PassportOrIdCardDetails("country", "number", date)
 
@@ -55,7 +56,9 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       "lead trustee type unknown" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
+          .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+          .success
+          .value
 
         val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -75,7 +78,9 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       "trustee type unknown" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
+          .set(TrusteeOrLeadTrusteePage(0), Trustee)
+          .success
+          .value
 
         val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -95,17 +100,25 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       "lead trustee org" when {
 
         val name: String = "Lead Trustee Org"
-        val typeLabel = "Lead Trustee Company"
+        val typeLabel    = "Lead Trustee Company"
 
         "in progress" when {
 
           "name added" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
-              .set(ltorg.NamePage(0), name).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.NamePage(0), name)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -125,9 +138,15 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "no name added" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), false)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -150,17 +169,39 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "UK registered with UK address and email address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), true).success.value
-              .set(ltorg.NamePage(0), name).success.value
-              .set(ltorg.UtrPage(0), "utr").success.value
-              .set(ltorg.AddressUkYesNoPage(0), true).success.value
-              .set(ltorg.UkAddressPage(0), ukAddress).success.value
-              .set(ltorg.EmailAddressYesNoPage(0), true).success.value
-              .set(ltorg.EmailAddressPage(0), "email").success.value
-              .set(ltorg.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.NamePage(0), name)
+              .success
+              .value
+              .set(ltorg.UtrPage(0), "utr")
+              .success
+              .value
+              .set(ltorg.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltorg.EmailAddressYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.EmailAddressPage(0), "email")
+              .success
+              .value
+              .set(ltorg.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -180,15 +221,33 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "Non-UK registered with non-UK address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
-              .set(ltorg.NamePage(0), name).success.value
-              .set(ltorg.AddressUkYesNoPage(0), false).success.value
-              .set(ltorg.InternationalAddressPage(0), internationalAddress).success.value
-              .set(ltorg.EmailAddressYesNoPage(0), false).success.value
-              .set(ltorg.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.NamePage(0), name)
+              .success
+              .value
+              .set(ltorg.AddressUkYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.InternationalAddressPage(0), internationalAddress)
+              .success
+              .value
+              .set(ltorg.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -211,15 +270,33 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "IsUkBusiness is true but Utr is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), true).success.value
-              .set(ltorg.NamePage(0), name).success.value
-              .set(ltorg.AddressUkYesNoPage(0), true).success.value
-              .set(ltorg.UkAddressPage(0), ukAddress).success.value
-              .set(ltorg.EmailAddressYesNoPage(0), false).success.value
-              .set(ltorg.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.NamePage(0), name)
+              .success
+              .value
+              .set(ltorg.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltorg.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -239,14 +316,30 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressUkYesNo is true but UkAddress is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
-              .set(ltorg.NamePage(0), name).success.value
-              .set(ltorg.AddressUkYesNoPage(0), true).success.value
-              .set(ltorg.EmailAddressYesNoPage(0), false).success.value
-              .set(ltorg.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.NamePage(0), name)
+              .success
+              .value
+              .set(ltorg.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -266,14 +359,30 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressUkYesNo is false but InternationalAddress is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
-              .set(ltorg.NamePage(0), name).success.value
-              .set(ltorg.AddressUkYesNoPage(0), false).success.value
-              .set(ltorg.EmailAddressYesNoPage(0), false).success.value
-              .set(ltorg.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.NamePage(0), name)
+              .success
+              .value
+              .set(ltorg.AddressUkYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -293,15 +402,33 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "EmailAddressYesNo is true but EmailAddress is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(ltorg.UkRegisteredYesNoPage(0), false).success.value
-              .set(ltorg.NamePage(0), name).success.value
-              .set(ltorg.AddressUkYesNoPage(0), true).success.value
-              .set(ltorg.UkAddressPage(0), ukAddress).success.value
-              .set(ltorg.EmailAddressYesNoPage(0), true).success.value
-              .set(ltorg.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(ltorg.UkRegisteredYesNoPage(0), false)
+              .success
+              .value
+              .set(ltorg.NamePage(0), name)
+              .success
+              .value
+              .set(ltorg.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltorg.EmailAddressYesNoPage(0), true)
+              .success
+              .value
+              .set(ltorg.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -323,14 +450,20 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       "trustee org" when {
 
         val name: String = "Trustee Org"
-        val typeLabel = "Trustee Company"
+        val typeLabel    = "Trustee Company"
 
         "in progress" in {
 
           val userAnswers = emptyUserAnswers
-            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-            .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-            .set(torg.NamePage(0), name).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee)
+            .success
+            .value
+            .set(TrusteeIndividualOrBusinessPage(0), Business)
+            .success
+            .value
+            .set(torg.NamePage(0), name)
+            .success
+            .value
 
           val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -352,12 +485,24 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "no UTR and no address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), false).success.value
-              .set(torg.AddressYesNoPage(0), false).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), false)
+              .success
+              .value
+              .set(torg.AddressYesNoPage(0), false)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -377,12 +522,24 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "UTR" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), true).success.value
-              .set(torg.UtrPage(0), "utr").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), true)
+              .success
+              .value
+              .set(torg.UtrPage(0), "utr")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -402,14 +559,30 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "UK address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), false).success.value
-              .set(torg.AddressYesNoPage(0), true).success.value
-              .set(torg.AddressUkYesNoPage(0), true).success.value
-              .set(torg.UkAddressPage(0), ukAddress).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), false)
+              .success
+              .value
+              .set(torg.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(torg.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(torg.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -429,14 +602,30 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "Non-UK address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), false).success.value
-              .set(torg.AddressYesNoPage(0), true).success.value
-              .set(torg.AddressUkYesNoPage(0), false).success.value
-              .set(torg.InternationalAddressPage(0), internationalAddress).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), false)
+              .success
+              .value
+              .set(torg.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(torg.AddressUkYesNoPage(0), false)
+              .success
+              .value
+              .set(torg.InternationalAddressPage(0), internationalAddress)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -459,11 +648,21 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "UtrYesNo is true but Utr is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), true).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), true)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -483,11 +682,21 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "UtrYesNo is false but AddressYesNo is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), false).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), false)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -507,12 +716,24 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressYesNo is true but AddressUkYesNoPage is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), false).success.value
-              .set(torg.AddressYesNoPage(0), true).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), false)
+              .success
+              .value
+              .set(torg.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -532,13 +753,27 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressUkYesNo is answered but Address is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-              .set(torg.NamePage(0), name).success.value
-              .set(torg.UtrYesNoPage(0), false).success.value
-              .set(torg.AddressYesNoPage(0), true).success.value
-              .set(torg.AddressUkYesNoPage(0), true).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Business)
+              .success
+              .value
+              .set(torg.NamePage(0), name)
+              .success
+              .value
+              .set(torg.UtrYesNoPage(0), false)
+              .success
+              .value
+              .set(torg.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(torg.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -555,20 +790,37 @@ class AddATrusteeViewHelperSpec extends SpecBase {
             )
           }
         }
-        
+
         "multiple" in {
 
           val userAnswers = emptyUserAnswers
-            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-            .set(TrusteeIndividualOrBusinessPage(0), Business).success.value
-            .set(torg.NamePage(0), name).success.value
-
-            .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
-            .set(TrusteeIndividualOrBusinessPage(1), Business).success.value
-            .set(torg.NamePage(1), name).success.value
-            .set(torg.UtrYesNoPage(1), true).success.value
-            .set(torg.UtrPage(1), "utr").success.value
-            .set(TrusteeStatus(1), Completed).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee)
+            .success
+            .value
+            .set(TrusteeIndividualOrBusinessPage(0), Business)
+            .success
+            .value
+            .set(torg.NamePage(0), name)
+            .success
+            .value
+            .set(TrusteeOrLeadTrusteePage(1), Trustee)
+            .success
+            .value
+            .set(TrusteeIndividualOrBusinessPage(1), Business)
+            .success
+            .value
+            .set(torg.NamePage(1), name)
+            .success
+            .value
+            .set(torg.UtrYesNoPage(1), true)
+            .success
+            .value
+            .set(torg.UtrPage(1), "utr")
+            .success
+            .value
+            .set(TrusteeStatus(1), Completed)
+            .success
+            .value
 
           val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -596,16 +848,22 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       "lead trustee ind" when {
 
         val name: FullName = FullName("Lead", Some("Trustee"), "Ind")
-        val typeLabel = "Lead Trustee Individual"
+        val typeLabel      = "Lead Trustee Individual"
 
         "in progress" when {
 
           "name added" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -625,8 +883,12 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "no name added" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -649,18 +911,42 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "NINO, UK address and email address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), true).success.value
-              .set(ltind.TrusteesNinoPage(0), "nino").success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.UkAddressPage(0), ukAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), true).success.value
-              .set(ltind.EmailAddressPage(0), "email").success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.TrusteesNinoPage(0), "nino")
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.EmailAddressPage(0), "email")
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -680,18 +966,42 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "Passport and UK address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), false).success.value
-              .set(ltind.TrusteeDetailsChoicePage(0), Passport).success.value
-              .set(ltind.PassportDetailsPage(0), passportOrIdCardDetails).success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.UkAddressPage(0), ukAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TrusteeDetailsChoicePage(0), Passport)
+              .success
+              .value
+              .set(ltind.PassportDetailsPage(0), passportOrIdCardDetails)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -711,18 +1021,42 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "ID Card and international address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), false).success.value
-              .set(ltind.TrusteeDetailsChoicePage(0), IdCard).success.value
-              .set(ltind.IDCardDetailsPage(0), passportOrIdCardDetails).success.value
-              .set(ltind.AddressUkYesNoPage(0), false).success.value
-              .set(ltind.InternationalAddressPage(0), internationalAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TrusteeDetailsChoicePage(0), IdCard)
+              .success
+              .value
+              .set(ltind.IDCardDetailsPage(0), passportOrIdCardDetails)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.InternationalAddressPage(0), internationalAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -745,16 +1079,36 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "NinoYesNo is true but Nino is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), true).success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.UkAddressPage(0), ukAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -774,16 +1128,36 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "NinoYesNo is false but DetailsChoice is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), false).success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.UkAddressPage(0), ukAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -803,17 +1177,39 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "DetailsChoice is Passport but PassportDetails is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), false).success.value
-              .set(ltind.TrusteeDetailsChoicePage(0), Passport).success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.UkAddressPage(0), ukAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TrusteeDetailsChoicePage(0), Passport)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -833,17 +1229,39 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "DetailsChoice is IdCard but IdCardDetails is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), false).success.value
-              .set(ltind.TrusteeDetailsChoicePage(0), IdCard).success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.UkAddressPage(0), ukAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TrusteeDetailsChoicePage(0), IdCard)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -863,15 +1281,33 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressUkYesNo is true but UkAddress is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), true).success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -891,15 +1327,33 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressUkYesNo is false but InternationalAddress is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), true).success.value
-              .set(ltind.AddressUkYesNoPage(0), false).success.value
-              .set(ltind.EmailAddressYesNoPage(0), false).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -919,18 +1373,42 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "EmailAddressYesNo is true but EmailAddress is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(ltind.TrusteesNamePage(0), name).success.value
-              .set(ltind.TrusteesDateOfBirthPage(0), date).success.value
-              .set(ltind.TrusteeNinoYesNoPage(0), false).success.value
-              .set(ltind.TrusteeDetailsChoicePage(0), Passport).success.value
-              .set(ltind.PassportDetailsPage(0), passportOrIdCardDetails).success.value
-              .set(ltind.AddressUkYesNoPage(0), true).success.value
-              .set(ltind.UkAddressPage(0), ukAddress).success.value
-              .set(ltind.EmailAddressYesNoPage(0), true).success.value
-              .set(ltind.TelephoneNumberPage(0), "tel").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), LeadTrustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(ltind.TrusteesNamePage(0), name)
+              .success
+              .value
+              .set(ltind.TrusteesDateOfBirthPage(0), date)
+              .success
+              .value
+              .set(ltind.TrusteeNinoYesNoPage(0), false)
+              .success
+              .value
+              .set(ltind.TrusteeDetailsChoicePage(0), Passport)
+              .success
+              .value
+              .set(ltind.PassportDetailsPage(0), passportOrIdCardDetails)
+              .success
+              .value
+              .set(ltind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(ltind.EmailAddressYesNoPage(0), true)
+              .success
+              .value
+              .set(ltind.TelephoneNumberPage(0), "tel")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -952,14 +1430,20 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       "trustee ind" when {
 
         val name: FullName = FullName("Normal", Some("Trustee"), "Ind")
-        val typeLabel = "Trustee Individual"
+        val typeLabel      = "Trustee Individual"
 
         "in progress" in {
 
           val userAnswers = emptyUserAnswers
-            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-            .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-            .set(tind.NamePage(0), name).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee)
+            .success
+            .value
+            .set(TrusteeIndividualOrBusinessPage(0), Individual)
+            .success
+            .value
+            .set(tind.NamePage(0), name)
+            .success
+            .value
 
           val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -981,13 +1465,27 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "No NINO and no address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), false).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), false)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1007,14 +1505,30 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "Date of birth and NINO" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), true).success.value
-              .set(tind.DateOfBirthPage(0), date).success.value
-              .set(tind.NinoYesNoPage(0), true).success.value
-              .set(tind.NinoPage(0), "nino").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.DateOfBirthPage(0), date)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.NinoPage(0), "nino")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1034,17 +1548,39 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "UK address" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(tind.AddressUkYesNoPage(0), true).success.value
-              .set(tind.UkAddressPage(0), ukAddress).success.value
-              .set(tind.PassportDetailsYesNoPage(0), false).success.value
-              .set(tind.IDCardDetailsYesNoPage(0), false).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(tind.PassportDetailsYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.IDCardDetailsYesNoPage(0), false)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1064,17 +1600,39 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "UK address and passport details" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(tind.AddressUkYesNoPage(0), true).success.value
-              .set(tind.UkAddressPage(0), ukAddress).success.value
-              .set(tind.PassportDetailsYesNoPage(0), true).success.value
-              .set(tind.PassportDetailsPage(0), passportOrIdCardDetails).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(tind.PassportDetailsYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.PassportDetailsPage(0), passportOrIdCardDetails)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1094,18 +1652,42 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "Non-UK address and ID card details" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(tind.AddressUkYesNoPage(0), false).success.value
-              .set(tind.InternationalAddressPage(0), internationalAddress).success.value
-              .set(tind.PassportDetailsYesNoPage(0), false).success.value
-              .set(tind.IDCardDetailsYesNoPage(0), true).success.value
-              .set(tind.IDCardDetailsPage(0), passportOrIdCardDetails).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.AddressUkYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.InternationalAddressPage(0), internationalAddress)
+              .success
+              .value
+              .set(tind.PassportDetailsYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.IDCardDetailsYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.IDCardDetailsPage(0), passportOrIdCardDetails)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1128,13 +1710,27 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "DateOfBirthYesNo is true but DateOfBirth is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), true).success.value
-              .set(tind.NinoYesNoPage(0), true).success.value
-              .set(tind.NinoPage(0), "nino").success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.NinoPage(0), "nino")
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1154,12 +1750,24 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "NinoYesNo is true but Nino is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), true).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), true)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1179,12 +1787,24 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "NinoYesNo is false but AddressYesNo is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1204,13 +1824,27 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressYesNo is true but AddressUkYesNo is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1230,14 +1864,30 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "AddressUkYesNo is answered but Address is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(tind.AddressUkYesNoPage(0), false).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.AddressUkYesNoPage(0), false)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1257,16 +1907,36 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "PassportDetailsYesNo is true but PassportDetails is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(tind.AddressUkYesNoPage(0), true).success.value
-              .set(tind.UkAddressPage(0), ukAddress).success.value
-              .set(tind.PassportDetailsYesNoPage(0), true).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(tind.PassportDetailsYesNoPage(0), true)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1286,16 +1956,36 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "PassportDetailsYesNo is false but IdCardDetailsYesNo is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(tind.AddressUkYesNoPage(0), true).success.value
-              .set(tind.UkAddressPage(0), ukAddress).success.value
-              .set(tind.PassportDetailsYesNoPage(0), false).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(tind.PassportDetailsYesNoPage(0), false)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1315,18 +2005,42 @@ class AddATrusteeViewHelperSpec extends SpecBase {
           "IdCardDetailsYesNo is true but IdCardDetails is missing" in {
 
             val userAnswers = emptyUserAnswers
-              .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-              .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-              .set(tind.NamePage(0), name).success.value
-              .set(tind.DateOfBirthYesNoPage(0), false).success.value
-              .set(tind.NinoYesNoPage(0), false).success.value
-              .set(tind.AddressYesNoPage(0), true).success.value
-              .set(tind.AddressUkYesNoPage(0), true).success.value
-              .set(tind.UkAddressPage(0), ukAddress).success.value
-              .set(tind.PassportDetailsYesNoPage(0), true).success.value
-              .set(tind.PassportDetailsPage(0), passportOrIdCardDetails).success.value
-              .set(tind.IDCardDetailsYesNoPage(0), true).success.value
-              .set(TrusteeStatus(0), Completed).success.value
+              .set(TrusteeOrLeadTrusteePage(0), Trustee)
+              .success
+              .value
+              .set(TrusteeIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(tind.NamePage(0), name)
+              .success
+              .value
+              .set(tind.DateOfBirthYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.NinoYesNoPage(0), false)
+              .success
+              .value
+              .set(tind.AddressYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.AddressUkYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.UkAddressPage(0), ukAddress)
+              .success
+              .value
+              .set(tind.PassportDetailsYesNoPage(0), true)
+              .success
+              .value
+              .set(tind.PassportDetailsPage(0), passportOrIdCardDetails)
+              .success
+              .value
+              .set(tind.IDCardDetailsYesNoPage(0), true)
+              .success
+              .value
+              .set(TrusteeStatus(0), Completed)
+              .success
+              .value
 
             val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1347,17 +2061,36 @@ class AddATrusteeViewHelperSpec extends SpecBase {
         "multiple" in {
 
           val userAnswers = emptyUserAnswers
-            .set(TrusteeOrLeadTrusteePage(0), Trustee).success.value
-            .set(TrusteeIndividualOrBusinessPage(0), Individual).success.value
-            .set(tind.NamePage(0), name).success.value
-
-            .set(TrusteeOrLeadTrusteePage(1), Trustee).success.value
-            .set(TrusteeIndividualOrBusinessPage(1), Individual).success.value
-            .set(tind.NamePage(1), name).success.value
-            .set(tind.DateOfBirthYesNoPage(1), false).success.value
-            .set(tind.NinoYesNoPage(1), true).success.value
-            .set(tind.NinoPage(1), "nino").success.value
-            .set(TrusteeStatus(1), Completed).success.value
+            .set(TrusteeOrLeadTrusteePage(0), Trustee)
+            .success
+            .value
+            .set(TrusteeIndividualOrBusinessPage(0), Individual)
+            .success
+            .value
+            .set(tind.NamePage(0), name)
+            .success
+            .value
+            .set(TrusteeOrLeadTrusteePage(1), Trustee)
+            .success
+            .value
+            .set(TrusteeIndividualOrBusinessPage(1), Individual)
+            .success
+            .value
+            .set(tind.NamePage(1), name)
+            .success
+            .value
+            .set(tind.DateOfBirthYesNoPage(1), false)
+            .success
+            .value
+            .set(tind.NinoYesNoPage(1), true)
+            .success
+            .value
+            .set(tind.NinoPage(1), "nino")
+            .success
+            .value
+            .set(TrusteeStatus(1), Completed)
+            .success
+            .value
 
           val helper = new AddATrusteeViewHelper(userAnswers, fakeDraftId)
 
@@ -1383,4 +2116,5 @@ class AddATrusteeViewHelperSpec extends SpecBase {
       }
     }
   }
+
 }

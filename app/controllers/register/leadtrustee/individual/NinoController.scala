@@ -41,104 +41,118 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class NinoController @Inject()(
-                                override val messagesApi: MessagesApi,
-                                implicit val frontendAppConfig: FrontendAppConfig,
-                                registrationsRepository: RegistrationsRepository,
-                                @LeadTrusteeIndividual navigator: Navigator,
-                                val standardActionSets: StandardActionSets,
-                                val nameAction: NameRequiredActionImpl,
-                                formProvider: NinoFormProvider,
-                                val controllerComponents: MessagesControllerComponents,
-                                view: NinoView,
-                                val trustsIndividualCheckService: TrustsIndividualCheckService,
-                                errorHandler: ErrorHandler,
-                                errorPageView: InternalServerErrorPageView,
-                                draftRegistrationService: DraftRegistrationService
-                              )(implicit val ec: ExecutionContext) extends FrontendBaseController with NinoControllerHelper with I18nSupport with Logging {
+class NinoController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @LeadTrusteeIndividual navigator: Navigator,
+  val standardActionSets: StandardActionSets,
+  val nameAction: NameRequiredActionImpl,
+  formProvider: NinoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: NinoView,
+  val trustsIndividualCheckService: TrustsIndividualCheckService,
+  errorHandler: ErrorHandler,
+  errorPageView: InternalServerErrorPageView,
+  draftRegistrationService: DraftRegistrationService
+)(implicit val ec: ExecutionContext)
+    extends FrontendBaseController with NinoControllerHelper with I18nSupport with Logging {
 
-  private def getForm(draftId: String, index: Int)(implicit request: TrusteeNameRequest[AnyContent]): Future[Form[String]] = {
+  private def getForm(draftId: String, index: Int)(implicit
+    request: TrusteeNameRequest[AnyContent]
+  ): Future[Form[String]] =
     getSettlorNinos(draftId).map { existingSettlorNinos =>
       formProvider("leadTrustee.individual.nino", request.userAnswers, index, Seq(existingSettlorNinos))
     }
-  }
 
-  private def getSettlorNinos(draftId: String)(implicit request: TrusteeNameRequest[AnyContent]) = {
+  private def getSettlorNinos(draftId: String)(implicit request: TrusteeNameRequest[AnyContent]) =
     draftRegistrationService.retrieveSettlorNinos(draftId)
-  }
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-      maxFailedAttemptsReached(draftId).flatMap { isMaxAttemptsReached =>
-        if (isMaxAttemptsReached) {
-          Future.successful(redirectToFailedAttemptsPage(index, draftId))
-        } else {
-          getForm(draftId, index).map { form =>
-
-            val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
-              case None => form
-              case Some(value) => form.fill(value)
-            }
-
-            Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    maxFailedAttemptsReached(draftId).flatMap { isMaxAttemptsReached =>
+      if (isMaxAttemptsReached) {
+        Future.successful(redirectToFailedAttemptsPage(index, draftId))
+      } else {
+        getForm(draftId, index).map { form =>
+          val preparedForm = request.userAnswers.get(TrusteesNinoPage(index)) match {
+            case None        => form
+            case Some(value) => form.fill(value)
           }
+
+          Ok(view(preparedForm, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
         }
       }
+    }
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-      getForm(draftId, index).flatMap { form =>
-        form.bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    getForm(draftId, index).flatMap { form =>
+      form
+        .bindFromRequest()
+        .fold(
           formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))),
-          value => {
+            Future.successful(
+              BadRequest(view(formWithErrors, draftId, index, request.trusteeName, isLeadTrusteeMatched(index)))
+            ),
+          value =>
             request.userAnswers.set(TrusteesNinoPage(index), value) match {
               case Success(updatedAnswers) =>
                 trustsIndividualCheckService.matchLeadTrustee(updatedAnswers, index).map { matchingResponse =>
                   handleMatchingResponse(updatedAnswers, index, draftId, matchingResponse)
                 }
-              case Failure(_) =>
+              case Failure(_)              =>
                 logger.error("[NinoController][onSubmit] Error while storing user answers")
                 Future.successful(InternalServerError(errorPageView()))
             }
-          }
         )
-      }
+    }
   }
 
-  private def handleMatchingResponse(updatedAnswers: UserAnswers, index: Int, draftId: String,
-                                     matchingResponse: TrustsIndividualCheckServiceResponse)
-                                    (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Result = {
+  private def handleMatchingResponse(
+    updatedAnswers: UserAnswers,
+    index: Int,
+    draftId: String,
+    matchingResponse: TrustsIndividualCheckServiceResponse
+  )(implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Result =
     updatedAnswers.set(MatchedYesNoPage(index), matchingResponse == SuccessfulMatchResponse) match {
       case Success(updatedAnswersWithMatched) =>
         registrationsRepository.set(updatedAnswersWithMatched)
         matchingResponse match {
           case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
             Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswersWithMatched))
-          case UnsuccessfulMatchResponse =>
-            removeNinoAndRedirect(updatedAnswersWithMatched, index, draftId, Redirect(routes.MatchingFailedController.onPageLoad(index, draftId)))
-          case LockedMatchResponse =>
-            removeNinoAndRedirect(updatedAnswersWithMatched, index, draftId, Redirect(routes.MatchingLockedController.onPageLoad(index, draftId)))
-          case _ =>
+          case UnsuccessfulMatchResponse                              =>
+            removeNinoAndRedirect(
+              updatedAnswersWithMatched,
+              index,
+              draftId,
+              Redirect(routes.MatchingFailedController.onPageLoad(index, draftId))
+            )
+          case LockedMatchResponse                                    =>
+            removeNinoAndRedirect(
+              updatedAnswersWithMatched,
+              index,
+              draftId,
+              Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
+            )
+          case _                                                      =>
             InternalServerError(errorPageView())
         }
-      case Failure(_) =>
+      case Failure(_)                         =>
         logger.error("[NinoController][handleMatching] Error while storing user answers")
         InternalServerError(errorPageView())
     }
-  }
 
-  private def removeNinoAndRedirect(updatedAnswers: UserAnswers, index: Int, draftId: String, redirect: Result)
-                                   (implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Result = {
+  private def removeNinoAndRedirect(updatedAnswers: UserAnswers, index: Int, draftId: String, redirect: Result)(implicit
+    hc: HeaderCarrier,
+    request: TrusteeNameRequest[_]
+  ): Result =
     updatedAnswers.remove(TrusteesNinoPage(index)) match {
       case Success(updatedAnswersWithMatched) =>
         registrationsRepository.set(updatedAnswersWithMatched)
         redirect
-      case Failure(_) => {
+      case Failure(_)                         =>
         logger.error("[NinoController][removeNinoAndRedirect] Error while removing NI from user answers")
         InternalServerError(errorPageView())
-      }
     }
-  }
+
 }

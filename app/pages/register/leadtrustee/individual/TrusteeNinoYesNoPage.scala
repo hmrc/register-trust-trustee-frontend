@@ -23,23 +23,25 @@ import sections.Trustees
 
 import scala.util.Try
 
-final case class TrusteeNinoYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class TrusteeNinoYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = Trustees.path \ index \ toString
 
   override def toString: String = "ninoYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) =>
-        userAnswers.remove(TrusteeDetailsChoicePage(index))
+      case Some(true)  =>
+        userAnswers
+          .remove(TrusteeDetailsChoicePage(index))
           .flatMap(_.remove(PassportDetailsPage(index)))
           .flatMap(_.remove(IDCardDetailsPage(index)))
       case Some(false) =>
-        userAnswers.remove(TrusteesNinoPage(index))
+        userAnswers
+          .remove(TrusteesNinoPage(index))
           .flatMap(_.remove(MatchedYesNoPage(index)))
-      case _ =>
+      case _           =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

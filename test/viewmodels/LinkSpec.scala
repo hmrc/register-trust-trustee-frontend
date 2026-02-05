@@ -39,4 +39,5 @@ class LinkSpec extends SpecBase {
       }
     }
   }
+
 }

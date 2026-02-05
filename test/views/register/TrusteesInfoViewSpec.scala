@@ -31,7 +31,10 @@ class TrusteesInfoViewSpec extends ViewBehaviours {
 
     behave like pageWithTitleAndSectionSubheading(applyView, "trusteesInfo.5mld")
 
-    behave like pageWithGuidance(applyView, "trusteesInfo.5mld", "subheading1",
+    behave like pageWithGuidance(
+      applyView,
+      "trusteesInfo.5mld",
+      "subheading1",
       "paragraph1",
       "paragraph2",
       "subheading2",
@@ -65,7 +68,8 @@ class TrusteesInfoViewSpec extends ViewBehaviours {
       "details.subheading1",
       "details.paragraph1",
       "details.subheading2",
-      "details.paragraph2")
+      "details.paragraph2"
+    )
 
     behave like pageWithBackLink(applyView)
 
@@ -73,4 +77,5 @@ class TrusteesInfoViewSpec extends ViewBehaviours {
 
     behave like pageWithASubmitButton(applyView)
   }
+
 }

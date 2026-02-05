@@ -27,4 +27,5 @@ class IdMatchErrorResponseSpec extends AnyWordSpec with Matchers {
       IdMatchErrorResponse(input).toString mustEqual input.mkString(", ")
     }
   }
+
 }

@@ -51,4 +51,5 @@ class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

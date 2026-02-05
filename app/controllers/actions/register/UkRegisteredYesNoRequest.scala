@@ -21,7 +21,7 @@ import models.requests.RegistrationDataRequest
 import play.api.mvc.WrappedRequest
 
 case class UkRegisteredYesNoRequest[T](request: RegistrationDataRequest[T], isUkRegistered: Boolean)
-  extends WrappedRequest[T](request){
+    extends WrappedRequest[T](request) {
 
-  val userAnswers:UserAnswers = request.userAnswers
+  val userAnswers: UserAnswers = request.userAnswers
 }

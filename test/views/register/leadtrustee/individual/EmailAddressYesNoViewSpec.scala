@@ -24,9 +24,9 @@ import views.html.register.leadtrustee.individual.EmailAddressYesNoView
 
 class EmailAddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "leadTrustee.individual.emailAddressYesNo"
+  val prefix   = "leadTrustee.individual.emailAddressYesNo"
   val fakeName = "Test"
-  val index = 0
+  val index    = 0
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
@@ -47,4 +47,5 @@ class EmailAddressYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

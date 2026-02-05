@@ -31,16 +31,18 @@ import views.html.register.leadtrustee.organisation.EmailAddressYesNoView
 
 class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("leadTrustee.organisation.emailYesNo")
 
-  val index = 0
+  val index    = 0
   val fakeName = "Test"
 
   lazy val emailAddressYesNoRoute: String = routes.EmailAddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(NamePage(index), fakeName).success.value
+    .set(NamePage(index), fakeName)
+    .success
+    .value
 
   "EmailAddressYesNo Controller" must {
 
@@ -65,7 +67,9 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(EmailAddressYesNoPage(index), true).success.value
+        .set(EmailAddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,12 +93,12 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[LeadTrusteeOrganisation]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, emailAddressYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -157,4 +161,5 @@ class EmailAddressYesNoControllerSpec extends SpecBase with IndexValidation {
       application.stop()
     }
   }
+
 }

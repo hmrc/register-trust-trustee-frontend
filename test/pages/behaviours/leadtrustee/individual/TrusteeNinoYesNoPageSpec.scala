@@ -28,6 +28,7 @@ import java.time.LocalDate
 class TrusteeNinoYesNoPageSpec extends PageBehaviours {
 
   private val index: Int = 0
+
   private val passportOrIdCardDetails: PassportOrIdCardDetails =
     PassportOrIdCardDetails("FR", "num", LocalDate.parse("2010-05-04"))
 
@@ -41,41 +42,49 @@ class TrusteeNinoYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(TrusteeNinoYesNoPage(index), false)
+              .success
+              .value
+              .set(TrusteeDetailsChoicePage(index), Passport)
+              .success
+              .value
+              .set(PassportDetailsPage(index), passportOrIdCardDetails)
+              .success
+              .value
+              .set(IDCardDetailsPage(index), passportOrIdCardDetails)
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(TrusteeNinoYesNoPage(index), false).success.value
-                .set(TrusteeDetailsChoicePage(index), Passport).success.value
-                .set(PassportDetailsPage(index), passportOrIdCardDetails).success.value
-                .set(IDCardDetailsPage(index), passportOrIdCardDetails).success.value
+          val result = initial.set(TrusteeNinoYesNoPage(index), true).success.value
 
-            val result = initial.set(TrusteeNinoYesNoPage(index), true).success.value
-
-            result.get(TrusteeDetailsChoicePage(index)) mustNot be(defined)
-            result.get(PassportDetailsPage(index)) mustNot be(defined)
-            result.get(IDCardDetailsPage(index)) mustNot be(defined)
+          result.get(TrusteeDetailsChoicePage(index)) mustNot be(defined)
+          result.get(PassportDetailsPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsPage(index)) mustNot be(defined)
         }
-      }
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val initial: UserAnswers =
+            userAnswers
+              .set(TrusteeNinoYesNoPage(index), true)
+              .success
+              .value
+              .set(TrusteesNinoPage(index), "nino")
+              .success
+              .value
+              .set(MatchedYesNoPage(index), true)
+              .success
+              .value
 
-            val initial: UserAnswers =
-              userAnswers
-                .set(TrusteeNinoYesNoPage(index), true).success.value
-                .set(TrusteesNinoPage(index), "nino").success.value
-                .set(MatchedYesNoPage(index), true).success.value
+          val result = initial.set(TrusteeNinoYesNoPage(index), false).success.value
 
-            val result = initial.set(TrusteeNinoYesNoPage(index), false).success.value
-
-            result.get(TrusteesNinoPage(index)) mustNot be(defined)
-            result.get(MatchedYesNoPage(index)) mustNot be(defined)
+          result.get(TrusteesNinoPage(index)) mustNot be(defined)
+          result.get(MatchedYesNoPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 

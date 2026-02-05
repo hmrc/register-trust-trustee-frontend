@@ -28,14 +28,13 @@ object DetailsChoice extends Enumerable.Implicits {
   case object Passport extends WithName("passport") with DetailsChoice
 
   val values: List[DetailsChoice] = List(
-    Passport, IdCard
+    Passport,
+    IdCard
   )
 
-  def options: List[RadioOption] = values.map {
-    value => {
-      val prefix: String =  "leadTrustee.individual.5mld.trusteeDetailsChoice"
-      RadioOption(prefix, value.toString)
-    }
+  def options: List[RadioOption] = values.map { value =>
+    val prefix: String = "leadTrustee.individual.5mld.trusteeDetailsChoice"
+    RadioOption(prefix, value.toString)
   }
 
   implicit val enumerable: Enumerable[DetailsChoice] =

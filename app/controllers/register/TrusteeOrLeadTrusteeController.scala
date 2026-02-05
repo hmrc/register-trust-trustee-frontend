@@ -17,7 +17,9 @@
 package controllers.register
 
 import config.FrontendAppConfig
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import controllers.filters.IndexActionFilterProvider
 import forms.TrusteeOrLeadTrusteeFormProvider
 
@@ -39,89 +41,86 @@ import views.html.register.TrusteeOrLeadTrusteeView
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class TrusteeOrLeadTrusteeController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                implicit val frontendAppConfig: FrontendAppConfig,
-                                                registrationsRepository: RegistrationsRepository,
-                                                navigator: Navigator,
-                                                identify: RegistrationIdentifierAction,
-                                                getData: DraftIdRetrievalActionProvider,
-                                                requireData: RegistrationDataRequiredAction,
-                                                validateIndex : IndexActionFilterProvider,
-                                                formProvider: TrusteeOrLeadTrusteeFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: TrusteeOrLeadTrusteeView,
-                                                errorPageView: InternalServerErrorPageView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class TrusteeOrLeadTrusteeController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  navigator: Navigator,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  validateIndex: IndexActionFilterProvider,
+  formProvider: TrusteeOrLeadTrusteeFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: TrusteeOrLeadTrusteeView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider()
 
-  private def actions(index : Int, draftId: String) =
-    identify andThen
+  private def actions(index: Int, draftId: String) =
+    identify           andThen
       getData(draftId) andThen
-      requireData andThen
+      requireData      andThen
       validateIndex(index, Trustees)
 
-  def onPageLoad(index : Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      def renderView = {
-        val preparedForm = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Future.successful(Ok(view(preparedForm, draftId, index)))
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    def renderView = {
+      val preparedForm = request.userAnswers.get(TrusteeOrLeadTrusteePage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
       }
 
-      def leadTrustee : Option[(TrusteeViewModel, Int)] = {
-        val trustees = request.userAnswers.get(Trustees).getOrElse(Nil).zipWithIndex
+      Future.successful(Ok(view(preparedForm, draftId, index)))
+    }
 
-        trustees.find{ case (trustee, _) => trustee.isLead}
-      }
+    def leadTrustee: Option[(TrusteeViewModel, Int)] = {
+      val trustees = request.userAnswers.get(Trustees).getOrElse(Nil).zipWithIndex
 
-      leadTrustee match {
-        case Some((_, i)) =>
-          def currentIndexIsNotTheLeadTrustee = i != index
+      trustees.find { case (trustee, _) => trustee.isLead }
+    }
 
-          // A lead trustee has already been added, if the current index is not the lead trustee
-          // answer the question on behalf of the user and redirect to next page
-          if (currentIndexIsNotTheLeadTrustee) {
-            request.userAnswers.set(TrusteeOrLeadTrusteePage(index), Trustee) match {
-              case Success(updatedAnswers) =>
-                registrationsRepository.set(updatedAnswers).map{ _ =>
-                  Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
-                }
-              case Failure(_) =>
-                logger.error("[TrusteeOrLeadTrusteeController][onPageLoad] Error while storing user answers")
-                Future.successful(InternalServerError(errorPageView()))
-            }
-          } else {
-            renderView
-          }
-        case None =>
-          renderView
-      }
-  }
+    leadTrustee match {
+      case Some((_, i)) =>
+        def currentIndexIsNotTheLeadTrustee = i != index
 
-  def onSubmit(index : Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
-
-        value => {
-          request.userAnswers.set(TrusteeOrLeadTrusteePage(index), value) match {
+        // A lead trustee has already been added, if the current index is not the lead trustee
+        // answer the question on behalf of the user and redirect to next page
+        if (currentIndexIsNotTheLeadTrustee) {
+          request.userAnswers.set(TrusteeOrLeadTrusteePage(index), Trustee) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
+              logger.error("[TrusteeOrLeadTrusteeController][onPageLoad] Error while storing user answers")
+              Future.successful(InternalServerError(errorPageView()))
+          }
+        } else {
+          renderView
+        }
+      case None         =>
+        renderView
+    }
+  }
+
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+        value =>
+          request.userAnswers.set(TrusteeOrLeadTrusteePage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(TrusteeOrLeadTrusteePage(index), draftId, updatedAnswers))
+              }
+            case Failure(_)              =>
               logger.error("[TrusteeOrLeadTrusteeController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }

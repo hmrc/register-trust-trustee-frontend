@@ -25,10 +25,10 @@ import views.html.register.TrusteeIndividualOrBusinessView
 
 class TrusteeIndividualOrBusinessViewSpec extends ViewBehaviours {
 
-  private val messageKeyPrefix: String = "leadTrustee.individualOrBusiness"
+  private val messageKeyPrefix: String         = "leadTrustee.individualOrBusiness"
   private val form: Form[IndividualOrBusiness] = new IndividualOrBusinessFormProvider()(messageKeyPrefix)
-  private val index = 0
-  private val heading = messages(s"$messageKeyPrefix.heading")
+  private val index                            = 0
+  private val heading                          = messages(s"$messageKeyPrefix.heading")
 
   "TrusteeIndividualOrBusinessView" when {
 
@@ -64,4 +64,5 @@ class TrusteeIndividualOrBusinessViewSpec extends ViewBehaviours {
       behave like pageWithDisabledInput(applyView(form))
     }
   }
+
 }

@@ -26,21 +26,21 @@ import sections.Trustee
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrusteeRequiredAction(index: Int, draftId: String)(implicit val executionContext: ExecutionContext)
-  extends ActionRefiner[RegistrationDataRequest, RemoveIndexRequest] with Logging {
+    extends ActionRefiner[RegistrationDataRequest, RemoveIndexRequest] with Logging {
 
-  override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, RemoveIndexRequest[A]]] = {
+  override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, RemoveIndexRequest[A]]] =
     Future.successful(
       request.userAnswers.get(Trustee(index)) match {
         case Some(trustee) =>
           Right(RemoveIndexRequest(request, trustee))
-        case _ =>
+        case _             =>
           logger.info(s"Unable to remove trustee. Did not find trustee at index $index")
           Left(Redirect(controllers.register.routes.AddATrusteeController.onPageLoad(draftId)))
       }
     )
-  }
+
 }
 
-class TrusteeRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext) {
+class TrusteeRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext) {
   def apply(index: Int, draftId: String): TrusteeRequiredAction = new TrusteeRequiredAction(index, draftId)
 }

@@ -29,7 +29,7 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
   private val messageKeyPrefix = "leadTrustee.individual.trusteeDetailsChoice"
 
   private val name: FullName = FullName("First", None, "last")
-  val index = 0
+  val index                  = 0
 
   lazy val form: Form[DetailsChoice] = injector.instanceOf[DetailsChoiceFormProvider].withPrefix(messageKeyPrefix)
 
@@ -58,4 +58,5 @@ class TrusteeDetailsChoiceViewSpec extends OptionsViewBehaviours {
       assertContainsText(doc, additionalContent)
     }
   }
+
 }

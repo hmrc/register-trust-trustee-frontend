@@ -29,65 +29,71 @@ import play.api.mvc.Call
 class LeadTrusteeIndividualNavigator extends Navigator {
 
   override def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case TrusteesNamePage(index) => _ => rts.DateOfBirthController.onPageLoad(index, draftId)
-    case TrusteesDateOfBirthPage(index) => _ => mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId)
+    case TrusteesNamePage(index)         => _ => rts.DateOfBirthController.onPageLoad(index, draftId)
+    case TrusteesDateOfBirthPage(index)  =>
+      _ => mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId)
     case CountryOfNationalityPage(index) => _ => rts.NinoYesNoController.onPageLoad(index, draftId)
-    case TrusteesNinoPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
-    case IDCardDetailsPage(index) => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    case TrusteesNinoPage(index)         => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index)   => _ => rts.InternationalAddressController.onPageLoad(index, draftId)
+    case PassportDetailsPage(index)      => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
+    case IDCardDetailsPage(index)        => _ => mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId)
     case InternationalAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
-    case UkAddressPage(index) => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
-    case EmailAddressPage(index) => _ => rts.TelephoneNumberController.onPageLoad(index, draftId)
-    case TelephoneNumberPage(index) => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
+    case UkAddressPage(index)            => _ => rts.EmailAddressYesNoController.onPageLoad(index, draftId)
+    case EmailAddressPage(index)         => _ => rts.TelephoneNumberController.onPageLoad(index, draftId)
+    case TelephoneNumberPage(index)      => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
   }
 
-  override def conditionalNavigation(draftId: String)(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case page @ TrusteeNinoYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.NinoController.onPageLoad(index, draftId),
-        noCall = rts.TrusteeDetailsChoiceController.onPageLoad(index, draftId)
-      )
-    case page @ AddressUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
-        noCall = rts.InternationalAddressController.onPageLoad(index, draftId)
-      )
-    case TrusteeDetailsChoicePage(index) => ua =>
-      detailsRoutes(ua, index, draftId)
-    case page @ EmailAddressYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.EmailAddressController.onPageLoad(index, draftId),
-        noCall = rts.TelephoneNumberController.onPageLoad(index, draftId)
-      )
-    case page @ CountryOfNationalityInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.NinoYesNoController.onPageLoad(index, draftId),
-        noCall = mld5Rts.CountryOfNationalityController.onPageLoad(index, draftId)
-      )
-    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
-        noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
-      )
+  override def conditionalNavigation(
+    draftId: String
+  )(implicit config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case page @ TrusteeNinoYesNoPage(index)                 =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.NinoController.onPageLoad(index, draftId),
+          noCall = rts.TrusteeDetailsChoiceController.onPageLoad(index, draftId)
+        )
+    case page @ AddressUkYesNoPage(index)                   =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+          noCall = rts.InternationalAddressController.onPageLoad(index, draftId)
+        )
+    case TrusteeDetailsChoicePage(index)                    => ua => detailsRoutes(ua, index, draftId)
+    case page @ EmailAddressYesNoPage(index)                =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.EmailAddressController.onPageLoad(index, draftId),
+          noCall = rts.TelephoneNumberController.onPageLoad(index, draftId)
+        )
+    case page @ CountryOfNationalityInTheUkYesNoPage(index) =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.NinoYesNoController.onPageLoad(index, draftId),
+          noCall = mld5Rts.CountryOfNationalityController.onPageLoad(index, draftId)
+        )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index)   =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+          noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
+        )
   }
 
-  private def detailsRoutes(answers: ReadableUserAnswers, index: Int, draftId: String): Call = {
+  private def detailsRoutes(answers: ReadableUserAnswers, index: Int, draftId: String): Call =
     answers.get(TrusteeDetailsChoicePage(index)) match {
-      case Some(IdCard) => rts.IDCardDetailsController.onPageLoad(index, draftId)
+      case Some(IdCard)   => rts.IDCardDetailsController.onPageLoad(index, draftId)
       case Some(Passport) => rts.PassportDetailsController.onPageLoad(index, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case _              => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
 
 }

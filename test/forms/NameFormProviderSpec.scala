@@ -35,24 +35,22 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
    * This method produces a Gen[String] that conforms to the nameRegex,
    * but is at least one character over the max allowed length
    */
-  private def validStringButOverMaxLength(maxLength: Int): Gen[String] = {
+  private def validStringButOverMaxLength(maxLength: Int): Gen[String] =
     for {
       firstChar <- Gen.alphaUpperChar
-      length <- Gen.choose(maxLength + 1, maxLength * 2)
-      chars <- Gen.listOfN(length, Gen.alphaChar)
+      length    <- Gen.choose(maxLength + 1, maxLength * 2)
+      chars     <- Gen.listOfN(length, Gen.alphaChar)
     } yield (firstChar :: chars).mkString
-  }
-
 
   for (prefix <- messagePrefix) {
     val form = new NameFormProvider()(prefix)
     s".firstName with $prefix" must {
 
-      val fieldName = "firstName"
+      val fieldName   = "firstName"
       val requiredKey = s"$prefix.error.firstName.required"
-      val lengthKey = s"$prefix.error.firstName.length"
-      val capitalKey = s"$prefix.error.firstName.capitalLetter"
-      val maxLength = 35
+      val lengthKey   = s"$prefix.error.firstName.length"
+      val capitalKey  = s"$prefix.error.firstName.capitalLetter"
+      val maxLength   = 35
 
       behave like fieldThatBindsValidData(
         form,
@@ -89,10 +87,10 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
 
     s".middleName with $prefix" must {
 
-      val fieldName = "middleName"
-      val lengthKey = s"$prefix.error.middleName.length"
+      val fieldName  = "middleName"
+      val lengthKey  = s"$prefix.error.middleName.length"
       val capitalKey = s"$prefix.error.middleName.capitalLetter"
-      val maxLength = 35
+      val maxLength  = 35
 
       behave like fieldWithMaxLength(
         form,
@@ -132,11 +130,11 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
 
     s".lastName with $prefix" must {
 
-      val fieldName = "lastName"
+      val fieldName   = "lastName"
       val requiredKey = s"$prefix.error.lastName.required"
-      val lengthKey = s"$prefix.error.lastName.length"
-      val capitalKey = s"$prefix.error.lastName.capitalLetter"
-      val maxLength = 35
+      val lengthKey   = s"$prefix.error.lastName.length"
+      val capitalKey  = s"$prefix.error.lastName.capitalLetter"
+      val maxLength   = 35
 
       behave like fieldThatBindsValidData(
         form,

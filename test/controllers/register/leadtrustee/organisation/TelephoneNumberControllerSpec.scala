@@ -30,15 +30,17 @@ import views.html.register.leadtrustee.organisation.TelephoneNumberView
 
 class TelephoneNumberControllerSpec extends SpecBase {
 
-  val formProvider = new TelephoneNumberFormProvider()
+  val formProvider       = new TelephoneNumberFormProvider()
   val form: Form[String] = formProvider("leadTrustee.organisation.telephoneNumber")
-  val name = "Name"
+  val name               = "Name"
 
-  val index = 0
+  val index       = 0
   val validAnswer = "1234567890"
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(NamePage(index), name).success.value
+    .set(NamePage(index), name)
+    .success
+    .value
 
   lazy val telephoneNumberRoute: String = routes.TelephoneNumberController.onPageLoad(index, fakeDraftId).url
 
@@ -65,7 +67,9 @@ class TelephoneNumberControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(TelephoneNumberPage(index), validAnswer).success.value
+        .set(TelephoneNumberPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -158,4 +162,5 @@ class TelephoneNumberControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

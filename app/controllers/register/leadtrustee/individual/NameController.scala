@@ -36,17 +36,18 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class NameController @Inject()(
-                                override val messagesApi: MessagesApi,
-                                implicit val frontendAppConfig: FrontendAppConfig,
-                                registrationsRepository: RegistrationsRepository,
-                                @LeadTrusteeIndividual navigator: Navigator,
-                                standardActionSets: StandardActionSets,
-                                formProvider: NameFormProvider,
-                                val controllerComponents: MessagesControllerComponents,
-                                view: NameView,
-                                errorHandler: ErrorHandler
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class NameController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @LeadTrusteeIndividual navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  formProvider: NameFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: NameView,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider("leadTrustee.individual.name")
 
@@ -56,36 +57,33 @@ class NameController @Inject()(
   private def isLeadTrusteeMatched(index: Int)(implicit request: RegistrationDataRequest[_]) =
     request.userAnswers.isLeadTrusteeMatched(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(TrusteesNamePage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TrusteesNamePage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index, isLeadTrusteeMatched(index)))
+    Ok(view(preparedForm, draftId, index, isLeadTrusteeMatched(index)))
 
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, isLeadTrusteeMatched(index)))),
-
-        value => {
+        value =>
           request.userAnswers.set(TrusteesNamePage(index), value) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(TrusteesNamePage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[NameController][onSubmit] Error while storing user answers")
               errorHandler.internalServerErrorTemplate.flatMap(html => Future.successful(InternalServerError(html)))
           }
-        }
       )
   }
+
 }

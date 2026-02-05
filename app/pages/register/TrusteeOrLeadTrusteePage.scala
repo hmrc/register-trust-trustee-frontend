@@ -32,7 +32,7 @@ final case class TrusteeOrLeadTrusteePage(index: Int) extends QuestionPage[Trust
 
   override def toString: String = "trusteeOrLeadTrustee"
 
-  override def cleanup(value: Option[TrusteeOrLeadTrustee], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[TrusteeOrLeadTrustee], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(LeadTrustee) =>
         userAnswers
@@ -51,5 +51,5 @@ final case class TrusteeOrLeadTrusteePage(index: Int) extends QuestionPage[Trust
       case _ =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

@@ -24,7 +24,7 @@ import views.html.register.trustees.individual.CheckDetailsView
 class CheckDetailsViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "trustee.individual.checkDetails"
-  val index = 0
+  val index            = 0
 
   "CheckDetails view" must {
 
@@ -39,4 +39,5 @@ class CheckDetailsViewSpec extends ViewBehaviours {
 
     behave like pageWithASubmitButton(applyView())
   }
+
 }

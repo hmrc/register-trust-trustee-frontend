@@ -26,8 +26,8 @@ import views.html.register.trustees.organisation.mld5.CountryOfResidenceView
 
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
-  val prefix = "trustee.organisation.5mld.countryOfResidence"
-  val index = 0
+  val prefix      = "trustee.organisation.5mld.countryOfResidence"
+  val index       = 0
   val trusteeName = "Test"
 
   val form: Form[String] = new CountryFormProvider().withPrefix(prefix)
@@ -51,4 +51,5 @@ class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

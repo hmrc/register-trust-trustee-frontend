@@ -37,11 +37,15 @@ import scala.concurrent.Future
 
 class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
 
-  private val index: Int = 0
+  private val index: Int   = 0
   private val name: String = "Name"
 
   class Harness(index: Int) extends TrusteeRequiredAction(index, fakeDraftId) {
-    def callRefine[A](request: RegistrationDataRequest[A]): Future[Either[Result, RemoveIndexRequest[A]]] = refine(request)
+
+    def callRefine[A](request: RegistrationDataRequest[A]): Future[Either[Result, RemoveIndexRequest[A]]] = refine(
+      request
+    )
+
   }
 
   private def request(userAnswers: UserAnswers) = RegistrationDataRequest(
@@ -65,7 +69,9 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
         whenReady(futureResult) { r =>
           val result = Future.successful(r.left.value)
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.register.routes.AddATrusteeController.onPageLoad(fakeDraftId).url
+          redirectLocation(result).value mustEqual controllers.register.routes.AddATrusteeController
+            .onPageLoad(fakeDraftId)
+            .url
         }
       }
     }
@@ -77,12 +83,24 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
         val action = new Harness(index)
 
         val userAnswers = emptyUserAnswers
-          .set(TrusteeOrLeadTrusteePage(index), Trustee).success.value
-          .set(TrusteeIndividualOrBusinessPage(index), Business).success.value
-          .set(NamePage(index), name).success.value
-          .set(UtrYesNoPage(index), true).success.value
-          .set(UtrPage(index), "utr").success.value
-          .set(TrusteeStatus(index), Completed).success.value
+          .set(TrusteeOrLeadTrusteePage(index), Trustee)
+          .success
+          .value
+          .set(TrusteeIndividualOrBusinessPage(index), Business)
+          .success
+          .value
+          .set(NamePage(index), name)
+          .success
+          .value
+          .set(UtrYesNoPage(index), true)
+          .success
+          .value
+          .set(UtrPage(index), "utr")
+          .success
+          .value
+          .set(TrusteeStatus(index), Completed)
+          .success
+          .value
 
         val futureResult = action.callRefine(request(userAnswers))
 
@@ -97,4 +115,5 @@ class TrusteeRequiredActionSpec extends SpecBase with ScalaFutures {
       }
     }
   }
+
 }

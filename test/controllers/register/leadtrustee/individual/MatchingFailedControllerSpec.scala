@@ -64,7 +64,12 @@ class MatchingFailedControllerSpec extends SpecBase {
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(fakeDraftId, index, numberOfFailedAttempts, frontendAppConfig.maxMatchingAttempts - numberOfFailedAttempts)(request, messages).toString
+              view(
+                fakeDraftId,
+                index,
+                numberOfFailedAttempts,
+                frontendAppConfig.maxMatchingAttempts - numberOfFailedAttempts
+              )(request, messages).toString
 
             application.stop()
           }
@@ -169,4 +174,5 @@ class MatchingFailedControllerSpec extends SpecBase {
       }
     }
   }
+
 }

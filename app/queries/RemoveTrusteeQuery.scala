@@ -19,7 +19,7 @@ package queries
 import play.api.libs.json.JsPath
 import sections.Trustees
 
-final case class RemoveTrusteeQuery(index : Int) extends Settable[Boolean] {
+final case class RemoveTrusteeQuery(index: Int) extends Settable[Boolean] {
 
   override def path: JsPath = JsPath \ Trustees \ index
 }

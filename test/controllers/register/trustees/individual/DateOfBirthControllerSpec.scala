@@ -35,12 +35,12 @@ import java.time.{LocalDate, ZoneOffset}
 class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
 
   private val trusteeMessagePrefix = "trustee.individual.dateOfBirth"
-  private val formProvider = new DateFormProvider(frontendAppConfig)
-  private val form = formProvider.withConfig(trusteeMessagePrefix)
+  private val formProvider         = new DateFormProvider(frontendAppConfig)
+  private val form                 = formProvider.withConfig(trusteeMessagePrefix)
 
   private val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
-  private val index = 0
+  private val index       = 0
   private val trusteeName = "FirstName LastName"
 
   private lazy val trusteesDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
@@ -50,7 +50,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -71,8 +73,12 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
-        .set(DateOfBirthPage(index), validAnswer).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
+        .set(DateOfBirthPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +99,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -101,7 +109,8 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
             bind[Navigator]
               .qualifiedWith(classOf[TrusteeIndividual])
               .toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trusteesDateOfBirthRoute)
@@ -123,7 +132,9 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("FirstName", None, "LastName")).success.value
+        .set(NamePage(index), FullName("FirstName", None, "LastName"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -182,14 +193,14 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
 
     "for a GET" must {
 
-      def getForIndex(index: Int) : FakeRequest[AnyContentAsEmpty.type] = {
+      def getForIndex(index: Int): FakeRequest[AnyContentAsEmpty.type] = {
         val route = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
         FakeRequest(GET, route)
       }
 
       validateIndex(
-        Gen.const(LocalDate.of(2010,10,10)),
+        Gen.const(LocalDate.of(2010, 10, 10)),
         DateOfBirthPage.apply,
         getForIndex
       )
@@ -211,11 +222,12 @@ class DateOfBirthControllerSpec extends SpecBase with IndexValidation {
       }
 
       validateIndex(
-        Gen.const(LocalDate.of(2010,10,10)),
+        Gen.const(LocalDate.of(2010, 10, 10)),
         DateOfBirthPage.apply,
         postForIndex
       )
     }
 
   }
+
 }

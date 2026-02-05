@@ -49,7 +49,7 @@ trait NinoControllerHelper {
       attempts >= frontendAppConfig.maxMatchingAttempts
     }
 
-  protected def redirectToFailedAttemptsPage(index: Int, draftId: String): Result = {
+  protected def redirectToFailedAttemptsPage(index: Int, draftId: String): Result =
     Redirect(controllers.register.leadtrustee.individual.routes.MatchingLockedController.onPageLoad(index, draftId))
-  }
+
 }

@@ -37,53 +37,51 @@ import views.html.register.leadtrustee.individual.TelephoneNumberView
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class TelephoneNumberController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           implicit val frontendAppConfig: FrontendAppConfig,
-                                           registrationsRepository: RegistrationsRepository,
-                                           @LeadTrusteeIndividual navigator: Navigator,
-                                           standardActionSets: StandardActionSets,
-                                           nameAction: NameRequiredActionImpl,
-                                           formProvider: TelephoneNumberFormProvider,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: TelephoneNumberView,
-                                           errorPageView: InternalServerErrorPageView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class TelephoneNumberController @Inject() (
+  override val messagesApi: MessagesApi,
+  implicit val frontendAppConfig: FrontendAppConfig,
+  registrationsRepository: RegistrationsRepository,
+  @LeadTrusteeIndividual navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredActionImpl,
+  formProvider: TelephoneNumberFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: TelephoneNumberView,
+  errorPageView: InternalServerErrorPageView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form = formProvider("leadTrustee.individual.telephoneNumber")
 
   private def actions(index: Int, draftId: String) =
     standardActionSets.indexValidated(draftId, index) andThen nameAction(index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(TelephoneNumberPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TelephoneNumberPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index, request.trusteeName))
+    Ok(view(preparedForm, draftId, index, request.trusteeName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.trusteeName))),
-
-        value => {
+        value =>
           request.userAnswers.set(TelephoneNumberPage(index), value) match {
             case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map{ _ =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(TelephoneNumberPage(index), draftId, updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[TelephoneNumberController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(errorPageView()))
           }
-        }
       )
   }
+
 }

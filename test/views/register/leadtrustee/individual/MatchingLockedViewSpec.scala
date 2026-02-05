@@ -25,13 +25,19 @@ import views.html.register.leadtrustee.individual.MatchingLockedView
 
 class MatchingLockedViewSpec extends LinkListViewBehaviours {
 
-  val prefix = "leadTrustee.individual.matching.locked"
-  val index = 0
+  val prefix                   = "leadTrustee.individual.matching.locked"
+  val index                    = 0
   val view: MatchingLockedView = viewFor[MatchingLockedView](Some(emptyUserAnswers))
 
   val links: List[Link] = List(
-    Link(messages("leadTrustee.individual.matching.locked.link1"), routes.MatchingLockedController.continueWithPassport(index, fakeDraftId).url),
-    Link(messages("leadTrustee.individual.matching.locked.link2"), routes.MatchingLockedController.continueWithIdCard(index, fakeDraftId).url)
+    Link(
+      messages("leadTrustee.individual.matching.locked.link1"),
+      routes.MatchingLockedController.continueWithPassport(index, fakeDraftId).url
+    ),
+    Link(
+      messages("leadTrustee.individual.matching.locked.link2"),
+      routes.MatchingLockedController.continueWithIdCard(index, fakeDraftId).url
+    )
   )
 
   val name: FullName = FullName("Joe", None, "Bloggs")
@@ -45,9 +51,18 @@ class MatchingLockedViewSpec extends LinkListViewBehaviours {
 
     behave like pageWithTitleAndCaption(applyView, prefix, captionParam = "", args = name.toString)
 
-    behave like pageWithGuidance(applyView, prefix, "paragraph1", "subheading1", "paragraph3", "paragraph4", "paragraph5")
+    behave like pageWithGuidance(
+      applyView,
+      prefix,
+      "paragraph1",
+      "subheading1",
+      "paragraph3",
+      "paragraph4",
+      "paragraph5"
+    )
 
     behave like linkList(applyView, links)
 
   }
+
 }

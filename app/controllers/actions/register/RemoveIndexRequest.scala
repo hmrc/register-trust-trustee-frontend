@@ -21,6 +21,7 @@ import models.requests.RegistrationDataRequest
 import play.api.mvc.WrappedRequest
 import viewmodels.addAnother.TrusteeViewModel
 
-case class RemoveIndexRequest[T](request: RegistrationDataRequest[T], trustee: TrusteeViewModel) extends WrappedRequest[T](request){
-  val userAnswers:UserAnswers = request.userAnswers
+case class RemoveIndexRequest[T](request: RegistrationDataRequest[T], trustee: TrusteeViewModel)
+    extends WrappedRequest[T](request) {
+  val userAnswers: UserAnswers = request.userAnswers
 }

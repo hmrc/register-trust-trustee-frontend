@@ -28,6 +28,7 @@ import java.time.LocalDate
 class TrusteeDetailsChoicePageSpec extends PageBehaviours {
 
   private val index = 0
+
   private val passportOrIdCardDetails: PassportOrIdCardDetails =
     PassportOrIdCardDetails("FR", "num", LocalDate.parse("2010-05-04"))
 
@@ -35,29 +36,33 @@ class TrusteeDetailsChoicePageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
 
-      "PASSPORT selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers =
-              userAnswers
-                .set(IDCardDetailsPage(index), passportOrIdCardDetails).success.value
-                .set(TrusteeDetailsChoicePage(index), Passport).success.value
+      "PASSPORT selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers =
+            userAnswers
+              .set(IDCardDetailsPage(index), passportOrIdCardDetails)
+              .success
+              .value
+              .set(TrusteeDetailsChoicePage(index), Passport)
+              .success
+              .value
 
-            result.get(IDCardDetailsPage(index)) mustNot be(defined)
+          result.get(IDCardDetailsPage(index)) mustNot be(defined)
         }
-      }
 
-      "ID CARD selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers =
-              userAnswers
-                .set(PassportDetailsPage(index), passportOrIdCardDetails).success.value
-                .set(TrusteeDetailsChoicePage(index), IdCard).success.value
+      "ID CARD selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers =
+            userAnswers
+              .set(PassportDetailsPage(index), passportOrIdCardDetails)
+              .success
+              .value
+              .set(TrusteeDetailsChoicePage(index), IdCard)
+              .success
+              .value
 
-            result.get(PassportDetailsPage(index)) mustNot be(defined)
+          result.get(PassportDetailsPage(index)) mustNot be(defined)
         }
-      }
     }
   }
 
