@@ -17,6 +17,8 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 
 @this(
     appConfig: FrontendAppConfig,
@@ -51,7 +53,6 @@
     keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
 )}
 
-@stylesheets()
 @autocompleteCss()
 }
 
