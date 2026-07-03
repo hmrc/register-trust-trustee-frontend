@@ -15,6 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
+@import resources._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
@@ -25,6 +26,7 @@
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
     hmrcStandardPage: HmrcStandardPage,
     govukBackLink: GovukBackLink,
+    stylesheets: Stylesheets,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     autocompleteCss: HmrcAccessibleAutocompleteCss,
     autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
@@ -42,18 +44,19 @@
     )(mainContent: Html)(implicit request: RequestHeader, messages: Messages)
 
 @headScripts = {
-@if(timeoutEnabled) {
-@hmrcTimeoutDialogHelper(
-    signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
-    keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
-    timeout = Some(appConfig.timeoutLength),
-    countdown = Some(appConfig.countdownLength),
-    title = Some(messages("timeout.title")),
-    message = Some(messages("timeout.message")),
-    keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
-)}
-
-@autocompleteCss()
+    @if(timeoutEnabled) {
+        @hmrcTimeoutDialogHelper(
+            signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
+            keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
+            timeout = Some(appConfig.timeoutLength),
+            countdown = Some(appConfig.countdownLength),
+            title = Some(messages("timeout.title")),
+            message = Some(messages("timeout.message")),
+            keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
+        )
+    }
+    @stylesheets()
+    @autocompleteCss()
 }
 
 @beforeContentBlock = {
