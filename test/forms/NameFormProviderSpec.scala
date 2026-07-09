@@ -81,9 +81,9 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
 
     s".middleName with $prefix" must {
 
-      val fieldName  = "middleName"
-      val lengthKey  = s"$prefix.error.middleName.length"
-      val maxLength  = 35
+      val fieldName = "middleName"
+      val lengthKey = s"$prefix.error.middleName.length"
+      val maxLength = 35
 
       behave like fieldWithMaxLength(
         form,
