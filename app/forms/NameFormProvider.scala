@@ -36,8 +36,7 @@ class NameFormProvider @Inject() extends Mappings {
           firstError(
             nonEmptyString("firstName", s"$messagePrefix.error.firstName.required"),
             regexp(Validation.individualNameRegex, s"$messagePrefix.error.firstName.invalid"),
-            maxLength(maxFieldCharacters, s"$messagePrefix.error.firstName.length"),
-            startsWithCapitalLetter("firstName", s"$messagePrefix.error.firstName.capitalLetter")
+            maxLength(maxFieldCharacters, s"$messagePrefix.error.firstName.length")
           )
         ),
       "middleName" -> optional(
@@ -48,8 +47,7 @@ class NameFormProvider @Inject() extends Mappings {
               if (value.nonEmpty) {
                 firstError(
                   regexp(Validation.individualNameRegex, s"$messagePrefix.error.middleName.invalid"),
-                  maxLength(maxFieldCharacters, s"$messagePrefix.error.middleName.length"),
-                  startsWithCapitalLetter("middleName", s"$messagePrefix.error.middleName.capitalLetter")
+                  maxLength(maxFieldCharacters, s"$messagePrefix.error.middleName.length")
                 )(value)
               } else {
                 Valid
@@ -62,8 +60,7 @@ class NameFormProvider @Inject() extends Mappings {
           firstError(
             nonEmptyString("lastName", s"$messagePrefix.error.lastName.required"),
             regexp(Validation.individualNameRegex, s"$messagePrefix.error.lastName.invalid"),
-            maxLength(maxFieldCharacters, s"$messagePrefix.error.lastName.length"),
-            startsWithCapitalLetter("lastName", s"$messagePrefix.error.lastName.capitalLetter")
+            maxLength(maxFieldCharacters, s"$messagePrefix.error.lastName.length")
           )
         )
     )(FullName.apply)(FullName.unapply)

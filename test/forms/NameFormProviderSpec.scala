@@ -49,7 +49,6 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
       val fieldName   = "firstName"
       val requiredKey = s"$prefix.error.firstName.required"
       val lengthKey   = s"$prefix.error.firstName.length"
-      val capitalKey  = s"$prefix.error.firstName.capitalLetter"
       val maxLength   = 35
 
       behave like fieldThatBindsValidData(
@@ -78,18 +77,12 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
         requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
       )
 
-      behave like fieldStartingWithCapitalLetter(
-        form,
-        fieldName,
-        requiredError = FormError(fieldName, capitalKey, Seq(fieldName))
-      )
     }
 
     s".middleName with $prefix" must {
 
       val fieldName  = "middleName"
       val lengthKey  = s"$prefix.error.middleName.length"
-      val capitalKey = s"$prefix.error.middleName.capitalLetter"
       val maxLength  = 35
 
       behave like fieldWithMaxLength(
@@ -104,12 +97,6 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
         form,
         fieldName,
         validDataGenerator = RegexpGen.from(nameRegex)
-      )
-
-      behave like fieldStartingWithCapitalLetter(
-        form,
-        fieldName,
-        requiredError = FormError(fieldName, capitalKey, Seq(fieldName))
       )
 
       "bind whitespace trim values" in {
@@ -133,7 +120,6 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
       val fieldName   = "lastName"
       val requiredKey = s"$prefix.error.lastName.required"
       val lengthKey   = s"$prefix.error.lastName.length"
-      val capitalKey  = s"$prefix.error.lastName.capitalLetter"
       val maxLength   = 35
 
       behave like fieldThatBindsValidData(
@@ -162,11 +148,6 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
         requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
       )
 
-      behave like fieldStartingWithCapitalLetter(
-        form,
-        fieldName,
-        requiredError = FormError(fieldName, capitalKey, Seq(fieldName))
-      )
     }
   }
 
