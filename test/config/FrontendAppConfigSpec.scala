@@ -106,9 +106,6 @@ class FrontendAppConfigSpec extends SpecBase {
       }
     }
 
-    // NOTE: trustsUrl / trustsStoreUrl / trustsIndividualCheckUrl are read via
-    // `configuration.get[Service](...).baseUrl`. These assertions assume the standard
-    // "protocol://host:port" shape - double check against your Service ConfigLoader if these fail.
     ".trustsUrl" must {
       "return the configured trusts service base URL" in {
         config.trustsUrl mustBe "http://localhost:9782"
