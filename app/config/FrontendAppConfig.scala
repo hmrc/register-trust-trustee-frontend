@@ -17,16 +17,13 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import controllers.routes
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages}
-import play.api.mvc.Call
 
 import java.time.LocalDate
-import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration, contactFrontendConfig: ContactFrontendConfig) {
+class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val repositoryKey: String         = "trustees"
   val repositoryKeySettlors: String = "settlors"
@@ -34,19 +31,14 @@ class FrontendAppConfig @Inject() (configuration: Configuration, contactFrontend
   final val ENGLISH = "en"
   final val WELSH   = "cy"
 
-  val betaFeedbackUrl =
-    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
-
-  lazy val authUrl: String          = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
-  val appName: String               = configuration.get[String]("appName")
+  lazy val logoutUrl: String        = s"${configuration.get[String]("urls.logout")}?useServiceNavigation"
+
+  val appName: String = configuration.get[String]("appName")
 
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
-
-  lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
 
   lazy val registrationProgressUrlTemplate: String = configuration.get[String]("urls.registrationProgress")
 
@@ -77,9 +69,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration, contactFrontend
     "english" -> Lang(ENGLISH),
     "cymraeg" -> Lang(WELSH)
   )
-
-  def routeToSwitchLanguage: String => Call =
-    (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   private def getInt(path: String): Int = configuration.get[Int](path)
 

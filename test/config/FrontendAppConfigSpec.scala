@@ -18,6 +18,9 @@ package config
 
 import base.SpecBase
 import play.api.i18n.{Lang, MessagesImpl}
+import play.api.inject.guice.GuiceApplicationBuilder
+
+import java.time.LocalDate
 
 class FrontendAppConfigSpec extends SpecBase {
 
@@ -25,24 +28,179 @@ class FrontendAppConfigSpec extends SpecBase {
 
   "FrontendAppConfig" when {
 
+    ".logoutUrl" must {
+      "append the useServiceNavigation parameter to the configured feedback URL" in {
+        config.logoutUrl mustBe "http://localhost:9514/feedback/trusts?useServiceNavigation"
+      }
+    }
+
+    ".loginUrl" must {
+      "return the configured login URL" in {
+        config.loginUrl mustBe "http://localhost:9949/auth-login-stub/gg-sign-in"
+      }
+    }
+
+    ".loginContinueUrl" must {
+      "return the configured login continue URL" in {
+        config.loginContinueUrl mustBe "http://localhost:9781/trusts-registration"
+      }
+    }
+
+    ".appName" must {
+      "return the configured application name" in {
+        config.appName mustBe "register-trust-trustee-frontend"
+      }
+    }
+
+    ".logoutAudit" must {
+      "return the configured value" in {
+        config.logoutAudit mustBe false
+      }
+
+      "return true when enabled via config" in {
+        val application = new GuiceApplicationBuilder()
+          .configure(defaultAppConfigurations ++ Map("microservice.services.features.auditing.logout" -> true))
+          .build()
+
+        application.injector.instanceOf[FrontendAppConfig].logoutAudit mustBe true
+        application.stop()
+      }
+    }
+
+    ".registrationProgressUrl" must {
+      "substitute the draftId into the configured template" in {
+        config.registrationProgressUrl("draftId") mustBe
+          "http://localhost:9781/trusts-registration/draftId/registration-progress"
+      }
+
+      "substitute a different draftId correctly" in {
+        config.registrationProgressUrl("abc-123") mustBe
+          "http://localhost:9781/trusts-registration/abc-123/registration-progress"
+      }
+    }
+
+    ".languageTranslationEnabled" must {
+      "return the configured value" in {
+        config.languageTranslationEnabled mustBe true
+      }
+    }
+
+    ".languageMap" must {
+      "have the correct languageMap" in {
+        config.languageMap mustBe Map(
+          "english" -> Lang("en"),
+          "cymraeg" -> Lang("cy")
+        )
+      }
+    }
+
+    ".maintainATrustFrontendUrl" must {
+      "return the configured URL" in {
+        config.maintainATrustFrontendUrl mustBe "http://localhost:9788/maintain-a-trust"
+      }
+    }
+
+    ".createAgentServicesAccountUrl" must {
+      "return the configured URL" in {
+        config.createAgentServicesAccountUrl mustBe "http://localhost:9788/create-agent-services-account"
+      }
+    }
+
+    // NOTE: trustsUrl / trustsStoreUrl / trustsIndividualCheckUrl are read via
+    // `configuration.get[Service](...).baseUrl`. These assertions assume the standard
+    // "protocol://host:port" shape - double check against your Service ConfigLoader if these fail.
+    ".trustsUrl" must {
+      "return the configured trusts service base URL" in {
+        config.trustsUrl mustBe "http://localhost:9782"
+      }
+    }
+
+    ".trustsStoreUrl" must {
+      "return the configured trusts-store service base URL" in {
+        config.trustsStoreUrl mustBe "http://localhost:9783"
+      }
+    }
+
+    ".trustsIndividualCheckUrl" must {
+      "return the configured trusts-individual-check service base URL" in {
+        config.trustsIndividualCheckUrl mustBe "http://localhost:9846"
+      }
+    }
+
+    ".locationCanonicalList" must {
+      "return the configured file name" in {
+        config.locationCanonicalList mustBe "location-autocomplete-canonical-list.json"
+      }
+    }
+
+    ".locationCanonicalListCY" must {
+      "return the configured file name" in {
+        config.locationCanonicalListCY mustBe "location-autocomplete-canonical-list-cy.json"
+      }
+    }
+
+    ".findLostUtrUrl" must {
+      "return the hardcoded gov.uk URL" in {
+        config.findLostUtrUrl mustBe "https://www.gov.uk/find-lost-utr-number"
+      }
+    }
+
+    ".countdownLength" must {
+      "return the configured value" in {
+        config.countdownLength mustBe 120
+      }
+    }
+
+    ".timeoutLength" must {
+      "return the configured value" in {
+        config.timeoutLength mustBe 900
+      }
+    }
+
+    ".minDate" must {
+      "return the configured date" in {
+        config.minDate mustBe LocalDate.of(1500, 1, 1)
+      }
+    }
+
+    ".maxPassportDate" must {
+      "return the configured date" in {
+        config.maxPassportDate mustBe LocalDate.of(2099, 12, 31)
+      }
+    }
+
+    ".minLeadTrusteeDob" must {
+      "return the configured date" in {
+        config.minLeadTrusteeDob mustBe LocalDate.of(1900, 1, 1)
+      }
+    }
+
+    ".registerTrustAsTrusteeUrl" must {
+      "return the configured URL" in {
+        config.registerTrustAsTrusteeUrl mustBe "https://www.gov.uk/guidance/register-a-trust-as-a-trustee"
+      }
+    }
+
+    ".maxMatchingAttempts" must {
+      "return the configured value" in {
+        config.maxMatchingAttempts mustBe 3
+      }
+    }
+
     ".helplineUrl" when {
       "in English mode" must {
         "return trusts helpline URL" in {
           val messages = MessagesImpl(Lang("en"), messagesApi)
-
-          config.helplineUrl(
-            messages
-          ) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts"
+          config.helplineUrl(messages) mustBe
+            "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts"
         }
       }
 
       "in Welsh mode" must {
         "return Welsh language helpline URL" in {
           val messages = MessagesImpl(Lang("cy"), messagesApi)
-
-          config.helplineUrl(
-            messages
-          ) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines"
+          config.helplineUrl(messages) mustBe
+            "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines"
         }
       }
     }
