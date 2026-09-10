@@ -79,12 +79,6 @@ class FrontendAppConfigSpec extends SpecBase {
       }
     }
 
-    ".languageTranslationEnabled" must {
-      "return the configured value" in {
-        config.languageTranslationEnabled mustBe true
-      }
-    }
-
     ".languageMap" must {
       "have the correct languageMap" in {
         config.languageMap mustBe Map(
