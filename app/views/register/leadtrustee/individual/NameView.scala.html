@@ -21,9 +21,10 @@
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
     inputText: InputText,
-    heading: Heading,
     submitButton: SubmitButton,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    govukFieldset: GovukFieldset,
+    govukHint: GovukHint
 )
 
 @(form: Form[_], draftId: String, index: Int, readOnly: Boolean)(implicit request: Request[_], messages: Messages)
@@ -37,11 +38,25 @@
 
         @errorSummary(form.errors)
 
-        <fieldset class="govuk-fieldset">
+        @govukFieldset(Fieldset(
+            describedBy = Some("name-hint"),
+            legend = Some(Legend(
+                content = Text(messages("leadTrustee.individual.name.heading")),
+                classes = "govuk-fieldset__legend--l",
+                isPageHeading = true
+            )),
+            html = fields
+        ))
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                @heading("leadTrustee.individual.name.heading")
-            </legend>
+        @submitButton()
+    }
+}
+
+@fields = {
+    @govukHint(Hint(
+        id = Some("name-hint"),
+        content = Text(messages("leadtrustee.individual.name.hint"))
+    ))
 
             @inputText(
                 field = form("firstName"),
@@ -66,9 +81,4 @@
                 inputClass = Some("govuk-!-width-one-half"),
                 readOnly = readOnly
             )
-
-        </fieldset>
-
-        @submitButton()
-    }
 }

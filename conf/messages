@@ -659,6 +659,7 @@ leadTrustee.individual.name.checkYourAnswersLabel = What is the lead trustee’s
 leadTrustee.individual.name.firstName = First name
 leadTrustee.individual.name.middleName = Middle names (optional)
 leadTrustee.individual.name.lastName = Last name
+leadtrustee.individual.name.hint = Start each name with a capital letter. For example, John Smith
 
 leadTrustee.individual.name.error.firstName.required = Enter the lead trustee’s first name.
 leadTrustee.individual.name.error.firstName.length = Lead trustee’s first name must be 35 characters or less.
