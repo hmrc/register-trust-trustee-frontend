@@ -544,6 +544,7 @@ trustee.individual.name.heading=Beth yw enw’r ymddiriedolwr?
 trustee.individual.name.lastName=Enw olaf
 trustee.individual.name.middleName=Enwau canol (dewisol)
 trustee.individual.name.title=Beth yw enw’r ymddiriedolwr?
+trustee.individual.name.hint = Dechreuwch bob enw â phrif lythyren. Er enghraifft, John Smith
 
 trustee.individual.nino.checkYourAnswersLabel=Beth yw rhif Yswiriant Gwladol {0}?
 trustee.individual.nino.error.invalidFormat=Nodwch rif Yswiriant Gwladol yr ymddiriedolwr yn y fformat cywir
