@@ -15,15 +15,16 @@
  *@
 
 @import controllers.register.trustees.individual.routes._
-@import views.html.components.{ErrorSummary, Heading, SubmitButton, InputText}
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
     errorSummary: ErrorSummary,
-    heading: Heading,
     inputText: InputText,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    govukFieldset: GovukFieldset,
+    govukHint: GovukHint
 )
 
 @(form: Form[_], draftId: String, index : Int)(implicit request: Request[_], messages: Messages)
@@ -33,38 +34,48 @@
     showBackLink = true
     ) {
 
-    @formHelper(action = NameController.onSubmit(index, draftId),  Symbol("autoComplete") -> "on") {
+    @formHelper(action = NameController.onSubmit(index, draftId), Symbol("autoComplete") -> "on") {
 
         @errorSummary(form.errors)
 
-        <fieldset class="govuk-fieldset">
-
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                @heading("trustee.individual.name.heading")
-            </legend>
-
-            @inputText(
-            field = form("firstName"),
-            label = messages("trustee.individual.name.firstName"),
-            inputClass = Some("govuk-!-width-one-half"),
-            autocomplete = Some("given-name")
-            )
-
-            @inputText(
-            field = form("middleName"),
-            label = messages("trustee.individual.name.middleName"),
-            inputClass = Some("govuk-!-width-one-half"),
-            autocomplete = Some("additional-name")
-            )
-
-            @inputText(
-            field = form("lastName"),
-            label = messages("trustee.individual.name.lastName"),
-            inputClass = Some("govuk-!-width-one-half"),
-            autocomplete = Some("family-name")
-            )
-        </fieldset>
+        @govukFieldset(Fieldset(
+            describedBy = Some("name-hint"),
+            legend = Some(Legend(
+                content = Text(messages("trustee.individual.name.heading")),
+                classes = "govuk-fieldset__legend--l",
+                isPageHeading = true
+            )),
+            html = fields
+        ))
 
         @submitButton()
     }
+}
+
+@fields = {
+    @govukHint(Hint(
+        id = Some("name-hint"),
+        content = Text(messages("trustee.individual.name.hint"))
+    ))
+
+    @inputText(
+        field = form("firstName"),
+        label = messages("trustee.individual.name.firstName"),
+        inputClass = Some("govuk-!-width-one-half"),
+        autocomplete = Some("given-name")
+    )
+
+    @inputText(
+        field = form("middleName"),
+        label = messages("trustee.individual.name.middleName"),
+        inputClass = Some("govuk-!-width-one-half"),
+        autocomplete = Some("additional-name")
+    )
+
+    @inputText(
+        field = form("lastName"),
+        label = messages("trustee.individual.name.lastName"),
+        inputClass = Some("govuk-!-width-one-half"),
+        autocomplete = Some("family-name")
+    )
 }

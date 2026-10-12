@@ -159,6 +159,7 @@ leadTrustee.individual.liveInTheUkYesNo.heading=A yw {0} yn byw yn y DU?
 leadTrustee.individual.liveInTheUkYesNo.title=A yw’r prif ymddiriedolwr yn byw yn y DU?
 
 leadTrustee.individual.name.checkYourAnswersLabel=Beth yw enw’r prif ymddiriedolwr?
+leadtrustee.individual.name.hint = Dechreuwch bob enw â phrif lythyren. Er enghraifft, John Smith
 
 leadTrustee.individual.name.error.firstName.required = Nodwch enw cyntaf y prif ymddiriedolwr.
 leadTrustee.individual.name.error.firstName.length=Mae’n rhaid i enw cyntaf y prif ymddiriedolwr fod yn 35 o gymeriadau neu lai.
@@ -543,6 +544,7 @@ trustee.individual.name.heading=Beth yw enw’r ymddiriedolwr?
 trustee.individual.name.lastName=Enw olaf
 trustee.individual.name.middleName=Enwau canol (dewisol)
 trustee.individual.name.title=Beth yw enw’r ymddiriedolwr?
+trustee.individual.name.hint = Dechreuwch bob enw â phrif lythyren. Er enghraifft, John Smith
 
 trustee.individual.nino.checkYourAnswersLabel=Beth yw rhif Yswiriant Gwladol {0}?
 trustee.individual.nino.error.invalidFormat=Nodwch rif Yswiriant Gwladol yr ymddiriedolwr yn y fformat cywir
