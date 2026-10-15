@@ -13,7 +13,7 @@ object AppDependencies {
 
   private lazy val test = Seq(
     "uk.gov.hmrc"          %% "bootstrap-test-play-30" % playBootstrapVersion,
-    "org.scalatestplus"    %% "scalacheck-1-19"        % "3.2.20.0",
+    "org.scalatestplus"    %% "scalacheck-1-20"        % "3.2.20.0",
     "io.github.wolfendale" %% "scalacheck-gen-regexp"  % "1.1.0"
   ).map(_ % Test)
 
