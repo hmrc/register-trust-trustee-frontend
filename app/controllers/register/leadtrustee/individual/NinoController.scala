@@ -97,7 +97,7 @@ class NinoController @Inject() (
           value =>
             request.userAnswers.set(TrusteesNinoPage(index), value) match {
               case Success(updatedAnswers) =>
-                trustsIndividualCheckService.matchLeadTrustee(updatedAnswers, index).map { matchingResponse =>
+                trustsIndividualCheckService.matchLeadTrustee(updatedAnswers, index).flatMap { matchingResponse =>
                   handleMatchingResponse(updatedAnswers, index, draftId, matchingResponse)
                 }
               case Failure(_)              =>
@@ -113,13 +113,14 @@ class NinoController @Inject() (
     index: Int,
     draftId: String,
     matchingResponse: TrustsIndividualCheckServiceResponse
-  )(implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Result =
+  )(implicit hc: HeaderCarrier, request: TrusteeNameRequest[_]): Future[Result] =
     updatedAnswers.set(MatchedYesNoPage(index), matchingResponse == SuccessfulMatchResponse) match {
       case Success(updatedAnswersWithMatched) =>
-        registrationsRepository.set(updatedAnswersWithMatched)
         matchingResponse match {
           case SuccessfulMatchResponse | ServiceNotIn5mldModeResponse =>
+            registrationsRepository.set(updatedAnswersWithMatched).map { _ =>
             Redirect(navigator.nextPage(TrusteesNinoPage(index), draftId, updatedAnswersWithMatched))
+            }(controllerComponents.executionContext)
           case UnsuccessfulMatchResponse                              =>
             removeNinoAndRedirect(
               updatedAnswersWithMatched,
@@ -134,25 +135,26 @@ class NinoController @Inject() (
               draftId,
               Redirect(routes.MatchingLockedController.onPageLoad(index, draftId))
             )
-          case _                                                      =>
-            InternalServerError(errorPageView())
+          case _ =>
+            Future.successful(InternalServerError(errorPageView()))
         }
       case Failure(_)                         =>
         logger.error("[NinoController][handleMatching] Error while storing user answers")
-        InternalServerError(errorPageView())
+        Future.successful(InternalServerError(errorPageView()))
     }
 
   private def removeNinoAndRedirect(updatedAnswers: UserAnswers, index: Int, draftId: String, redirect: Result)(implicit
     hc: HeaderCarrier,
     request: TrusteeNameRequest[_]
-  ): Result =
+  ): Future[Result] =
     updatedAnswers.remove(TrusteesNinoPage(index)) match {
       case Success(updatedAnswersWithMatched) =>
-        registrationsRepository.set(updatedAnswersWithMatched)
+        registrationsRepository.set(updatedAnswersWithMatched).map { _ =>
         redirect
+        }(controllerComponents.executionContext)
       case Failure(_)                         =>
         logger.error("[NinoController][removeNinoAndRedirect] Error while removing NI from user answers")
-        InternalServerError(errorPageView())
+        Future.successful(InternalServerError(errorPageView()))
     }
 
 }
