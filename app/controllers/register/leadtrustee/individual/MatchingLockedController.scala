@@ -80,8 +80,7 @@ class MatchingLockedController @Inject() (
   ): Future[Result] =
     ninoYesNoSet.set(TrusteeDetailsChoicePage(index), detailsChoice) match {
       case Success(detailsChoiceSet) =>
-        registrationsRepository.set(detailsChoiceSet)
-        Future.successful(Redirect(call))
+        registrationsRepository.set(detailsChoiceSet).map(_ => Redirect(call))(controllerComponents.executionContext)
       case Failure(_)                =>
         logger.error("[MatchingLockedController][handleDetailsChoiceSet] Error while storing user answers")
         Future.successful(InternalServerError(errorPageView()))
